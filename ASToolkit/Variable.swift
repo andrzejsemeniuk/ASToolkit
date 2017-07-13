@@ -12,6 +12,10 @@ public protocol Variable {
     var value       : Double { get set }
 }
 
+public protocol VariableWithDefaultValue : Variable {
+    var value0      : Double { get }
+}
+
 public protocol VariableWithRange : Variable {
     var lowerbound  : Double { get }
     var upperbound  : Double { get }
@@ -20,12 +24,12 @@ public protocol VariableWithRange : Variable {
 
 
 
-// enabled?
-// fixed?
-// priority?
-
 public class VariableWithImmutableRange : VariableWithRange
 {
+    // enabled?
+    // fixed?
+    // priority?
+    
     public let lowerbound   : Double
     public let upperbound   : Double
     public let range        : Double
@@ -132,10 +136,18 @@ public class Variable22 : VariableWithImmutableRange
     public convenience  init(value:Double = 0)      { self.init(value) }
 }
 
-public class VariableHH : VariableWithImmutableRange
+public class VariableHalfHalf : VariableWithImmutableRange
 {
     public              init(_ v:Double = 0)        { super.init(lowerbound:-0.5,upperbound:0.5,value:v) }
     public convenience  init(value:Double = 0)      { self.init(value) }
+}
+
+typealias VariableHH           = VariableHalfHalf
+
+public class VariableNN : VariableWithImmutableRange
+{
+    public              init(_ N:Double, _ v:Double = 0)        { super.init(lowerbound:-abs(N),upperbound:abs(N),value:v) }
+    public convenience  init(N:Double, value:Double = 0)        { self.init(N, value) }
 }
 
 
@@ -193,10 +205,6 @@ public class VariableWithMutableRange : VariableWithRange
         self.value = v
     }
     
-}
-
-public protocol VariableWithDefaultValue {
-    var value0: Double { get }
 }
 
 public class VariableWithImmutableRangeAndDefaultValue : VariableWithImmutableRange, VariableWithDefaultValue {

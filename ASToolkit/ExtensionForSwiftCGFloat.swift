@@ -54,6 +54,7 @@ extension CGFloat {
 }
 
 extension CGFloat {
+    
     public init?(_ string:String) {
         if let n = NumberFormatter().number(from: string) {
             self.init(n)
@@ -62,5 +63,6 @@ extension CGFloat {
             return nil
         }
     }
+    
 }
 
