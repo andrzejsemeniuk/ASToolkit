@@ -10,14 +10,11 @@ import Foundation
 
 extension CGFloat
 {
-    public func clamp               (minimum:CGFloat, maximum:CGFloat) -> CGFloat {
-        return self < minimum ? minimum : maximum < self ? maximum : self
+    public var clampedTo01         : CGFloat {
+        return clamped(minimum:0, maximum:1)
     }
-    public func clamp01             () -> CGFloat {
-        return clamp(minimum:0, maximum:1)
-    }
-    public func clamp0255           () -> CGFloat {
-        return clamp(minimum:0, maximum:255)
+    public var clampedTo0255       : CGFloat {
+        return clamped(minimum:0, maximum:255)
     }
     
     public func lerp                (from:CGFloat, to:CGFloat) -> CGFloat {

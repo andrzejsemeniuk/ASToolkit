@@ -10,14 +10,11 @@ import Foundation
 
 extension Float
 {
-    public func clamp               (minimum:Float, maximum:Float) -> Float {
-        return self < minimum ? minimum : maximum < self ? maximum : self
+    public var clampedTo01         : Float {
+        return clamped(minimum:0, maximum:1)
     }
-    public func clamp01             () -> Float {
-        return clamp(minimum:0,maximum:1)
-    }
-    public func clamp0255           () -> Float {
-        return clamp(minimum:0,maximum:255)
+    public var clampedTo0255       : Float {
+        return clamped(minimum:0, maximum:255)
     }
     
     public func lerp                (from:Float, to:Float) -> Float {

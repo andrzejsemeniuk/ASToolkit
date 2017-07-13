@@ -63,6 +63,7 @@
 		570FC31E1F167D9B00FEAC03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 570FC31D1F167D9B00FEAC03 /* Main.storyboard */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
+		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +144,7 @@
 		570FC31D1F167D9B00FEAC03 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
+		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +211,7 @@
 				570FC2761F1124A300FEAC03 /* ExtensionForGCD.swift */,
 				570FC27E1F1124A300FEAC03 /* ExtensionForOperators.swift */,
 				570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */,
+				57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */,
 				570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */,
 				570FC2811F1124A300FEAC03 /* ExtensionForSwiftBool.swift */,
 				570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */,
@@ -460,6 +463,7 @@
 				570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
 				570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */,
+				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
 				570FC2C21F1124A300FEAC03 /* ExtensionForSwiftUInt.swift in Sources */,
 				570FC2C91F1124A300FEAC03 /* Math.swift in Sources */,

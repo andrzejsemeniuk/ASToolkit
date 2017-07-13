@@ -43,10 +43,10 @@ extension UIColor
         let components      = RGBA()
         let maximum:CGFloat   = 256
         
-        let r = Float(components.red*maximum).clamp0255()
-        let g = Float(components.green*maximum).clamp0255()
-        let b = Float(components.blue*maximum).clamp0255()
-        let a = Float(components.alpha*maximum).clamp0255()
+        let r = Float(components.red*maximum).clampedTo0255
+        let g = Float(components.green*maximum).clampedTo0255
+        let b = Float(components.blue*maximum).clampedTo0255
+        let a = Float(components.alpha*maximum).clampedTo0255
         
         let result = (
             UInt8(r),

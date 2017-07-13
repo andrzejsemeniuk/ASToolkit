@@ -10,15 +10,13 @@ import Foundation
 
 extension Double
 {
-    public func clamp               (minimum:Double, maximum:Double) -> Double {
-        return self < minimum ? minimum : maximum < self ? maximum : self
+    public var clampedTo01         : Double {
+        return clamped(minimum:0, maximum:1)
     }
-    public func clamp01             () -> Double {
-        return clamp(minimum:0,maximum:1)
+    public var clampedTo0255       : Double {
+        return clamped(minimum:0, maximum:255)
     }
-    public func clamp0255           () -> Double {
-        return clamp(minimum:0,maximum:255)
-    }
+    
     
     public func lerp                (from:Double, to:Double) -> Double {
 //        return (1.0-self)*from + self*to
