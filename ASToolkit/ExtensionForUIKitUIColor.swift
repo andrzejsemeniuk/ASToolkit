@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+UIColor.swift
+//  ExtensionForUIKitUIColor.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

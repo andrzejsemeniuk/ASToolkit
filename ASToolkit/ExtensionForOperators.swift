@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+Operators.swift
+//  ExtensionForOperators.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

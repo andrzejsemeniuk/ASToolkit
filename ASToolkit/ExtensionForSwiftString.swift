@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+String.swift
+//  ExtensionForSwiftNumeric.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

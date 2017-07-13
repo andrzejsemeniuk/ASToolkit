@@ -1,5 +1,5 @@
 //
-//  ExtensionForDispatchQueue.swift
+//  ExtensionForGCD.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 12/29/16.

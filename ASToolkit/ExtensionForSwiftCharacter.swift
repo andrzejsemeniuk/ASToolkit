@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+Double.swift
+//  ExtensionForSwiftCharacter.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

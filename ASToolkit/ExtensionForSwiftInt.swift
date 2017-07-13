@@ -1,5 +1,5 @@
 //
-//  Extension+Int.swift
+//  ExtensionForSwiftInt.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

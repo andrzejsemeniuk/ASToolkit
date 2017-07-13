@@ -1,6 +1,6 @@
 //
-//  ASToolkitSwiftSpriteKit.swift
-//  ASToolkitFrankenbots
+//  ExtensionForSpriteKit.swift
+//  ASToolkit
 //
 //  Created by andrzej semeniuk on 5/1/16.
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
@@ -37,8 +37,8 @@ public struct CGRatio
     func __conversion() -> (CGFloat, CGFloat)                       { return (h, v) }
 }
 
-public func CGAsRadians(degrees:CGFloat) -> CGFloat                 { return degrees / 180.0 * Math.PI }
-public func CGAsDegrees(radians:CGFloat) -> CGFloat                 { return radians / Math.PI * 180.0 }
+public func CGAsRadians(degrees:CGFloat) -> CGFloat                 { return degrees / 180.0 * .pi }
+public func CGAsDegrees(radians:CGFloat) -> CGFloat                 { return radians / .pi * 180.0 }
 
 public struct CGDegrees
 {
@@ -149,7 +149,7 @@ public struct CGScreen
     public static var scale                                                    :CGFloat    { return UIScreen.main.scale }
     
     
-    public static func diagonal                (fraction:CGFloat = 1.0)        -> CGFloat  { return TGF.Environment.Screen.diagonal(fraction) }
+    public static func diagonal                (fraction:CGFloat = 1.0)        -> CGFloat  { return Environment.Screen.diagonal(fraction) }
     
     public static func pointFromRatio          (x:CGFloat, y:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,y:y) }
     public static func pointFrom               (ratio:CGXY)                    -> CGPoint  { return pointFromRatio(x:ratio.x,y:ratio.y) }
@@ -365,13 +365,13 @@ extension SKNode
         // if is suffixed with ~5
         // if not has .suffix
         
-        if TGF.Environment.DeviceType.IPHONE5 {
+        if Environment.DeviceType.iPhone5 {
             return name + (name.hasSuffix("~5") ? "" : "~5") + suffix
         }
-        if TGF.Environment.DeviceType.IPHONE6 {
+        if Environment.DeviceType.iPhone6 {
             return name + (name.hasSuffix("~6") ? "" : "~6") + suffix
         }
-        if TGF.Environment.DeviceType.IPHONE6p {
+        if Environment.DeviceType.iPhone6plus {
             return name + (name.hasSuffix("~6+") ? "" : "~6+") + suffix
         }
         

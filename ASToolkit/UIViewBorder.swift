@@ -1,5 +1,5 @@
 //
-//  UIBorder.swift
+//  UIViewBorder.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 5/2/17.

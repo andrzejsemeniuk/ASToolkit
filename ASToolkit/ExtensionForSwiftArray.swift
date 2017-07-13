@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+Array.swift
+//  ExtensionForSwiftArray.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

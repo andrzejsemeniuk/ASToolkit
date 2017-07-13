@@ -1,5 +1,5 @@
 //
-//  Extension+Int.swift
+//  ExtensionForSwiftBool.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.

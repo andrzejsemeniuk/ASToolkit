@@ -12,7 +12,7 @@
 		570FC20E1F111E0E00FEAC03 /* ASToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 570FC2001F111E0E00FEAC03 /* ASToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2711F1124A300FEAC03 /* CGFloat01.swift */; };
 		570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */; };
-		570FC2AE1F1124A300FEAC03 /* ExtensionForDispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2761F1124A300FEAC03 /* ExtensionForDispatchQueue.swift */; };
+		570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2761F1124A300FEAC03 /* ExtensionForGCD.swift */; };
 		570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */; };
 		570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2781F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift */; };
 		570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2791F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift */; };
@@ -55,13 +55,14 @@
 		570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A41F1124A300FEAC03 /* Utility.swift */; };
 		570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */; };
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
-		570FC2DF1F1124A300FEAC03 /* UtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A71F1124A300FEAC03 /* UtilityVariable.swift */; };
-		570FC2E21F16643B00FEAC03 /* testTGFUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2961F1124A300FEAC03 /* testTGFUtilityVariable.swift */; };
+		570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */; };
 		570FC2EA1F16681B00FEAC03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2E91F16681B00FEAC03 /* AppDelegate.swift */; };
 		570FC2F41F16681B00FEAC03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 570FC2F31F16681B00FEAC03 /* Assets.xcassets */; };
 		570FC3191F1669A200FEAC03 /* UIViewShowcase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC3181F1669A200FEAC03 /* UIViewShowcase.swift */; };
 		570FC31A1F166A3F00FEAC03 /* ASToolkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */; };
 		570FC31E1F167D9B00FEAC03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 570FC31D1F167D9B00FEAC03 /* Main.storyboard */; };
+		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
+		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +91,7 @@
 		570FC20D1F111E0E00FEAC03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		570FC2711F1124A300FEAC03 /* CGFloat01.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGFloat01.swift; sourceTree = "<group>"; };
 		570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForCoreGraphics.swift; sourceTree = "<group>"; };
-		570FC2761F1124A300FEAC03 /* ExtensionForDispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForDispatchQueue.swift; sourceTree = "<group>"; };
+		570FC2761F1124A300FEAC03 /* ExtensionForGCD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForGCD.swift; sourceTree = "<group>"; };
 		570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		570FC2781F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSAttributedString.swift; sourceTree = "<group>"; };
 		570FC2791F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSCharacterSet.swift; sourceTree = "<group>"; };
@@ -118,7 +119,7 @@
 		570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIView.swift; sourceTree = "<group>"; };
 		570FC2911F1124A300FEAC03 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintsBuilder.swift; sourceTree = "<group>"; };
-		570FC2961F1124A300FEAC03 /* testTGFUtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testTGFUtilityVariable.swift; sourceTree = "<group>"; };
+		570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testUtilityVariable.swift; sourceTree = "<group>"; };
 		570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonWithCenteredCircle.swift; sourceTree = "<group>"; };
 		570FC2991F1124A300FEAC03 /* UIGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGlyph.swift; sourceTree = "<group>"; };
 		570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithInsets.swift; sourceTree = "<group>"; };
@@ -134,13 +135,14 @@
 		570FC2A41F1124A300FEAC03 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityLoop.swift; sourceTree = "<group>"; };
-		570FC2A71F1124A300FEAC03 /* UtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityVariable.swift; sourceTree = "<group>"; };
 		570FC2E71F16681B00FEAC03 /* UIViewShowcase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIViewShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		570FC2E91F16681B00FEAC03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		570FC2F31F16681B00FEAC03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		570FC2F81F16681B00FEAC03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		570FC3181F1669A200FEAC03 /* UIViewShowcase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewShowcase.swift; sourceTree = "<group>"; };
 		570FC31D1F167D9B00FEAC03 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,10 +196,9 @@
 			isa = PBXGroup;
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
-				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
+				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
 				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
-				570FC2761F1124A300FEAC03 /* ExtensionForDispatchQueue.swift */,
 				570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */,
 				570FC2781F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift */,
 				570FC2791F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift */,
@@ -205,6 +206,7 @@
 				570FC27B1F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift */,
 				570FC27C1F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift */,
 				570FC27D1F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift */,
+				570FC2761F1124A300FEAC03 /* ExtensionForGCD.swift */,
 				570FC27E1F1124A300FEAC03 /* ExtensionForOperators.swift */,
 				570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */,
 				570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */,
@@ -223,8 +225,10 @@
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift */,
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
+				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
+				570FC2E11F11256D00FEAC03 /* TEST */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -240,8 +244,7 @@
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
 				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
-				570FC2A71F1124A300FEAC03 /* UtilityVariable.swift */,
-				570FC2E11F11256D00FEAC03 /* TEST */,
+				57DD96C61F1802F10001C481 /* Variable.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -258,7 +261,7 @@
 		570FC2E11F11256D00FEAC03 /* TEST */ = {
 			isa = PBXGroup;
 			children = (
-				570FC2961F1124A300FEAC03 /* testTGFUtilityVariable.swift */,
+				570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */,
 			);
 			name = TEST;
 			sourceTree = "<group>";
@@ -441,8 +444,7 @@
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
 				570FC2D81F1124A300FEAC03 /* UIViewGroupValue.swift in Sources */,
 				570FC2C31F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift in Sources */,
-				570FC2AE1F1124A300FEAC03 /* ExtensionForDispatchQueue.swift in Sources */,
-				570FC2DF1F1124A300FEAC03 /* UtilityVariable.swift in Sources */,
+				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
 				570FC2DB1F1124A300FEAC03 /* UIViewValue.swift in Sources */,
 				570FC2D91F1124A300FEAC03 /* UIViewPane.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
@@ -465,9 +467,11 @@
 				570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */,
 				570FC2B51F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift in Sources */,
 				570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */,
+				57DD96C71F1802F10001C481 /* Variable.swift in Sources */,
 				570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */,
 				570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */,
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
+				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,7 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				570FC2E21F16643B00FEAC03 /* testTGFUtilityVariable.swift in Sources */,
+				570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,6 +724,7 @@
 				570FC2131F111E0E00FEAC03 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		570FC2141F111E0E00FEAC03 /* Build configuration list for PBXNativeTarget "ASToolkitTests" */ = {
 			isa = XCConfigurationList;
@@ -728,6 +733,7 @@
 				570FC2161F111E0E00FEAC03 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		570FC30F1F16681C00FEAC03 /* Build configuration list for PBXNativeTarget "UIViewShowcase" */ = {
 			isa = XCConfigurationList;
@@ -736,6 +742,7 @@
 				570FC3111F16681C00FEAC03 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

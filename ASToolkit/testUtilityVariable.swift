@@ -1,5 +1,5 @@
 //
-//  ASToolkitTestUtilityVariable.swift
+//  testUtilityVariable.swift
 //  ASToolkitFrankenbots
 //
 //  Created by andrzej semeniuk on 5/29/16.
@@ -13,7 +13,7 @@ import XCTest
 
 
 
-class TestTGFUtilityVariable: XCTestCase {
+class TestUtilityVariable: XCTestCase {
 
     override func setUp() {
         super.setUp()

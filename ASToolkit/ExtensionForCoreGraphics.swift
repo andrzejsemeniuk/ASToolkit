@@ -1,5 +1,5 @@
 //
-//  ExtensionForCGCGPoint.swift
+//  ExtensionForCoreGraphics.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 12/15/16.

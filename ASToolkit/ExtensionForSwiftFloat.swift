@@ -1,5 +1,5 @@
 //
-//  ASToolkitExtension+Float.swift
+//  ExtensionForSwiftFloat.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 10/9/16.
@@ -10,39 +10,51 @@ import Foundation
 
 extension Float
 {
-    public func clamp(_ minimum:Float,_ maximum:Float) -> Float {
-        return self < maximum ? (minimum < self ? self : minimum) : maximum
+    public func clamp               (minimum:Float, maximum:Float) -> Float {
+        return self < minimum ? minimum : maximum < self ? maximum : self
     }
-    public func clamp01() -> Float {
-        return clamp(0,1)
+    public func clamp01             () -> Float {
+        return clamp(minimum:0,maximum:1)
     }
-    public func clamp0255() -> Float {
-        return clamp(0,255)
+    public func clamp0255           () -> Float {
+        return clamp(minimum:0,maximum:255)
     }
-    public func lerp(_ from:Float, _ to:Float) -> Float {
-        return (1.0-self)*from + self*to
-        //        return from + (to - from) * self
+    
+    public func lerp                (from:Float, to:Float) -> Float {
+        //        return (1.0-self)*from + self*to
+        return from + (to - from) * self
     }
-    public static func lerp(_ from:Float, _ to:Float, _ with:Float) -> Float {
-        return with.lerp(from,to)
+    public static func lerp         (from:Float, to:Float, with:Float) -> Float {
+        return with.lerp(from:from,to:to)
     }
-    public func lerp01(_ from:Float, _ to:Float) -> Float {
-        return min(1.0,max(0.0,self.lerp(from,to)))
+    public func lerp01              (from:Float, to:Float) -> Float {
+        return min(1,max(0,self.lerp(from:from,to:to)))
     }
-    public static func lerp01(_ from:Float, _ to:Float, _ with:Float) -> Float {
-        return with.lerp01(from,to)
+    public static func lerp01       (from:Float, to:Float, with:Float) -> Float {
+        return with.lerp01(from:from,to:to)
+    }
+    
+    public func progress            (from f:Float, to t:Float) -> Float {
+        return f < t ? (self-f)/(t-f) : (f-self)/(f-t)
+    }
+    public func progress01          () -> Float {
+        return progress(from:0,to:1)
     }
 }
 
 extension Float {
     
     public static var random:Float {
-        get {
-            return Float(arc4random()) / 0xFFFFFFFF
-        }
+        return Float(arc4random()) / 0xFFFFFFFF
     }
     public static func random(min: Float, max: Float) -> Float {
         return Float.random * (max - min) + min
     }
     
 }
+
+
+
+
+
+
