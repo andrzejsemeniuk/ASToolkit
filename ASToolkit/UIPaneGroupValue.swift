@@ -1,5 +1,5 @@
 //
-//  UIViewGroupValue.swift
+//  UIPaneGroupValue.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 5/2/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class UIViewGroupValueColorHue {
+class UIPaneGroupValueColorHue {
     // border, title, slider, +/- buttons, value window
     // +, -, hex?, color circle/square, previous?, next?, title
     // width/height, insets
@@ -23,22 +23,22 @@ class UIViewGroupValueColorHue {
     // states + transitions + operations
 }
 
-class UIViewGroupValueColorSaturation {
+class UIPaneGroupValueColorSaturation {
     
 }
 
-class UIViewGroupValueColorBrightness {
+class UIPaneGroupValueColorBrightness {
     
 }
 
-class UIViewGroupValueColorContrast {
+class UIPaneGroupValueColorContrast {
     
 }
 
-class UIViewGroupValueFont {
+class UIPaneGroupValueFont {
     
 }
 
-class UIViewGroupValueText {
+class UIPaneGroupValueText {
     
 }

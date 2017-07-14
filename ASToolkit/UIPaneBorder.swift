@@ -9,19 +9,19 @@
 import Foundation
 import UIKit
 
-public struct UIViewBorderParameters {
-    public let thickness        : CGFloat
-    public let color            : UIColor
-    public let insets           : CGFloat
+public class UIPaneBorder : UIView {
     
-    public init(thickness:CGFloat, color:UIColor, insets:CGFloat) {
-        self.thickness      = thickness
-        self.color          = color
-        self.insets         = insets
+    public struct Parameters {
+        public let thickness        : CGFloat
+        public let color            : UIColor
+        public let insets           : CGFloat
+        
+        public init(thickness:CGFloat, color:UIColor, insets:CGFloat) {
+            self.thickness      = thickness
+            self.color          = color
+            self.insets         = insets
+        }
     }
-}
-
-public class UIViewBorder : UIView {
     
     public enum Style {
         case dash   (space:CGFloat,length:CGFloat)
@@ -29,7 +29,7 @@ public class UIViewBorder : UIView {
         case solid  (thickness:CGFloat)
     }
     
-    public var sides            : Set<UIViewSide>       = [.top,.left,.bottom,.right]
+    public var sides            : Set<UIPane.Side>      = [.top,.left,.bottom,.right]
     public var style            : Style                 = .solid(thickness:1)
     public var color            : UIColor               = .clear
     

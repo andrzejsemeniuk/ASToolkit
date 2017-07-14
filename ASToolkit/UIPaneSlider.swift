@@ -21,7 +21,7 @@ import UIKit
 //    public var increment        : T?
 //}
 
-class UIViewSlider {
+class UIPaneSlider {
     
 }
 

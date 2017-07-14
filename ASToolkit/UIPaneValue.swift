@@ -18,7 +18,7 @@ import UIKit
 //-mark
 //-notch
 
-public class UIViewValue {
+public class UIPaneValue {
     
     public var title        : UILabel?
     public var value        : AnyObject?

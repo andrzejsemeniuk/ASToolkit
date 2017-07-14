@@ -128,13 +128,13 @@ class UIViewShowcase : UIViewController {
         
         self.view.backgroundColor = .lightGray
         
-        let pane = UIViewPaneSide.create(on:self.view, side:.right, length:400)
+        let pane = UIPaneSide.create(on:self.view, side:.right, length:400)
         
         pane.backgroundColor = .darkGray
         
         pane.set(title      : " TITLE " | UIColor.white | UIFont.systemFont(ofSize: 16),
                  side       : .bottom,
-                 border     : UIViewBorderParameters(thickness:1,color:UIColor.white,insets:2))
+                 border     : UIPaneBorder.Parameters(thickness:1,color:UIColor.white,insets:2))
         
         DispatchQueue.main.asyncAfter(deadline:.now() + 2) {
             let _ = pane.open(duration:3) { flag in

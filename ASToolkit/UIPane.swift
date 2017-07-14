@@ -9,21 +9,40 @@
 import Foundation
 import UIKit
 
-public class UIViewPane : UIView {
+public class UIPane : UIView {
     
+    public enum State {
+        case undefined
+        case initialized
+        case visible
+        case idle
+        case begun
+        case ended
+        case transitioning
+        case selected
+        case enabled
+        case highlighted
+        case open
+        case opening
+        case closed
+        case closing
+        case showing
+        case hiding
+    }
     
+    public enum Side {
+        case top, left, bottom, right
+    }
+    
+
     // transition from/to
     // proportion of screen
     // orientation landscape/portrait
     // bound to side
 
-    public enum Side {
-        case left, right, bottom, top
-    }
-    
     private(set) var title:UILabelWithInsets!
     
-    public func set(title:NSAttributedString, side:Side, margin:CGFloat = 8, background:UIColor = .clear, border:UIViewBorderParameters? = nil) {
+    public func set(title:NSAttributedString, side:Side, margin:CGFloat = 8, background:UIColor = .clear, border:UIPaneBorder.Parameters? = nil) {
         
         if self.title==nil {
             self.title = UILabelWithInsets()
@@ -75,7 +94,7 @@ public class UIViewPane : UIView {
     }
 }
 
-public class UIViewPaneSide : UIViewPane {
+public class UIPaneSide : UIPane {
     
     public enum Transition {
         case slide
@@ -89,8 +108,8 @@ public class UIViewPaneSide : UIViewPane {
     private(set) var side               : Side          = .top
     private(set) var length             : CGFloat       = 0
     
-    static public func create(on:UIView, side:Side, length:CGFloat) -> UIViewPaneSide {
-        let result = UIViewPaneSide()
+    static public func create(on:UIView, side:Side, length:CGFloat) -> UIPaneSide {
+        let result = UIPaneSide()
         result.length = length
         result.side = side
         result.isHidden = true
@@ -207,11 +226,11 @@ public class UIViewPaneSide : UIViewPane {
     }
 }
 
-public class UIViewPaneSideColor : UIViewPaneSide {
+public class UIPaneSideColor : UIPaneSide {
     // three sliders, 1 value window
 }
 
-public class UIViewPaneSideContrast : UIViewPaneSide {
+public class UIPaneSideContrast : UIPaneSide {
     // 1 slider, 1 value window
     // slider=(min,max,notches?,mark,title,value,next?,prev?,border?,insets)
     // operations=create,show,hide,update,read,disable

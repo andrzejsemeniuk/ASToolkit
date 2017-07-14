@@ -24,7 +24,7 @@ import UIKit
 public class UIViewCircle : UIView {
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.cornerRadius = max(frame.size.width,frame.size.height)/2
+        self.layer.cornerRadius = min(frame.size.width,frame.size.height)/2
     }
     
     required public init?(coder aDecoder: NSCoder) {

@@ -1,5 +1,5 @@
 //
-//  UIViewGroup.swift
+//  UIPaneGroup.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 5/2/17.
@@ -15,7 +15,7 @@ import UIKit
 //-border style
 //-states: enabled/disabled/highlighted
 
-public class UIViewGroup : UIView {
+public class UIPaneGroup : UIView {
     
     public var elements     : [UIView] = []
     
@@ -44,29 +44,29 @@ public class UIViewGroup : UIView {
         // add constraints
     }
     
-//    public class func create(column:[UIView], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIViewGroup {
-//        return UIViewGroup(elements:[column], title:title, border:border, rule:.column)
+//    public class func create(column:[UIView], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIPaneGroup {
+//        return UIPaneGroup(elements:[column], title:title, border:border, rule:.column)
 //    }
 //    
-//    public class func create(matrix:[[UIView?]], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIViewGroup {
-//        return UIViewGroup(elements:matrix, title:title, border:border, rule:.matrix)
+//    public class func create(matrix:[[UIView?]], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIPaneGroup {
+//        return UIPaneGroup(elements:matrix, title:title, border:border, rule:.matrix)
 //    }
 
 }
 
-class UIViewGroupRow : UIViewGroup {
+class UIPaneGroupRow : UIPaneGroup {
 
-//    public class func create(with row:[UIView], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIViewGroupRow {
-//        return UIViewGroupRow(elements:[row], title:title, border:border, rule:.row)
+//    public class func create(with row:[UIView], title:UIViewTitle? = nil, border:UIViewBorder? = nil) -> UIPaneGroupRow {
+//        return UIPaneGroupRow(elements:[row], title:title, border:border, rule:.row)
 //    }
     
 }
 
-class UIViewGroupColumn : UIViewGroup {
+class UIPaneGroupColumn : UIPaneGroup {
     
 }
 
-class UIViewGroupMatrix : UIViewGroup {
+class UIPaneGroupMatrix : UIPaneGroup {
     
 }
 

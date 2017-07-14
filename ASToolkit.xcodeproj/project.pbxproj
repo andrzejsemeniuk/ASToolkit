@@ -44,14 +44,13 @@
 		570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2991F1124A300FEAC03 /* UIGlyph.swift */; };
 		570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */; };
 		570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */; };
-		570FC2D41F1124A300FEAC03 /* UIViewBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29C1F1124A300FEAC03 /* UIViewBorder.swift */; };
+		570FC2D41F1124A300FEAC03 /* UIPaneBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29C1F1124A300FEAC03 /* UIPaneBorder.swift */; };
 		570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */; };
-		570FC2D61F1124A300FEAC03 /* UIViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29E1F1124A300FEAC03 /* UIViewConstants.swift */; };
-		570FC2D71F1124A300FEAC03 /* UIViewGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29F1F1124A300FEAC03 /* UIViewGroup.swift */; };
-		570FC2D81F1124A300FEAC03 /* UIViewGroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A01F1124A300FEAC03 /* UIViewGroupValue.swift */; };
-		570FC2D91F1124A300FEAC03 /* UIViewPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A11F1124A300FEAC03 /* UIViewPane.swift */; };
-		570FC2DA1F1124A300FEAC03 /* UIViewSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A21F1124A300FEAC03 /* UIViewSlider.swift */; };
-		570FC2DB1F1124A300FEAC03 /* UIViewValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A31F1124A300FEAC03 /* UIViewValue.swift */; };
+		570FC2D71F1124A300FEAC03 /* UIPaneGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29F1F1124A300FEAC03 /* UIPaneGroup.swift */; };
+		570FC2D81F1124A300FEAC03 /* UIPaneGroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A01F1124A300FEAC03 /* UIPaneGroupValue.swift */; };
+		570FC2D91F1124A300FEAC03 /* UIPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A11F1124A300FEAC03 /* UIPane.swift */; };
+		570FC2DA1F1124A300FEAC03 /* UIPaneSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A21F1124A300FEAC03 /* UIPaneSlider.swift */; };
+		570FC2DB1F1124A300FEAC03 /* UIPaneValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A31F1124A300FEAC03 /* UIPaneValue.swift */; };
 		570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A41F1124A300FEAC03 /* Utility.swift */; };
 		570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */; };
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
@@ -125,14 +124,13 @@
 		570FC2991F1124A300FEAC03 /* UIGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGlyph.swift; sourceTree = "<group>"; };
 		570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithInsets.swift; sourceTree = "<group>"; };
 		570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithInsetsAndCenteredCircle.swift; sourceTree = "<group>"; };
-		570FC29C1F1124A300FEAC03 /* UIViewBorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewBorder.swift; sourceTree = "<group>"; };
+		570FC29C1F1124A300FEAC03 /* UIPaneBorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPaneBorder.swift; sourceTree = "<group>"; };
 		570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewCircle.swift; sourceTree = "<group>"; };
-		570FC29E1F1124A300FEAC03 /* UIViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewConstants.swift; sourceTree = "<group>"; };
-		570FC29F1F1124A300FEAC03 /* UIViewGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewGroup.swift; sourceTree = "<group>"; };
-		570FC2A01F1124A300FEAC03 /* UIViewGroupValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewGroupValue.swift; sourceTree = "<group>"; };
-		570FC2A11F1124A300FEAC03 /* UIViewPane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewPane.swift; sourceTree = "<group>"; };
-		570FC2A21F1124A300FEAC03 /* UIViewSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewSlider.swift; sourceTree = "<group>"; };
-		570FC2A31F1124A300FEAC03 /* UIViewValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewValue.swift; sourceTree = "<group>"; };
+		570FC29F1F1124A300FEAC03 /* UIPaneGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPaneGroup.swift; sourceTree = "<group>"; };
+		570FC2A01F1124A300FEAC03 /* UIPaneGroupValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPaneGroupValue.swift; sourceTree = "<group>"; };
+		570FC2A11F1124A300FEAC03 /* UIPane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPane.swift; sourceTree = "<group>"; };
+		570FC2A21F1124A300FEAC03 /* UIPaneSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPaneSlider.swift; sourceTree = "<group>"; };
+		570FC2A31F1124A300FEAC03 /* UIPaneValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPaneValue.swift; sourceTree = "<group>"; };
 		570FC2A41F1124A300FEAC03 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityLoop.swift; sourceTree = "<group>"; };
@@ -236,14 +234,13 @@
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
 				570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */,
-				570FC29C1F1124A300FEAC03 /* UIViewBorder.swift */,
+				570FC29C1F1124A300FEAC03 /* UIPaneBorder.swift */,
 				570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */,
-				570FC29E1F1124A300FEAC03 /* UIViewConstants.swift */,
-				570FC29F1F1124A300FEAC03 /* UIViewGroup.swift */,
-				570FC2A01F1124A300FEAC03 /* UIViewGroupValue.swift */,
-				570FC2A11F1124A300FEAC03 /* UIViewPane.swift */,
-				570FC2A21F1124A300FEAC03 /* UIViewSlider.swift */,
-				570FC2A31F1124A300FEAC03 /* UIViewValue.swift */,
+				570FC29F1F1124A300FEAC03 /* UIPaneGroup.swift */,
+				570FC2A01F1124A300FEAC03 /* UIPaneGroupValue.swift */,
+				570FC2A11F1124A300FEAC03 /* UIPane.swift */,
+				570FC2A21F1124A300FEAC03 /* UIPaneSlider.swift */,
+				570FC2A31F1124A300FEAC03 /* UIPaneValue.swift */,
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
 				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
@@ -436,22 +433,21 @@
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,
 				570FC2C51F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift in Sources */,
 				570FC2BA1F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift in Sources */,
-				570FC2D71F1124A300FEAC03 /* UIViewGroup.swift in Sources */,
-				570FC2D61F1124A300FEAC03 /* UIViewConstants.swift in Sources */,
+				570FC2D71F1124A300FEAC03 /* UIPaneGroup.swift in Sources */,
 				570FC2B21F1124A300FEAC03 /* ExtensionForFoundationNSLayoutAnchor.swift in Sources */,
 				570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */,
-				570FC2DA1F1124A300FEAC03 /* UIViewSlider.swift in Sources */,
+				570FC2DA1F1124A300FEAC03 /* UIPaneSlider.swift in Sources */,
 				570FC2BE1F1124A300FEAC03 /* ExtensionForSwiftFloat.swift in Sources */,
 				570FC2C61F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
-				570FC2D81F1124A300FEAC03 /* UIViewGroupValue.swift in Sources */,
+				570FC2D81F1124A300FEAC03 /* UIPaneGroupValue.swift in Sources */,
 				570FC2C31F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift in Sources */,
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
-				570FC2DB1F1124A300FEAC03 /* UIViewValue.swift in Sources */,
-				570FC2D91F1124A300FEAC03 /* UIViewPane.swift in Sources */,
+				570FC2DB1F1124A300FEAC03 /* UIPaneValue.swift in Sources */,
+				570FC2D91F1124A300FEAC03 /* UIPane.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
-				570FC2D41F1124A300FEAC03 /* UIViewBorder.swift in Sources */,
+				570FC2D41F1124A300FEAC03 /* UIPaneBorder.swift in Sources */,
 				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,
