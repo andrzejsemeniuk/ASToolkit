@@ -50,6 +50,7 @@
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
 		570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
+		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
 /* End PBXBuildFile section */
@@ -111,6 +112,7 @@
 		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityLoop.swift; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
+				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
 				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
@@ -342,6 +345,7 @@
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,
 				570FC2C51F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift in Sources */,
 				570FC2BA1F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift in Sources */,
+				579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */,
 				570FC2B21F1124A300FEAC03 /* ExtensionForFoundationNSLayoutAnchor.swift in Sources */,
 				570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */,
 				570FC2BE1F1124A300FEAC03 /* ExtensionForSwiftFloat.swift in Sources */,
