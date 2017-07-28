@@ -71,14 +71,20 @@ open class Math
     }
     
     
-    static public func random      (_ from:CGFloat,to:CGFloat)  -> CGFloat  {
+    static public func random      (from:CGFloat,to:CGFloat)  -> CGFloat  {
         let v = Double(randomGetDistribution().nextInt())
-        return from + CGFloat(v/Math.__randomDistributionDelta) * (to-from)
+        let w = Math.__randomDistributionDelta
+        let x = CGFloat(v/w)
+        let y = to-from
+        return from + x * y
     }
     
-    static public func random01    ()  -> CGFloat  { return random(0,to:1) }
-    static public func random11    ()  -> CGFloat  { return random(-1,to:+1) }
+    static public func random01    ()  -> CGFloat  { return random(from: 0,to: 1) }
+    static public func random11    ()  -> CGFloat  { return random(from:-1,to:+1) }
     
+    static public func arcrandom01 ()  -> Double   { return Double(arc4random()) / Double(UInt32.max) }
+    static public func arcrandom   (from:Double, to:Double)  -> Double   { return from+arcrandom01()*(to-from) }
+
 }
 
 

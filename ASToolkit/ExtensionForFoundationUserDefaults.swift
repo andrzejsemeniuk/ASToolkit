@@ -23,17 +23,34 @@ extension UserDefaults
 }
 
 extension UserDefaults {
-    public func set(string:String, forKey:String) {
-        set(string, forKey: forKey)
+    open func date(forKey key:String) -> Date? {
+        return value(forKey: key) as? Date
     }
-    public func set(bool:Bool, forKey:String) {
-        set(bool, forKey: forKey)
+    
+    @nonobjc
+    open func set(_ value:UIColor, forKey:String) {
+        let data = NSKeyedArchiver.archivedData(withRootObject: value)
+        set(data, forKey: forKey)
     }
-    public func set(date:Date, forKey:String) {
-        set(date, forKey: forKey)
+    
+    open func color(forKey:String) -> UIColor? {
+        if let data = value(forKey: forKey) as? Data {
+            return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIColor
+        }
+        return nil
     }
-    public func date(forKey string:String) -> Date? {
-        return value(forKey: string) as? Date
+    
+    @nonobjc
+    open func set(_ value:UIFont, forKey:String) {
+        let data = NSKeyedArchiver.archivedData(withRootObject: value)
+        set(data, forKey: forKey)
+    }
+    
+    open func font(forKey:String) -> UIFont? {
+        if let data = value(forKey: forKey) as? Data {
+            return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIFont
+        }
+        return nil
     }
 }
 

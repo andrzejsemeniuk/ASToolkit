@@ -24,7 +24,7 @@ public struct UITableViewTap
 
 extension UIApplication
 {
-    static var rootViewController : UIViewController! {
+    static public var rootViewController : UIViewController! {
         return UIApplication.shared.keyWindow!.rootViewController
     }
     
@@ -32,32 +32,32 @@ extension UIApplication
 
 
 
-func NOT(_ A:Bool) -> Bool
+public func not(_ A:Bool) -> Bool
 {
     return !A
 }
 
-func AND(_ A:Bool,_ B:Bool) -> Bool
+public func and(_ A:Bool,_ B:Bool) -> Bool
 {
     return A && B
 }
 
-func NAND(_ A:Bool,_ B:Bool) -> Bool
+public func nand(_ A:Bool,_ B:Bool) -> Bool
 {
-    return NOT(AND(A,B))
+    return not(and(A,B))
 }
 
-func OR(_ A:Bool,_ B:Bool) -> Bool
+public func or(_ A:Bool,_ B:Bool) -> Bool
 {
     return A || B
 }
 
-func NOR(_ A:Bool,_ B:Bool) -> Bool
+public func nor(_ A:Bool,_ B:Bool) -> Bool
 {
-    return NOT(OR(A,B))
+    return not(or(A,B))
 }
 
-func XOR(_ A:Bool,_ B:Bool) -> Bool
+public func xor(_ A:Bool,_ B:Bool) -> Bool
 {
     return (A && !B) || (!A && B)
 }

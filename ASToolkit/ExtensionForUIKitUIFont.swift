@@ -103,6 +103,15 @@ extension UIFont {
     }
 }
 
+extension UIFont {
+    
+    static public let defaultFont : UIFont = {
+        return UIFont.systemFont(ofSize: UIFont.systemFontSize)
+    }()
+    
+}
+
+// TODO: MOVE TO OWN FILE
 public class Glypher {
     
     fileprivate let font:UIFont

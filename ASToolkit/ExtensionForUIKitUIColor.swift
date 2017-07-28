@@ -44,7 +44,7 @@ extension UIColor
     }
     
     public func components_RGBA_UInt8() -> (red:UInt8,green:UInt8,blue:UInt8,alpha:UInt8) {
-        let components      = RGBA()
+        let components        = RGBA
         let maximum:CGFloat   = 256
         
         let r = Float(components.red*maximum).clampedTo0255
@@ -76,7 +76,7 @@ extension UIColor
         return a.red==b.red && a.green==b.green && a.blue==b.blue
     }
     
-    public func RGBA() -> (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat) {
+    public var RGBA : (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat) {
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
@@ -86,8 +86,13 @@ extension UIColor
         
         return (r,g,b,a)
     }
-    
-    public func HSBA() -> (hue:CGFloat,saturation:CGFloat,brightness:CGFloat,alpha:CGFloat) {
+
+    public var arrayOfRGBA : [CGFloat] {
+        let v = RGBA
+        return [v.red, v.green, v.blue, v.alpha]
+    }
+
+    public var HSBA : (hue:CGFloat,saturation:CGFloat,brightness:CGFloat,alpha:CGFloat) {
         var h:CGFloat = 0
         var s:CGFloat = 0
         var b:CGFloat = 0
@@ -98,14 +103,19 @@ extension UIColor
         return (h,s,b,a)
     }
     
-    public var red          :CGFloat    { return RGBA().red }
-    public var green        :CGFloat    { return RGBA().green }
-    public var blue         :CGFloat    { return RGBA().blue }
-    public var alpha        :CGFloat    { return RGBA().alpha }
+    public var arrayOfHSBA : [CGFloat] {
+        let v = HSBA
+        return [v.hue, v.saturation, v.brightness, v.alpha]
+    }
     
-    public var hue          :CGFloat    { return HSBA().hue }
-    public var saturation   :CGFloat    { return HSBA().saturation }
-    public var brightness   :CGFloat    { return HSBA().brightness }
+    public var red          :CGFloat    { return RGBA.red }
+    public var green        :CGFloat    { return RGBA.green }
+    public var blue         :CGFloat    { return RGBA.blue }
+    public var alpha        :CGFloat    { return RGBA.alpha }
+    
+    public var hue          :CGFloat    { return HSBA.hue }
+    public var saturation   :CGFloat    { return HSBA.saturation }
+    public var brightness   :CGFloat    { return HSBA.brightness }
     
     public class func GRAY(_ v:Float, _ a:Float = 1.0) -> UIColor
     {

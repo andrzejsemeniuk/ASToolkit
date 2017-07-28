@@ -13,12 +13,49 @@ extension CGPoint {
     public var asCGSize:CGSize {
         return CGSize(width:x,height:y)
     }
+    
+    public init(xy:CGFloat) {
+        self.init(x:xy, y:xy)
+    }
+    
+    static public var almostZero:CGPoint = {
+        return CGPoint(x: CGFloat.leastNormalMagnitude, y: CGFloat.leastNormalMagnitude)
+    }()
 }
 
 extension CGSize {
+    public init(side:CGFloat) {
+        self.init(width:side, height:side)
+    }
+    
     public var asCGPoint:CGPoint {
         return CGPoint(x:width,y:height)
     }
+    public var diagonal:CGFloat {
+        return sqrt(width*width + height*height)
+    }
+    
+    static public var almostZero:CGSize = {
+        return CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
+    }()
+}
+
+extension CGRect {
+    public init(_ point:CGPoint) {
+        self.init(x:point.x, y:point.y, width:0, height:0)
+    }
+    
+    public init(_ size:CGSize) {
+        self.init(x: 0, y: 0, width: size.width, height: size.height)
+    }
+
+    public var diagonal:CGFloat {
+        return sqrt(width*width + height*height)
+    }
+    
+    static public var almostZero:CGRect = {
+        return CGRect(origin:CGPoint.almostZero, size:CGSize.almostZero)
+    }()
 }
 
 extension CGAffineTransform {
