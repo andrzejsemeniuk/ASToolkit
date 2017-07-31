@@ -10,11 +10,23 @@ import Foundation
 
 extension Array
 {
-    public func subarray(_ index:Int = 0, length:Int) -> Array {
-        if (length-index) < self.count {
-            return Array(self[index..<length])
+    public mutating func trim(to:Int) -> Array {
+        let result = subarray(from:to, length:count-to)
+        let range = startIndex.advanced(by: to)..<endIndex
+        self.removeSubrange(range)
+        return result
+    }
+    
+    public func subarray(from:Int, to:Int) -> Array {
+        var result = [Element]()
+        for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
+            result.append(self[i])
         }
-        return self
+        return result
+    }
+    
+    public func subarray(from:Int, length:Int) -> Array {
+        return subarray(from:from, to:from+length)
     }
     
     public subscript (safe i:Int) -> Array.Element? {

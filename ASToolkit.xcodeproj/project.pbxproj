@@ -54,6 +54,7 @@
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */; };
+		5762F6791F2FA35A00621781 /* testExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */; };
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
@@ -120,6 +121,7 @@
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolToDictionary.swift; sourceTree = "<group>"; };
+		5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testExtensionForSwiftArray.swift; sourceTree = "<group>"; };
 		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
@@ -200,8 +202,10 @@
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
+				5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */,
 				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
+				5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -212,8 +216,6 @@
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 				570FC2E11F11256D00FEAC03 /* TEST */,
-				5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */,
-				5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -231,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */,
+				5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */,
 			);
 			name = TEST;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 			files = (
 				570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
+				5762F6791F2FA35A00621781 /* testExtensionForSwiftArray.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,26 +45,27 @@ public class VariableWithImmutableRange : VariableWithRange
         }
     }
     
-    public var lerp  : Double {
+    public var lerp         : Double {
         return range != 0 ? value.lerp(from:lowerbound, to:upperbound) : 0
     }
     
     public var description  : String { return "[\(lowerbound),\(upperbound)=\(value)]" }
     
-    public                  init (lowerbound l:Double,upperbound u:Double,value v:Double)
+    public                  init (lowerbound l:Double, upperbound u:Double, value v:Double)
     {
-        self.lowerbound    = l
-        self.upperbound    = u
-        self.range         = u-l
-        self.value         = v
+        self.lowerbound    = min(l,u)
+        self.upperbound    = max(l,u)
+        self.range         = upperbound-lowerbound
+        self.value         = max(lowerbound,min(upperbound,v))
     }
     
-    public convenience      init (_ lowerbound:Double,_ upperbound:Double,_ value:Double)
+    public convenience      init (_ lowerbound:Double, _ upperbound:Double, _ value:Double)
     {
-        self.init(lowerbound:lowerbound,upperbound:upperbound,value:value)
+        self.init(lowerbound:lowerbound, upperbound:upperbound, value:value)
     }
     
-    public func setValueTo          (value:Double)                                                  { self.value = value }
+    public func set                 (value:Double)                                                  { self.value = value }
+    public func setValueTo          (_ value:Double)                                                { self.value = value }
     public func setValueFrom        (ratio:Double)                                                  { self.value = lowerbound+ratio*range }
     
     public func setValueToLowerbound()                                                              { self.value = lowerbound }
@@ -158,8 +159,20 @@ public class VariableNN : VariableWithImmutableRange
 
 public class VariableWithMutableRange : VariableWithRange
 {
-    public var lowerbound   : Double
-    public var upperbound   : Double
+    public var lowerbound   : Double {
+        didSet {
+            if value < lowerbound {
+                value = lowerbound
+            }
+        }
+    }
+    public var upperbound   : Double {
+        didSet {
+            if upperbound < value {
+                value = upperbound
+            }
+        }
+    }
     public var range        : Double {
         return upperbound - lowerbound
     }
@@ -183,9 +196,9 @@ public class VariableWithMutableRange : VariableWithRange
     
     public                  init (lowerbound l:Double, upperbound u:Double, value v:Double)
     {
-        self.lowerbound    = l
-        self.upperbound    = u
-        self.value         = v
+        self.lowerbound    = min(l,u)
+        self.upperbound    = max(l,u)
+        self.value         = max(lowerbound,min(upperbound,v))
     }
     
     public convenience      init (_ lowerbound:Double,_ upperbound:Double,_ value:Double)
@@ -193,18 +206,27 @@ public class VariableWithMutableRange : VariableWithRange
         self.init(lowerbound:lowerbound,upperbound:upperbound,value:value)
     }
     
-    public func setValueTo          (value:Double)                                                  { self.value = value }
+    public func set                 (value:Double)                                                  { self.value = value }
+    public func setValueTo          (_ value:Double)                                                { self.value = value }
     public func setValueFrom        (ratio:Double)                                                  { self.value = lowerbound+ratio*range }
     
     public func setValueToLowerbound()                                                              { self.value = lowerbound }
     public func setValueToUpperbound()                                                              { self.value = upperbound }
     
     public func set                 (lowerbound l:Double,upperbound u:Double,value v:Double)        {
-        self.lowerbound = l
-        self.upperbound = u
+        self.lowerbound = min(l,u)
+        self.upperbound = max(l,u)
         self.value = v
     }
     
+    public func set                 (lowerbound l:Double,upperbound u:Double)                       {
+        let v = self.value
+        self.lowerbound = min(l,u)
+        self.upperbound = max(l,u)
+        self.value = v
+    }
+    
+
 }
 
 public class VariableWithImmutableRangeAndDefaultValue : VariableWithImmutableRange, VariableWithDefaultValue {
