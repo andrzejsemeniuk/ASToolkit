@@ -11,6 +11,7 @@ import Foundation
 extension Array
 {
     public mutating func trim(to:Int) -> Array {
+        let to = Swift.min(to,count)
         let result = subarray(from:to, length:count-to)
         let range = startIndex.advanced(by: to)..<endIndex
         self.removeSubrange(range)

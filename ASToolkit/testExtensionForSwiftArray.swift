@@ -69,6 +69,11 @@ class testExtensionForSwiftArray: XCTestCase {
         XCTAssertEqual(a,[1])
         XCTAssertEqual(r.count,4)
         XCTAssertEqual(r,[2,3,4,5])
+        
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:5).count,0)
+        a = []
+        XCTAssertEqual(a.trim(to:5).count,0)
     }
     
     func testPerformanceExample() {
