@@ -50,6 +50,10 @@
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
 		570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
+		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
+		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
+		5762F6751F2F8EB400621781 /* ProtocolFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */; };
+		5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */; };
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
@@ -112,6 +116,10 @@
 		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityLoop.swift; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolRemovable.swift; sourceTree = "<group>"; };
+		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
+		5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolFromDictionary.swift; sourceTree = "<group>"; };
+		5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolToDictionary.swift; sourceTree = "<group>"; };
 		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
@@ -158,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
+				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
@@ -189,10 +198,10 @@
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift */,
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
-				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
-				570FC2E11F11256D00FEAC03 /* TEST */,
+				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
+				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -202,6 +211,9 @@
 				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
+				570FC2E11F11256D00FEAC03 /* TEST */,
+				5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */,
+				5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -337,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */,
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
 				570FC2BF1F1124A300FEAC03 /* ExtensionForSwiftInt.swift in Sources */,
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
@@ -351,6 +364,7 @@
 				570FC2BE1F1124A300FEAC03 /* ExtensionForSwiftFloat.swift in Sources */,
 				570FC2C61F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
+				5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
 				570FC2C31F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift in Sources */,
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
@@ -363,8 +377,10 @@
 				570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */,
 				570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */,
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
+				5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */,
 				570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
+				5762F6751F2F8EB400621781 /* ProtocolFromDictionary.swift in Sources */,
 				570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */,
 				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,

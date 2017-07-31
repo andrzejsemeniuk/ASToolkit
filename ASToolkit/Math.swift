@@ -16,6 +16,13 @@ import GameplayKit
 
 open class Math
 {
+    static open func clamp(_ v:CGFloat, min v0:CGFloat, max v1:CGFloat) -> CGFloat {
+        return min(v1,max(v0,v))
+    }
+    
+    static open func clamp01(_ v:CGFloat) -> CGFloat {
+        return clamp(v,min:0,max:1)
+    }
     
     static private var __randomSourceObject    :GKRandomSource?
     static private var __randomSource          :RandomSource       = .arc4Random

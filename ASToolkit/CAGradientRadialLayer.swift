@@ -12,7 +12,7 @@ import UIKit
 
 public class CAGradientRadialLayer: CAGradientLayer {
     
-    override public init(){
+    override public init() {
         super.init()
         needsDisplayOnBoundsChange = true
     }
@@ -20,7 +20,17 @@ public class CAGradientRadialLayer: CAGradientLayer {
     required public init(coder aDecoder: NSCoder) {
         super.init()
     }
+
+    override public init(layer: Any) {
+        super.init(layer:layer)
+        if let layer = layer as? CAGradientRadialLayer {
+            self.center = layer.center
+            self.radius = layer.radius
+        }
+        needsDisplayOnBoundsChange = true
+    }
     
+
     public var center:CGPoint = CGPoint.zero
     public var radius:CGFloat = 100
     
