@@ -55,6 +55,12 @@
 		5762F6751F2F8EB400621781 /* ProtocolFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */; };
 		5762F6791F2FA35A00621781 /* testExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */; };
+		5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */; };
+		5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48B1F3100CD002739A6 /* GenericSetting.swift */; };
+		5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */; };
+		5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */; };
+		5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */; };
+		5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */; };
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
@@ -122,6 +128,12 @@
 		5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolToDictionary.swift; sourceTree = "<group>"; };
 		5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testExtensionForSwiftArray.swift; sourceTree = "<group>"; };
+		5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericManagerOfSettings.swift; sourceTree = "<group>"; };
+		5791F48B1F3100CD002739A6 /* GenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericSetting.swift; sourceTree = "<group>"; };
+		5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfSettings.swift; sourceTree = "<group>"; };
+		5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfList.swift; sourceTree = "<group>"; };
+		5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfPickerOfFont.swift; sourceTree = "<group>"; };
+		5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfPickerOfColor.swift; sourceTree = "<group>"; };
 		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
@@ -200,6 +212,12 @@
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift */,
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
+				5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */,
+				5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */,
+				5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */,
+				5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */,
+				5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */,
+				5791F48B1F3100CD002739A6 /* GenericSetting.swift */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
 				5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */,
@@ -352,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */,
 				5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */,
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
 				570FC2BF1F1124A300FEAC03 /* ExtensionForSwiftInt.swift in Sources */,
@@ -365,12 +384,14 @@
 				570FC2B21F1124A300FEAC03 /* ExtensionForFoundationNSLayoutAnchor.swift in Sources */,
 				570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */,
 				570FC2BE1F1124A300FEAC03 /* ExtensionForSwiftFloat.swift in Sources */,
+				5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */,
 				570FC2C61F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
 				5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
 				570FC2C31F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift in Sources */,
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
+				5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
 				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
@@ -378,8 +399,10 @@
 				570FC2BD1F1124A300FEAC03 /* ExtensionForSwiftDouble.swift in Sources */,
 				570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */,
 				570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */,
+				5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */,
 				570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */,
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
+				5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */,
 				570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
@@ -393,6 +416,7 @@
 				570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */,
 				570FC2B51F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift in Sources */,
 				570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */,
+				5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */,
 				57DD96C71F1802F10001C481 /* Variable.swift in Sources */,
 				570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */,
 				570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */,
