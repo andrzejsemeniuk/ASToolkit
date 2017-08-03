@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5708C7421F33E15B0029DE65 /* testExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */; };
+		5708C7431F33E15B0029DE65 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */; };
 		570FC2071F111E0E00FEAC03 /* ASToolkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */; };
 		570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */; };
 		570FC20E1F111E0E00FEAC03 /* ASToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 570FC2001F111E0E00FEAC03 /* ASToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,13 +50,11 @@
 		570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A41F1124A300FEAC03 /* Utility.swift */; };
 		570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */; };
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
-		570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
 		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */; };
-		5762F6791F2FA35A00621781 /* testExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */; };
 		5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */; };
 		5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48B1F3100CD002739A6 /* GenericSetting.swift */; };
 		5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */; };
@@ -77,6 +77,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testExtensionForSwiftArray.swift; sourceTree = "<group>"; };
+		5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testUtilityVariable.swift; sourceTree = "<group>"; };
 		570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ASToolkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		570FC2001F111E0E00FEAC03 /* ASToolkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASToolkit.h; sourceTree = "<group>"; };
 		570FC2011F111E0E00FEAC03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -113,7 +115,6 @@
 		570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIView.swift; sourceTree = "<group>"; };
 		570FC2911F1124A300FEAC03 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintsBuilder.swift; sourceTree = "<group>"; };
-		570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testUtilityVariable.swift; sourceTree = "<group>"; };
 		570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonWithCenteredCircle.swift; sourceTree = "<group>"; };
 		570FC2991F1124A300FEAC03 /* UIGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIGlyph.swift; sourceTree = "<group>"; };
 		570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithInsets.swift; sourceTree = "<group>"; };
@@ -127,7 +128,6 @@
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolToDictionary.swift; sourceTree = "<group>"; };
-		5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testExtensionForSwiftArray.swift; sourceTree = "<group>"; };
 		5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericManagerOfSettings.swift; sourceTree = "<group>"; };
 		5791F48B1F3100CD002739A6 /* GenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericSetting.swift; sourceTree = "<group>"; };
 		5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfSettings.swift; sourceTree = "<group>"; };
@@ -233,7 +233,6 @@
 				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
-				570FC2E11F11256D00FEAC03 /* TEST */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -241,19 +240,12 @@
 		570FC20A1F111E0E00FEAC03 /* ASToolkitTests */ = {
 			isa = PBXGroup;
 			children = (
-				570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */,
 				570FC20D1F111E0E00FEAC03 /* Info.plist */,
+				570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */,
+				5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */,
+				5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */,
 			);
 			path = ASToolkitTests;
-			sourceTree = "<group>";
-		};
-		570FC2E11F11256D00FEAC03 /* TEST */ = {
-			isa = PBXGroup;
-			children = (
-				570FC2961F1124A300FEAC03 /* testUtilityVariable.swift */,
-				5762F6781F2FA35A00621781 /* testExtensionForSwiftArray.swift */,
-			);
-			name = TEST;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -429,9 +421,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				570FC2E21F16643B00FEAC03 /* testUtilityVariable.swift in Sources */,
+				5708C7421F33E15B0029DE65 /* testExtensionForSwiftArray.swift in Sources */,
+				5708C7431F33E15B0029DE65 /* testUtilityVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
-				5762F6791F2FA35A00621781 /* testExtensionForSwiftArray.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

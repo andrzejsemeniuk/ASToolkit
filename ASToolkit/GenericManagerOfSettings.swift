@@ -14,9 +14,20 @@ public protocol GenericManagerOfSettings : class {
     func encode         (data:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func decode         (data:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func reset          (withPrefix prefix:String?, withSuffix suffix:String?)
+//    var settings : [GenericSetting] { get }
 }
 
 extension GenericManagerOfSettings {
+    
+//    lazy public var settings : [GenericSetting] = {
+//        var result = [GenericSetting]()
+//        for child in Mirror(reflecting: self).children {
+//            if let setting = child.value as? GenericSetting {
+//                result.append(setting)
+//            }
+//        }
+//        return result
+//    }()
     
     public func encode(data:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
