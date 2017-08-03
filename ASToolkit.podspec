@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/andrzejsemeniuk/ASToolkit"
   s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author       = "Andrzej Semeniuk"
-  s.platform     = :ios, "10.0"
+  s.platform     = :ios, "10.3"
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
