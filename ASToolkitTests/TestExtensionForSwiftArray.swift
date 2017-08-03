@@ -1,5 +1,5 @@
 //
-//  testExtensionForSwiftArray.swift
+//  TestExtensionForSwiftArray.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 7/31/17.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class testExtensionForSwiftArray: XCTestCase {
+class TestExtensionForSwiftArray: XCTestCase {
     
     override func setUp() {
         super.setUp()

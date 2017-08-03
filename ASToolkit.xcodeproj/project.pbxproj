@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5708C7421F33E15B0029DE65 /* testExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */; };
-		5708C7431F33E15B0029DE65 /* testUtilityVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */; };
+		5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */; };
+		5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7411F33E15B0029DE65 /* TestVariable.swift */; };
 		570FC2071F111E0E00FEAC03 /* ASToolkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */; };
 		570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */; };
 		570FC20E1F111E0E00FEAC03 /* ASToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 570FC2001F111E0E00FEAC03 /* ASToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -77,8 +77,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testExtensionForSwiftArray.swift; sourceTree = "<group>"; };
-		5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testUtilityVariable.swift; sourceTree = "<group>"; };
+		5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForSwiftArray.swift; sourceTree = "<group>"; };
+		5708C7411F33E15B0029DE65 /* TestVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVariable.swift; sourceTree = "<group>"; };
 		570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ASToolkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		570FC2001F111E0E00FEAC03 /* ASToolkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASToolkit.h; sourceTree = "<group>"; };
 		570FC2011F111E0E00FEAC03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -242,8 +242,8 @@
 			children = (
 				570FC20D1F111E0E00FEAC03 /* Info.plist */,
 				570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */,
-				5708C7401F33E15B0029DE65 /* testExtensionForSwiftArray.swift */,
-				5708C7411F33E15B0029DE65 /* testUtilityVariable.swift */,
+				5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */,
+				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
 			);
 			path = ASToolkitTests;
 			sourceTree = "<group>";
@@ -421,8 +421,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5708C7421F33E15B0029DE65 /* testExtensionForSwiftArray.swift in Sources */,
-				5708C7431F33E15B0029DE65 /* testUtilityVariable.swift in Sources */,
+				5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */,
+				5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
