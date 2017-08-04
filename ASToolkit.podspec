@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.summary      = "A utility framework of useful and convenient additions and extensions to iOS in Swift"
   s.description  = "A utility framework of useful and convenient additions and extensions to iOS in Swift!"
   s.homepage     = "https://github.com/andrzejsemeniuk/ASToolkit"
-  s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = "Andrzej Semeniuk"
   s.platform     = :ios, "10.3"
 
