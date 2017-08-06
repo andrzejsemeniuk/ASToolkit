@@ -26,17 +26,14 @@ extension NSMutableAttributedString {
 
 
 
-public func + (lhs:NSAttributedString, rhs:NSAttributedString) -> NSAttributedString {
+public func < (lhs:NSAttributedString, rhs:NSAttributedString) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString:lhs)
     r.append(rhs)
     return r
 }
 
-
-
-
 public func += (lhs:inout NSAttributedString, rhs:NSAttributedString) {
-    lhs = lhs + rhs
+    lhs = lhs < rhs
 }
 
 
