@@ -95,8 +95,7 @@ extension String {
 
 extension Date {
     
-    // TODO: UNIT TESTING
-    public static func create(withCalendar calendar:Calendar = Calendar(identifier: .iso8601), year:Int, month:Int, day:Int, hour:Int = 0, minute:Int = 0, second:Int = 0) -> Date? {
+    public static func create   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), year:Int, month:Int, day:Int, hour:Int = 0, minute:Int = 0, second:Int = 0) -> Date? {
         var components      = DateComponents()
         
         components.year     = year
@@ -105,7 +104,25 @@ extension Date {
         components.hour     = hour
         components.minute   = minute
         components.second   = second
-    
+        
         return calendar.date(from:components)
     }
+    
+    public func valid           (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), year:Int, month:Int, day:Int, hour:Int = 0, minute:Int = 0, second:Int = 0) -> Bool {
+        return year     == self.year(withCalendar: calendar)
+            && month    == self.month(withCalendar: calendar)
+            && day      == self.day(withCalendar: calendar)
+            && hour     == self.hour(withCalendar: calendar)
+            && minute   == self.minute(withCalendar: calendar)
+            && second   == self.second(withCalendar: calendar)
+    }
+    
+    
+    public static func valid    (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), year:Int, month:Int, day:Int, hour:Int = 0, minute:Int = 0, second:Int = 0) -> Bool {
+        if let date = Date.create(withCalendar: calendar, year: year, month: month, day: day, hour: hour, minute: minute, second: second) {
+            return date.valid(withCalendar:calendar, year:year, month:month, day:day, hour:hour, minute:minute, second:second)
+        }
+        return false
+    }
 }
+

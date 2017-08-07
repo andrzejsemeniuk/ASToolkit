@@ -11,3 +11,7 @@ import Foundation
 extension UInt {
 }
 
+extension UInt {
+    public func isInInterval(_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+}
+

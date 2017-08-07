@@ -65,6 +65,7 @@
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
+		57F91CB61F38A8DC0021230B /* ExtensionForSwiftUInt64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
+		57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUInt64.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +211,7 @@
 				570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */,
 				570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */,
 				570FC28A1F1124A300FEAC03 /* ExtensionForSwiftUInt.swift */,
+				57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */,
 				570FC28B1F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift */,
 				570FC28C1F1124A300FEAC03 /* ExtensionForUIKitUIColor.swift */,
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
@@ -396,6 +399,7 @@
 				570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */,
 				5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */,
 				570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */,
+				57F91CB61F38A8DC0021230B /* ExtensionForSwiftUInt64.swift in Sources */,
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
 				5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolToDictionary.swift in Sources */,

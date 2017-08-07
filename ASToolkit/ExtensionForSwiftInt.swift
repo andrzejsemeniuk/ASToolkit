@@ -42,3 +42,7 @@ extension Int {
     public var degreesToRadians: Double { return Double(self) * .pi / 180 }
     public var radiansToDegrees: Double { return Double(self) * 180 / .pi }
 }
+
+extension Int {
+    public func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
+}
