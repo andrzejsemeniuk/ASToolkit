@@ -50,10 +50,26 @@ extension Date {
         return r
     }
     
-    public func added(days:Double = 0, hours:Double = 0, minutes:Double = 0, seconds:Double = 0) -> Date {
-        return Date(timeIntervalSinceNow: self.timeIntervalSinceNow + seconds + minutes * 60.0 + hours * 3600.0 + days * 86400.0)
+    public func adding  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), years:Int = 0, months:Int = 0, days:Int = 0, hours:Int = 0, minutes:Int = 0, seconds:Int = 0) -> Date? {
+        var components      = DateComponents()
+        
+        components.year     = years
+        components.month    = months
+        components.day      = days
+        components.hour     = hours
+        components.minute   = minutes
+        components.second   = seconds
+        
+        return calendar.date(byAdding: components, to: self)
     }
-    
+
+    public func year   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.year, from: self) }
+    public func month  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.month, from: self) }
+    public func day    (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.day, from: self) }
+    public func hour   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.hour, from: self) }
+    public func minute (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.minute, from: self) }
+    public func second (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.second, from: self) }
+
 }
 
 extension Date {
@@ -61,7 +77,7 @@ extension Date {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+//        formatter.timeZone = TimeZone.local
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
         return formatter
     }()
@@ -74,5 +90,22 @@ extension Date {
 extension String {
     public var dateFromISO8601: Date? {
         return Date.iso8601Formatter.date(from: self)
+    }
+}
+
+extension Date {
+    
+    // TODO: UNIT TESTING
+    public static func create(withCalendar calendar:Calendar = Calendar(identifier: .iso8601), year:Int, month:Int, day:Int, hour:Int = 0, minute:Int = 0, second:Int = 0) -> Date? {
+        var components      = DateComponents()
+        
+        components.year     = year
+        components.month    = month
+        components.day      = day
+        components.hour     = hour
+        components.minute   = minute
+        components.second   = second
+    
+        return calendar.date(from:components)
     }
 }
