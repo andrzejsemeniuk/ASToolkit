@@ -1,6 +1,6 @@
 //
 //  GenericControllerOfList
-//  productGroceries
+//  ASToolkit
 //
 //  Created by Andrzej Semeniuk on 3/25/16.
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
@@ -9,21 +9,21 @@
 import Foundation
 import UIKit
 
-class GenericControllerOfList : UITableViewController
+open class GenericControllerOfList : UITableViewController
 {
-    var items:[String]                      = []
+    public var items:[String]                      = []
     
-    var selected:String!                    = nil
+    public var selected:String!                    = nil
     
-    var handlerForCellForRowAtIndexPath     : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> UITableViewCell)! = nil
+    public var handlerForCellForRowAtIndexPath     : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> UITableViewCell)! = nil
     
-    var handlerForDidSelectRowAtIndexPath   : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> Void)! = nil
+    public var handlerForDidSelectRowAtIndexPath   : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> Void)! = nil
     
-    var handlerForCommitEditingStyle        : ((_ controller:GenericControllerOfList,_ commitEditingStyle:UITableViewCellEditingStyle,_ indexPath:IndexPath) -> Bool)! = nil
+    public var handlerForCommitEditingStyle        : ((_ controller:GenericControllerOfList,_ commitEditingStyle:UITableViewCellEditingStyle,_ indexPath:IndexPath) -> Bool)! = nil
     
     
     
-    override func viewDidLoad()
+    override open func viewDidLoad()
     {
         super.viewDidLoad()
         
@@ -34,7 +34,7 @@ class GenericControllerOfList : UITableViewController
         //        tableView.separatorStyle    = .None
     }
     
-    override func didReceiveMemoryWarning()
+    override open func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
     }
@@ -44,17 +44,17 @@ class GenericControllerOfList : UITableViewController
     
     
     
-    override func numberOfSections              (in: UITableView) -> Int
+    override open func numberOfSections              (in: UITableView) -> Int
     {
         return 1
     }
     
-    override func tableView                     (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override open func tableView                     (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return items.count
     }
     
-    override func tableView                     (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    override open func tableView                     (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         if handlerForCellForRowAtIndexPath != nil {
             return handlerForCellForRowAtIndexPath(self,indexPath)
@@ -80,7 +80,7 @@ class GenericControllerOfList : UITableViewController
     
     
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    override open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         if handlerForDidSelectRowAtIndexPath != nil {
             handlerForDidSelectRowAtIndexPath(self,indexPath)
@@ -90,7 +90,7 @@ class GenericControllerOfList : UITableViewController
     
     
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+    override open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
     {
         if handlerForCommitEditingStyle != nil {
             if handlerForCommitEditingStyle(self,editingStyle,indexPath) {
@@ -113,7 +113,7 @@ class GenericControllerOfList : UITableViewController
     
     
     
-    override func viewWillAppear(_ animated: Bool)
+    override open func viewWillAppear(_ animated: Bool)
     {
         tableView.reloadData()
         

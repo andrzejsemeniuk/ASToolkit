@@ -1,6 +1,6 @@
 //
 //  GenericControllerOfSettings.swift
-//  productGroceries
+//  ASToolkit
 //
 //  Created by Andrzej Semeniuk on 3/25/16.
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
@@ -263,9 +263,12 @@ open class GenericControllerOfSettings : UITableViewController
     
     // MARK: - CREATE CELL - TAP
     
-    open func createCellForTap                      (title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
+    open func createCellForTap                      (title:String, detail:String? = nil, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
+            if let label = cell.detailTextLabel, let detail = detail {
+                label.text = detail
+            }
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
@@ -279,9 +282,12 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
 
-    open func createCellForTapOnQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
+    open func createCellForTapOnQuestion            (title:String, detail:String? = nil, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
+            if let label = cell.detailTextLabel, let detail = detail {
+                label.text = detail
+            }
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title

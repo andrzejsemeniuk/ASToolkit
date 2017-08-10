@@ -14,20 +14,20 @@ public protocol GenericManagerOfSettings : class {
     func encode         (data:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func decode         (data:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func reset          (withPrefix prefix:String?, withSuffix suffix:String?)
-//    var settings : [GenericSetting] { get }
+    var settings : [GenericSetting<Any>] { get }
 }
 
 extension GenericManagerOfSettings {
     
-//    lazy public var settings : [GenericSetting] = {
-//        var result = [GenericSetting]()
-//        for child in Mirror(reflecting: self).children {
-//            if let setting = child.value as? GenericSetting {
-//                result.append(setting)
-//            }
-//        }
-//        return result
-//    }()
+    public var settings : [GenericSetting<Any>] {
+        var result = [GenericSetting<Any>]()
+        for child in Mirror(reflecting: self).children {
+            if let setting = child.value as? GenericSetting<Any> {
+                result.append(setting)
+            }
+        }
+        return result
+    }
     
     public func encode(data:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
@@ -39,8 +39,8 @@ extension GenericManagerOfSettings {
                     continue
                 }
             }
-            if let setting = child.value as? ToDictionary {
-                setting.to(dictionary:&data)
+            if let setting = child.value as? AssignableToDictionary {
+                setting.assign(toDictionary:&data)
             }
         }
     }
@@ -55,8 +55,8 @@ extension GenericManagerOfSettings {
                     continue
                 }
             }
-            if let setting = child.value as? FromDictionary {
-                setting.from(dictionary:data)
+            if let setting = child.value as? AssignableFromDictionary {
+                setting.assign(fromDictionary:data)
             }
         }
     }

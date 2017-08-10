@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-open class GenericSetting<TYPE> : Removable, Resettable, FromDictionary, ToDictionary {
+open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionary, AssignableToDictionary {
     
     public typealias Key = String
     
@@ -40,13 +40,13 @@ open class GenericSetting<TYPE> : Removable, Resettable, FromDictionary, ToDicti
         }
     }
     
-    open func from(dictionary:[String:Any]) {
+    open func assign(fromDictionary dictionary:[String:Any]) {
         if let value = dictionary[key] as? TYPE {
             self.value = value
         }
     }
 
-    open func to(dictionary:inout [String:Any]) {
+    open func assign(toDictionary dictionary:inout [String:Any]) {
         dictionary[key] = self.value
     }
     
