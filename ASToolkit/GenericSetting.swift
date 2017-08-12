@@ -41,13 +41,15 @@ open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionar
     }
     
     open func assign(fromDictionary dictionary:[String:Any]) {
-        if let value = dictionary[key] as? TYPE {
-            self.value = value
+        if let data = dictionary[key] as? Data {
+            if let value = NSKeyedUnarchiver.unarchiveObject(with: data) as? TYPE {
+                self.value = value
+            }
         }
     }
 
     open func assign(toDictionary dictionary:inout [String:Any]) {
-        dictionary[key] = self.value
+        dictionary[key] = NSKeyedArchiver.archivedData(withRootObject: value)
     }
     
     open func remove() {

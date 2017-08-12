@@ -11,8 +11,8 @@ import UIKit
 
 public protocol GenericManagerOfSettings : class {
     func synchronize    ()
-    func encode         (data:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
-    func decode         (data:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
+    func encode         (dictionary:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
+    func decode         (dictionary:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func reset          (withPrefix prefix:String?, withSuffix suffix:String?)
     var settings : [GenericSetting<Any>] { get }
 }
@@ -29,7 +29,7 @@ extension GenericManagerOfSettings {
         return result
     }
     
-    public func encode(data:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
+    public func encode(dictionary:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
             if let label = child.label {
                 if let prefix = prefix, !label.hasPrefix(prefix) {
@@ -40,12 +40,12 @@ extension GenericManagerOfSettings {
                 }
             }
             if let setting = child.value as? AssignableToDictionary {
-                setting.assign(toDictionary:&data)
+                setting.assign(toDictionary:&dictionary)
             }
         }
     }
     
-    public func decode(data:[String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
+    public func decode(dictionary:[String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
             if let label = child.label {
                 if let prefix = prefix, !label.hasPrefix(prefix) {
@@ -56,7 +56,7 @@ extension GenericManagerOfSettings {
                 }
             }
             if let setting = child.value as? AssignableFromDictionary {
-                setting.assign(fromDictionary:data)
+                setting.assign(fromDictionary:dictionary)
             }
         }
     }

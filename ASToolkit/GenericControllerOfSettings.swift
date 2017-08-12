@@ -23,18 +23,6 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
-    struct Row {
-        let function                : FunctionOnCell
-    }
-    
-    struct Group {
-        let title                   : String?
-        let footer                  : String?
-        let rows                    : [Row]
-    }
-
-
-    
     
     var actions                             : [IndexPath : Action]                  = [:]
     var updates                             : [Update]                              = []
@@ -49,7 +37,26 @@ open class GenericControllerOfSettings : UITableViewController
     open weak var manager                   : GenericManagerOfSettings?
     
     
-    open var rows                           : [[Any]]                               = []
+    public struct Section {
+        public var header                   : String?
+        public var footer                   : String?
+        public var cells                    : [FunctionOnCell]
+        
+        public init(header:String? = nil,
+                    footer:String? = nil,
+                    cells :[FunctionOnCell]? = nil) {
+            self.header = header
+            self.footer = footer
+            self.cells  = cells ?? []
+        }
+    }
+    
+    open var sections                       : [Section]                             = []
+
+    open func row(at:IndexPath) -> FunctionOnCell? {
+        return sections[safe:at.section]?.cells[safe:at.item]
+    }
+    
     open var elementCornerRadius            : CGFloat                               = 4
     open var elementBackgroundColor         : UIColor                               = UIColor(white:1,alpha:0.3)
     open var colorForHeaderText             : UIColor?
@@ -66,9 +73,9 @@ open class GenericControllerOfSettings : UITableViewController
     
     // MARK: - OPEN METHODS
     
-    open func createRows() -> [[Any]]
+    open func createSections() -> [Section]
     {
-        return [[Any]]()
+        return [Section]()
     }
     
 
@@ -81,6 +88,12 @@ open class GenericControllerOfSettings : UITableViewController
         tableView.reloadData()
     }
     
+    override open func viewDidLoad()
+    {
+        tableView = UITableView(frame:tableView.frame, style:.grouped)
+
+        super.viewDidLoad()
+    }
     
     override open func viewWillAppear(_ animated: Bool)
     {
@@ -91,13 +104,13 @@ open class GenericControllerOfSettings : UITableViewController
         
         actions.removeAll()
         
-        rows = createRows()
+        sections = createSections()
         
         reload()
         
         if let title = super.title {
             if let point = GenericControllerOfSettings.lastOffsetY[title] {
-                tableView.setContentOffset(point,animated:true)
+//                tableView.setContentOffset(point,animated:true)
             }
         }
         
@@ -121,7 +134,7 @@ open class GenericControllerOfSettings : UITableViewController
         
         updates.removeAll()
         
-        rows.removeAll()
+        sections.removeAll()
         
         actions.removeAll()
         
@@ -138,45 +151,27 @@ open class GenericControllerOfSettings : UITableViewController
     
     override open func numberOfSections              (in: UITableView) -> Int
     {
-        return rows.count
+        return sections.count
     }
     
     override open func tableView                     (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return section < rows.count ? rows[section].count-2 : 0
+        return sections[section].cells.count
     }
     
     override open func tableView                     (_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        if 0 < rows.count {
-            if let text = rows[section].first as? String {
-                return 0 < text.length ? text : nil
-            }
-        }
-        return nil
+        return sections[section].header
     }
     
     override open func tableView                     (_ tableView: UITableView, titleForFooterInSection section: Int) -> String?
     {
-        if 0 < rows.count {
-            if let text = rows[section].last as? String {
-                return 0 < text.length ? text : nil
-            }
-        }
-        return nil
-    }
-    
-    override open func tableView                     (_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int
-    {
-        if 0 < indexPath.row {
-            //            return 1
-        }
-        return 0
+        return sections[section].footer
     }
     
     override open func tableView                     (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = UITableViewCell(style:.value1,reuseIdentifier:nil)
+        let cell = UITableViewCell(style:.value1, reuseIdentifier:nil)
         
         cell.selectionStyle = .none
         
@@ -189,11 +184,7 @@ open class GenericControllerOfSettings : UITableViewController
             cell.backgroundColor = UIColor(white:1,alpha:0.7)
         }
         
-        if 0 < rows.count {
-            if let f = rows[indexPath.section][indexPath.row+1] as? FunctionOnCell {
-                f(cell,indexPath)
-            }
-        }
+        sections[indexPath.section].cells[indexPath.row](cell,indexPath)
         
         return cell
     }
@@ -263,12 +254,9 @@ open class GenericControllerOfSettings : UITableViewController
     
     // MARK: - CREATE CELL - TAP
     
-    open func createCellForTap                      (title:String, detail:String? = nil, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
+    open func createCellForTap                      (title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
-            if let label = cell.detailTextLabel, let detail = detail {
-                label.text = detail
-            }
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
@@ -282,12 +270,9 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
 
-    open func createCellForTapOnQuestion            (title:String, detail:String? = nil, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
+    open func createCellForTapOnQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
-            if let label = cell.detailTextLabel, let detail = detail {
-                label.text = detail
-            }
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
@@ -302,7 +287,49 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
+    
+    open func createCellForTapOnInput               (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, value:@escaping ()->String, action:@escaping (String)->()) -> FunctionOnCell {
+        
+        return { (cell:UITableViewCell, indexPath:IndexPath) in
+            if let label = cell.textLabel {
+                cell.selectionStyle = .default
+                label.text          = title
+                setup?(cell,indexPath)
+                self.addAction(indexPath: indexPath) { [weak self] in
+                    self?.createAlertForInput(title: title, message: message, value:value(), ok:ok, cancel:cancel) { result in
+                        action(result)
+                    }
+                }
+            }
+        }
+        
+    }
+    
 
+    
+    
+    
+    open func createAlertForInput         (title:String, message:String, value:String = "", ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { textfield in
+            textfield.text = value
+        }
+        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+            setter(alert.textFields?[safe:0]?.text ?? "")
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(ok)
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
+    
+
+    
     
     open func createAlertForQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", handler:@escaping Action) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
@@ -436,18 +463,18 @@ open class GenericControllerOfSettings : UITableViewController
         return view
     }
     
-    open func createAlertForUITextField         (_ field:UITextField, title:String, message:String, setter:@escaping (String)->()) {
+    open func createAlertForUITextField         (_ field:UITextField, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addTextField { textfield in
             textfield.text = field.text
         }
-        let ok = UIAlertAction.init(title: "Ok", style: UIAlertActionStyle.default) { action in
+        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
             setter(alert.textFields?[safe:0]?.text ?? "")
             alert.dismiss(animated: true) {
             }
         }
         alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel) { action in
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
             alert.dismiss(animated: true) {
             }
         }
