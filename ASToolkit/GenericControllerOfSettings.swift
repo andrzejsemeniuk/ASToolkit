@@ -359,7 +359,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.text          = title
                 setup?(cell,indexPath)
                 self.addAction(indexPath: indexPath) { [weak self] in
-                    self?.createAlertForQuestion(title: title, message: message, ok:ok, cancel:cancel) {
+                    self?.createAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
                         action?()
                     }
                 }
@@ -376,7 +376,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.text          = title
                 setup?(cell,indexPath)
                 self.addAction(indexPath: indexPath) { [weak self] in
-                    self?.createAlertForInput(title: title, message: message, value:value(), ok:ok, cancel:cancel) { result in
+                    self?.createAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
                         action(result)
                     }
                 }
@@ -393,7 +393,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.text          = title
                 setup?(cell,indexPath)
                 self.addAction(indexPath: indexPath) { [weak self] in
-                    self?.createAlertForChoice(title: title, message: message, choices:choices(), cancel:cancel) { result in
+                    self?.createAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
                         action(result)
                     }
                 }
