@@ -254,6 +254,85 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
+    // MARK: - Alerts
+    
+    open func createAlertForInput               (title:String, message:String, value:String = "", ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.text = value
+        }
+        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+            setter(alert.textFields?[safe:0]?.text ?? "")
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(ok)
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
+    
+    open func createAlertForQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", handler:@escaping Action) {
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+            handler()
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(ok)
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
+    
+    open func createAlertForUITextField         (_ field:UITextField, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField { textfield in
+            textfield.text = field.text
+        }
+        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+            setter(alert.textFields?[safe:0]?.text ?? "")
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(ok)
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
+    
+    open func createAlertForChoice              (title:String, message:String, choices:[String], cancel:String = "Cancel", handler:@escaping (String)->()) {
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .actionSheet)
+        for choice in choices {
+            let ok = UIAlertAction.init(title: choice, style: .destructive) { action in
+                handler(choice)
+//                alert.dismiss(animated: true) {
+//                }
+            }
+            alert.addAction(ok)
+        }
+        let cancel = UIAlertAction.init(title: cancel, style: .cancel) { action in
+            alert.dismiss(animated: true) {
+            }
+        }
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
+    
+
+    
+    
+    
+    
     // MARK: - CREATE CELL - TAP
     
     open func createCellForTap                      (title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
@@ -289,7 +368,6 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-    
     open func createCellForTapOnInput               (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, value:@escaping ()->String, action:@escaping (String)->()) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
@@ -307,47 +385,25 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-
-    
-    
-    
-    open func createAlertForInput         (title:String, message:String, value:String = "", ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addTextField { textfield in
-            textfield.text = value
-        }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            setter(alert.textFields?[safe:0]?.text ?? "")
-            alert.dismiss(animated: true) {
+    open func createCellForTapOnChoice              (title:String, message:String, choices:@escaping ()->([String]), cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:@escaping (String)->()) -> FunctionOnCell {
+        
+        return { (cell:UITableViewCell, indexPath:IndexPath) in
+            if let label = cell.textLabel {
+                cell.selectionStyle = .default
+                label.text          = title
+                setup?(cell,indexPath)
+                self.addAction(indexPath: indexPath) { [weak self] in
+                    self?.createAlertForChoice(title: title, message: message, choices:choices(), cancel:cancel) { result in
+                        action(result)
+                    }
+                }
             }
         }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
+        
     }
     
 
     
-    
-    open func createAlertForQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", handler:@escaping Action) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            handler()
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
-    }
     
 
     
@@ -463,25 +519,6 @@ open class GenericControllerOfSettings : UITableViewController
             NSFontAttributeName : view.font ?? UIFont.defaultFont
             ])
         return view
-    }
-    
-    open func createAlertForUITextField         (_ field:UITextField, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addTextField { textfield in
-            textfield.text = field.text
-        }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            setter(alert.textFields?[safe:0]?.text ?? "")
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
     }
     
     open func createCellForUITextFieldAsString  (_ setting:GenericSetting<String>, count:Int = 8, title:String, message:String = "Enter text", setup:((UITableViewCell,IndexPath,UITextField)->())? = nil, action:Action? = nil ) -> FunctionOnCell {

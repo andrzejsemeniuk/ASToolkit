@@ -13,9 +13,10 @@ open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionar
     
     public typealias Key = String
     
-    public let key         : Key
-    public let first       : TYPE
-    public var value       : TYPE {
+    public let key          : Key
+    public let first        : TYPE
+    
+    open var value          : TYPE {
         willSet (newValue) {
             self.store(newValue)
         }
@@ -80,6 +81,17 @@ open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionar
     }
     
 
+}
+
+open class GenericSettingWithObserver<TYPE> : GenericSetting<TYPE> {
+    
+    public var observer                 : ((GenericSetting<TYPE>)->())?
+    
+    override open var value             : TYPE {
+        didSet {
+            observer?(self)
+        }
+    }
 }
 
 // TODO: ADD STORAGE-PROTOCOL BASED ON TYPE: SET/GET/REMOVE/UPDATE
