@@ -92,6 +92,8 @@ open class GenericControllerOfSettings : UITableViewController
     {
         tableView = UITableView(frame:tableView.frame, style:.grouped)
 
+        self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
+        
         super.viewDidLoad()
     }
     
@@ -110,7 +112,7 @@ open class GenericControllerOfSettings : UITableViewController
         
         if let title = super.title {
             if let point = GenericControllerOfSettings.lastOffsetY[title] {
-//                tableView.setContentOffset(point,animated:true)
+                tableView.setContentOffset(point,animated:true)
             }
         }
         

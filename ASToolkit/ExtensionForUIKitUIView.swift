@@ -11,9 +11,9 @@ import UIKit
 
 extension UIView
 {
-    public class func createWithBackgroundColor(_ color:UIColor) -> UIView
+    public class func create(withBackgroundColor color:UIColor = .clear, frame:CGRect = CGRect.zero) -> UIView
     {
-        let result = UIView()
+        let result = UIView(frame:frame)
         result.backgroundColor = color
         return result
     }
@@ -88,5 +88,16 @@ extension UIView {
         self.removeConstraints(self.constraints)
     }
     
+    open func constraintCenter(to:UIView) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.centerXAnchor.constraint(equalTo: to.centerXAnchor).isActive = true
+        self.centerYAnchor.constraint(equalTo: to.centerYAnchor).isActive = true
+    }
+    
+    open func constraintCenterToSuperview() {
+        if let superview = superview {
+            constraintCenter(to:superview)
+        }
+    }
 }
 
