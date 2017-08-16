@@ -9,93 +9,260 @@
 import Foundation
 import UIKit
 
-class GenericControllerOfPickerOfColor : UITableViewController
+open class GenericControllerOfPickerOfColor : UITableViewController
 {
-    open var colors:[UIColor]  = []
+    public enum Flavor {
+        case list                   (selected:UIColor, colors:[UIColor])
+        case listOfSolidCircles     (selected:UIColor, colors:[[UIColor]], diameter:CGFloat, space:CGFloat)
+        case listOfSolidSquares     (selected:UIColor, colors:[[UIColor]], side:CGFloat, space:CGFloat)
+        case matrix                 (selected:UIColor, colors:[[UIColor]])
+        case slidersForRGB          (selected:UIColor)
+        case slidersForRGBA         (selected:UIColor)
+        case slidersForHSB          (selected:UIColor)
+        case slidersForHSBA         (selected:UIColor)
+    }
     
-    open var selected:UIColor = UIColor.black
     
     
+    public var rowHeight    : CGFloat           = 44
     
-    override func viewDidLoad()
+    //    public var flavor       : Flavor            = .list(selected:.white, colors:GenericControllerOfPickerOfColor.generateListOfDefaultColors()) {
+    
+    public var flavor       : Flavor            = .listOfSolidCircles(selected  : .white,
+                                                                      colors    : GenericControllerOfPickerOfColor.generateListOfDefaultColorsForCircles(),
+                                                                      diameter  : 36,
+                                                                      space     : 8)
+        {
+        didSet {
+            
+            switch flavor {
+            case .list(let selected, let colors):
+                self.selected = selected
+            case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+                self.selected = selected
+            case .listOfSolidSquares(let selected, let colors, let side, let space):
+                self.selected = selected
+            case .matrix(let selected, let colors):
+                self.selected = selected
+            case .slidersForHSB(let selected):
+                self.selected = selected
+            case .slidersForRGB(let selected):
+                self.selected = selected
+            case .slidersForHSBA(let selected):
+                self.selected = selected
+            case .slidersForRGBA(let selected):
+                self.selected = selected
+            }
+            
+            reload()
+        }
+    }
+    
+    private var buttons     : [UIButtonWithCenteredCircle]        = []
+    
+    public var selected     : UIColor           = .white
+    
+    
+    override open func viewDidLoad()
     {
-        tableView.dataSource    = self
+        tableView.dataSource = self
         
-        tableView.delegate      = self
+        tableView.delegate = self
         
         tableView.separatorStyle = .none
-        
-        if true
-        {
-            colors = [
-                UIColor.GRAY(1.00,1),
-                UIColor.GRAY(0.90,1),
-                UIColor.GRAY(0.80,1),
-                UIColor.GRAY(0.70,1),
-                UIColor.GRAY(0.60,1),
-                UIColor.GRAY(0.50,1),
-                UIColor.GRAY(0.40,1),
-                UIColor.GRAY(0.30,1),
-                UIColor.GRAY(0.20,1),
-                UIColor.GRAY(0.10,1),
-                UIColor.GRAY(0.00,1),
-            ]
-            
-            let hues:[Float]        = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
-            let saturations:[Float] = [0.4,0.6,0.8,1]
-            let values:[Float]      = [1]
-            
-            for h in hues {
-                for v in values {
-                    for s in saturations {
-                        colors.append(UIColor.HSBA(h,s,v,1))
-                    }
-                }
-            }
-        }
-        
         
         reload()
         
         super.viewDidLoad()
     }
     
-    override func didReceiveMemoryWarning()
-    {
-        super.didReceiveMemoryWarning()
+    
+    
+    
+    static open func generateListOfDefaultColors() -> [UIColor] {
         
-        // TODO clear data and reload table
+        var colors = [
+            UIColor.GRAY(1.00,1),
+            UIColor.GRAY(0.90,1),
+            UIColor.GRAY(0.80,1),
+            UIColor.GRAY(0.70,1),
+            UIColor.GRAY(0.60,1),
+            UIColor.GRAY(0.50,1),
+            UIColor.GRAY(0.40,1),
+            UIColor.GRAY(0.30,1),
+            UIColor.GRAY(0.20,1),
+            UIColor.GRAY(0.10,1),
+            UIColor.GRAY(0.00,1),
+            ]
+        
+        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
+        let saturations : [Float]   = [0.4,0.6,0.8,1]
+        let values      : [Float]   = [1]
+        
+        for h in hues {
+            for v in values {
+                for s in saturations {
+                    colors.append(UIColor.HSBA(h,s,v,1))
+                }
+            }
+        }
+        
+        return colors
+    }
+    
+    
+    
+    static open func generateListOfDefaultColorsForCircles() -> [[UIColor]] {
+        
+        var colors:[[UIColor]] = []
+        
+        colors.append([
+            UIColor.GRAY(1.00,1),
+            UIColor.GRAY(0.85,1),
+            UIColor.GRAY(0.60,1),
+            UIColor.GRAY(0.45,1),
+            UIColor.GRAY(0.30,1),
+            UIColor.GRAY(0.15,1),
+            UIColor.GRAY(0.00,1),
+            ])
+        
+        //        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
+        var hues        : [Float]   = stride(from:0.0,to:0.95,by:0.06).asArray.asArrayOfFloat
+        let saturations : [Float]   = [0.1,0.3,0.5,0.6,0.7,0.85,1]
+        let values      : [Float]   = [1]
+        
+        for h in hues {
+            var row:[UIColor] = []
+            for v in values {
+                for s in saturations {
+                    row.append(UIColor.HSBA(h,s,v,1))
+                }
+            }
+            colors.append(row)
+        }
+        
+        return colors
     }
     
     
     
     
-    
-    override func numberOfSections      (in: UITableView) -> Int
+    override open func numberOfSections      (in: UITableView) -> Int
     {
         return 1
     }
     
-    override func tableView             (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override open func tableView             (_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return colors.count
+        switch flavor {
+        case .list                  (_, let colors)             : return colors.count
+        case .listOfSolidCircles    (_, let colors, _, _)       : return colors.count
+        case .listOfSolidSquares    (_, let colors, _, _)       : return colors.count
+        case .matrix                (_, let colors)             : return colors.count
+        case .slidersForHSB                                     : return 3
+        case .slidersForRGB                                     : return 3
+        case .slidersForHSBA                                    : return 4
+        case .slidersForRGBA                                    : return 4
+        }
+        return 0
     }
     
-    override func tableView             (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    override open func tableView             (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let color = colors[indexPath.row]
+        let cell : UITableViewCell
         
-        let cell = UITableViewCell(style:.default,reuseIdentifier:nil)
+        cell = UITableViewCell(style:.default,reuseIdentifier:nil)
         
-        cell.backgroundColor = color
         
-        cell.selectionStyle = .default
-        
-        if color.components_RGBA_UInt8_equals(selected) {
-            cell.accessoryType = .checkmark
-        }
-        else {
-            cell.accessoryType = .none
+        switch flavor {
+            
+        case .list(let selected, let colors):
+            
+            let color = colors[indexPath.row]
+            
+            cell.backgroundColor = color
+            
+            cell.selectionStyle = .default
+            
+            if color.components_RGBA_UInt8_equals(selected) {
+                cell.accessoryType = .checkmark
+            }
+            else {
+                cell.accessoryType = .none
+            }
+            
+        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+            
+            let stack = UIStackView()
+            stack.axis = .horizontal
+            stack.alignment = .center
+            stack.distribution = .equalSpacing
+            stack.spacing = space
+            
+            for color in colors[indexPath.row] {
+                let circle = UIButtonWithCenteredCircle(frame:CGRect(side:diameter))
+                circle.circle(for: .normal).radius = diameter/2
+                circle.circle(for: .normal).fillColor = color.cgColor
+                circle.circle(for: .selected).radius = diameter/2+space/2
+                circle.circle(for: .selected).fillColor = color.cgColor
+                circle.widthAnchor.constraint(equalToConstant: diameter).isActive=true
+                circle.heightAnchor.constraint(equalToConstant: diameter).isActive=true
+                circle.addTarget(self, action: #selector(GenericControllerOfPickerOfColor.handleTapOnCircle(_:)), for: .touchUpInside)
+                self.buttons.append(circle)
+                stack.addArrangedSubview(circle)
+                if color == self.selected {
+                    circle.isSelected = true
+                }
+            }
+            
+            
+            cell.contentView.backgroundColor = self.selected //UIColor(white:0.97) // TODO: ADD ASSOCIATED VALUE TO ENUM ?
+            cell.contentView.addSubview(stack)
+            
+            stack.translatesAutoresizingMaskIntoConstraints=false
+            stack.centerXAnchor.constraint(equalTo: stack.superview!.centerXAnchor).isActive=true
+            stack.centerYAnchor.constraint(equalTo: stack.superview!.centerYAnchor).isActive=true
+            
+            break
+            
+        case .listOfSolidSquares(let selected, let colors, let side, let space):
+            
+            var views = [UIView]()
+            for color in colors[indexPath.row] {
+                let frame = CGRect(x:0,
+                                   y:rowHeight/2-side/2,
+                                   width:side/2,
+                                   height:side/2)
+                var circle = UIView(frame:frame)
+                views.append(circle)
+                circle.backgroundColor = color
+            }
+            
+            let stack = UIStackView.init(arrangedSubviews: views)
+            stack.axis = .horizontal
+            stack.alignment = .center
+            stack.distribution = .equalSpacing
+            
+            cell.contentView.addSubview(stack)
+            //            cell.backgroundColor = self.tableView.backgroundColor
+            
+            break
+            
+        case .matrix(let selected, let colors):
+            break
+            
+        case .slidersForHSB(let selected):
+            break
+            
+        case .slidersForRGB(let selected):
+            break
+            
+        case .slidersForHSBA(let selected):
+            break
+            
+        case .slidersForRGBA(let selected):
+            break
+            
         }
         
         return cell
@@ -104,39 +271,109 @@ class GenericControllerOfPickerOfColor : UITableViewController
     
     
     
+    open func handleTapOnCircle(_ control:UIControl) {
+        
+        if let button = control as? UIButtonWithCenteredCircle {
+            self.selected = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
+            for button in self.buttons {
+                let color = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
+                button.isSelected = color == self.selected
+            }
+            self.view.backgroundColor = self.selected
+            self.update()
+            self.reload()
+        }
+    }
+    
+    override open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return rowHeight
+    }
+    
+    
+    
     open func reload()
     {
+        self.buttons = []
         tableView.reloadData()
     }
     
     
     
-    override func viewWillAppear(_ animated: Bool)
+    override open func viewWillAppear(_ animated: Bool)
     {
         reload()
         
-        for (row,color) in colors.enumerated() {
+        switch flavor {
+        case .list(_, let colors):
             
-            if color.components_RGBA_UInt8_equals(selected) {
+            for (row,color) in colors.enumerated() {
                 
-                let path = IndexPath(row:row, section:0)
-                
-                tableView.scrollToRow(at: path as IndexPath,at:.middle,animated:true)
-                
-                break
+                if color.components_RGBA_UInt8_equals(selected) {
+                    
+                    let path = IndexPath(row:row, section:0)
+                    
+                    tableView.scrollToRow(at: path as IndexPath,at:.middle,animated:true)
+                    
+                    break
+                }
             }
+            
+        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+            break
+            
+        case .listOfSolidSquares(let selected, let colors, let side, let space):
+            break
+            
+        case .matrix(let selected, let colors):
+            break
+            
+        case .slidersForHSB(let selected):
+            break
+            
+        case .slidersForRGB(let selected):
+            break
+            
+        case .slidersForHSBA(let selected):
+            break
+            
+        case .slidersForRGBA(let selected):
+            break
+            
         }
+        
         
         super.viewWillAppear(animated)
     }
     
     
     
-    var update: (() -> ()) = {}
+    public var update: (() -> ()) = {}
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    override open func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    override open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        selected = colors[indexPath.row]
+        switch flavor {
+        case .list(let selected, let colors):
+            self.selected = colors[indexPath.row]
+        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+            return
+        case .listOfSolidSquares(let selected, let colors, let side, let space):
+            self.selected = selected
+        case .matrix(let selected, let colors):
+            self.selected = selected
+        case .slidersForHSB(let selected):
+            self.selected = selected
+        case .slidersForRGB(let selected):
+            self.selected = selected
+        case .slidersForHSBA(let selected):
+            self.selected = selected
+        case .slidersForRGBA(let selected):
+            self.selected = selected
+        }
+        
         
         reload()
         

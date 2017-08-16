@@ -749,14 +749,19 @@ open class GenericControllerOfSettings : UITableViewController
                     
                     self.addAction(indexPath: indexPath) { [weak self] in
                         
-                        let colors      = GenericControllerOfPickerOfColor()
-                        colors.title    = title
-                        colors.selected = color0
-                        colors.update   = {
-                            action?(colors.selected)
+                        guard let `self` = self else { return }
+                        
+                        let picker      = GenericControllerOfPickerOfColor()
+                        picker.tableView.backgroundColor = self.tableView.backgroundColor
+                        picker.title    = title
+                        picker.selected = color0
+                        picker.update   = { [weak picker] in
+                            if let picker = picker {
+                                action?(picker.selected)
+                            }
                         }
                         
-                        self?.navigationController?.pushViewController(colors, animated:true)
+                        self.navigationController?.pushViewController(picker, animated:true)
                     }
                 }
         }

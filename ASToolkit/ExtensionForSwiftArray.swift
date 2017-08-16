@@ -35,40 +35,45 @@ extension Array
     }
 }
 
-extension Array {
-    static public func convertToInt(array:[Double]) -> [Int] {
-        var result:[Int] = []
-        array.forEach({ result.append(Int($0)) })
-        return result
-    }
-    static public func convertToDouble(array:[Int]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
-    }
-    static public func convertToFloat(array:[Double]) -> [Float] {
-        var result:[Float] = []
-        array.forEach({ result.append(Float($0)) })
-        return result
-    }
-    static public func convertToDouble(array:[Float]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
-    }
-    static public func convertToCGFloat(array:[Double]) -> [CGFloat] {
-        var result:[CGFloat] = []
-        array.forEach({ result.append(CGFloat($0)) })
-        return result
-    }
-    static public func convertToDouble(array:[CGFloat]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
-    }
-    static public func convertToUInt32(array:[Character]) -> [UInt32] {
-        var result:[UInt32] = []
-        array.forEach({ result.append($0.unicodeScalarCodePoint) })
-        return result
-    }
+
+extension Array where Element == Character {
+    
+    public var asArrayOfUInt32      : [UInt32]      { return self.map { $0.unicodeScalarCodePoint } }
+    
+}
+
+
+extension Array where Element == Int {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+
+}
+
+
+extension Array where Element == Float {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
+
+extension Array where Element == CGFloat {
+    
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
+
+extension Array where Element == Double {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
 }

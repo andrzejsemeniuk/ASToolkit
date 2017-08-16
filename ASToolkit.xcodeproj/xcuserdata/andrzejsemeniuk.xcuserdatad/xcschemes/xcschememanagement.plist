@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>ASToolkitUITests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -33,6 +38,11 @@
 			<true/>
 		</dict>
 		<key>570FC3071F16681C00FEAC03</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>57DBB01E1F4293E400AF2BEB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

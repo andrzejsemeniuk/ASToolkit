@@ -45,10 +45,22 @@ extension CGRect {
         self.init(x:point.x, y:point.y, width:0, height:0)
     }
     
+    public init(x:CGFloat, y:CGFloat) {
+        self.init(x: x, y: y, width: 0, height: 0)
+    }
+    
     public init(_ size:CGSize) {
         self.init(x: 0, y: 0, width: size.width, height: size.height)
     }
 
+    public init(width:CGFloat, height:CGFloat) {
+        self.init(x: 0, y: 0, width: width, height: height)
+    }
+    
+    public init(side:CGFloat) {
+        self.init(x: 0, y: 0, width: side, height: side)
+    }
+    
     public var diagonal:CGFloat {
         return sqrt(width*width + height*height)
     }
