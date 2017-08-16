@@ -752,7 +752,7 @@ open class GenericControllerOfSettings : UITableViewController
                         guard let `self` = self else { return }
                         
                         let picker      = GenericControllerOfPickerOfColor()
-                        picker.tableView.backgroundColor = self.tableView.backgroundColor
+                        picker.tableView.backgroundColor = color0
                         picker.title    = title
                         picker.selected = color0
                         picker.update   = { [weak picker] in

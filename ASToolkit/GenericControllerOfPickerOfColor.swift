@@ -58,7 +58,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         }
     }
     
-    private var buttons     : [UIButtonWithCenteredCircle]        = []
+    private var buttons     : [AnyObject]       = []
     
     public var selected     : UIColor           = .white
     
@@ -116,19 +116,12 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         
         var colors:[[UIColor]] = []
         
-        colors.append([
-            UIColor.GRAY(1.00,1),
-            UIColor.GRAY(0.85,1),
-            UIColor.GRAY(0.60,1),
-            UIColor.GRAY(0.45,1),
-            UIColor.GRAY(0.30,1),
-            UIColor.GRAY(0.15,1),
-            UIColor.GRAY(0.00,1),
-            ])
+        colors.append(stride(from:1.0,to:0.5,by:-0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
+        colors.append(stride(from:0.0,to:0.5,by:0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
         
         //        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
-        var hues        : [Float]   = stride(from:0.0,to:0.95,by:0.06).asArray.asArrayOfFloat
-        let saturations : [Float]   = [0.1,0.3,0.5,0.6,0.7,0.85,1]
+        let hues        : [Float]   = stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat
+        let saturations : [Float]   = [0.15,0.28,0.42,0.58,0.7,0.84,1]
         let values      : [Float]   = [1]
         
         for h in hues {
@@ -275,11 +268,12 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         
         if let button = control as? UIButtonWithCenteredCircle {
             self.selected = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
-            for button in self.buttons {
-                let color = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
-                button.isSelected = color == self.selected
+            for element in self.buttons {
+                if let button = element as? UIButtonWithCenteredCircle {
+                    let color = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
+                    button.isSelected = color == self.selected
+                }
             }
-            self.view.backgroundColor = self.selected
             self.update()
             self.reload()
         }
@@ -293,6 +287,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     
     open func reload()
     {
+        self.view.backgroundColor = self.selected
         self.buttons = []
         tableView.reloadData()
     }
