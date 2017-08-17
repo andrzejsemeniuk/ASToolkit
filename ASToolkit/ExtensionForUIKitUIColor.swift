@@ -190,69 +190,26 @@ extension UIColor {
 
 
 extension UIColor {
-    // let colorSpaceCMYK = CGColorSpaceCreateDeviceCMYK()
     
     public typealias CMYKTuple  = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat)
     public typealias CMYKATuple = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat, alpha: CGFloat)
     
     public var CMYK:CMYKTuple {
         
+        // r = (1-c)(1-k) ??
+        // c = 1-r/(1-k) ??
         
-//        function rgb2cmyk (r,g,b) {
-//            var computedC = 0;
-//            var computedM = 0;
-//            var computedY = 0;
-//            var computedK = 0;
-//            
-//            //remove spaces from input RGB values, convert to int
-//            var r = parseInt( (''+r).replace(/\s/g,''),10 );
-//            var g = parseInt( (''+g).replace(/\s/g,''),10 );
-//            var b = parseInt( (''+b).replace(/\s/g,''),10 );
-//            
-//            if ( r==null || g==null || b==null ||
-//                isNaN(r) || isNaN(g)|| isNaN(b) )
-//            {
-//                alert ('Please enter numeric RGB values!');
-//                return;
-//            }
-//            if (r<0 || g<0 || b<0 || r>255 || g>255 || b>255) {
-//                alert ('RGB values must be in the range 0 to 255.');
-//                return;
-//            }
-//            
-//            // BLACK
-//            if (r==0 && g==0 && b==0) {
-//                computedK = 1;
-//                return [0,0,0,1];
-//            }
-//            
-
         let RGB = self.RGBA
         
         if RGB.red < 0.001 && RGB.green < 0.001 && RGB.blue < 0.001 {
             return (0,0,0,1)
         }
         
-//            computedC = 1 - (r/255);
-//            computedM = 1 - (g/255);
-//            computedY = 1 - (b/255);
-        
         let computedC = 1 - RGB.red.clampedTo01
         let computedM = 1 - RGB.green.clampedTo01
         let computedY = 1 - RGB.blue.clampedTo01
-//            
-//            var minCMY = Math.min(computedC,
-//                                  Math.min(computedM,computedY));
         
         let minCMY          : CGFloat = min(computedC, computedM, computedY)
-        
-//            computedC = (computedC - minCMY) / (1 - minCMY) ;
-//            computedM = (computedM - minCMY) / (1 - minCMY) ;
-//            computedY = (computedY - minCMY) / (1 - minCMY) ;
-//            computedK = minCMY;
-//            
-//            return [computedC,computedM,computedY,computedK];
-//        }
         
         let denominator     : CGFloat = 1 - minCMY
         
@@ -271,10 +228,8 @@ extension UIColor {
     
     public convenience init(cyan:CGFloat, magenta:CGFloat, yellow:CGFloat, key:CGFloat, alpha:CGFloat = 1) {
         
-//        unsigned char r = (unsigned char)(255 * (1 - cmyk.C) * (1 - cmyk.K));
-//        unsigned char g = (unsigned char)(255 * (1 - cmyk.M) * (1 - cmyk.K));
-//        unsigned char b = (unsigned char)(255 * (1 - cmyk.Y) * (1 - cmyk.K));
-
+        // r = (1 - c) * (1 - k)
+        
         let multiplier      : CGFloat = 1.0 - key.clampedTo01
         
         self.init(
