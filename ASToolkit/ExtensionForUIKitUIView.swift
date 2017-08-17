@@ -101,3 +101,13 @@ extension UIView {
     }
 }
 
+extension UIView {
+    
+    /// Add provided views as subviews all at once.
+    ///
+    /// - Parameter views: views to add as subviews to this view
+    open func addSubviews(_ views:[UIView]) {
+        views.forEach { self.addSubview($0) }
+    }
+}
+

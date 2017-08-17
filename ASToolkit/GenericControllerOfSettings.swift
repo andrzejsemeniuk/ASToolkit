@@ -724,7 +724,7 @@ open class GenericControllerOfSettings : UITableViewController
     
     // MARK: - CREATE CELL - UIColor
     
-    open func createCellForUIColor              (_ color0:UIColor, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:((UIColor)->())? = nil) -> FunctionOnCell
+    open func createCellForUIColor              (_ color0:UIColor, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, setupForPicker:((GenericControllerOfPickerOfColor)->())? = nil, action:((UIColor)->())? = nil) -> FunctionOnCell
     {
         return
             { (cell:UITableViewCell, indexPath:IndexPath) in
@@ -753,8 +753,11 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         let picker      = GenericControllerOfPickerOfColor()
                         picker.tableView.backgroundColor = color0
+                        picker.tableView.showsVerticalScrollIndicator = false
                         picker.title    = title
                         picker.selected = color0
+                        
+                        setupForPicker?(picker)
                         picker.update   = { [weak picker] in
                             if let picker = picker {
                                 action?(picker.selected)

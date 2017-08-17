@@ -117,7 +117,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         var colors:[[UIColor]] = []
         
         colors.append(stride(from:1.0,to:0.5,by:-0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
-        colors.append(stride(from:0.0,to:0.5,by:0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
+        colors.append(stride(from:0.0,to:0.5,by: 0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
         
         //        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
         let hues        : [Float]   = stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat

@@ -68,6 +68,7 @@
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
 		57F91CB61F38A8DC0021230B /* ExtensionForSwiftUInt64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */; };
 		57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FBB1091F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift */; };
+		57FBB10C1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FBB10B1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +149,7 @@
 		57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUInt64.swift; sourceTree = "<group>"; };
 		57FBB1081F43B147008FA2D9 /* wikipedia.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = wikipedia.css; sourceTree = "<group>"; };
 		57FBB1091F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftSequence.swift; sourceTree = "<group>"; };
+		57FBB10B1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerOfColorWithSliders.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
 				5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */,
 				5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */,
+				57FBB10B1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift */,
 				5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */,
 				5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */,
 				5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */,
@@ -461,6 +464,7 @@
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
 				5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */,
+				57FBB10C1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift in Sources */,
 				570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
 				5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */,

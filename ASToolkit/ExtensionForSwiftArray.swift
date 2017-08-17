@@ -77,3 +77,19 @@ extension Array where Element == Double {
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
 }
+
+extension Array {
+    
+    public func adjacent(_ handle:(Element,Element)->()) {
+        for i in stride(from:1,to:count,by:1) {
+            handle(self[i-1],self[i])
+        }
+    }
+
+    public func find(_ where:(Element)->Bool) -> Element? {
+        if let index = self.index(where:`where`) {
+            return self[index]
+        }
+        return nil
+    }
+}

@@ -10,6 +10,9 @@ import Foundation
 
 extension UIEdgeInsets {
     
+    /// Initializes all edges with same value
+    ///
+    /// - Parameter all: value for all edges
     public init(all:CGFloat) {
         self.init(top:all,left:all,bottom:all,right:all)
     }
