@@ -10,11 +10,40 @@ import Foundation
 
 open class PickerOfColorWithSliders : UIView {
 
-    open class StoredColors : UIView {
+    public enum Component {
+        case colorDot               (height:CGFloat)
+        
+        case sliderRed              (height:CGFloat)
+        case sliderGreen            (height:CGFloat)
+        case sliderBlue             (height:CGFloat)
+        
+        case sliderCyan             (height:CGFloat)
+        case sliderMagenta          (height:CGFloat)
+        case sliderYellow           (height:CGFloat)
+        case sliderKey              (height:CGFloat)
+        
+        case sliderHue              (height:CGFloat)
+        case sliderSaturation       (height:CGFloat)
+        case sliderBrightness       (height:CGFloat)
+        
+        case sliderGrayscale        (height:CGFloat)
+
+        case sliderAlpha            (height:CGFloat)
+        
+        case sliderCustom           (height:CGFloat, color:UIColor, label:NSAttributedString, value0:Float, value1:Float)
+        
+        case storageDots            (radius:CGFloat, rows:Int, colors:[UIColor])
+    }
+
+    open class ComponentColorDot : UIViewCircle {
+        
+    }
+    
+    open class ComponentStorageDots : UIView {
         
         private var buttons : [[UIButtonWithCenteredCircle]] = []
         
-        public var limit    = 32
+        public var rows     = 4
         
         public var columns  = 4
         
@@ -33,20 +62,13 @@ open class PickerOfColorWithSliders : UIView {
         }
     }
     
-    open class Slider : UIView {
+    open class ComponentSlider : UIView {
         
-        public enum Kind {
-            case red(height:CGFloat),green(height:CGFloat),blue(height:CGFloat)
-            case hue(height:CGFloat),saturation(height:CGFloat),value(height:CGFloat)
-            case alpha(height:CGFloat)
-            case custom(height:CGFloat, color:UIColor, label:NSAttributedString, value0:Float, value1:Float)
-        }
-        
-        public weak var leftView    : UILabelWithInsetsAndCenteredCircle!
+        public weak var leftView    : UIViewCircleWithUILabel!
         public weak var leftButton  : UIButtonWithCenteredCircle!
         public weak var slider      : UISlider!
         public weak var rightButton : UIButtonWithCenteredCircle!
-        public weak var rightView   : UILabelWithInsetsAndCenteredCircle!
+        public weak var rightView   : UIViewCircleWithUILabel!
         
         public var update           : (UIColor)->() = { _ in }
         public var action           : (Float)->() = { _ in }
@@ -82,31 +104,49 @@ open class PickerOfColorWithSliders : UIView {
         }
     }
     
+    // MARK: - Data
+    
+    public var sliders          : [ComponentSlider]     {
+        return self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
+    }
+    
+    public var color            : UIColor               = .clear {
+        didSet {
+            sliders.forEach { $0.update(color) }
+            self.subviews.filter( { $0 is ComponentColorDot } ).forEach { $0.backgroundColor = color }
+            handler?(color)
+        }
+    }
+    
+    // MARK: - Initializers
+    
     override public init            (frame:CGRect) {
         super.init(frame:frame)
     }
     
-    required public init(coder: NSCoder) {
+    required public init            (coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func addSliderRed        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> Slider {
-        let slider = self.addSlider(label: "R" | UIColor.white, color: UIColor(rgb:[1,0,0]), side:side)
+    // MARK: - Components
+    
+    public func addComponentSliderRed        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        let slider = self.addComponentSlider(label: "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[1,0,0]), side:side)
         
         slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
             let RGBA = color.RGBA
-            slider?.slider.setValue(Float(RGBA.red*255), animated:true)
-            slider?.rightView.circle.fillColor = UIColor(rgba:[1,0,0,RGBA.red]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            slider.slider.setValue(Float(RGBA.red)*slider.slider.maximumValue, animated:true)
+            slider.rightView.backgroundColor = UIColor(rgba:[1,0,0,RGBA.red])
+            slider.rightView.setNeedsDisplay()
         }
         
         slider.action = { [weak slider, weak self] value in
             guard let `self` = self else { return }
+            guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
-            RGBA.red = CGFloat(value) / CGFloat(255.0)
-            self.color = UIColor(rgba: [RGBA.red,RGBA.green,RGBA.blue,RGBA.alpha])
-            slider?.rightView.circle.fillColor = UIColor(rgba:[1,0,0,RGBA.red]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            RGBA.red = CGFloat(value) / CGFloat(slider.slider.maximumValue)
+            self.color = UIColor(RGBA:RGBA)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -114,24 +154,24 @@ open class PickerOfColorWithSliders : UIView {
         return slider
     }
     
-    public func addSliderGreen      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> Slider {
+    public func addComponentSliderGreen      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addSlider(label: "G" | UIColor.white, color: UIColor(rgb:[0,0.9,0]), side:side)
+        let slider = self.addComponentSlider(label: "G" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0,0.9,0]), side:side)
         
         slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
             let RGBA = color.RGBA
-            slider?.slider.setValue(Float(RGBA.green*255), animated:true)
-            slider?.rightView.circle.fillColor = UIColor(rgba:[0,0.9,0,RGBA.green]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            slider.slider.setValue(Float(RGBA.green)*slider.slider.maximumValue, animated:true)
+            slider.rightView.backgroundColor = UIColor(rgba:[0,0.9,0,RGBA.green])
+            slider.rightView.setNeedsDisplay()
         }
         
         slider.action = { [weak slider, weak self] value in
             guard let `self` = self else { return }
+            guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
-            RGBA.green = CGFloat(value) / CGFloat(255.0)
-            self.color = UIColor(rgba: [RGBA.red,RGBA.green,RGBA.blue,RGBA.alpha])
-            slider?.rightView.circle.fillColor = UIColor(rgba:[0,0.9,0,RGBA.green]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            RGBA.green = CGFloat(value) / CGFloat(slider.slider.maximumValue)
+            self.color = UIColor(RGBA:RGBA)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -139,24 +179,24 @@ open class PickerOfColorWithSliders : UIView {
         return slider
     }
     
-    public func addSliderBlue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> Slider {
+    public func addComponentSliderBlue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addSlider(label: "B" | UIColor.white, color: UIColor(rgb:[0.4,0.6,1]), side:side)
+        let slider = self.addComponentSlider(label: "B" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0.4,0.6,1]), side:side)
         
         slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
             let RGBA = color.RGBA
-            slider?.slider.setValue(Float(RGBA.blue*255), animated:true)
-            slider?.rightView.circle.fillColor = UIColor(rgba:[0.4,0.6,1,RGBA.blue]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            slider.slider.setValue(Float(RGBA.blue)*slider.slider.maximumValue, animated:true)
+            slider.rightView.backgroundColor = UIColor(rgba:[0.4,0.6,1,RGBA.blue])
+            slider.rightView.setNeedsDisplay()
         }
         
         slider.action = { [weak slider, weak self] value in
             guard let `self` = self else { return }
+            guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
-            RGBA.blue = CGFloat(value) / CGFloat(255.0)
-            self.color = UIColor(rgba: [RGBA.red,RGBA.green,RGBA.blue,RGBA.alpha])
-            slider?.rightView.circle.fillColor = UIColor(rgba:[0.4,0.6,1,RGBA.blue]).cgColor
-            slider?.rightView.setNeedsDisplay()
+            RGBA.blue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
+            self.color = UIColor(RGBA:RGBA)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -164,24 +204,24 @@ open class PickerOfColorWithSliders : UIView {
         return slider
     }
     
-    public func addSliderAlpha      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> Slider {
+    public func addComponentSliderAlpha      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addSlider(label: "A" | UIColor.gray, color: UIColor(white:1.0), side:side)
+        let slider = self.addComponentSlider(label: "A" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:1.0), side:side)
         
         slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
             let RGBA = color.RGBA
-            slider?.slider.setValue(Float(RGBA.alpha*255), animated:true)
-            slider?.rightView.circle.fillColor = UIColor(white:1.0,alpha:RGBA.alpha).cgColor
-            slider?.rightView.setNeedsDisplay()
+            slider.slider.setValue(Float(RGBA.alpha)*slider.slider.maximumValue, animated:true)
+            slider.rightView.backgroundColor = UIColor(white:1.0,alpha:RGBA.alpha)
+            slider.rightView.setNeedsDisplay()
         }
         
         slider.action = { [weak slider, weak self] value in
             guard let `self` = self else { return }
+            guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
-            RGBA.alpha = CGFloat(value) / CGFloat(255.0)
-            self.color = UIColor(rgba: [RGBA.red,RGBA.green,RGBA.blue,RGBA.alpha])
-            slider?.rightView.circle.fillColor = UIColor(white:1.0,alpha:RGBA.alpha).cgColor
-            slider?.rightView.setNeedsDisplay()
+            RGBA.alpha = CGFloat(value) / CGFloat(slider.slider.maximumValue)
+            self.color = UIColor(RGBA:RGBA)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -189,51 +229,216 @@ open class PickerOfColorWithSliders : UIView {
         return slider
     }
     
-    func handleSliderEvent(_ control:UIControl) {
-        if let uislider = control as? UISlider {
-            if let slider = self.sliders.find({ $0.slider == uislider }) {
-                slider.action(uislider.value)
-            }
-        }
-    }
-    
-    private var displayColor : UIView?
-    
-    public func addDisplayColor     (side:CGFloat = 128) -> UIView {
-        self.displayColor?.removeFromSuperview()
-        let displayColor = UIViewCircle(frame: CGRect(side:side))
-        displayColor.backgroundColor = self.color
-        self.addSubview(displayColor)
-        self.displayColor = displayColor
+    public func addComponentSliderHue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        
+        slider.slider.minimumValue = 0
+        slider.slider.maximumValue = 359.999
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let HSBA = color.HSBA
+            slider.slider.setValue(Float(HSBA.hue)*slider.slider.maximumValue, animated:true)
+            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,1,1,1])
+            slider.rightView.setNeedsDisplay()
 
-        displayColor.translatesAutoresizingMaskIntoConstraints=false
-        displayColor.heightAnchor.constraint(equalToConstant: side).isActive=true
-        displayColor.widthAnchor.constraint(equalToConstant: side).isActive=true
-        displayColor.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        }
         
-        return displayColor
+        slider.action = { [weak slider, weak self] value in
+            guard let `self` = self else { return }
+            guard let `slider` = slider else { return }
+            var HSBA = self.color.HSBA
+            HSBA.hue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
+            self.color = UIColor(HSBA:HSBA)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
     }
     
-    public func addSlider           (label:NSAttributedString, color:UIColor, side:CGFloat = 32) -> Slider {
+    public func addComponentSliderSaturation    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let leftView        = UILabelWithInsetsAndCenteredCircle    ()
+        let slider = self.addComponentSlider(label: "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let HSBA = color.HSBA
+            slider.slider.setValue(Float(HSBA.saturation), animated:true)
+            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,HSBA.saturation,1,1])
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.saturation = CGFloat(value)
+            self.color = UIColor(HSBA:HSBA)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+    public func addComponentSliderBrightness    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let HSBA = color.HSBA
+            slider.slider.setValue(Float(HSBA.brightness), animated:true)
+            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,1,HSBA.brightness,1])
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.brightness = CGFloat(value)
+            self.color = UIColor(HSBA:HSBA)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+    public func addComponentSliderCyan          (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "C" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.cyan, side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let CMYK = color.CMYK
+            slider.slider.setValue(Float(CMYK.cyan), animated:true)
+            slider.rightView.backgroundColor = UIColor.cyan.withAlphaComponent(CMYK.cyan)
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.cyan = CGFloat(value).clampedTo01
+            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+    public func addComponentSliderMagenta           (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "M" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.magenta, side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let CMYK = color.CMYK
+            slider.slider.setValue(Float(CMYK.magenta), animated:true)
+            slider.rightView.backgroundColor = UIColor.magenta.withAlphaComponent(CMYK.magenta)
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.magenta = CGFloat(value).clampedTo01
+            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+    public func addComponentSliderYellow        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "Y" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.yellow, side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+        
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let CMYK = color.CMYK
+            slider.slider.setValue(Float(CMYK.yellow), animated:true)
+            slider.rightView.backgroundColor = UIColor.yellow.withAlphaComponent(CMYK.yellow)
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.yellow = CGFloat(value).clampedTo01
+            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+    public func addComponentSliderKey           (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label: "K" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.black, side:side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
+
+        slider.update = { [weak slider] color in
+            guard let `slider` = slider else { return }
+            let CMYK = color.CMYK
+            slider.slider.setValue(Float(CMYK.key), animated:true)
+            slider.rightView.backgroundColor = UIColor.black.withAlphaComponent(CMYK.key)
+            slider.rightView.setNeedsDisplay()
+        }
+        
+        slider.action = { [weak self] value in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.key = CGFloat(value).clampedTo01
+            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+        }
+        
+        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        return slider
+    }
+    
+
+    open func addComponentSlider           (label:NSAttributedString, color:UIColor, side:CGFloat = 32) -> ComponentSlider {
+        
+        let leftView        = UIViewCircleWithUILabel               (side:side)
         let leftButton      = UIButtonWithCenteredCircle            ()
-        let slider          = UISlider()
+        let slider          = UISlider                              ()
         let rightButton     = UIButtonWithCenteredCircle            ()
-        let rightView       = UILabelWithInsetsAndCenteredCircle    ()
+        let rightView       = UIViewCircleWithUILabel               (side:side)
         
         slider.minimumValue = 0
         slider.maximumValue = 255
         slider.tintColor = color
         slider.isContinuous = false
         
-        leftView.attributedText     = label
-        leftView.circle.radius      = side/2
-        leftView.circle.fillColor   = color.cgColor
-        leftView.sizeToFit()
-
-        rightView.circle.radius     = side/2
-        rightView.circle.fillColor  = UIColor.clear.cgColor
+        leftView.backgroundColor            = color
+        leftView.view.attributedText        = label
+        leftView.view.textAlignment         = .center
+        
+        rightView.backgroundColor           = color
 
         leftButton.setAttributedTitle("-" | UIColor.white, for: .normal)
         leftButton.circle(for: .normal).radius = side/2
@@ -249,7 +454,7 @@ open class PickerOfColorWithSliders : UIView {
 //        let interval = someObject.timeIntervalSinceNow
         
         
-        let result = Slider()
+        let result = ComponentSlider()
         
         result.leftView     = leftView
         result.leftButton   = leftButton
@@ -264,24 +469,44 @@ open class PickerOfColorWithSliders : UIView {
         return result
     }
     
-    public var sliders : [Slider] {
-        return self.subviews.filter { $0 is Slider }.map { $0 as! Slider }
-    }
-    
-    public var color : UIColor = .clear {
-        didSet {
-            sliders.forEach { $0.update(color) }
-            displayColor?.backgroundColor = color
-            handler?(color)
+    func handleSliderEvent(_ control:UIControl) {
+        if let uislider = control as? UISlider {
+            if let slider = self.sliders.find({ $0.slider == uislider }) {
+                slider.action(uislider.value)
+            }
         }
     }
     
+    open func addComponentColorDot          (height side:CGFloat = 32) -> ComponentColorDot {
+        
+        let displayColor = ComponentColorDot(frame: CGRect(side:side))
+        
+        displayColor.backgroundColor = self.color
+        
+        self.addSubview(displayColor)
+        
+        displayColor.translatesAutoresizingMaskIntoConstraints=false
+        displayColor.heightAnchor.constraint(equalToConstant: side).isActive=true
+        displayColor.widthAnchor.constraint(equalToConstant: side).isActive=true
+        displayColor.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        if false {
+            let views = [UILabel(),UILabel(),UILabel()]
+//            let pile = UIViewPileCentered(frame: CGRect(side:32), pile:views.map { $0 as UIView })
+            views[0].attributedText = "\u{20dd}" | UIColor.black | UIFont.systemFont(ofSize: 32)
+            views[1].attributedText = "\u{20dd}" | UIColor.gray | UIFont.systemFont(ofSize: 24)
+            views[2].attributedText = "\u{20dd}" | UIColor.white | UIFont.systemFont(ofSize: 16)
+            displayColor.pile(views: views, constrainCenters: true)
+        }
+        
+        return displayColor
+    }
+    
+
+    
+    
     
     private func build() {
-        
-        // the width of each element in box equals this width
-        // the height of each element in box is variant
-        // the box is centered vertically and horizontally to this view
         
         if let first = self.subviews.first {
             let box = UILayoutGuide()
@@ -298,7 +523,7 @@ open class PickerOfColorWithSliders : UIView {
             }
             
             for subview in self.subviews {
-                if subview is Slider {
+                if subview is ComponentSlider {
                     subview.leftAnchor.constraint(equalTo: self.leftAnchor).isActive=true
                     subview.rightAnchor.constraint(equalTo: self.rightAnchor).isActive=true
                 }
@@ -312,21 +537,28 @@ open class PickerOfColorWithSliders : UIView {
     public var handler  : ((UIColor)->())?
     
     
-    static public func create           (withSliders kinds:[Slider.Kind], withStoredColors:[UIColor] = []) -> PickerOfColorWithSliders {
+    static public func create           (withComponents components:[Component]) -> PickerOfColorWithSliders {
         let result = PickerOfColorWithSliders()
         
-//        result.addArrangedSubview(CellForColor(radius:25))
-        
-        result.addDisplayColor(side:128)
-        
-        for kind in kinds {
-            switch kind {
-            case .red(let height)       : result.addSliderRed(side:height)
-            case .green(let height)     : result.addSliderGreen(side:height)
-            case .blue(let height)      : result.addSliderBlue(side:height)
-            case .alpha(let height)     : result.addSliderAlpha(side:height)
+        for component in components {
+            switch component {
                 
-            default: _ = result.addSliderRed(side:16)
+            case .colorDot              (let height)     : _ = result.addComponentColorDot          (height:height)
+                
+            case .sliderRed             (let height)     : _ = result.addComponentSliderRed         (side:height)
+            case .sliderGreen           (let height)     : _ = result.addComponentSliderGreen       (side:height)
+            case .sliderBlue            (let height)     : _ = result.addComponentSliderBlue        (side:height)
+            case .sliderAlpha           (let height)     : _ = result.addComponentSliderAlpha       (side:height)
+            case .sliderHue             (let height)     : _ = result.addComponentSliderHue         (side:height)
+            case .sliderSaturation      (let height)     : _ = result.addComponentSliderSaturation  (side:height)
+            case .sliderBrightness      (let height)     : _ = result.addComponentSliderBrightness  (side:height)
+            case .sliderCyan            (let height)     : _ = result.addComponentSliderCyan        (side:height)
+            case .sliderMagenta         (let height)     : _ = result.addComponentSliderMagenta     (side:height)
+            case .sliderYellow          (let height)     : _ = result.addComponentSliderYellow      (side:height)
+            case .sliderKey             (let height)     : _ = result.addComponentSliderKey         (side:height)
+                
+            default: _ = result.addComponentSliderRed(side:16)
+                
             }
         }
 

@@ -111,3 +111,23 @@ extension UIView {
     }
 }
 
+
+extension UIView {
+    
+    /// Adds views on on top of the previous
+    ///
+    /// - Parameters:
+    ///   - views: the views to stack
+    ///   - constrainCenters: if true will create constraint to center view to previous view's center
+    public func pile(views:[UIView], constrainCenters:Bool) {
+        var current = self
+        for view in views {
+            current.addSubview(view)
+            if constrainCenters {
+                view.constraintCenterToSuperview()
+            }
+            current = view
+        }
+    }
+    
+}

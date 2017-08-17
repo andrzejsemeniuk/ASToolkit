@@ -51,6 +51,7 @@ extension UIColor
         self.init(hue:h, saturation:s, brightness:b, alpha:a)
     }
     
+    
     public func components_RGBA_UInt8() -> (red:UInt8,green:UInt8,blue:UInt8,alpha:UInt8) {
         let components        = RGBA
         let maximum:CGFloat   = 256
@@ -84,7 +85,10 @@ extension UIColor
         return a.red==b.red && a.green==b.green && a.blue==b.blue
     }
     
-    public var RGBA : (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat) {
+    
+    public typealias RGBATuple = (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)
+    
+    public var RGBA : RGBATuple {
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
@@ -100,7 +104,14 @@ extension UIColor
         return [v.red, v.green, v.blue, v.alpha]
     }
 
-    public var HSBA : (hue:CGFloat,saturation:CGFloat,brightness:CGFloat,alpha:CGFloat) {
+    public convenience init(RGBA:RGBATuple) {
+        self.init(red:RGBA.red, green:RGBA.green, blue:RGBA.blue, alpha:RGBA.alpha)
+    }
+    
+    
+    public typealias HSBATuple = (hue:CGFloat,saturation:CGFloat,brightness:CGFloat,alpha:CGFloat)
+    
+    public var HSBA : HSBATuple {
         var h:CGFloat = 0
         var s:CGFloat = 0
         var b:CGFloat = 0
@@ -116,6 +127,11 @@ extension UIColor
         return [v.hue, v.saturation, v.brightness, v.alpha]
     }
     
+    public convenience init(HSBA:HSBATuple) {
+        self.init(hue:HSBA.hue, saturation:HSBA.saturation, brightness:HSBA.brightness, alpha:HSBA.alpha)
+    }
+    
+
     public var red          :CGFloat    { return RGBA.red }
     public var green        :CGFloat    { return RGBA.green }
     public var blue         :CGFloat    { return RGBA.blue }
@@ -169,5 +185,124 @@ extension UIColor
 extension UIColor {
     
     open class var aqua: UIColor { return UIColor(hsb:[0.51,1,1]) }
+    
+}
+
+
+extension UIColor {
+    // let colorSpaceCMYK = CGColorSpaceCreateDeviceCMYK()
+    
+    public typealias CMYKTuple  = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat)
+    public typealias CMYKATuple = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat, alpha: CGFloat)
+    
+    public var CMYK:CMYKTuple {
+        
+        
+//        function rgb2cmyk (r,g,b) {
+//            var computedC = 0;
+//            var computedM = 0;
+//            var computedY = 0;
+//            var computedK = 0;
+//            
+//            //remove spaces from input RGB values, convert to int
+//            var r = parseInt( (''+r).replace(/\s/g,''),10 );
+//            var g = parseInt( (''+g).replace(/\s/g,''),10 );
+//            var b = parseInt( (''+b).replace(/\s/g,''),10 );
+//            
+//            if ( r==null || g==null || b==null ||
+//                isNaN(r) || isNaN(g)|| isNaN(b) )
+//            {
+//                alert ('Please enter numeric RGB values!');
+//                return;
+//            }
+//            if (r<0 || g<0 || b<0 || r>255 || g>255 || b>255) {
+//                alert ('RGB values must be in the range 0 to 255.');
+//                return;
+//            }
+//            
+//            // BLACK
+//            if (r==0 && g==0 && b==0) {
+//                computedK = 1;
+//                return [0,0,0,1];
+//            }
+//            
+
+        let RGB = self.RGBA
+        
+        if RGB.red < 0.001 && RGB.green < 0.001 && RGB.blue < 0.001 {
+            return (0,0,0,1)
+        }
+        
+//            computedC = 1 - (r/255);
+//            computedM = 1 - (g/255);
+//            computedY = 1 - (b/255);
+        
+        let computedC = 1 - RGB.red.clampedTo01
+        let computedM = 1 - RGB.green.clampedTo01
+        let computedY = 1 - RGB.blue.clampedTo01
+//            
+//            var minCMY = Math.min(computedC,
+//                                  Math.min(computedM,computedY));
+        
+        let minCMY          : CGFloat = min(computedC, computedM, computedY)
+        
+//            computedC = (computedC - minCMY) / (1 - minCMY) ;
+//            computedM = (computedM - minCMY) / (1 - minCMY) ;
+//            computedY = (computedY - minCMY) / (1 - minCMY) ;
+//            computedK = minCMY;
+//            
+//            return [computedC,computedM,computedY,computedK];
+//        }
+        
+        let denominator     : CGFloat = 1 - minCMY
+        
+        return (
+            (computedC - minCMY) / denominator,
+            (computedM - minCMY) / denominator,
+            (computedY - minCMY) / denominator,
+            minCMY
+        )
+    }
+    
+    public var CMYKA : CMYKATuple {
+        let CMYK = self.CMYK
+        return (CMYK.cyan, CMYK.magenta, CMYK.yellow, CMYK.key, alpha)
+    }
+    
+    public convenience init(cyan:CGFloat, magenta:CGFloat, yellow:CGFloat, key:CGFloat, alpha:CGFloat = 1) {
+        
+//        unsigned char r = (unsigned char)(255 * (1 - cmyk.C) * (1 - cmyk.K));
+//        unsigned char g = (unsigned char)(255 * (1 - cmyk.M) * (1 - cmyk.K));
+//        unsigned char b = (unsigned char)(255 * (1 - cmyk.Y) * (1 - cmyk.K));
+
+        let multiplier      : CGFloat = 1.0 - key.clampedTo01
+        
+        self.init(
+            r: (1.0 - cyan.clampedTo01) * multiplier,
+            g: (1.0 - magenta.clampedTo01) * multiplier,
+            b: (1.0 - yellow.clampedTo01) * multiplier,
+            a: alpha
+        )
+    }
+    
+    public convenience init(c:CGFloat, m:CGFloat, y:CGFloat, k:CGFloat, a:CGFloat = 1) {
+        self.init(cyan:c, magenta:m, yellow:y, key:k, alpha:a)
+    }
+    
+    public convenience init(cmyk:[CGFloat]) {
+        self.init(cyan:cmyk[0], magenta:cmyk[1], yellow:cmyk[2], key:cmyk[3])
+    }
+    
+    public convenience init(cmyka:[CGFloat]) {
+        self.init(cyan:cmyka[0], magenta:cmyka[1], yellow:cmyka[2], key:cmyka[3], alpha:cmyka[4])
+    }
+    
+    public convenience init(CMYK:CMYKTuple, alpha:CGFloat = 1) {
+        self.init(cyan:CMYK.cyan, magenta:CMYK.magenta, yellow:CMYK.yellow, key:CMYK.key, alpha:alpha)
+    }
+    
+    public convenience init(CMYKA:CMYKATuple) {
+        self.init(cyan:CMYKA.cyan, magenta:CMYKA.magenta, yellow:CMYKA.yellow, key:CMYKA.key, alpha:CMYKA.alpha)
+    }
     
 }
