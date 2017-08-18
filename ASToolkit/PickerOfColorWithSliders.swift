@@ -32,7 +32,7 @@ open class PickerOfColorWithSliders : UIView {
         
         case sliderCustom           (height:CGFloat, color:UIColor, label:NSAttributedString, value0:Float, value1:Float)
         
-        case storageDots            (radius:CGFloat, rows:Int, colors:[UIColor])
+        case storageDots            (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor])
     }
 
     open class ComponentColorDisplay : UIView {
@@ -144,10 +144,69 @@ open class PickerOfColorWithSliders : UIView {
         
         public var columns  = 4
         
-        // constraint on count of columns? on button radius? on margin?
+        private var heightConstraint : NSLayoutConstraint?
         
-        public func set     (colors:[UIColor]) {
+        public func set     (radius:CGFloat, colors:[UIColor]) {
             
+            let side = radius*2
+            
+            buttons.forEach {
+                $0.forEach {
+                    $0.removeFromSuperview()
+                }
+            }
+            
+            buttons = []
+            
+            let capacity = rows * columns
+            
+            var column  = 0
+            var row     = 0
+            var index   = 0
+            
+            var colors  = colors
+            
+            while colors.count > capacity {
+                _ = colors.trim(to: capacity)
+            }
+            while colors.count < capacity {
+                colors.append(.white)
+            }
+            
+            for color in colors {
+
+                if buttons.count <= row {
+                    buttons.append([])
+                }
+                
+                let button = UIButtonWithCenteredCircle(frame: CGRect(side:side))
+                button.circle(for: .normal).radius = radius
+                button.circle(for: .normal).fillColor = color.cgColor
+                buttons[row].append(button)
+                
+                self.addSubview(button)
+                
+                column += 1
+                index += 1
+                
+                if column == columns {
+                    column = 0
+                    row += 1
+                }
+            }
+            
+            let dx = (UIScreen.main.bounds.width - self.alignmentRectInsets.left - self.alignmentRectInsets.right) / CGFloat(1 + columns)
+            let height = CGFloat(1 + rows) * dx + alignmentRectInsets.top + alignmentRectInsets.bottom
+            self.translatesAutoresizingMaskIntoConstraints=false
+            if let constraint = heightConstraint {
+                self.removeConstraint(constraint)
+            }
+            self.heightConstraint = self.heightAnchor.constraint(equalToConstant: height)
+            self.heightConstraint?.isActive=true
+            
+            self.backgroundColor = UIColor(white:0,alpha:0.1)
+            
+            setNeedsLayout()
         }
         
         public func add     (color:UIColor) {
@@ -155,6 +214,29 @@ open class PickerOfColorWithSliders : UIView {
         }
         
         public func remove  (color:UIColor) {
+            
+        }
+        
+        override open func layoutSubviews() {
+            
+            let dx = (self.frame.width - self.alignmentRectInsets.left - self.alignmentRectInsets.right) / CGFloat(1 + columns)
+            let dy = dx
+            
+            let x0 = CGFloat(self.alignmentRectInsets.left + dx)
+            var y  = CGFloat(self.alignmentRectInsets.top + dy)
+            
+            for row in buttons {
+                
+                var x = x0
+                
+                for button in row {
+                    button.center = CGPoint(x,y)
+                    
+                    x += dx
+                }
+                
+                y += dy
+            }
             
         }
     }
@@ -598,6 +680,23 @@ open class PickerOfColorWithSliders : UIView {
         return display
     }
     
+    
+    func addComponentStorageDots(radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
+        
+        let storage = ComponentStorageDots()
+        
+        self.addSubview(storage)
+        
+        storage.rows     = rows
+        storage.columns  = columns
+        storage.set(radius: radius, colors: colors)
+        
+        storage.translatesAutoresizingMaskIntoConstraints=false
+        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        return storage
+    }
 
     
     
@@ -656,6 +755,9 @@ open class PickerOfColorWithSliders : UIView {
             case .sliderMagenta         (let height)     : _ = result.addComponentSliderMagenta     (side:height)
             case .sliderYellow          (let height)     : _ = result.addComponentSliderYellow      (side:height)
             case .sliderKey             (let height)     : _ = result.addComponentSliderKey         (side:height)
+                
+            case .storageDots           (let radius, let columns, let rows, let colors) :
+                _ = result.addComponentStorageDots(radius:radius, columns:columns, rows:rows, colors:colors)
                 
             default: _ = result.addComponentSliderRed(side:16)
                 

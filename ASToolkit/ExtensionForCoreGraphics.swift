@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 extension CGPoint {
+    
+    public init(_ x:CGFloat, _ y:CGFloat) {
+        self.init(x:x, y:y)
+    }
+    
     public var asCGSize:CGSize {
         return CGSize(width:x,height:y)
     }
