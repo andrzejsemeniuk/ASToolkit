@@ -87,22 +87,43 @@ extension UIView {
     open func removeAllConstraints() {
         self.removeConstraints(self.constraints)
     }
-    
-    open func constraintCenter(to:UIView) {
+
+    open func constrainXCenter(to:UIView) {
         self.translatesAutoresizingMaskIntoConstraints=false
         self.centerXAnchor.constraint(equalTo: to.centerXAnchor).isActive = true
+    }
+    
+    open func constrainYCenter(to:UIView) {
+        self.translatesAutoresizingMaskIntoConstraints=false
         self.centerYAnchor.constraint(equalTo: to.centerYAnchor).isActive = true
     }
     
-    open func constraintCenterToSuperview() {
+    open func constrainCenter(to:UIView) {
+        self.constrainXCenter(to: to)
+        self.constrainYCenter(to: to)
+    }
+    
+    open func constrainCenterToSuperview() {
         if let superview = superview {
-            constraintCenter(to:superview)
+            constrainCenter(to:superview)
+        }
+    }
+    
+    open func constrainCenterXToSuperview() {
+        if let superview = superview {
+            constrainXCenter(to:superview)
+        }
+    }
+    
+    open func constrainCenterYToSuperview() {
+        if let superview = superview {
+            constrainYCenter(to:superview)
         }
     }
     
     open func addSubviewCentered(_ view:UIView) {
         self.addSubview(view)
-        view.constraintCenterToSuperview()
+        view.constrainCenterToSuperview()
     }
     
     open func constrainSizeToFrameSize() {
@@ -134,7 +155,7 @@ extension UIView {
         for view in views {
             current.addSubview(view)
             if constrainCenters {
-                view.constraintCenterToSuperview()
+                view.constrainCenterToSuperview()
             }
             current = view
         }

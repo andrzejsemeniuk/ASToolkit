@@ -24,7 +24,7 @@ open class UIViewPile : UIView {
         var top = self.top()
         for view in views {
             top.addSubview(view)
-            view.constraintCenterToSuperview()
+            view.constrainCenterToSuperview()
             top = view
         }
     }
@@ -52,7 +52,7 @@ open class UIViewPileCentered : UIViewPile {
         var top = self.top()
         for view in views {
             top.addSubview(view)
-            view.constraintCenterToSuperview()
+            view.constrainCenterToSuperview()
             top = view
         }
     }

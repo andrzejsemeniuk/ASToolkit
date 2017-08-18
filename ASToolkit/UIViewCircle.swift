@@ -40,7 +40,7 @@ open class UIViewCircleWithCenteredUIView<TYPE : UIView> : UIViewCircle {
         self.view = view
         super.init(frame:CGRect(side:side))
         self.addSubview(view)
-        view.constraintCenterToSuperview()
+        view.constrainCenterToSuperview()
     }
     
     public convenience init(radius:CGFloat, view:TYPE = TYPE()) {

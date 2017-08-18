@@ -288,6 +288,7 @@ open class PickerOfColorWithSliders : UIView {
     
     open class ComponentSlider : UIView {
         
+        public weak var title       : UILabelWithInsets!
         public weak var leftView    : UIViewCircleWithUILabel!
         public weak var leftButton  : UIButtonWithCenteredCircle!
         public weak var slider      : UISlider!
@@ -303,6 +304,8 @@ open class PickerOfColorWithSliders : UIView {
         
         public func build(side:CGFloat, margin:CGFloat = 16) {
             
+            self.subviews.forEach { $0.removeFromSuperview() }
+            
             self.addSubviews([
                 slider,
                 leftButton,
@@ -311,23 +314,44 @@ open class PickerOfColorWithSliders : UIView {
                 rightView
                 ])
             
-            let builder = NSLayoutConstraintsBuilder(views:[
+            var views : Dictionary<String,UIView> = [
                 "self"          : self,
                 "leftView"      : leftView,
                 "leftButton"    : leftButton,
                 "slider"        : slider,
                 "rightButton"   : rightButton,
                 "rightView"     : rightView
-                ])
+            ]
+            
+            if let title = title {
+                self.insertSubview(title, at:0)
+                views["title"] = title
+            }
+            
+            let builder = NSLayoutConstraintsBuilder(views:views)
             
             builder < "H:|-[leftView(\(side))]-[leftButton(\(side))]-[slider(>=8)]-[rightButton(\(side))]-[rightView(\(side))]-|"
-            builder < "V:|-(\(margin))-[leftView(\(side))]-(\(margin))-|"
-            builder < "V:|-(\(margin))-[leftButton(\(side))]-(\(margin))-|"
-            builder < "V:|-(\(margin))-[rightButton(\(side))]-(\(margin))-|"
-            builder < "V:|-(\(margin))-[rightView(\(side))]-(\(margin))-|"
-            builder < "V:|-(\(margin))-[slider(\(side))]-(\(margin))-|"
-            builder < "V:[self(\(side+margin+margin))]"
+
+            builder < "V:|-(>=\(margin))-[leftView(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[leftButton(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[rightButton(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[rightView(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[slider(\(side))]-(\(margin))-|"
+
+            if let title = title {
+                //                builder < "H:|-[title]-|" // THERE IS NO WAY TO X-CENTER A VIEW USING VFL
+                title.constrainCenterXToSuperview()
+                builder < "V:|[title]-[slider]"
+                builder < "V:[self(>=\(side+margin+margin))]"
+            }
+            else {
+                builder < "V:[self(\(side+margin+margin))]"
+            }
+            
+            
             builder.activate()
+            
+            
 
         }
         
@@ -473,7 +497,10 @@ open class PickerOfColorWithSliders : UIView {
     
     public func addComponentSliderHue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        let slider = self.addComponentSlider(label  : "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : "H U E" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             color  : UIColor(white:0,alpha:0.02),
+                                             side   : side)
         
         slider.slider.minimumValue = 0
         slider.slider.maximumValue = 359.999
@@ -501,7 +528,10 @@ open class PickerOfColorWithSliders : UIView {
     
     public func addComponentSliderSaturation    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        let slider = self.addComponentSlider(label  : "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : "S A T U R A T I O N" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             color  : UIColor(white:0,alpha:0.02),
+                                             side   : side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -528,7 +558,10 @@ open class PickerOfColorWithSliders : UIView {
     
     public func addComponentSliderBrightness    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:0,alpha:0.02), side:side)
+        let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : "B R I G H T N E S S" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             color  : UIColor(white:0,alpha:0.02),
+                                             side   : side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -662,7 +695,9 @@ open class PickerOfColorWithSliders : UIView {
     }
     
 
-    open func addComponentSlider           (label:NSAttributedString, color:UIColor, side:CGFloat = 32) -> ComponentSlider {
+    open func addComponentSlider           (label:NSAttributedString, title:NSAttributedString? = nil, color:UIColor, side:CGFloat = 32) -> ComponentSlider {
+        
+        let GRAY            = UIColor(white:0.9)
         
         let leftView        = UIViewCircleWithUILabel               (side:side)
         let leftButton      = UIButtonWithCenteredCircle            ()
@@ -683,13 +718,25 @@ open class PickerOfColorWithSliders : UIView {
 
         leftButton.setAttributedTitle("-" | UIColor.white, for: .normal)
         leftButton.circle(for: .normal).radius = side/2
-        leftButton.circle(for: .normal).fillColor = UIColor(white:0.9).cgColor
+        leftButton.circle(for: .normal).fillColor = GRAY.cgColor
 
         rightButton.setAttributedTitle("+" | UIColor.white, for: .normal)
         rightButton.circle(for: .normal).radius = side/2
-        rightButton.circle(for: .normal).fillColor = UIColor(white:0.9).cgColor
+        rightButton.circle(for: .normal).fillColor = GRAY.cgColor
         
+        var titleLabel      : UILabelWithInsets?
         
+        if let title = title {
+            titleLabel      = UILabelWithInsets()
+            titleLabel?.textAlignment = .center
+            titleLabel?.attributedText = title
+            titleLabel?.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
+//            titleLabel?.layer.borderColor = UIColor(white:1,alpha:0.5).cgColor
+//            titleLabel?.layer.borderWidth = 1
+//            titleLabel?.sizeToFit()
+            
+            titleLabel?.layer.backgroundColor = GRAY.cgColor
+        }
         
 //        var someObject:AnyObject = "whatever" as AnyObject
 //        let interval = someObject.timeIntervalSinceNow
@@ -697,6 +744,9 @@ open class PickerOfColorWithSliders : UIView {
         
         let result = ComponentSlider()
         
+        if let titleLabel = titleLabel {
+            result.title    = titleLabel
+        }
         result.leftView     = leftView
         result.leftButton   = leftButton
         result.slider       = slider
