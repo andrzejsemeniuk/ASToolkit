@@ -298,6 +298,9 @@ open class PickerOfColorWithSliders : UIView {
         public var update           : (ComponentSlider,UIColor,Bool)->() = { _ in }
         public var action           : (Float)->() = { _ in }
         
+        public var actionOnLeftButton   : (ComponentSlider)->() = { _ in }
+        public var actionOnRightButton  : (ComponentSlider)->() = { _ in }
+        
         public func update          (color:UIColor, animated:Bool) {
             self.update(self,color,animated)
         }
@@ -415,7 +418,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.red += 1.0/255.0
+            RGBA.red = RGBA.red.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.red += 1.0/255.0
+            RGBA.red = RGBA.red.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
         
         return slider
     }
@@ -440,7 +457,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.green -= 1.0/255.0
+            RGBA.green = RGBA.green.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.green += 1.0/255.0
+            RGBA.green = RGBA.green.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
         
         return slider
     }
@@ -465,7 +496,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.blue -= 1.0/255.0
+            RGBA.blue = RGBA.blue.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.blue += 1.0/255.0
+            RGBA.blue = RGBA.blue.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
         
         return slider
     }
@@ -490,14 +535,28 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.alpha -= 1.0/255.0
+            RGBA.alpha = RGBA.alpha.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var RGBA = self.color.RGBA
+            RGBA.alpha += 1.0/255.0
+            RGBA.alpha = RGBA.alpha.clampedTo01
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
+        }
         
         return slider
     }
     
     public func addComponentSliderHue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label  : "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+        let slider = self.addComponentSlider(label  : "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : "H U E" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
@@ -521,14 +580,28 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.hue -= 1.0/360.0
+            HSBA.hue = HSBA.hue.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
         
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.hue += 1.0/360.0
+            HSBA.hue = HSBA.hue.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
+
         return slider
     }
     
     public func addComponentSliderSaturation    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label  : "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+        let slider = self.addComponentSlider(label  : "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : "S A T U R A T I O N" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
@@ -551,14 +624,28 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.saturation -= 1.0/255.0
+            HSBA.saturation = HSBA.saturation.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.saturation += 1.0/255.0
+            HSBA.saturation = HSBA.saturation.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
         
         return slider
     }
     
     public func addComponentSliderBrightness    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+        let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : "B R I G H T N E S S" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
@@ -581,7 +668,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.brightness -= 1.0/255.0
+            HSBA.brightness = HSBA.brightness.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var HSBA = self.color.HSBA
+            HSBA.brightness += 1.0/255.0
+            HSBA.brightness = HSBA.brightness.clampedTo01
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
+        }
         
         return slider
     }
@@ -608,7 +709,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.cyan -= 1.0/255.0
+            CMYK.cyan = CMYK.cyan.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.cyan += 1.0/255.0
+            CMYK.cyan = CMYK.cyan.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
         
         return slider
     }
@@ -635,7 +750,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.magenta -= 1.0/255.0
+            CMYK.magenta = CMYK.magenta.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.magenta += 1.0/255.0
+            CMYK.magenta = CMYK.magenta.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
         
         return slider
     }
@@ -662,7 +791,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.yellow -= 1.0/255.0
+            CMYK.yellow = CMYK.yellow.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.yellow += 1.0/255.0
+            CMYK.yellow = CMYK.yellow.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
         
         return slider
     }
@@ -689,7 +832,21 @@ open class PickerOfColorWithSliders : UIView {
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
-        slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        slider.actionOnLeftButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.key -= 1.0/255.0
+            CMYK.key = CMYK.key.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
+        
+        slider.actionOnRightButton = { [weak self] slider in
+            guard let `self` = self else { return }
+            var CMYK = self.color.CMYK
+            CMYK.key += 1.0/255.0
+            CMYK.key = CMYK.key.clampedTo01
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+        }
         
         return slider
     }
@@ -757,6 +914,12 @@ open class PickerOfColorWithSliders : UIView {
         
         result.build(side:side)
         
+        result.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        
+        result.leftButton.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderLeftButtonEvent(_:)), for: .touchDown)
+        
+        result.rightButton.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderRightButtonEvent(_:)), for: .touchDown)
+        
         return result
     }
     
@@ -764,6 +927,22 @@ open class PickerOfColorWithSliders : UIView {
         if let uislider = control as? UISlider {
             if let slider = self.componentSliders.find({ $0.slider == uislider }) {
                 slider.action(uislider.value)
+            }
+        }
+    }
+    
+    func handleSliderLeftButtonEvent(_ control:UIControl) {
+        if let button = control as? UIButton {
+            if let slider = self.componentSliders.find({ $0.leftButton == button }) {
+                slider.actionOnLeftButton(slider)
+            }
+        }
+    }
+    
+    func handleSliderRightButtonEvent(_ control:UIControl) {
+        if let button = control as? UIButton {
+            if let slider = self.componentSliders.find({ $0.rightButton == button }) {
+                slider.actionOnRightButton(slider)
             }
         }
     }
