@@ -11,7 +11,7 @@ import Foundation
 open class PickerOfColorWithSliders : UIView {
 
     public enum Component {
-        case colorDot               (height:CGFloat)
+        case colorDisplay           (height:CGFloat, kind:ComponentColorDisplay.Kind)
         
         case sliderRed              (height:CGFloat)
         case sliderGreen            (height:CGFloat)
@@ -35,7 +35,104 @@ open class PickerOfColorWithSliders : UIView {
         case storageDots            (radius:CGFloat, rows:Int, colors:[UIColor])
     }
 
-    open class ComponentColorDot : UIViewCircle {
+    open class ComponentColorDisplay : UIView {
+        
+        public enum Kind {
+            case background
+            case dot
+            case dots
+        }
+
+        public var kind             : Kind             = .background {
+            didSet {
+                self.updateKind()
+            }
+        }
+        
+        public var color            : UIColor           = .clear {
+            didSet {
+                self.updateColor()
+            }
+        }
+        
+        private weak var viewDot    : UIViewCircle!
+        private var viewDots        : [UIViewCircle]    = []
+        private var viewDotsIndex   : Int               = 0
+        
+        public init(height: CGFloat, kind:Kind = .background) {
+            super.init(frame: CGRect(side:height))
+            
+            // dot
+            
+            let viewDot = UIViewCircle(side:height)
+            self.addSubviewCentered(viewDot)
+            viewDot.constrainSizeToFrameSize()
+            self.viewDot = viewDot
+            
+            // dots
+            
+            self.viewDots = [
+                UIViewCircle(side:height),
+                UIViewCircle(side:height/2)
+            ]
+            
+            viewDots.forEach {
+                self.addSubviewCentered($0)
+                $0.constrainSizeToFrameSize()
+                $0.backgroundColor = .white
+            }
+            
+            // init
+            
+            subviews.forEach { $0.isHidden = true }
+            
+            self.kind = kind
+            self.updateKind()
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(ComponentColorDisplay.tapped))
+            self.addGestureRecognizer(tap)
+         }
+        
+        func tapped() {
+            if false {
+                switch kind {
+                case .background    : self.kind = .dot
+                case .dot           : self.kind = .dots
+                case .dots          :
+                    self.viewDotsIndex += 1
+                    self.viewDotsIndex %= self.viewDots.count
+                    if 0 == self.viewDotsIndex {
+                        self.kind = .background
+                    }
+                }
+            }
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func updateKind() {
+            subviews.forEach { $0.isHidden = true }
+            switch kind {
+            case .dot       :
+                viewDot.isHidden = false
+            case .dots      :
+                viewDots.forEach { $0.isHidden = false }
+            case .background:
+                break
+            }
+            self.backgroundColor = .clear
+            self.updateColor()
+        }
+        
+        private func updateColor() {
+            switch kind {
+            case .dot           : viewDot.backgroundColor = color
+            case .background    : self.backgroundColor = color
+            case .dots          : self.viewDots[self.viewDotsIndex].backgroundColor = color
+            }
+        }
         
     }
     
@@ -106,14 +203,13 @@ open class PickerOfColorWithSliders : UIView {
     
     // MARK: - Data
     
-    public var sliders          : [ComponentSlider]     {
-        return self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
-    }
+    public var componentSliders     : [ComponentSlider]         = []
+    public var componentDisplays    : [ComponentColorDisplay]   = []
     
     public var color            : UIColor               = .clear {
         didSet {
-            sliders.forEach { $0.update(color) }
-            self.subviews.filter( { $0 is ComponentColorDot } ).forEach { $0.backgroundColor = color }
+            componentSliders.forEach { $0.update(color) }
+            componentDisplays.forEach { $0.color = color }
             handler?(color)
         }
     }
@@ -431,7 +527,7 @@ open class PickerOfColorWithSliders : UIView {
         
         slider.minimumValue = 0
         slider.maximumValue = 255
-        slider.tintColor = color
+        slider.tintColor    = color
         slider.isContinuous = false
         
         leftView.backgroundColor            = color
@@ -471,24 +567,24 @@ open class PickerOfColorWithSliders : UIView {
     
     func handleSliderEvent(_ control:UIControl) {
         if let uislider = control as? UISlider {
-            if let slider = self.sliders.find({ $0.slider == uislider }) {
+            if let slider = self.componentSliders.find({ $0.slider == uislider }) {
                 slider.action(uislider.value)
             }
         }
     }
     
-    open func addComponentColorDot          (height side:CGFloat = 32) -> ComponentColorDot {
+    open func addComponentColorDisplay       (height side:CGFloat = 32, kind:ComponentColorDisplay.Kind) -> ComponentColorDisplay {
         
-        let displayColor = ComponentColorDot(frame: CGRect(side:side))
+        let display = ComponentColorDisplay(height:side, kind:kind)
         
-        displayColor.backgroundColor = self.color
+        self.addSubview(display)
         
-        self.addSubview(displayColor)
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
-        displayColor.translatesAutoresizingMaskIntoConstraints=false
-        displayColor.heightAnchor.constraint(equalToConstant: side).isActive=true
-        displayColor.widthAnchor.constraint(equalToConstant: side).isActive=true
-        displayColor.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        display.color = self.color
         
         if false {
             let views = [UILabel(),UILabel(),UILabel()]
@@ -496,10 +592,10 @@ open class PickerOfColorWithSliders : UIView {
             views[0].attributedText = "\u{20dd}" | UIColor.black | UIFont.systemFont(ofSize: 32)
             views[1].attributedText = "\u{20dd}" | UIColor.gray | UIFont.systemFont(ofSize: 24)
             views[2].attributedText = "\u{20dd}" | UIColor.white | UIFont.systemFont(ofSize: 16)
-            displayColor.pile(views: views, constrainCenters: true)
+            display.pile(views: views, constrainCenters: true)
         }
         
-        return displayColor
+        return display
     }
     
 
@@ -530,6 +626,9 @@ open class PickerOfColorWithSliders : UIView {
             }
         }
 
+        self.componentSliders  = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
+        self.componentDisplays = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
+
     }
     
     
@@ -543,7 +642,8 @@ open class PickerOfColorWithSliders : UIView {
         for component in components {
             switch component {
                 
-            case .colorDot              (let height)     : _ = result.addComponentColorDot          (height:height)
+            case .colorDisplay          (let height, let kind) :
+                _ = result.addComponentColorDisplay      (height:height,kind:kind)
                 
             case .sliderRed             (let height)     : _ = result.addComponentSliderRed         (side:height)
             case .sliderGreen           (let height)     : _ = result.addComponentSliderGreen       (side:height)

@@ -99,6 +99,16 @@ extension UIView {
             constraintCenter(to:superview)
         }
     }
+    
+    open func addSubviewCentered(_ view:UIView) {
+        self.addSubview(view)
+        view.constraintCenterToSuperview()
+    }
+    
+    open func constrainSizeToFrameSize() {
+        self.widthAnchor.constraint(equalToConstant: frame.width).isActive=true
+        self.heightAnchor.constraint(equalToConstant: frame.height).isActive=true
+    }
 }
 
 extension UIView {
