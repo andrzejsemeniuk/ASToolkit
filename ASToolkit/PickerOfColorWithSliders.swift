@@ -8,9 +8,21 @@
 
 import Foundation
 
+// TODO: TAP ON DISPLAY ADDS COLOR TO STORAGE?
+// TODO: PERSIST LAST COLOR SET?
+
+public protocol ProtocolForPickerOfColorWithSlidersComponentStorage {
+    
+    func add(color:UIColor)
+    
+}
+
 open class PickerOfColorWithSliders : UIView {
 
+    public var preferenceSliderSetValueAnimationDuration                    : Double                = 0.4
+    
     public enum Component {
+        
         case colorDisplay           (height:CGFloat, kind:ComponentColorDisplay.Kind)
         
         case sliderRed              (height:CGFloat)
@@ -54,6 +66,10 @@ open class PickerOfColorWithSliders : UIView {
                 self.updateColor()
             }
         }
+
+        public typealias Handler    = (ComponentColorDisplay)->()
+        
+        public var handler          : Handler?
         
         private weak var viewDot    : UIViewCircle!
         private var viewDots        : [UIViewCircle]    = []
@@ -94,16 +110,18 @@ open class PickerOfColorWithSliders : UIView {
          }
         
         func tapped() {
-            if false {
-                switch kind {
-                case .background    : self.kind = .dot
-                case .dot           : self.kind = .dots
-                case .dots          :
-                    self.viewDotsIndex += 1
-                    self.viewDotsIndex %= self.viewDots.count
-                    if 0 == self.viewDotsIndex {
-                        self.kind = .background
-                    }
+            self.handler?(self)
+        }
+
+        public func nextKind() {
+            switch kind {
+            case .background    : self.kind = .dot
+            case .dot           : self.kind = .dots
+            case .dots          :
+                self.viewDotsIndex += 1
+                self.viewDotsIndex %= self.viewDots.count
+                if 0 == self.viewDotsIndex {
+                    self.kind = .background
                 }
             }
         }
@@ -136,7 +154,7 @@ open class PickerOfColorWithSliders : UIView {
         
     }
     
-    open class ComponentStorageDots : UIView {
+    open class ComponentStorageDots : UIView, ProtocolForPickerOfColorWithSlidersComponentStorage {
         
         private var buttons : [[UIButtonWithCenteredCircle]] = []
         
@@ -146,12 +164,25 @@ open class PickerOfColorWithSliders : UIView {
         
         private var heightConstraint : NSLayoutConstraint?
         
-        public func set     (radius:CGFloat, colors:[UIColor]) {
+        public typealias Handler = ((UIColor)->Void)
+        
+        public var handler : Handler?
+        
+        func tapped(_ control:UIControl!) {
+            if let button = control as? UIButtonWithCenteredCircle, let color = button.circle(for: .normal).fillColor {
+                handler?(UIColor(cgColor:color))
+            }
+        }
+        
+        public func set     (radius:CGFloat, colors:[UIColor], handler:Handler? = nil) {
+            
+            self.handler = handler
             
             let side = radius*2
             
             buttons.forEach {
                 $0.forEach {
+                    $0.removeTarget(self, action: #selector(ComponentStorageDots.tapped(_:)), for: .touchUpInside)
                     $0.removeFromSuperview()
                 }
             }
@@ -182,6 +213,8 @@ open class PickerOfColorWithSliders : UIView {
                 let button = UIButtonWithCenteredCircle(frame: CGRect(side:side))
                 button.circle(for: .normal).radius = radius
                 button.circle(for: .normal).fillColor = color.cgColor
+                button.addTarget(self, action: #selector(ComponentStorageDots.tapped(_:)), for: .touchUpInside)
+
                 buttons[row].append(button)
                 
                 self.addSubview(button)
@@ -210,7 +243,19 @@ open class PickerOfColorWithSliders : UIView {
         }
         
         public func add     (color:UIColor) {
-            
+            let buttons = self.buttons.flatMap { $0 }
+            var previous:CGColor?
+            for button in buttons {
+                let circle = button.circle(for: .normal)
+                let next = circle.fillColor ?? UIColor.white.cgColor
+                if let previous = previous {
+                    circle.fillColor = previous
+                }
+                previous = next
+            }
+            if !buttons.isEmpty {
+                buttons[0].circle(for: .normal).fillColor = color.cgColor
+            }
         }
         
         public func remove  (color:UIColor) {
@@ -249,8 +294,12 @@ open class PickerOfColorWithSliders : UIView {
         public weak var rightButton : UIButtonWithCenteredCircle!
         public weak var rightView   : UIViewCircleWithUILabel!
         
-        public var update           : (UIColor)->() = { _ in }
+        public var update           : (ComponentSlider,UIColor,Bool)->() = { _ in }
         public var action           : (Float)->() = { _ in }
+        
+        public func update          (color:UIColor, animated:Bool) {
+            self.update(self,color,animated)
+        }
         
         public func build(side:CGFloat, margin:CGFloat = 16) {
             
@@ -281,19 +330,34 @@ open class PickerOfColorWithSliders : UIView {
             builder.activate()
 
         }
+        
+        public func set(value:Float, withAnimationDuration duration:Double? = nil, withRightViewBackgroundColor color:UIColor? = nil) {
+            if let duration = duration {
+                slider.setValue(value, withAnimationDuration:duration)
+            }
+            else {
+                slider.setValue(value, animated: false)
+            }
+            if let color = color {
+                rightView.backgroundColor = color
+                rightView.setNeedsDisplay()
+            }
+        }
     }
     
     // MARK: - Data
     
     public var componentSliders     : [ComponentSlider]         = []
     public var componentDisplays    : [ComponentColorDisplay]   = []
+    public var componentStorage     : [ProtocolForPickerOfColorWithSlidersComponentStorage]   = []
     
-    public var color            : UIColor               = .clear {
-        didSet {
-            componentSliders.forEach { $0.update(color) }
-            componentDisplays.forEach { $0.color = color }
-            handler?(color)
-        }
+    public private(set) var color   : UIColor                   = .clear
+    
+    public func set(color:UIColor, animated:Bool) {
+        self.color = color
+        componentSliders.forEach { $0.update(color:color, animated:animated) }
+        componentDisplays.forEach { $0.color = color }
+        handler?(color)
     }
     
     // MARK: - Initializers
@@ -311,12 +375,12 @@ open class PickerOfColorWithSliders : UIView {
     public func addComponentSliderRed        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
         let slider = self.addComponentSlider(label: "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[1,0,0]), side:side)
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let RGBA = color.RGBA
-            slider.slider.setValue(Float(RGBA.red)*slider.slider.maximumValue, animated:true)
-            slider.rightView.backgroundColor = UIColor(rgba:[1,0,0,RGBA.red])
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(RGBA.red)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(rgba:[1,0,0,RGBA.red]))
         }
         
         slider.action = { [weak slider, weak self] value in
@@ -324,7 +388,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.red = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.color = UIColor(RGBA:RGBA)
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -336,12 +400,12 @@ open class PickerOfColorWithSliders : UIView {
         
         let slider = self.addComponentSlider(label: "G" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0,0.9,0]), side:side)
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let RGBA = color.RGBA
-            slider.slider.setValue(Float(RGBA.green)*slider.slider.maximumValue, animated:true)
-            slider.rightView.backgroundColor = UIColor(rgba:[0,0.9,0,RGBA.green])
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(RGBA.green)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(rgba:[0,0.9,0,RGBA.green]))
         }
         
         slider.action = { [weak slider, weak self] value in
@@ -349,7 +413,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.green = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.color = UIColor(RGBA:RGBA)
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -361,12 +425,12 @@ open class PickerOfColorWithSliders : UIView {
         
         let slider = self.addComponentSlider(label: "B" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0.4,0.6,1]), side:side)
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let RGBA = color.RGBA
-            slider.slider.setValue(Float(RGBA.blue)*slider.slider.maximumValue, animated:true)
-            slider.rightView.backgroundColor = UIColor(rgba:[0.4,0.6,1,RGBA.blue])
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(RGBA.blue)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(rgba:[0.4,0.6,1,RGBA.blue]))
         }
         
         slider.action = { [weak slider, weak self] value in
@@ -374,7 +438,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.blue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.color = UIColor(RGBA:RGBA)
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -386,12 +450,12 @@ open class PickerOfColorWithSliders : UIView {
         
         let slider = self.addComponentSlider(label: "A" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:1.0), side:side)
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let RGBA = color.RGBA
-            slider.slider.setValue(Float(RGBA.alpha)*slider.slider.maximumValue, animated:true)
-            slider.rightView.backgroundColor = UIColor(white:1.0,alpha:RGBA.alpha)
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(RGBA.alpha)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(white:1.0,alpha:RGBA.alpha))
         }
         
         slider.action = { [weak slider, weak self] value in
@@ -399,7 +463,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.alpha = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.color = UIColor(RGBA:RGBA)
+            self.set(color:UIColor(RGBA:RGBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -414,13 +478,12 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.minimumValue = 0
         slider.slider.maximumValue = 359.999
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let HSBA = color.HSBA
-            slider.slider.setValue(Float(HSBA.hue)*slider.slider.maximumValue, animated:true)
-            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,1,1,1])
-            slider.rightView.setNeedsDisplay()
-
+            slider.set(value                            : Float(HSBA.hue)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,1,1,1]))
         }
         
         slider.action = { [weak slider, weak self] value in
@@ -428,7 +491,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `slider` = slider else { return }
             var HSBA = self.color.HSBA
             HSBA.hue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.color = UIColor(HSBA:HSBA)
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -443,19 +506,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let HSBA = color.HSBA
-            slider.slider.setValue(Float(HSBA.saturation), animated:true)
-            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,HSBA.saturation,1,1])
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(HSBA.saturation)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,HSBA.saturation,1,1]))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var HSBA = self.color.HSBA
             HSBA.saturation = CGFloat(value)
-            self.color = UIColor(HSBA:HSBA)
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -470,19 +533,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let HSBA = color.HSBA
-            slider.slider.setValue(Float(HSBA.brightness), animated:true)
-            slider.rightView.backgroundColor = UIColor(hsba:[HSBA.hue,1,HSBA.brightness,1])
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(HSBA.brightness)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,1,HSBA.brightness,1]))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var HSBA = self.color.HSBA
             HSBA.brightness = CGFloat(value)
-            self.color = UIColor(HSBA:HSBA)
+            self.set(color:UIColor(HSBA:HSBA), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -497,19 +560,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let CMYK = color.CMYK
-            slider.slider.setValue(Float(CMYK.cyan), animated:true)
-            slider.rightView.backgroundColor = UIColor.cyan.withAlphaComponent(CMYK.cyan)
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(CMYK.cyan)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor.cyan.withAlphaComponent(CMYK.cyan))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.cyan = CGFloat(value).clampedTo01
-            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -524,19 +587,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let CMYK = color.CMYK
-            slider.slider.setValue(Float(CMYK.magenta), animated:true)
-            slider.rightView.backgroundColor = UIColor.magenta.withAlphaComponent(CMYK.magenta)
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(CMYK.magenta)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor.magenta.withAlphaComponent(CMYK.magenta))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.magenta = CGFloat(value).clampedTo01
-            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -551,19 +614,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
         
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let CMYK = color.CMYK
-            slider.slider.setValue(Float(CMYK.yellow), animated:true)
-            slider.rightView.backgroundColor = UIColor.yellow.withAlphaComponent(CMYK.yellow)
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(CMYK.yellow)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor.yellow.withAlphaComponent(CMYK.yellow))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.yellow = CGFloat(value).clampedTo01
-            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -578,19 +641,19 @@ open class PickerOfColorWithSliders : UIView {
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
 
-        slider.update = { [weak slider] color in
-            guard let `slider` = slider else { return }
+        slider.update = { [weak self] slider,color,animate in
+            guard let `self` = self else { return }
             let CMYK = color.CMYK
-            slider.slider.setValue(Float(CMYK.key), animated:true)
-            slider.rightView.backgroundColor = UIColor.black.withAlphaComponent(CMYK.key)
-            slider.rightView.setNeedsDisplay()
+            slider.set(value                            : Float(CMYK.key)*slider.slider.maximumValue,
+                       withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
+                       withRightViewBackgroundColor     : UIColor.black.withAlphaComponent(CMYK.key))
         }
         
         slider.action = { [weak self] value in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.key = CGFloat(value).clampedTo01
-            self.color = UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
         }
         
         slider.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
@@ -689,7 +752,9 @@ open class PickerOfColorWithSliders : UIView {
         
         storage.rows     = rows
         storage.columns  = columns
-        storage.set(radius: radius, colors: colors)
+        storage.set(radius: radius, colors: colors) { [weak self] color in
+            self?.set(color:color, animated:true)
+        }
         
         storage.translatesAutoresizingMaskIntoConstraints=false
         storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
@@ -725,9 +790,16 @@ open class PickerOfColorWithSliders : UIView {
             }
         }
 
-        self.componentSliders  = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
-        self.componentDisplays = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
+        self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
+        self.componentDisplays  = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
+        self.componentStorage   = self.subviews.filter { $0 is ProtocolForPickerOfColorWithSlidersComponentStorage }.map { $0 as! ProtocolForPickerOfColorWithSlidersComponentStorage }
 
+        self.componentDisplays.forEach {
+            $0.handler = { [weak self] display in
+                guard let `self` = self else { return }
+                self.componentStorage.first?.add(color:self.color)
+            }
+        }
     }
     
     

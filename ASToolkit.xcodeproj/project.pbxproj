@@ -64,6 +64,8 @@
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		57A6AC6F1F45EF3E0055341F /* UIViewPile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */; };
 		57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */; };
+		57AA4C5D1F475DDD005384AD /* ExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5C1F475DDD005384AD /* ExtensionForUIKitUISlider.swift */; };
+		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
@@ -144,6 +146,8 @@
 		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewPile.swift; sourceTree = "<group>"; };
 		57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForUIKitUIColor.swift; sourceTree = "<group>"; };
+		57AA4C5C1F475DDD005384AD /* ExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
+		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
@@ -205,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
-				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
@@ -238,20 +241,22 @@
 				570FC28C1F1124A300FEAC03 /* ExtensionForUIKitUIColor.swift */,
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift */,
+				57AA4C5C1F475DDD005384AD /* ExtensionForUIKitUISlider.swift */,
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIKitUIView.swift */,
 				5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */,
 				5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */,
-				57FBB10B1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift */,
 				5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */,
 				5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */,
 				5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */,
 				5791F48B1F3100CD002739A6 /* GenericSetting.swift */,
+				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
+				57FBB10B1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift */,
 				5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */,
+				5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */,
 				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
-				5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -283,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */,
+				57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */,
 				57DBB0231F4293E400AF2BEB /* Info.plist */,
 			);
 			path = ASToolkitUITests;
@@ -474,6 +480,7 @@
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
 				5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */,
 				570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */,
+				57AA4C5D1F475DDD005384AD /* ExtensionForUIKitUISlider.swift in Sources */,
 				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
 				570FC2C21F1124A300FEAC03 /* ExtensionForSwiftUInt.swift in Sources */,
@@ -507,6 +514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */,
 				57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
