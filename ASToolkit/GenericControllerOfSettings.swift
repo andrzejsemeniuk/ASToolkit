@@ -30,10 +30,10 @@ open class GenericControllerOfSettings : UITableViewController
     var registeredUISwitches                : [UISwitch : FunctionUpdateOnUISwitch] = [:]
     var registeredUISliders                 : [UISlider : FunctionUpdateOnUISlider] = [:]
     var registeredUITextFields:[UITextField : FunctionUpdateOnUITextField]          = [:]
-
     
     
-
+    
+    
     open weak var manager                   : GenericManagerOfSettings?
     
     
@@ -52,7 +52,7 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
     open var sections                       : [Section]                             = []
-
+    
     open func row(at:IndexPath) -> FunctionOnCell? {
         return sections[safe:at.section]?.cells[safe:at.item]
     }
@@ -62,7 +62,7 @@ open class GenericControllerOfSettings : UITableViewController
     open var colorForHeaderText             : UIColor?
     open var colorForFooterText             : UIColor?
     
-
+    
     static open var lastOffsetY             : [String:CGPoint]                      = [:]
     
     
@@ -78,7 +78,7 @@ open class GenericControllerOfSettings : UITableViewController
         return [Section]()
     }
     
-
+    
     
     // MARK: - UIViewController
     
@@ -91,7 +91,7 @@ open class GenericControllerOfSettings : UITableViewController
     override open func viewDidLoad()
     {
         tableView = UITableView(frame:tableView.frame, style:.grouped)
-
+        
         self.edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
         
         super.viewDidLoad()
@@ -146,7 +146,7 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
     
-
+    
     
     
     // MARK: - UITableView
@@ -206,7 +206,7 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-
+    
     override open func tableView                     (_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         
         if let view = view as? UITableViewHeaderFooterView {
@@ -217,7 +217,7 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-
+    
     
     
     
@@ -243,7 +243,7 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
-    // MARK: - Updates 
+    // MARK: - Updates
     
     open func addUpdate(update:@escaping Update) {
         updates.append(update)
@@ -315,8 +315,8 @@ open class GenericControllerOfSettings : UITableViewController
         for choice in choices {
             let ok = UIAlertAction.init(title: choice, style: .destructive) { action in
                 handler(choice)
-//                alert.dismiss(animated: true) {
-//                }
+                //                alert.dismiss(animated: true) {
+                //                }
             }
             alert.addAction(ok)
         }
@@ -328,7 +328,7 @@ open class GenericControllerOfSettings : UITableViewController
         self.present(alert, animated: true)
     }
     
-
+    
     
     
     
@@ -350,7 +350,7 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-
+    
     open func createCellForTapOnQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
         
         return { (cell:UITableViewCell, indexPath:IndexPath) in
@@ -402,10 +402,10 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
-
     
     
-
+    
+    
     
     
     
@@ -480,7 +480,7 @@ open class GenericControllerOfSettings : UITableViewController
             }
         }
     }
-
+    
     open func createCellForUISlider             (_ setting:GenericSetting<CGFloat>, title:String, minimum:Float = 0, maximum:Float = 1, continuous:Bool = false, setup:((UITableViewCell,IndexPath,UISlider)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
         return { (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
@@ -496,7 +496,7 @@ open class GenericControllerOfSettings : UITableViewController
             }
         }
     }
-
+    
     
     
     
@@ -506,11 +506,11 @@ open class GenericControllerOfSettings : UITableViewController
     open func registerUITextField               (count:Int, value:String, animated:Bool = true) -> UITextField {
         let view = UITextField()
         view.isEnabled = false
-//        view.delegate = self
-//        view.borderStyle = .line
-//        view.layer.borderColor = UIColor.init(white:0,alpha:0.02).cgColor
-//        view.layer.borderWidth = 1
-//        view.backgroundColor = UIColor.init(white:1,alpha:0.2)
+        //        view.delegate = self
+        //        view.borderStyle = .line
+        //        view.layer.borderColor = UIColor.init(white:0,alpha:0.02).cgColor
+        //        view.layer.borderWidth = 1
+        //        view.backgroundColor = UIColor.init(white:1,alpha:0.2)
         view.layer.cornerRadius = self.elementCornerRadius
         view.text = value
         view.textAlignment = .right
@@ -541,7 +541,7 @@ open class GenericControllerOfSettings : UITableViewController
             }
         }
     }
-
+    
     open func createCellForUITextFieldAsDouble  (_ setting:GenericSetting<Double>, count:Int = 8, title:String, message:String = "Enter a number", minimum:Double? = nil, maximum:Double? = nil, setup:((UITableViewCell,IndexPath,UITextField)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
         return { (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
@@ -566,7 +566,7 @@ open class GenericControllerOfSettings : UITableViewController
                         }
                     }
                 }
-
+                
             }
         }
     }
@@ -658,13 +658,13 @@ open class GenericControllerOfSettings : UITableViewController
         }
     }
     
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -699,14 +699,14 @@ open class GenericControllerOfSettings : UITableViewController
                 }
         }
     }
-
+    
     open func createCellForUIFontName           (_ font0:GenericSetting<String>, name:String = "Font", title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:(()->())? = nil) -> FunctionOnCell {
         return createCellForUIFontName(font0.value, name:name, title:title, setup:setup, action: { name in
             font0.value = name
             action?()
         })
     }
-
+    
     open func createCellForUIFont               (_ font0:GenericSetting<UIFont>, name:String = "Font", title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:(()->())? = nil) -> FunctionOnCell {
         return createCellForUIFontName(font0.value.fontName, name:name, title:title, setup:setup, action: { name in
             if let font = UIFont(name:name, size:font0.value.pointSize) {
@@ -724,13 +724,18 @@ open class GenericControllerOfSettings : UITableViewController
     
     // MARK: - CREATE CELL - UIColor
     
-    open func createCellForUIColor              (_ color0:UIColor, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, setupForPicker:((GenericControllerOfPickerOfColor)->())? = nil, action:((UIColor)->())? = nil) -> FunctionOnCell
+    open func createCellForUIColor              (_ color0       : UIColor,
+                                                 title          : String,
+                                                 setup          : ((UITableViewCell,IndexPath)->())? = nil,
+                                                 setupForPicker : ((GenericControllerOfPickerOfColor)->())? = nil,
+                                                 action         : ((UIColor)->())? = nil) -> FunctionOnCell
     {
         return
             { (cell:UITableViewCell, indexPath:IndexPath) in
                 if let label = cell.textLabel {
                     
                     label.text          = title
+                    
                     if let detail = cell.detailTextLabel {
                         detail.text     = "  "
                         
@@ -770,13 +775,18 @@ open class GenericControllerOfSettings : UITableViewController
         }
     }
     
-    open func createCellForUIColor              (_ setting:GenericSetting<UIColor>, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:(()->())? = nil) -> FunctionOnCell {
-        return createCellForUIColor(setting.value, title:title, setup:setup, action:{ color in
+    open func createCellForUIColor              (_ setting      : GenericSetting<UIColor>,
+                                                 title          : String,
+                                                 setup          : ((UITableViewCell,IndexPath)->())? = nil,
+                                                 setupForPicker : ((GenericControllerOfPickerOfColor)->())? = nil,
+                                                 action         : (()->())? = nil) -> FunctionOnCell
+    {
+        return createCellForUIColor(setting.value, title:title, setup:setup, setupForPicker:setupForPicker, action:{ color in
             setting.value = color
             action?()
         })
     }
-
+    
     
     
     

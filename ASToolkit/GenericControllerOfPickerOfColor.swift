@@ -13,8 +13,8 @@ open class GenericControllerOfPickerOfColor : UITableViewController
 {
     public enum Flavor {
         case list                   (selected:UIColor, colors:[UIColor])
-        case listOfSolidCircles     (selected:UIColor, colors:[[UIColor]], diameter:CGFloat, space:CGFloat)
-        case listOfSolidSquares     (selected:UIColor, colors:[[UIColor]], side:CGFloat, space:CGFloat)
+        case matrixOfSolidCircles   (selected:UIColor, colors:[[UIColor]], diameter:CGFloat, space:CGFloat)
+        case matrixOfSolidSquares   (selected:UIColor, colors:[[UIColor]], side:CGFloat, space:CGFloat)
         case matrix                 (selected:UIColor, colors:[[UIColor]])
         case slidersForRGB          (selected:UIColor)
         case slidersForRGBA         (selected:UIColor)
@@ -28,19 +28,19 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     
     //    public var flavor       : Flavor            = .list(selected:.white, colors:GenericControllerOfPickerOfColor.generateListOfDefaultColors()) {
     
-    public var flavor       : Flavor            = .listOfSolidCircles(selected  : .white,
-                                                                      colors    : GenericControllerOfPickerOfColor.generateListOfDefaultColorsForCircles(),
-                                                                      diameter  : 36,
-                                                                      space     : 8)
+    public var flavor       : Flavor            = .matrixOfSolidCircles(selected  : .white,
+                                                                        colors    : GenericControllerOfPickerOfColor.generateMatrixOfDefaultColorsForCircles(),
+                                                                        diameter  : 36,
+                                                                        space     : 8)
         {
         didSet {
             
             switch flavor {
             case .list(let selected, let colors):
                 self.selected = selected
-            case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+            case .matrixOfSolidCircles(let selected, let colors, let diameter, let space):
                 self.selected = selected
-            case .listOfSolidSquares(let selected, let colors, let side, let space):
+            case .matrixOfSolidSquares(let selected, let colors, let side, let space):
                 self.selected = selected
             case .matrix(let selected, let colors):
                 self.selected = selected
@@ -112,16 +112,24 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     
     
     
-    static open func generateListOfDefaultColorsForCircles() -> [[UIColor]] {
+    static open func generateMatrixOfDefaultColorsForCircles(columns    : Int = 7,
+                                                             rowsOfGray : Int = 2,
+                                                             rowsOfHues : Int = 20) -> [[UIColor]] {
         
-        var colors:[[UIColor]] = []
+        var delta:Double
         
-        colors.append(stride(from:1.0,to:0.5,by:-0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
-        colors.append(stride(from:0.0,to:0.5,by: 0.5/7.0).asArray.asArrayOfCGFloat.map { UIColor(white:$0) })
+        var colors:[[UIColor]]
         
-        //        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
-        let hues        : [Float]   = stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat
-        let saturations : [Float]   = [0.15,0.28,0.42,0.58,0.7,0.84,1]
+        delta = 1.0/Double(columns * rowsOfGray - 1)
+        colors = stride(from:1.0,to:delta-0.001,by:-delta).asArray.asArrayOfCGFloat.map { UIColor(white:$0) }.appended(.black).split(by:columns)
+        
+        delta = 1.0/Double(rowsOfHues)
+        let hues        : [Float]   = stride(from:0.0,to:1.001-delta,by:delta).asArray.asArrayOfFloat
+            // stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat
+
+        delta = 1.0/Double(columns+1)
+        let saturations : [Float]   = stride(from:delta,to:1.0,by:delta).asArray.asArrayOfFloat
+
         let values      : [Float]   = [1]
         
         for h in hues {
@@ -137,7 +145,8 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         return colors
     }
     
-    
+
+
     
     
     override open func numberOfSections      (in: UITableView) -> Int
@@ -149,15 +158,14 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     {
         switch flavor {
         case .list                  (_, let colors)             : return colors.count
-        case .listOfSolidCircles    (_, let colors, _, _)       : return colors.count
-        case .listOfSolidSquares    (_, let colors, _, _)       : return colors.count
+        case .matrixOfSolidCircles    (_, let colors, _, _)       : return colors.count
+        case .matrixOfSolidSquares    (_, let colors, _, _)       : return colors.count
         case .matrix                (_, let colors)             : return colors.count
         case .slidersForHSB                                     : return 3
         case .slidersForRGB                                     : return 3
         case .slidersForHSBA                                    : return 4
         case .slidersForRGBA                                    : return 4
         }
-        return 0
     }
     
     override open func tableView             (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
@@ -184,7 +192,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
                 cell.accessoryType = .none
             }
             
-        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+        case .matrixOfSolidCircles(let selected, let colors, let diameter, let space):
             
             let stack = UIStackView()
             stack.axis = .horizontal
@@ -218,7 +226,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
             
             break
             
-        case .listOfSolidSquares(let selected, let colors, let side, let space):
+        case .matrixOfSolidSquares(let selected, let colors, let side, let space):
             
             var views = [UIView]()
             for color in colors[indexPath.row] {
@@ -313,10 +321,10 @@ open class GenericControllerOfPickerOfColor : UITableViewController
                 }
             }
             
-        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+        case .matrixOfSolidCircles(let selected, let colors, let diameter, let space):
             break
             
-        case .listOfSolidSquares(let selected, let colors, let side, let space):
+        case .matrixOfSolidSquares(let selected, let colors, let side, let space):
             break
             
         case .matrix(let selected, let colors):
@@ -353,9 +361,9 @@ open class GenericControllerOfPickerOfColor : UITableViewController
         switch flavor {
         case .list(let selected, let colors):
             self.selected = colors[indexPath.row]
-        case .listOfSolidCircles(let selected, let colors, let diameter, let space):
+        case .matrixOfSolidCircles(let selected, let colors, let diameter, let space):
             return
-        case .listOfSolidSquares(let selected, let colors, let side, let space):
+        case .matrixOfSolidSquares(let selected, let colors, let side, let space):
             self.selected = selected
         case .matrix(let selected, let colors):
             self.selected = selected

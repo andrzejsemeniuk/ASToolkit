@@ -93,3 +93,33 @@ extension Array {
         return nil
     }
 }
+
+extension Array {
+    
+    public func appended(_ element:Element) -> Array<Element> {
+        var result = self
+        result.append(element)
+        return result
+    }
+}
+
+extension Array {
+    
+    public func split(by:Int) -> [[Element]] {
+        var result : [[Element]] = []
+        var row : [Element] = []
+        for element in self {
+            if row.count >= by {
+                result.append(row)
+                row = []
+            }
+            row.append(element)
+        }
+        
+        if !row.empty {
+            result.append(row)
+        }
+        
+        return result
+    }
+}
