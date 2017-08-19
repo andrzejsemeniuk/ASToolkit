@@ -261,3 +261,75 @@ extension UIColor {
     }
     
 }
+
+extension UIColor {
+    
+    static open func generateListOfDefaultColors() -> [UIColor]
+    {
+
+        var colors = [
+            UIColor.GRAY(1.00,1),
+            UIColor.GRAY(0.90,1),
+            UIColor.GRAY(0.80,1),
+            UIColor.GRAY(0.70,1),
+            UIColor.GRAY(0.60,1),
+            UIColor.GRAY(0.50,1),
+            UIColor.GRAY(0.40,1),
+            UIColor.GRAY(0.30,1),
+            UIColor.GRAY(0.20,1),
+            UIColor.GRAY(0.10,1),
+            UIColor.GRAY(0.00,1),
+            ]
+        
+        let hues        : [Float]   = [0,0.06,0.1,0.14,0.2,0.3,0.4,0.53,0.6,0.7,0.8,0.9]
+        let saturations : [Float]   = [0.4,0.6,0.8,1]
+        let values      : [Float]   = [1]
+        
+        for h in hues {
+            for v in values {
+                for s in saturations {
+                    colors.append(UIColor.HSBA(h,s,v,1))
+                }
+            }
+        }
+        
+        return colors
+    }
+    
+    
+    
+    static open func generateMatrixOfColors(columns    : Int = 7,
+                                            rowsOfGray : Int = 2,
+                                            rowsOfHues : Int = 20) -> [[UIColor]]
+    {
+        var delta:Double
+        
+        var colors:[[UIColor]]
+        
+        delta = 1.0/Double(columns * rowsOfGray - 1)
+        colors = stride(from:1.0,to:delta-0.001,by:-delta).asArray.asArrayOfCGFloat.map { UIColor(white:$0) }.appended(.black).split(by:columns)
+        
+        delta = 1.0/Double(rowsOfHues)
+        let hues        : [Float]   = stride(from:0.0,to:1.001-delta,by:delta).asArray.asArrayOfFloat
+        // stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat
+        
+        delta = 1.0/Double(columns+1)
+        let saturations : [Float]   = stride(from:delta,to:1.0,by:delta).asArray.asArrayOfFloat
+        
+        let values      : [Float]   = [1]
+        
+        for h in hues {
+            var row:[UIColor] = []
+            for v in values {
+                for s in saturations {
+                    row.append(UIColor.HSBA(h,s,v,1))
+                }
+            }
+            colors.append(row)
+        }
+        
+        return colors
+    }
+
+    
+}
