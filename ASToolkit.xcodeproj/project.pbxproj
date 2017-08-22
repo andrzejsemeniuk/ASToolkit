@@ -55,6 +55,7 @@
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */; };
+		57851D491F4B9C8900AEFA4B /* ExtensionForUIKitUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */; };
 		5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */; };
 		5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48B1F3100CD002739A6 /* GenericSetting.swift */; };
 		5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */; };
@@ -137,6 +138,7 @@
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableToDictionary.swift; sourceTree = "<group>"; };
+		57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIImage.swift; sourceTree = "<group>"; };
 		5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericManagerOfSettings.swift; sourceTree = "<group>"; };
 		5791F48B1F3100CD002739A6 /* GenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericSetting.swift; sourceTree = "<group>"; };
 		5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfSettings.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
+				57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */,
 				57AA4C5D1F475DDD005384AD /* ExtensionForUIKitUISlider.swift in Sources */,
 				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
+				57851D491F4B9C8900AEFA4B /* ExtensionForUIKitUIImage.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
 				570FC2C21F1124A300FEAC03 /* ExtensionForSwiftUInt.swift in Sources */,
 				570FC2C91F1124A300FEAC03 /* Math.swift in Sources */,

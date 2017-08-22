@@ -333,3 +333,28 @@ extension UIColor {
 
     
 }
+
+
+extension UIColor {
+
+    open var descriptionAsRGB : String {
+        let v = RGBA
+        return "UIColor(rgb:[\(v.red),\(v.green),\(v.blue)])"
+    }
+    
+    open var descriptionAsRGBA : String {
+        let v = RGBA
+        return "UIColor(rgba:[\(v.red),\(v.green),\(v.blue),\(v.alpha)])"
+    }
+    
+    open var descriptionAsHSB : String {
+        let v = HSBA
+        return "UIColor(hsb:[\(v.hue),\(v.saturation),\(v.brightness)])"
+    }
+    
+    open var descriptionAsHSBA : String {
+        let v = HSBA
+        return "UIColor(hsba:[\(v.hue),\(v.saturation),\(v.brightness),\(v.alpha)])"
+    }
+
+}

@@ -9,7 +9,15 @@
 import Foundation
 import UIKit
 
-open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionary, AssignableToDictionary {
+// TODO: ADD STORAGE-PROTOCOL BASED ON TYPE: SET/GET/REMOVE/UPDATE
+// TODO: ADD DEFAULT USER-DEFAULTS IMPLEMENTATION
+// TODO: ADD FACTORY PROTOCOL
+// TODO: ADD USER-DEFAULTS FACTORY
+// TODO: ADD CORE-DATA FACTORY?
+// TODO: ADD DYNAMIC GETTER/SETTER CLOSURES/DELEGATES
+// TODO: ADD ABILITY TO SPECIFY IF VALUE WILL BE SAVED WHEN SET
+
+open class GenericSetting<TYPE> : CustomStringConvertible, Removable, Resettable, AssignableFromDictionary, AssignableToDictionary {
     
     public typealias Key = String
     
@@ -80,7 +88,9 @@ open class GenericSetting<TYPE> : Removable, Resettable, AssignableFromDictionar
         return UserDefaults.standard.value(forKey: key) as? TYPE
     }
     
-
+    open var description : String {
+        return "GenericSetting<\(first.self)>(key:(\(key)), first:(\(first)), value:(\(value))"
+    }
 }
 
 open class GenericSettingWithObserver<TYPE> : GenericSetting<TYPE> {
@@ -93,13 +103,4 @@ open class GenericSettingWithObserver<TYPE> : GenericSetting<TYPE> {
         }
     }
 }
-
-// TODO: ADD STORAGE-PROTOCOL BASED ON TYPE: SET/GET/REMOVE/UPDATE
-// TODO: ADD DEFAULT USER-DEFAULTS IMPLEMENTATION
-// TODO: ADD FACTORY PROTOCOL
-// TODO: ADD USER-DEFAULTS FACTORY
-// TODO: ADD CORE-DATA FACTORY?
-// TODO: ADD DYNAMIC GETTER/SETTER CLOSURES/DELEGATES
-// TODO: ADD ABILITY TO SPECIFY IF VALUE WILL BE SAVED WHEN SET
-
 
