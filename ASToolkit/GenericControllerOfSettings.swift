@@ -756,14 +756,15 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         guard let `self` = self else { return }
                         
-                        let picker      = GenericControllerOfPickerOfColor()
-                        picker.tableView.backgroundColor = color0
-                        picker.tableView.showsVerticalScrollIndicator = false
-                        picker.title    = title
-                        picker.selected = color0
+                        let picker                                      = GenericControllerOfPickerOfColor()
+                        picker.tableView.backgroundColor                = color0
+                        picker.tableView.showsVerticalScrollIndicator   = false
+                        picker.title                                    = title.trimmed()
+                        picker.selected                                 = color0
                         
                         setupForPicker?(picker)
-                        picker.update   = { [weak picker] in
+                        
+                        picker.update = { [weak picker] in
                             if let picker = picker {
                                 action?(picker.selected)
                             }

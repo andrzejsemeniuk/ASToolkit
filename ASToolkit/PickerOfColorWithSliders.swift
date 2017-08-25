@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 // TODO: TAP ON DISPLAY ADDS COLOR TO STORAGE?
 // TODO: PERSIST LAST COLOR SET?
@@ -706,7 +707,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.cyan = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -714,7 +715,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.cyan -= 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -722,7 +723,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.cyan += 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         return slider
@@ -747,7 +748,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.magenta = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -755,7 +756,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.magenta -= 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -763,7 +764,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.magenta += 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         return slider
@@ -788,7 +789,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.yellow = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -796,7 +797,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.yellow -= 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -804,7 +805,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.yellow += 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         return slider
@@ -829,7 +830,7 @@ open class PickerOfColorWithSliders : UIView {
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.key = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -837,7 +838,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.key -= 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -845,7 +846,7 @@ open class PickerOfColorWithSliders : UIView {
             var CMYK = self.color.CMYK
             CMYK.key += 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.alpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
         }
         
         return slider
@@ -1070,4 +1071,70 @@ open class PickerOfColorWithSliders : UIView {
         
         return result
     }
+}
+
+
+func test() {
+    
+    let WINDOW = UIWindow(frame: UIScreen.main.bounds)
+    
+    if false {
+        let picker = GenericControllerOfPickerOfColor()
+        picker.rowHeight = 80
+        let colors:[[UIColor]] = [
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white,.lightGray,.gray,.darkGray,.black],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white,.lightGray,.gray,.darkGray,.black],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white,.lightGray,.gray,.darkGray,.black],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white,.lightGray,.gray,.darkGray,.black],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.white,.lightGray,.gray,.darkGray,.black],
+            [.red,.orange,.yellow],
+            [.blue,.green,.aqua],
+            [.gray],
+            ]
+        picker.flavor = .matrixOfSolidCircles(selected: .white, colors: colors, diameter: 60, space: 16)
+        WINDOW.rootViewController = picker
+        WINDOW.makeKeyAndVisible()
+    }
+    else if false {
+        
+        let picker = PickerOfColorWithSliders.create(withComponents: [
+            .colorDisplay           (height:64,kind:.dot),
+            //                .sliderRed              (height:16),
+            //                .sliderGreen            (height:16),
+            //                .sliderBlue             (height:16),
+            .sliderAlpha            (height:32),
+            .sliderHue              (height:16),
+            .sliderSaturation       (height:16),
+            .sliderBrightness       (height:16),
+            //                .sliderCyan             (height:32),
+            //                .sliderMagenta          (height:32),
+            //                .sliderYellow           (height:32),
+            //                .sliderKey              (height:32),
+            .storageDots            (radius:16, columns:6, rows:3, colors:[.white,.gray,.black,.orange,.red,.blue,.green,.yellow])
+            ])
+        let vc = UIViewController()
+        picker.frame = UIScreen.main.bounds
+        vc.view = picker
+        picker.backgroundColor = UIColor(white:0.95)
+        picker.handler = { color in
+            print("new color\(color)")
+        }
+        picker.set(color:UIColor(rgb:[0.64,0.13,0.78]), animated:true)
+        WINDOW.rootViewController = vc
+        WINDOW.makeKeyAndVisible()
+    }
+
 }

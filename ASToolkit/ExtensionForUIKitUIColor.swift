@@ -132,14 +132,14 @@ extension UIColor
     }
     
 
-    public var red          :CGFloat    { return RGBA.red }
-    public var green        :CGFloat    { return RGBA.green }
-    public var blue         :CGFloat    { return RGBA.blue }
-    public var alpha        :CGFloat    { return RGBA.alpha }
+    public var RGBAred          :CGFloat    { return RGBA.red }
+    public var RGBAgreen        :CGFloat    { return RGBA.green }
+    public var RGBAblue         :CGFloat    { return RGBA.blue }
+    public var RGBAalpha        :CGFloat    { return RGBA.alpha }
     
-    public var hue          :CGFloat    { return HSBA.hue }
-    public var saturation   :CGFloat    { return HSBA.saturation }
-    public var brightness   :CGFloat    { return HSBA.brightness }
+    public var HSBAhue          :CGFloat    { return HSBA.hue }
+    public var HSBAsaturation   :CGFloat    { return HSBA.saturation }
+    public var HSBAbrightness   :CGFloat    { return HSBA.brightness }
     
     open class func GRAY(_ v:Float, _ a:Float = 1.0) -> UIColor
     {
@@ -184,13 +184,6 @@ extension UIColor
 
 extension UIColor {
     
-    open class var aqua: UIColor { return UIColor(hsb:[0.51,1,1]) }
-    
-}
-
-
-extension UIColor {
-    
     public typealias CMYKTuple  = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat)
     public typealias CMYKATuple = (cyan: CGFloat, magenta: CGFloat, yellow: CGFloat, key: CGFloat, alpha: CGFloat)
     
@@ -223,7 +216,7 @@ extension UIColor {
     
     public var CMYKA : CMYKATuple {
         let CMYK = self.CMYK
-        return (CMYK.cyan, CMYK.magenta, CMYK.yellow, CMYK.key, alpha)
+        return (CMYK.cyan, CMYK.magenta, CMYK.yellow, CMYK.key, RGBAalpha)
     }
     
     public convenience init(cyan:CGFloat, magenta:CGFloat, yellow:CGFloat, key:CGFloat, alpha:CGFloat = 1) {
@@ -358,3 +351,15 @@ extension UIColor {
     }
 
 }
+
+
+
+extension UIColor {
+    
+    open class var aqua     : UIColor { return UIColor(hsb:[0.51,1,1]) }
+    
+    open class var pink     : UIColor { return UIColor(rgb:[1,0.80,0.90]) }
+    
+}
+
+
