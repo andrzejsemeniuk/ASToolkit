@@ -51,6 +51,7 @@
 		570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */; };
 		570FC2DE1F1124A300FEAC03 /* UtilityLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
+		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
 		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */; };
@@ -134,6 +135,7 @@
 		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* UtilityLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityLoop.swift; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
 		5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolRemovable.swift; sourceTree = "<group>"; };
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableFromDictionary.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */,
 				57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */,
 				57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */,
+				574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */,
 				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
 			);
 			path = ASToolkitTests;
@@ -510,6 +513,7 @@
 				5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */,
 				5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
+				574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */,
 				57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
