@@ -48,7 +48,7 @@
 		570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */; };
 		570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */; };
 		570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A41F1124A300FEAC03 /* Utility.swift */; };
-		570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */; };
+		570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* Block.swift */; };
 		570FC2DE1F1124A300FEAC03 /* Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* Loop.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
@@ -132,7 +132,7 @@
 		570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelWithInsetsAndCenteredCircle.swift; sourceTree = "<group>"; };
 		570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewCircle.swift; sourceTree = "<group>"; };
 		570FC2A41F1124A300FEAC03 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
-		570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilityBlock.swift; sourceTree = "<group>"; };
+		570FC2A51F1124A300FEAC03 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* Loop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loop.swift; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
@@ -214,6 +214,7 @@
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
 				570FC2011F111E0E00FEAC03 /* Info.plist */,
+				570FC2A51F1124A300FEAC03 /* Block.swift */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
@@ -270,7 +271,6 @@
 				570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */,
 				57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */,
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
-				570FC2A51F1124A300FEAC03 /* UtilityBlock.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 			);
 			path = ASToolkit;
@@ -481,7 +481,7 @@
 				5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */,
 				57FBB10C1F44B3C1008FA2D9 /* PickerOfColorWithSliders.swift in Sources */,
-				570FC2DD1F1124A300FEAC03 /* UtilityBlock.swift in Sources */,
+				570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */,
 				57A6AC6F1F45EF3E0055341F /* UIViewPile.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
 				5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */,

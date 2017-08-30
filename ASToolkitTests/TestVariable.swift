@@ -1,6 +1,6 @@
 //
 //  TestVariable.swift
-//  ASToolkitFrankenbots
+//  ASToolkit
 //
 //  Created by andrzej semeniuk on 5/29/16.
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
