@@ -45,7 +45,10 @@ class ViewController: UIViewController {
         }
         else if true {
             
-            let picker = PickerOfColorWithSliders.create(withComponents: [
+            // display, controls, storage
+            // display = circle, 2 circles, fill, custom, text on bg
+            
+            let picker = GenericPickerOfColor.create(withComponents: [
                 .colorDisplay           (height:64,kind:.dot),
                 //                .sliderRed              (height:16),
                 //                .sliderGreen            (height:16),

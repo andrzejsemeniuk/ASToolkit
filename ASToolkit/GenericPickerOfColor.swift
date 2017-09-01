@@ -1,5 +1,5 @@
 //
-//  PickerOfColorWithSliders.swift
+//  GenericPickerOfColor.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 8/16/17.
@@ -12,13 +12,7 @@ import UIKit
 // TODO: TAP ON DISPLAY ADDS COLOR TO STORAGE?
 // TODO: PERSIST LAST COLOR SET?
 
-public protocol ProtocolForPickerOfColorWithSlidersComponentStorage {
-    
-    func add(color:UIColor)
-    
-}
-
-open class PickerOfColorWithSliders : UIView {
+open class GenericPickerOfColor : UIView {
 
     public var preferenceSliderSetValueAnimationDuration                    : Double                = 0.4
     
@@ -155,7 +149,17 @@ open class PickerOfColorWithSliders : UIView {
         
     }
     
-    open class ComponentStorageDots : UIView, ProtocolForPickerOfColorWithSlidersComponentStorage {
+    open class ComponentStorage : UIView {
+        
+        open func add     (color:UIColor) {
+        }
+        
+        open func remove  (color:UIColor) {
+        }
+        
+    }
+    
+    open class ComponentStorageDots : ComponentStorage {
         
         private var buttons : [[UIButtonWithCenteredCircle]] = []
         
@@ -243,7 +247,7 @@ open class PickerOfColorWithSliders : UIView {
             setNeedsLayout()
         }
         
-        public func add     (color:UIColor) {
+        override open func add     (color:UIColor) {
             let buttons = self.buttons.flatMap { $0 }
             var previous:CGColor?
             for button in buttons {
@@ -259,7 +263,7 @@ open class PickerOfColorWithSliders : UIView {
             }
         }
         
-        public func remove  (color:UIColor) {
+        override open func remove  (color:UIColor) {
             
         }
         
@@ -377,7 +381,7 @@ open class PickerOfColorWithSliders : UIView {
     
     public var componentSliders     : [ComponentSlider]         = []
     public var componentDisplays    : [ComponentColorDisplay]   = []
-    public var componentStorage     : [ProtocolForPickerOfColorWithSlidersComponentStorage]   = []
+    public var componentStorage     : [ComponentStorageDots]    = []
     
     public private(set) var color   : UIColor                   = .clear
     
@@ -915,11 +919,11 @@ open class PickerOfColorWithSliders : UIView {
         
         result.build(side:side)
         
-        result.slider.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderEvent(_:)), for: .allEvents)
+        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEvent(_:)), for: .allEvents)
         
-        result.leftButton.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderLeftButtonEvent(_:)), for: .touchDown)
+        result.leftButton.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderLeftButtonEvent(_:)), for: .touchDown)
         
-        result.rightButton.addTarget(self, action: #selector(PickerOfColorWithSliders.handleSliderRightButtonEvent(_:)), for: .touchDown)
+        result.rightButton.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderRightButtonEvent(_:)), for: .touchDown)
         
         return result
     }
@@ -995,18 +999,37 @@ open class PickerOfColorWithSliders : UIView {
 
     
     
+    private var box : UILayoutGuide?
     
-    private func build() {
+    open func clear() {
+        self.subviews.forEach { $0.removeFromSuperview() }
+        self.componentSliders = []
+        self.componentStorage = []
+        self.componentDisplays = []
+        if let box = self.box {
+            self.removeLayoutGuide(box)
+        }
+    }
+    
+    
+    open func build() {
         
         if let first = self.subviews.first {
-            let box = UILayoutGuide()
-            self.addLayoutGuide(box)
+            if let box = self.box {
+                self.removeLayoutGuide(box)
+            }
             
-            box.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-            box.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive=true
+            self.box = UILayoutGuide()
             
-            box.topAnchor.constraint(equalTo: first.topAnchor).isActive=true
-            box.bottomAnchor.constraint(equalTo: self.subviews.last!.bottomAnchor).isActive=true
+            if let box = self.box {
+                self.addLayoutGuide(box)
+                
+                box.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+                box.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive=true
+                
+                box.topAnchor.constraint(equalTo: first.topAnchor).isActive=true
+                box.bottomAnchor.constraint(equalTo: self.subviews.last!.bottomAnchor).isActive=true                
+            }
             
             self.subviews.adjacent { a,b in
                 a.bottomAnchor.constraint(equalTo: b.topAnchor).isActive=true
@@ -1022,7 +1045,7 @@ open class PickerOfColorWithSliders : UIView {
 
         self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
         self.componentDisplays  = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
-        self.componentStorage   = self.subviews.filter { $0 is ProtocolForPickerOfColorWithSlidersComponentStorage }.map { $0 as! ProtocolForPickerOfColorWithSlidersComponentStorage }
+        self.componentStorage   = self.subviews.filter { $0 is ComponentStorageDots }.map { $0 as! ComponentStorageDots }
 
         self.componentDisplays.forEach {
             $0.handler = { [weak self] display in
@@ -1037,8 +1060,8 @@ open class PickerOfColorWithSliders : UIView {
     public var handler  : ((UIColor)->())?
     
     
-    static public func create           (withComponents components:[Component]) -> PickerOfColorWithSliders {
-        let result = PickerOfColorWithSliders()
+    static public func create           (withComponents components:[Component]) -> GenericPickerOfColor {
+        let result = GenericPickerOfColor()
         
         for component in components {
             switch component {
@@ -1110,7 +1133,7 @@ func test() {
     }
     else if false {
         
-        let picker = PickerOfColorWithSliders.create(withComponents: [
+        let picker = GenericPickerOfColor.create(withComponents: [
             .colorDisplay           (height:64,kind:.dot),
             //                .sliderRed              (height:16),
             //                .sliderGreen            (height:16),

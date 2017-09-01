@@ -17,7 +17,7 @@ import UIKit
 // TODO: ADD DYNAMIC GETTER/SETTER CLOSURES/DELEGATES
 // TODO: ADD ABILITY TO SPECIFY IF VALUE WILL BE SAVED WHEN SET
 
-open class GenericSetting<TYPE> : CustomStringConvertible, Removable, Resettable, AssignableFromDictionary, AssignableToDictionary {
+open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, Resettable, AssignableFromDictionary, AssignableToDictionary {
     
     public typealias Key = String
     

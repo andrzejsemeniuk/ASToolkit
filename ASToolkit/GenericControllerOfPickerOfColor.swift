@@ -79,8 +79,23 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     
     
     
-
-
+//    typealias RowGenerator = (UITableViewCell)->()
+//    
+//    private var rows : [RowGenerator] = []
+//
+//    public var margin : CGFloat = 8 {
+//        didSet {
+//            self.tableView.scrollIndicatorInsets = UIEdgeInsets(all: margin)
+//        }
+//    }
+//
+//    open func clear() {
+//        self.rows = []
+//    }
+//
+//    open func addFlavor() {
+//        
+//    }
     
     
     override open func numberOfSections      (in: UITableView) -> Int
