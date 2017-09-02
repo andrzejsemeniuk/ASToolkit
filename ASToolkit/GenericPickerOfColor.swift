@@ -978,7 +978,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     
-    func addComponentStorageDots(radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
+    open func addComponentStorageDots(radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
         
         let storage = ComponentStorageDots()
         
