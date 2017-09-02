@@ -422,7 +422,40 @@ open class GenericControllerOfSettings : UITableViewController
         
     }
     
+    open func createCellForTapOnRevolvingChoices    (value:@escaping ()->String, id:String? = nil, title:String, choices:[String], setup:((UITableViewCell,IndexPath)->())? = nil, action:((String)->())? = nil) -> FunctionOnCell {
+        
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+            if let label = cell.textLabel {
+                cell.selectionStyle = .default
+                label.text          = title
+                let accessory       = UILabel()
+                cell.accessoryView  = accessory
+                accessory.text      = value()
+                accessory.sizeToFit()
+                setup?(cell,indexPath)
+                self?.addAction(indexPath: indexPath) {
+                    accessory.text = choices.next(after:accessory.text!) ?? value()
+                    accessory.sizeToFit()
+                    action?(accessory.text!)
+                }
+            }
+        }
+        
+    }
     
+    open func createCellForTapOnRevolvingChoices    (_ setting:GenericSetting<String>, id:String? = nil, title:String, choices:[String], setup:((UITableViewCell,IndexPath)->())? = nil, action:((String)->())? = nil) -> FunctionOnCell {
+        return createCellForTapOnRevolvingChoices(value     : { [weak setting] in
+            return setting?.value ?? ""
+        },
+                                                  id        : id,
+                                                  title     : title,
+                                                  choices   : choices,
+                                                  setup     : setup,
+                                                  action    : { [weak setting] string in
+                                                    setting?.value = string
+                                                    action?(string)
+        })
+    }
     
     
     
