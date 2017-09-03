@@ -70,6 +70,7 @@
 		57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */; };
 		57AA4C5D1F475DDD005384AD /* ExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5C1F475DDD005384AD /* ExtensionForUIKitUISlider.swift */; };
 		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
+		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
@@ -184,6 +185,7 @@
 		57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForUIKitUIColor.swift; sourceTree = "<group>"; };
 		57AA4C5C1F475DDD005384AD /* ExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
+		57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForString.swift; sourceTree = "<group>"; };
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */,
 				574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */,
 				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
+				57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */,
 			);
 			path = ASToolkitTests;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */,
+				57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */,
 				5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */,
 				5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
