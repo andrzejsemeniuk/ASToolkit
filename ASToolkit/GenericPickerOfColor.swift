@@ -404,8 +404,11 @@ open class GenericPickerOfColor : UIView {
     
     // MARK: - Components
     
-    public func addComponentSliderRed        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        let slider = self.addComponentSlider(label: "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[1,0,0]), side:side)
+    public func addComponentSliderRed        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+        let slider = self.addComponentSlider(label  : "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor(rgb:[1,0,0]),
+                                             side   : side)
         
         slider.update = { [weak self] slider,color,animate in
             guard let `self` = self else { return }
@@ -442,9 +445,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderGreen      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderGreen      (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "G" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0,0.9,0]), side:side)
+        let slider = self.addComponentSlider(label  : "G" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor(rgb:[0,0.9,0]),
+                                             side   : side)
         
         slider.update = { [weak self] slider,color,animate in
             guard let `self` = self else { return }
@@ -481,9 +487,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderBlue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderBlue       (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "B" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(rgb:[0.4,0.6,1]), side:side)
+        let slider = self.addComponentSlider(label  : "B" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor(rgb:[0.4,0.6,1]),
+                                             side   : side)
         
         slider.update = { [weak self] slider,color,animate in
             guard let `self` = self else { return }
@@ -520,9 +529,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderAlpha      (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderAlpha      (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "A" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor(white:1.0), side:side)
+        let slider = self.addComponentSlider(label  : "A" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor(white:1.0),
+                                             side   : side)
         
         slider.update = { [weak self] slider,color,animate in
             guard let `self` = self else { return }
@@ -559,10 +571,11 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderHue       (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderHue       (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
-                                             title  : "H U E" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             title  : title,
+//                                             title  : "H U E" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
         
@@ -604,10 +617,11 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderSaturation    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderSaturation    (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
-                                             title  : "S A T U R A T I O N" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             title  : title,
+//                                             title  : "S A T U R A T I O N" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
         
@@ -648,10 +662,11 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderBrightness    (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderBrightness    (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
-                                             title  : "B R I G H T N E S S" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
+                                             title  : title,
+//                                             title  : "B R I G H T N E S S" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
         
@@ -692,9 +707,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderCyan          (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderCyan          (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "C" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.cyan, side:side)
+        let slider = self.addComponentSlider(label  : "C" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor.cyan,
+                                             side   : side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -733,9 +751,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderMagenta           (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderMagenta           (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "M" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.magenta, side:side)
+        let slider = self.addComponentSlider(label  : "M" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor.magenta,
+                                             side   : side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -774,9 +795,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderYellow        (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderYellow        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "Y" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.yellow, side:side)
+        let slider = self.addComponentSlider(label  : "Y" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor.yellow,
+                                             side   : side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -815,9 +839,14 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderKey           (side:CGFloat = 32, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderKey           (side   : CGFloat = 32,
+                                                 title  : NSAttributedString? = nil,
+                                                 action : ((Int)->Bool)? = nil) -> ComponentSlider {
         
-        let slider = self.addComponentSlider(label: "K" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), color: UIColor.black, side:side)
+        let slider = self.addComponentSlider(label  : "K" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : UIColor.black,
+                                             side   :side)
         
         slider.slider.maximumValue = 1
         slider.slider.isContinuous = true
@@ -857,7 +886,10 @@ open class GenericPickerOfColor : UIView {
     }
     
 
-    open func addComponentSlider           (label:NSAttributedString, title:NSAttributedString? = nil, color:UIColor, side:CGFloat = 32) -> ComponentSlider {
+    open func addComponentSlider           (label       : NSAttributedString,
+                                            title       : NSAttributedString? = nil,
+                                            color       : UIColor,
+                                            side        : CGFloat = 32) -> ComponentSlider {
         
         let GRAY            = UIColor(white:0.9)
         
@@ -886,10 +918,10 @@ open class GenericPickerOfColor : UIView {
         rightButton.circle(for: .normal).radius = side/2
         rightButton.circle(for: .normal).fillColor = GRAY.cgColor
         
-        var titleLabel      : UILabelWithInsets?
+        var titleLabel : UILabelWithInsets?
         
         if let title = title {
-            titleLabel      = UILabelWithInsets()
+            titleLabel = UILabelWithInsets()
             titleLabel?.textAlignment = .center
             titleLabel?.attributedText = title
             titleLabel?.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
@@ -897,7 +929,7 @@ open class GenericPickerOfColor : UIView {
 //            titleLabel?.layer.borderWidth = 1
 //            titleLabel?.sizeToFit()
             
-            titleLabel?.layer.backgroundColor = GRAY.cgColor
+//            titleLabel?.layer.backgroundColor = GRAY.cgColor
         }
         
 //        var someObject:AnyObject = "whatever" as AnyObject
@@ -1001,6 +1033,8 @@ open class GenericPickerOfColor : UIView {
     
     private var box : UILayoutGuide?
     
+    
+    
     open func clear() {
         self.subviews.forEach { $0.removeFromSuperview() }
         self.componentSliders = []
@@ -1012,7 +1046,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     
-    open func build() {
+    open func build(margin:CGFloat = 8) {
         
         if let first = self.subviews.first {
             if let box = self.box {
@@ -1032,7 +1066,7 @@ open class GenericPickerOfColor : UIView {
             }
             
             self.subviews.adjacent { a,b in
-                a.bottomAnchor.constraint(equalTo: b.topAnchor).isActive=true
+                a.bottomAnchor.constraint(equalTo: b.topAnchor, constant:-margin).isActive=true
             }
             
             for subview in self.subviews {
