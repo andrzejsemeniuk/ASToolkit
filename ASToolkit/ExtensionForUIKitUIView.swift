@@ -121,6 +121,33 @@ extension UIView {
         }
     }
     
+    open func constrainTopLeftCornerToSuperview() {
+        if let superview = superview {
+            self.translatesAutoresizingMaskIntoConstraints=false
+            self.topAnchor.constraint(equalTo: superview.topAnchor).isActive=true
+            self.leftAnchor.constraint(equalTo: superview.leftAnchor).isActive=true
+        }
+    }
+    
+    open func constrainWidthToSuperview() {
+        if let superview = superview {
+            self.translatesAutoresizingMaskIntoConstraints=false
+            self.widthAnchor.constraint(equalTo: superview.widthAnchor).isActive=true
+        }
+    }
+    
+    open func constrainHeightToSuperview() {
+        if let superview = superview {
+            self.translatesAutoresizingMaskIntoConstraints=false
+            self.heightAnchor.constraint(equalTo: superview.heightAnchor).isActive=true
+        }
+    }
+    
+    open func constrainSizeToSuperview() {
+        constrainWidthToSuperview()
+        constrainHeightToSuperview()
+    }
+    
     open func addSubviewCentered(_ view:UIView) {
         self.addSubview(view)
         view.constrainCenterToSuperview()
@@ -139,6 +166,10 @@ extension UIView {
     /// - Parameter views: views to add as subviews to this view
     open func addSubviews(_ views:[UIView]) {
         views.forEach { self.addSubview($0) }
+    }
+    
+    open func removeAllSubviews() {
+        self.subviews.forEach { $0.removeFromSuperview() }
     }
 }
 
