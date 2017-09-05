@@ -1043,10 +1043,11 @@ open class GenericPickerOfColor : UIView {
         if let box = self.box {
             self.removeLayoutGuide(box)
         }
+        self.removeAllConstraints()
     }
     
     
-    open func build(margin:CGFloat = 8) {
+    open func build(width:CGFloat = UIScreen.main.bounds.width, margin:CGFloat = 8) {
         
         if let first = self.subviews.first {
             if let box = self.box {
@@ -1063,17 +1064,22 @@ open class GenericPickerOfColor : UIView {
                 
                 box.topAnchor.constraint(equalTo: first.topAnchor).isActive=true
                 box.bottomAnchor.constraint(equalTo: self.subviews.last!.bottomAnchor).isActive=true                
-            }
             
-            self.subviews.adjacent { a,b in
-                a.bottomAnchor.constraint(equalTo: b.topAnchor, constant:-margin).isActive=true
-            }
-            
-            for subview in self.subviews {
-                if subview is ComponentSlider {
-                    subview.leftAnchor.constraint(equalTo: self.leftAnchor).isActive=true
-                    subview.rightAnchor.constraint(equalTo: self.rightAnchor).isActive=true
+                self.subviews.adjacent { a,b in
+                    a.bottomAnchor.constraint(equalTo: b.topAnchor, constant:-margin).isActive=true
                 }
+                
+                for subview in self.subviews {
+                    if subview is ComponentSlider {
+                        subview.leftAnchor.constraint(equalTo: box.leftAnchor).isActive=true
+                        subview.rightAnchor.constraint(equalTo: box.rightAnchor).isActive=true
+                    }
+                }
+                
+                self.translatesAutoresizingMaskIntoConstraints=false
+                self.widthAnchor.constraint(equalToConstant: width).isActive=true
+                self.heightAnchor.constraint(equalTo: box.heightAnchor).isActive=true
+                box.widthAnchor.constraint(equalTo:self.widthAnchor).isActive=true
             }
         }
 
