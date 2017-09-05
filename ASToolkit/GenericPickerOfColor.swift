@@ -1031,56 +1031,33 @@ open class GenericPickerOfColor : UIView {
 
     
     
-    private var box : UILayoutGuide?
-    
     
     
     open func clear() {
-        self.subviews.forEach { $0.removeFromSuperview() }
+        self.removeAllSubviews()
+        self.removeAllConstraints()
         self.componentSliders = []
         self.componentStorage = []
         self.componentDisplays = []
-        if let box = self.box {
-            self.removeLayoutGuide(box)
-        }
-        self.removeAllConstraints()
     }
     
     
-    open func build(width:CGFloat = UIScreen.main.bounds.width, margin:CGFloat = 8) {
+    open func build(margin:CGFloat = 8) {
         
-        if let first = self.subviews.first {
-            if let box = self.box {
-                self.removeLayoutGuide(box)
+        if let first = self.subviews.first, let last = self.subviews.last {
+            
+            self.subviews.adjacent { a,b in
+                b.topAnchor.constraint(equalTo: a.bottomAnchor, constant:margin).isActive=true
             }
             
-            self.box = UILayoutGuide()
-            
-            if let box = self.box {
-                self.addLayoutGuide(box)
-                
-                box.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-                box.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive=true
-                
-                box.topAnchor.constraint(equalTo: first.topAnchor).isActive=true
-                box.bottomAnchor.constraint(equalTo: self.subviews.last!.bottomAnchor).isActive=true                
-            
-                self.subviews.adjacent { a,b in
-                    a.bottomAnchor.constraint(equalTo: b.topAnchor, constant:-margin).isActive=true
-                }
-                
-                for subview in self.subviews {
-                    if subview is ComponentSlider {
-                        subview.leftAnchor.constraint(equalTo: box.leftAnchor).isActive=true
-                        subview.rightAnchor.constraint(equalTo: box.rightAnchor).isActive=true
-                    }
-                }
-                
-                self.translatesAutoresizingMaskIntoConstraints=false
-                self.widthAnchor.constraint(equalToConstant: width).isActive=true
-                self.heightAnchor.constraint(equalTo: box.heightAnchor).isActive=true
-                box.widthAnchor.constraint(equalTo:self.widthAnchor).isActive=true
+            for subview in self.subviews {
+                subview.leftAnchor.constraint(equalTo: self.leftAnchor).isActive=true
+                subview.rightAnchor.constraint(equalTo: self.rightAnchor).isActive=true
             }
+            
+            self.translatesAutoresizingMaskIntoConstraints=false
+            first.topAnchor.constraint(equalTo: self.topAnchor).isActive=true
+            self.bottomAnchor.constraint(equalTo: last.bottomAnchor).isActive=true
         }
 
         self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
@@ -1094,8 +1071,7 @@ open class GenericPickerOfColor : UIView {
             }
         }
     }
-    
-    
+        
     /// This handler is called whenever the color changes
     public var handler  : ((UIColor)->())?
     
