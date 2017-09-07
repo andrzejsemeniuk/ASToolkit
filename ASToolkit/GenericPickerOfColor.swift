@@ -11,142 +11,145 @@ import UIKit
 
 // TODO: TAP ON DISPLAY ADDS COLOR TO STORAGE?
 // TODO: PERSIST LAST COLOR SET?
+// TODO: DISPLAY-DOT/ADD MARGIN
+// TODO: DISPLAY-DOT/ADD LABEL
+// TODO: OPERATION/ADD
+// TODO: REFACTOR INTO A FRAMEWORK
 
 open class GenericPickerOfColor : UIView {
 
     public var preferenceSliderSetValueAnimationDuration                    : Double                = 0.4
     
+    public enum Operation {
+        case copy
+        case paste
+        case swap
+        case store
+    }
+    
     public enum Component {
         
-        case colorDisplay           (height:CGFloat, kind:ComponentColorDisplay.Kind)
+        case operations                     (operations:[Operation])
         
-        case sliderRed              (height:CGFloat)
-        case sliderGreen            (height:CGFloat)
-        case sliderBlue             (height:CGFloat)
+        case colorDisplayDot                (height:CGFloat)
+        case colorDisplayFill               (height:CGFloat) // TODO
+        case colorDisplayDiagonal2          (height:CGFloat) // TODO
+        case colorDisplaySplitVertical      (height:CGFloat, count:Int) // TODO
+        case colorDisplaySplitHorizontal    (height:CGFloat, count:Int) // TODO
+        case colorDisplayDotOnFill          (height:CGFloat) // TODO
+        case colorDisplayValueAsHexadecimal // TODO
         
-        case sliderCyan             (height:CGFloat)
-        case sliderMagenta          (height:CGFloat)
-        case sliderYellow           (height:CGFloat)
-        case sliderKey              (height:CGFloat)
+        case mapHueSaturation               (height:CGFloat,reverse:Bool) // TODO
+        case mapHueBrightness               (height:CGFloat,reverse:Bool) // TODO
+        case mapSaturationBrightness        (height:CGFloat,reverse:Bool) // TODO
         
-        case sliderHue              (height:CGFloat)
-        case sliderSaturation       (height:CGFloat)
-        case sliderBrightness       (height:CGFloat)
+        case sliderRed                      (height:CGFloat)
+        case sliderGreen                    (height:CGFloat)
+        case sliderBlue                     (height:CGFloat)
         
-        case sliderGrayscale        (height:CGFloat)
+        case sliderCyan                     (height:CGFloat)
+        case sliderMagenta                  (height:CGFloat)
+        case sliderYellow                   (height:CGFloat)
+        case sliderKey                      (height:CGFloat)
+        
+        case sliderHue                      (height:CGFloat)
+        case sliderSaturation               (height:CGFloat)
+        case sliderBrightness               (height:CGFloat)
+        
+        case sliderGrayscale                (height:CGFloat) // TODO
 
-        case sliderAlpha            (height:CGFloat)
+        case sliderAlpha                    (height:CGFloat)
         
-        case sliderCustom           (height:CGFloat, color:UIColor, label:NSAttributedString, value0:Float, value1:Float)
+        case sliderCustom                   (height:CGFloat, color:UIColor, label:NSAttributedString, value0:Float, value1:Float) // TODO
         
-        case storageDots            (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor])
+        case storageDots                    (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor])
+        case storageFly                     (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) // TODO
     }
 
+    let tagForTitle = 5146
+    
+    open func addTitle(to:UIView, margin:CGFloat, title:NSAttributedString) -> UILabelWithInsets {
+        let result = UILabelWithInsets()
+        result.attributedText = title
+        to.addSubview(result)
+        result.constrainCenterXToSuperview()
+        result.sizeToFit()
+        result.tag = tagForTitle
+        result.topAnchor.constraint(equalTo: to.topAnchor, constant: margin)
+        return result
+    }
+    
+    open func removeTitle(from:UIView) {
+        from.removeSubview(withTag:tagForTitle)
+    }
+    
     open class ComponentColorDisplay : UIView {
-        
-        public enum Kind {
-            case background
-            case dot
-            case dots
-        }
-
-        public var kind             : Kind             = .background {
-            didSet {
-                self.updateKind()
-            }
-        }
         
         public var color            : UIColor           = .clear {
             didSet {
                 self.updateColor()
             }
         }
-
-        public typealias Handler    = (ComponentColorDisplay)->()
         
-        public var handler          : Handler?
-        
-        private weak var viewDot    : UIViewCircle!
-        private var viewDots        : [UIViewCircle]    = []
-        private var viewDotsIndex   : Int               = 0
-        
-        public init(height: CGFloat, kind:Kind = .background) {
+        public init(height: CGFloat) {
             super.init(frame: CGRect(side:height))
-            
-            // dot
-            
-            let viewDot = UIViewCircle(side:height)
-            self.addSubviewCentered(viewDot)
-            viewDot.constrainSizeToFrameSize()
-            self.viewDot = viewDot
-            
-            // dots
-            
-            self.viewDots = [
-                UIViewCircle(side:height),
-                UIViewCircle(side:height/2)
-            ]
-            
-            viewDots.forEach {
-                self.addSubviewCentered($0)
-                $0.constrainSizeToFrameSize()
-                $0.backgroundColor = .white
-            }
-            
-            // init
-            
-            subviews.forEach { $0.isHidden = true }
-            
-            self.kind = kind
-            self.updateKind()
-            
-            let tap = UITapGestureRecognizer(target: self, action: #selector(ComponentColorDisplay.tapped))
-            self.addGestureRecognizer(tap)
-         }
-        
-        func tapped() {
-            self.handler?(self)
-        }
-
-        public func nextKind() {
-            switch kind {
-            case .background    : self.kind = .dot
-            case .dot           : self.kind = .dots
-            case .dots          :
-                self.viewDotsIndex += 1
-                self.viewDotsIndex %= self.viewDots.count
-                if 0 == self.viewDotsIndex {
-                    self.kind = .background
-                }
-            }
         }
         
         required public init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        private func updateKind() {
-            subviews.forEach { $0.isHidden = true }
-            switch kind {
-            case .dot       :
-                viewDot.isHidden = false
-            case .dots      :
-                viewDots.forEach { $0.isHidden = false }
-            case .background:
-                break
-            }
-            self.backgroundColor = .clear
-            self.updateColor()
+        open func updateColor() {
+        }
+    }
+    
+    open class ComponentColorDisplayFill : ComponentColorDisplay {
+        
+        public override init(height: CGFloat) {
+            super.init(height:height)
+         }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
         }
         
-        private func updateColor() {
-            switch kind {
-            case .dot           : viewDot.backgroundColor = color
-            case .background    : self.backgroundColor = color
-            case .dots          : self.viewDots[self.viewDotsIndex].backgroundColor = color
-            }
+        override open func updateColor() {
+            self.backgroundColor = color
+            self.setNeedsDisplay()
+        }
+    }
+    
+    open class ComponentColorDisplayDot : ComponentColorDisplay {
+        
+        //        public weak var title       : UILabelWithInsets!
+        public weak var viewDot     : UIViewCircle!
+        
+        public override init(height: CGFloat) {
+            super.init(height:height)
+            
+            let viewDot = UIViewCircle(side:height)
+            self.addSubviewCentered(viewDot)
+            viewDot.constrainSizeToFrameSize()
+            self.viewDot = viewDot
+            
+            // let title = myslider.addTitle("hello" | .red | .fontGillSans)
+            //  title.superview = myslider.superview
+            //  myslider.superview=title
+            // title.backgroundColor = .black
+            // title.insets.left/right = 4
+            // title.margin.top/bottom=4
+            
+            // solution 2: increase top insets by title-height + margin + title-insets
         }
         
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func updateColor() {
+            viewDot.backgroundColor = color
+            viewDot.setNeedsDisplay()
+        }
     }
     
     open class ComponentStorage : UIView {
@@ -984,9 +987,25 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open func addComponentColorDisplay       (height side:CGFloat = 32, kind:ComponentColorDisplay.Kind) -> ComponentColorDisplay {
+    open func addComponentColorDisplayFill    (height side:CGFloat = 32) -> ComponentColorDisplayFill {
         
-        let display = ComponentColorDisplay(height:side, kind:kind)
+        let display = ComponentColorDisplayFill(height:side)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        display.color = self.color
+        
+        return display
+    }
+    
+    open func addComponentColorDisplayDot     (height side:CGFloat = 32) -> ComponentColorDisplayDot {
+        
+        let display = ComponentColorDisplayDot(height:side)
         
         self.addSubview(display)
         
@@ -1046,15 +1065,19 @@ open class GenericPickerOfColor : UIView {
         
         if let first = self.subviews.first, let last = self.subviews.last {
             
+            // tie subviews together
             self.subviews.adjacent { a,b in
                 b.topAnchor.constraint(equalTo: a.bottomAnchor, constant:margin).isActive=true
             }
             
+            // tie left/right anchors of subviews to picker
             for subview in self.subviews {
                 subview.leftAnchor.constraint(equalTo: self.leftAnchor).isActive=true
                 subview.rightAnchor.constraint(equalTo: self.rightAnchor).isActive=true
             }
             
+            // tie picker top anchor to top subview
+            // tie picker bottom anchor to bottom subview
             self.translatesAutoresizingMaskIntoConstraints=false
             first.topAnchor.constraint(equalTo: self.topAnchor).isActive=true
             self.bottomAnchor.constraint(equalTo: last.bottomAnchor).isActive=true
@@ -1063,13 +1086,6 @@ open class GenericPickerOfColor : UIView {
         self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
         self.componentDisplays  = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
         self.componentStorage   = self.subviews.filter { $0 is ComponentStorageDots }.map { $0 as! ComponentStorageDots }
-
-        self.componentDisplays.forEach {
-            $0.handler = { [weak self] display in
-                guard let `self` = self else { return }
-                self.componentStorage.first?.add(color:self.color)
-            }
-        }
     }
         
     /// This handler is called whenever the color changes
@@ -1082,8 +1098,8 @@ open class GenericPickerOfColor : UIView {
         for component in components {
             switch component {
                 
-            case .colorDisplay          (let height, let kind) :
-                _ = result.addComponentColorDisplay      (height:height,kind:kind)
+            case .colorDisplayDot        (let height) :
+                _ = result.addComponentColorDisplayDot    (height:height)
                 
             case .sliderRed             (let height)     : _ = result.addComponentSliderRed         (side:height)
             case .sliderGreen           (let height)     : _ = result.addComponentSliderGreen       (side:height)
@@ -1150,7 +1166,7 @@ func test() {
     else if false {
         
         let picker = GenericPickerOfColor.create(withComponents: [
-            .colorDisplay           (height:64,kind:.dot),
+            .colorDisplayDot           (height:64),
             //                .sliderRed              (height:16),
             //                .sliderGreen            (height:16),
             //                .sliderBlue             (height:16),
