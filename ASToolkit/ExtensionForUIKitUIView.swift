@@ -88,19 +88,19 @@ extension UIView {
         self.removeConstraints(self.constraints)
     }
 
-    open func constrainXCenter(to:UIView) {
+    open func constrainCenterX(to:UIView) {
         self.translatesAutoresizingMaskIntoConstraints=false
         self.centerXAnchor.constraint(equalTo: to.centerXAnchor).isActive = true
     }
     
-    open func constrainYCenter(to:UIView) {
+    open func constrainCenterY(to:UIView) {
         self.translatesAutoresizingMaskIntoConstraints=false
         self.centerYAnchor.constraint(equalTo: to.centerYAnchor).isActive = true
     }
     
     open func constrainCenter(to:UIView) {
-        self.constrainXCenter(to: to)
-        self.constrainYCenter(to: to)
+        self.constrainCenterX(to: to)
+        self.constrainCenterY(to: to)
     }
     
     open func constrainCenterToSuperview() {
@@ -111,13 +111,13 @@ extension UIView {
     
     open func constrainCenterXToSuperview() {
         if let superview = superview {
-            constrainXCenter(to:superview)
+            constrainCenterX(to:superview)
         }
     }
     
     open func constrainCenterYToSuperview() {
         if let superview = superview {
-            constrainYCenter(to:superview)
+            constrainCenterY(to:superview)
         }
     }
     
@@ -170,6 +170,22 @@ extension UIView {
     
     open func removeAllSubviews() {
         self.subviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    open func subview(withTag:Int) -> UIView? {
+        var result:UIView?
+        if let index = self.subviews.index(where: {
+            $0.tag == withTag
+        }) {
+            result = self.subviews[index]
+        }
+        return result
+    }
+    
+    open func removeSubview(withTag:Int) {
+        if let result = subview(withTag: withTag) {
+            result.removeFromSuperview()
+        }
     }
 }
 
