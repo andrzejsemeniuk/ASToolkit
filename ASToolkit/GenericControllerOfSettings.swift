@@ -481,15 +481,24 @@ open class GenericControllerOfSettings : UITableViewController
         }
     }
     
-    open func createCellForUISwitch             (_ setting:GenericSetting<Bool>, id:String? = nil, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:((Bool)->())? = nil ) -> FunctionOnCell {
+    open func createCellForUISwitch             (_ setting  : GenericSetting<Bool>,
+                                                 id         : String? = nil,
+                                                 title      : String,
+                                                 exclusive  : [Weak<GenericSetting<Bool>>]? = nil,
+                                                 setup      : ((UITableViewCell,IndexPath)->())? = nil,
+                                                 action     : ((Bool)->())? = nil ) -> FunctionOnCell {
         
         return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
                 setup?(cell,indexPath)
-                cell.accessoryView  = self?.registerUISwitch(id:id, indexPath:indexPath, on: setting.value, update: { (myswitch:UISwitch) in
+                cell.accessoryView  = self?.registerUISwitch(id:id, indexPath:indexPath, on: setting.value, update: { [weak setting] (myswitch:UISwitch) in
+                    guard let `setting` = setting else { return }
                     setting.value = myswitch.isOn
+                    if setting.value {
+                        exclusive?.filter { $0.value != nil && $0.value! !== setting }.map { $0.value! }.forEach { $0.value = false }
+                    }
                     action?(setting.value)
                 })
             }
