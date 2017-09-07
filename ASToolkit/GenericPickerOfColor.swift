@@ -32,8 +32,8 @@ open class GenericPickerOfColor : UIView {
         case operations                     (operations:[Operation])
         
         case colorDisplayDot                (height:CGFloat)
-        case colorDisplayFill               (height:CGFloat) // TODO
-        case colorDisplayDiagonal2          (height:CGFloat) // TODO
+        case colorDisplayFill               (height:CGFloat)
+        case colorDisplayDiagonal           (height:CGFloat)
         case colorDisplaySplitVertical      (height:CGFloat, count:Int) // TODO
         case colorDisplaySplitHorizontal    (height:CGFloat, count:Int) // TODO
         case colorDisplayDotOnFill          (height:CGFloat) // TODO
@@ -91,22 +91,41 @@ open class GenericPickerOfColor : UIView {
             }
         }
         
-        public init(height: CGFloat) {
+        public var colors           : [UIColor]         = []
+        public var colorIndex       : Int               = 0
+        
+        public init(height: CGFloat, count:Int) {
             super.init(frame: CGRect(side:height))
+            self.colors = Array<UIColor>.init(repeating: .clear, count: count)
+
+            if 1 < count {
+                let tap = UITapGestureRecognizer(target: self, action: #selector(ComponentColorDisplay.tapped))
+                self.addGestureRecognizer(tap)
+            }
         }
         
         required public init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
+        open func tapped() {
+            self.colorIndex += 1
+            print("0 \(colorIndex)")
+            self.colorIndex %= self.colors.count
+            print("1 \(colorIndex)")
+        }
+        
         open func updateColor() {
+            self.colors[self.colorIndex] = color
+            self.setNeedsDisplay()
         }
     }
     
     open class ComponentColorDisplayFill : ComponentColorDisplay {
         
-        public override init(height: CGFloat) {
-            super.init(height:height)
+        public init(height: CGFloat) {
+            super.init(height:height, count:1)
+            
          }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -124,8 +143,8 @@ open class GenericPickerOfColor : UIView {
         //        public weak var title       : UILabelWithInsets!
         public weak var viewDot     : UIViewCircle!
         
-        public override init(height: CGFloat) {
-            super.init(height:height)
+        public init(height: CGFloat) {
+            super.init(height:height, count:1)
             
             let viewDot = UIViewCircle(side:height)
             self.addSubviewCentered(viewDot)
@@ -149,6 +168,45 @@ open class GenericPickerOfColor : UIView {
         override open func updateColor() {
             viewDot.backgroundColor = color
             viewDot.setNeedsDisplay()
+        }
+    }
+    
+    open class ComponentColorDisplayDiagonal : ComponentColorDisplay {
+        
+        private weak var triangle : CAShapeLayer!
+        
+        public init(height: CGFloat) {
+            super.init(height:height, count:2)
+            
+            let triangle = CAShapeLayer()
+            self.triangle = triangle
+            self.layer.addSublayer(triangle)
+        }
+
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func draw(_ rect: CGRect) {
+            let path = CGMutablePath()
+            path.move(to: self.bounds.tl)
+            path.addLine(to: self.bounds.br)
+            path.addLine(to: self.bounds.tr)
+            path.addLine(to: self.bounds.tl)
+            path.closeSubpath()
+            self.triangle.path = path
+//            self.backgroundColor        = colors[0]
+//            self.triangle.fillColor     = colors[1].cgColor
+            super.draw(rect)
+        }
+        override open func updateColor() {
+            super.updateColor()
+            switch colorIndex {
+            case 0  :
+                self.backgroundColor      = color
+            default :
+                self.triangle.fillColor   = color.cgColor
+            }
         }
     }
     
@@ -1028,6 +1086,21 @@ open class GenericPickerOfColor : UIView {
         return display
     }
     
+    open func addComponentColorDisplayDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplayDiagonal {
+        
+        let display = ComponentColorDisplayDiagonal(height:side)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        display.color = self.color
+        
+        return display
+    }
     
     open func addComponentStorageDots(radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
         
