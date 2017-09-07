@@ -24,9 +24,14 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
     public let key          : Key
     public let first        : TYPE
     
+    public var inform       : ((TYPE)->())?
+    
     open var value          : TYPE {
         willSet (newValue) {
-            self.store(newValue)
+            store(newValue)
+        }
+        didSet {
+            inform?(value)
         }
     }
     
