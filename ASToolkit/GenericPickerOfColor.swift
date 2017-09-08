@@ -34,8 +34,8 @@ open class GenericPickerOfColor : UIView {
         case colorDisplayDot                (height:CGFloat)
         case colorDisplayFill               (height:CGFloat)
         case colorDisplayDiagonal           (height:CGFloat)
-        case colorDisplaySplitVertical      (height:CGFloat, count:Int) // TODO
-        case colorDisplaySplitHorizontal    (height:CGFloat, count:Int) // TODO
+        case colorDisplaySplitVertical      (height:CGFloat, count:Int)
+        case colorDisplaySplitHorizontal    (height:CGFloat, count:Int)
         case colorDisplayDotOnFill          (height:CGFloat) // TODO
         case colorDisplayValueAsHexadecimal // TODO
         
@@ -262,6 +262,76 @@ open class GenericPickerOfColor : UIView {
             super.updateFromColor()
             view.backgroundColor      = colorArrayManager.color(at:0)
             self.triangle.fillColor   = colorArrayManager.color(at:1).cgColor
+        }
+    }
+    
+    open class ComponentColorDisplaySplitVertical : ComponentColorDisplay {
+        
+        private weak var other  : UIView!
+        private weak var view   : UIView!
+        
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
+            
+            let view = UIView()
+            self.view = view
+            self.addSubview(view)
+            view.constrainSizeToSuperview()
+            view.constrainCenterToSuperview()
+            
+            let other = UIView()
+            self.other = other
+            view.addSubview(other)
+            other.translatesAutoresizingMaskIntoConstraints=false
+            other.leftAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
+            other.rightAnchor.constraint(equalTo: view.rightAnchor).isActive=true
+            other.topAnchor.constraint(equalTo: view.topAnchor).isActive=true
+            other.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive=true
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func updateFromColor() {
+            super.updateFromColor()
+            view.backgroundColor    = colorArrayManager.color(at:0)
+            other.backgroundColor   = colorArrayManager.color(at:1)
+        }
+    }
+    
+    open class ComponentColorDisplaySplitHorizontal : ComponentColorDisplay {
+        
+        private weak var other  : UIView!
+        private weak var view   : UIView!
+        
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
+            
+            let view = UIView()
+            self.view = view
+            self.addSubview(view)
+            view.constrainSizeToSuperview()
+            view.constrainCenterToSuperview()
+            
+            let other = UIView()
+            self.other = other
+            view.addSubview(other)
+            other.translatesAutoresizingMaskIntoConstraints=false
+            other.leftAnchor.constraint(equalTo: view.leftAnchor).isActive=true
+            other.rightAnchor.constraint(equalTo: view.rightAnchor).isActive=true
+            other.topAnchor.constraint(equalTo: view.centerYAnchor).isActive=true
+            other.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive=true
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func updateFromColor() {
+            super.updateFromColor()
+            view.backgroundColor    = colorArrayManager.color(at:0)
+            other.backgroundColor   = colorArrayManager.color(at:1)
         }
     }
     
@@ -1141,6 +1211,38 @@ open class GenericPickerOfColor : UIView {
     open func addComponentColorDisplayDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplayDiagonal {
         
         let display = ComponentColorDisplayDiagonal(height:side, colorArrayManager:self.colorArrayManager)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentColorDisplaySplitVertical (height side:CGFloat = 32) -> ComponentColorDisplaySplitVertical {
+        
+        let display = ComponentColorDisplaySplitVertical(height:side, colorArrayManager:self.colorArrayManager)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentColorDisplaySplitHorizontal (height side:CGFloat = 32) -> ComponentColorDisplaySplitHorizontal {
+        
+        let display = ComponentColorDisplaySplitHorizontal(height:side, colorArrayManager:self.colorArrayManager)
         
         self.addSubview(display)
         
