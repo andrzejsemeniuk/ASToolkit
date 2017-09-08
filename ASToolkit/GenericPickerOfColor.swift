@@ -37,7 +37,7 @@ open class GenericPickerOfColor : UIView {
         case colorDisplaySplitDiagonal           (height:CGFloat)
         case colorDisplaySplitVertical      (height:CGFloat, count:Int)
         case colorDisplaySplitHorizontal    (height:CGFloat, count:Int)
-        case colorDisplayValueAsHexadecimal // TODO
+        case colorDisplayValueAsHexadecimal
         
         case mapHueSaturation               (height:CGFloat,reverse:Bool) // TODO
         case mapHueBrightness               (height:CGFloat,reverse:Bool) // TODO
@@ -399,6 +399,110 @@ open class GenericPickerOfColor : UIView {
                 self.text.attributedText = "0x\(hex.joined())" | UIColor.black | font
             }
         }
+    }
+    
+    open class ComponentOperations : UIStackView {
+        
+        public let operations   : [Operation]
+        
+        public var buttons      : [Operation:UIButtonWithCenteredCircle] = [:]
+        
+        required public init(coder aDecoder: NSCoder) {
+            // TODO
+            self.operations = []
+            super.init(coder: aDecoder)
+        }
+
+        public init(height: CGFloat, operations:[Operation]) {
+            self.operations = operations
+
+            // create buttons based on operations
+            
+            super.init(frame: CGRect(side:height))
+            
+            self.distribution = .equalCentering
+            self.axis = .horizontal
+            self.alignment = .center
+            
+            // create buttons based on operations
+            
+            self.addArrangedSubview(UIView())
+            for (index,operation) in operations.enumerated() {
+                let button = self.createButton(forOperation: operation)
+                self.buttons[operation] = button
+                self.addArrangedSubview(button)
+                button.tag = index
+            }
+            self.addArrangedSubview(UIView())
+        }
+        
+        private func createButton(title:String, side:CGFloat = 32, insets:UIEdgeInsets = UIEdgeInsets()) -> UIButtonWithCenteredCircle {
+            let result = UIButtonWithCenteredCircle(frame: CGRect(side:side))
+            result.circle(for: .normal).radius = side/2
+            result.circle(for: .normal).fillColor = UIColor.clear.cgColor
+            result.circle(for: .normal).strokeColor = UIColor.blue.cgColor
+            result.circle(for: .normal).lineWidth = 3
+            result.circle(for: .selected).radius = side/2
+            result.circle(for: .selected).fillColor = UIColor.blue.cgColor
+            result.circle(for: .selected).strokeColor = UIColor.blue.cgColor
+            result.circle(for: .selected).lineWidth = 3
+            result.circle(for: .disabled).radius = side/2
+            result.circle(for: .disabled).fillColor = UIColor.lightGray.cgColor
+            result.circle(for: .disabled).strokeColor = UIColor.gray.cgColor
+            result.circle(for: .disabled).lineWidth = 3
+            
+            result.setAttributedTitle(title | UIColor.blue, for: .normal)
+            result.setAttributedTitle(title | UIColor.red, for: .selected)
+            result.setAttributedTitle(title | UIColor.gray, for: .disabled)
+            
+            result.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
+            
+            result.titleEdgeInsets = insets
+            
+            return result
+        }
+        
+        private func createButton(forOperation operation:Operation) -> UIButtonWithCenteredCircle {
+            switch operation {
+            case .copy      :
+                return createButton(title: "\u{2336}")
+            case .paste     :
+                return createButton(title: "\u{1F4CB}")
+            case .spread    :
+                //        ⚙
+                //        Unicode: U+2699, UTF-8: E2 9A 99
+                return createButton(title: "\u{2699}")
+            case .store     :
+                return createButton(title: "\u{2697}")
+            case .swap      :
+                return createButton(title: "\u{2698}")
+            }
+
+        }
+        
+        func tapped(_ control:UIButton) {
+            if let operation = operations[safe:control.tag] {
+                if !(buttons[operation]?.isSelected ?? true) {
+                    switch operation {
+                    case .copy      :
+                        print("copy")
+                    case .paste     :
+                        print("paste")
+                    case .spread    :
+                        print("spread")
+                    case .store     :
+                        print("store")
+                    case .swap      :
+                        print("swap")
+                    }
+                    buttons[operation]?.isSelected=true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                        self?.buttons[operation]?.isSelected=false
+                    }
+                }
+            }
+        }
+        
     }
     
     open class ComponentStorage : UIView {
@@ -1334,6 +1438,20 @@ open class GenericPickerOfColor : UIView {
         display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentOperations            (height side:CGFloat = 32, operations:[Operation]) -> ComponentOperations {
+        
+        let display = ComponentOperations(height:side, operations:operations)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         return display
     }
