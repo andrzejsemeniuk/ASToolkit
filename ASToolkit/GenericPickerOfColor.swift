@@ -25,6 +25,7 @@ open class GenericPickerOfColor : UIView {
         case paste
         case swap
         case store
+        case spread // spread color to other indexes
     }
     
     public enum Component {
@@ -33,10 +34,9 @@ open class GenericPickerOfColor : UIView {
         
         case colorDisplayDot                (height:CGFloat)
         case colorDisplayFill               (height:CGFloat)
-        case colorDisplayDiagonal           (height:CGFloat)
+        case colorDisplaySplitDiagonal           (height:CGFloat)
         case colorDisplaySplitVertical      (height:CGFloat, count:Int)
         case colorDisplaySplitHorizontal    (height:CGFloat, count:Int)
-        case colorDisplayDotOnFill          (height:CGFloat) // TODO
         case colorDisplayValueAsHexadecimal // TODO
         
         case mapHueSaturation               (height:CGFloat,reverse:Bool) // TODO
@@ -141,6 +141,8 @@ open class GenericPickerOfColor : UIView {
         public let colorArrayManager : ColorArrayManager
         public let colorLimit : Int
         
+        private var tap : UIGestureRecognizer?
+        
         public init(height: CGFloat, colorLimit:Int, colorArrayManager:ColorArrayManager) {
             
             self.colorLimit = colorLimit
@@ -149,8 +151,14 @@ open class GenericPickerOfColor : UIView {
             super.init(frame: CGRect(side:height))
             
             if 1 < colorLimit {
-                let tap = UITapGestureRecognizer(target: self, action: #selector(ComponentColorDisplay.tapped))
-                self.addGestureRecognizer(tap)
+                addTap()
+            }
+        }
+        
+        internal func addTap() {
+            if self.tap == nil {
+                tap = UITapGestureRecognizer(target: self, action: #selector(ComponentColorDisplay.tapped))
+                self.addGestureRecognizer(tap!)
             }
         }
         
@@ -223,7 +231,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open class ComponentColorDisplayDiagonal : ComponentColorDisplay {
+    open class ComponentColorDisplaySplitDiagonal : ComponentColorDisplay {
         
         private weak var triangle : CAShapeLayer!
         private weak var view : UIView!
@@ -332,6 +340,64 @@ open class GenericPickerOfColor : UIView {
             super.updateFromColor()
             view.backgroundColor    = colorArrayManager.color(at:0)
             other.backgroundColor   = colorArrayManager.color(at:1)
+        }
+    }
+    
+    open class ComponentColorDisplayValueAsHexadecimal : ComponentColorDisplay {
+        
+        public var colorified = true
+        
+        public let text = {
+            return UILabel()
+        }()
+        
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
+            
+            self.addSubview(self.text)
+            self.text.constrainCenterToSuperview()
+            self.text.constrainSizeToSuperview()
+            self.text.attributedText = "0x00000000" | .white
+            self.text.backgroundColor = UIColor(white:0,alpha:0.1)
+            self.text.textAlignment = .center
+            self.text.sizeToFit()
+            
+            super.addTap()
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func tapped() {
+            colorified.flip()
+            self.updateFromColor()
+        }
+        
+        override open func updateFromColor() {
+            super.updateFromColor()
+            let font    = text.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+            let color   = text.textColor ?? .white
+            let hex     = colorArrayManager.color.representationOfRGBAasHexadecimal
+            if colorified {
+                var representation = NSAttributedString.init(string:"0x")
+                representation += hex[0] | [
+                    NSBackgroundColorAttributeName      : UIColor.red
+                    ] | font
+                representation += hex[1] | [
+                    NSBackgroundColorAttributeName      : UIColor(hsb:[0.3,1,0.7])
+                    ] | font
+                representation += hex[2] | [
+                    NSBackgroundColorAttributeName      : UIColor(hsb:[0.61,1,1])
+                    ] | font
+                representation += hex[3] | [
+                    NSBackgroundColorAttributeName      : UIColor(white:0.6)
+                    ] | font
+                self.text.attributedText = representation | color | font
+            }
+            else {
+                self.text.attributedText = "0x\(hex.joined())" | color | font
+            }
         }
     }
     
@@ -1208,9 +1274,9 @@ open class GenericPickerOfColor : UIView {
         return display
     }
     
-    open func addComponentColorDisplayDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplayDiagonal {
+    open func addComponentColorDisplaySplitDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplaySplitDiagonal {
         
-        let display = ComponentColorDisplayDiagonal(height:side, colorArrayManager:self.colorArrayManager)
+        let display = ComponentColorDisplaySplitDiagonal(height:side, colorArrayManager:self.colorArrayManager)
         
         self.addSubview(display)
         
@@ -1243,6 +1309,22 @@ open class GenericPickerOfColor : UIView {
     open func addComponentColorDisplaySplitHorizontal (height side:CGFloat = 32) -> ComponentColorDisplaySplitHorizontal {
         
         let display = ComponentColorDisplaySplitHorizontal(height:side, colorArrayManager:self.colorArrayManager)
+        
+        self.addSubview(display)
+        
+        display.translatesAutoresizingMaskIntoConstraints=false
+        display.heightAnchor.constraint(equalToConstant: side).isActive=true
+        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentColorDisplayValueAsHexadecimal (height side:CGFloat = 32) -> ComponentColorDisplayValueAsHexadecimal {
+        
+        let display = ComponentColorDisplayValueAsHexadecimal(height:side, colorArrayManager:self.colorArrayManager)
         
         self.addSubview(display)
         
