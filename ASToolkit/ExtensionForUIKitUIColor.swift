@@ -350,6 +350,16 @@ extension UIColor {
         return "UIColor(hsba:[\(v.hue),\(v.saturation),\(v.brightness),\(v.alpha)])"
     }
 
+    open var representationOfRGBAasHexadecimal : [String] {
+        let v = components_RGBA_UInt8()
+        return [
+            String(format:"%02X",v.red),
+            String(format:"%02X",v.green),
+            String(format:"%02X",v.blue),
+            String(format:"%02X",v.alpha),
+        ]
+//        return String(format:"0x%02X%02X%02X%02X", v.red, v.green, v.blue, v.alpha)
+    }
 }
 
 
