@@ -83,7 +83,7 @@ open class GenericPickerOfColor : UIView {
         from.removeSubview(withTag:tagForTitle)
     }
     
-    open class ColorArray {
+    open class ColorArrayManager {
         public var listenersOfIndex : [(Int)->()]       = []
         public var colors           : [UIColor]         = [] {
             didSet {
@@ -138,13 +138,13 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentColorDisplay : UIView {
         
-        public let colorArray : ColorArray
+        public let colorArrayManager : ColorArrayManager
         public let colorLimit : Int
         
-        public init(height: CGFloat, colorLimit:Int, colorArray:ColorArray) {
+        public init(height: CGFloat, colorLimit:Int, colorArrayManager:ColorArrayManager) {
             
             self.colorLimit = colorLimit
-            self.colorArray = colorArray
+            self.colorArrayManager = colorArrayManager
             
             super.init(frame: CGRect(side:height))
             
@@ -159,7 +159,7 @@ open class GenericPickerOfColor : UIView {
         }
         
         open func tapped() {
-            colorArray.colorIndexAdvance(withLimit:colorLimit)
+            colorArrayManager.colorIndexAdvance(withLimit:colorLimit)
         }
         
         open func updateFromColor() {
@@ -171,8 +171,8 @@ open class GenericPickerOfColor : UIView {
         
         private weak var view:UIView!
         
-        public init(height: CGFloat, colorArray:ColorArray) {
-            super.init(height:height, colorLimit:1, colorArray:colorArray)
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:1, colorArrayManager:colorArrayManager)
             let view = UIView()
             self.view = view
             self.addSubview(view)
@@ -186,7 +186,7 @@ open class GenericPickerOfColor : UIView {
         
         override open func updateFromColor() {
             super.updateFromColor()
-            view.backgroundColor = colorArray.color(at: 0)
+            view.backgroundColor = colorArrayManager.color(at: 0)
         }
     }
     
@@ -195,8 +195,8 @@ open class GenericPickerOfColor : UIView {
         //        public weak var title       : UILabelWithInsets!
         public weak var viewDot     : UIViewCircle!
         
-        public init(height: CGFloat, colorArray:ColorArray) {
-            super.init(height:height, colorLimit:1, colorArray:colorArray)
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:1, colorArrayManager:colorArrayManager)
             
             let viewDot = UIViewCircle(side:height)
             self.addSubviewCentered(viewDot)
@@ -219,7 +219,7 @@ open class GenericPickerOfColor : UIView {
         
         override open func updateFromColor() {
             super.updateFromColor()
-            viewDot.backgroundColor = colorArray.color(at: 0)
+            viewDot.backgroundColor = colorArrayManager.color(at: 0)
         }
     }
     
@@ -228,8 +228,8 @@ open class GenericPickerOfColor : UIView {
         private weak var triangle : CAShapeLayer!
         private weak var view : UIView!
         
-        public init(height: CGFloat, colorArray:ColorArray) {
-            super.init(height:height, colorLimit:2, colorArray:colorArray)
+        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+            super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
             
             let view = UIView()
             self.view = view
@@ -260,8 +260,8 @@ open class GenericPickerOfColor : UIView {
         }
         override open func updateFromColor() {
             super.updateFromColor()
-            view.backgroundColor      = colorArray.color(at:0)
-            self.triangle.fillColor   = colorArray.color(at:1).cgColor
+            view.backgroundColor      = colorArrayManager.color(at:0)
+            self.triangle.fillColor   = colorArrayManager.color(at:1).cgColor
         }
     }
     
@@ -495,7 +495,7 @@ open class GenericPickerOfColor : UIView {
     
     // MARK: - Data
     
-    public let colorArray                                       = ColorArray()
+    public let colorArrayManager                                       = ColorArrayManager()
     public var componentSliders     : [ComponentSlider]         = []
     public var componentDisplays    : [ComponentColorDisplay]   = []
     public var componentStorage     : [ComponentStorageDots]    = []
@@ -506,8 +506,8 @@ open class GenericPickerOfColor : UIView {
     
     override public init            (frame:CGRect) {
         super.init(frame:frame)
-        self.colorArray.listenersOfIndex.append { [weak self] index in
-            self?.set(color: self!.colorArray.color, animated: true)
+        self.colorArrayManager.listenersOfIndex.append { [weak self] index in
+            self?.set(color: self!.colorArrayManager.color, animated: true)
         }
     }
     
@@ -1099,7 +1099,7 @@ open class GenericPickerOfColor : UIView {
     
     open func addComponentColorDisplayFill    (height side:CGFloat = 32) -> ComponentColorDisplayFill {
         
-        let display = ComponentColorDisplayFill(height:side, colorArray:colorArray)
+        let display = ComponentColorDisplayFill(height:side, colorArrayManager:colorArrayManager)
         
         self.addSubview(display)
         
@@ -1115,7 +1115,7 @@ open class GenericPickerOfColor : UIView {
     
     open func addComponentColorDisplayDot     (height side:CGFloat = 32) -> ComponentColorDisplayDot {
         
-        let display = ComponentColorDisplayDot(height:side, colorArray:self.colorArray)
+        let display = ComponentColorDisplayDot(height:side, colorArrayManager:self.colorArrayManager)
         
         self.addSubview(display)
         
@@ -1140,7 +1140,7 @@ open class GenericPickerOfColor : UIView {
     
     open func addComponentColorDisplayDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplayDiagonal {
         
-        let display = ComponentColorDisplayDiagonal(height:side, colorArray:self.colorArray)
+        let display = ComponentColorDisplayDiagonal(height:side, colorArrayManager:self.colorArrayManager)
         
         self.addSubview(display)
         
@@ -1178,7 +1178,7 @@ open class GenericPickerOfColor : UIView {
     
     open func set(color:UIColor, animated:Bool) {
         self.color = color
-        self.colorArray.colorSet(color)
+        self.colorArrayManager.colorSet(color)
         componentSliders.forEach { $0.update(color:color, animated:animated) }
         componentDisplays.forEach { $0.updateFromColor() }
         handlerForColor?(color)
@@ -1191,14 +1191,14 @@ open class GenericPickerOfColor : UIView {
         self.componentStorage = []
         self.componentDisplays = []
         if let array = withLastColorArray {
-            self.colorArray.colors = array
+            self.colorArrayManager.colors = array
         }
         if let index = lastColorIndex {
-            self.colorArray.colorIndex = index
+            self.colorArrayManager.colorIndex = index
         }
-        print("color-array-colors:\(colorArray.colors.map{ $0.arrayOfRGBA })")
-        print("color-array-index :\(colorArray.colorIndex)")
-        print("color-array-limit :\(colorArray.colorLimit)")
+        print("color-array-colors:\(colorArrayManager.colors.map{ $0.arrayOfRGBA })")
+        print("color-array-index :\(colorArrayManager.colorIndex)")
+        print("color-array-limit :\(colorArrayManager.colorLimit)")
     }
     
     open func build(margin:CGFloat = 8) {
@@ -1228,9 +1228,9 @@ open class GenericPickerOfColor : UIView {
         self.componentStorage   = self.subviews.filter { $0 is ComponentStorageDots }.map { $0 as! ComponentStorageDots }
         
         // update color array limit to highest limit supported
-        self.colorArray.colorLimit = self.componentDisplays.map{ $0.colorLimit }.reduce(0){ max($0,$1) }
-        print("updated color-array-index :\(colorArray.colorIndex)")
-        print("updated color-array-limit :\(colorArray.colorLimit)")
+        self.colorArrayManager.colorLimit = self.componentDisplays.map{ $0.colorLimit }.reduce(0){ max($0,$1) }
+        print("updated color-array-index :\(colorArrayManager.colorIndex)")
+        print("updated color-array-limit :\(colorArrayManager.colorLimit)")
 
         self.componentDisplays.forEach { $0.updateFromColor() }
     }
