@@ -377,26 +377,26 @@ open class GenericPickerOfColor : UIView {
         override open func updateFromColor() {
             super.updateFromColor()
             let font    = text.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-            let color   = text.textColor ?? .white
             let hex     = colorArrayManager.color.representationOfRGBAasHexadecimal
             if colorified {
-                var representation = NSAttributedString.init(string:"0x")
+                var representation = NSAttributedString.init()
+                representation += "0x" | font | UIColor.black
                 representation += hex[0] | [
                     NSBackgroundColorAttributeName      : UIColor.red
-                    ] | font
+                    ] | font | UIColor.white
                 representation += hex[1] | [
                     NSBackgroundColorAttributeName      : UIColor(hsb:[0.3,1,0.7])
-                    ] | font
+                    ] | font | UIColor.white
                 representation += hex[2] | [
                     NSBackgroundColorAttributeName      : UIColor(hsb:[0.61,1,1])
-                    ] | font
+                    ] | font | UIColor.white
                 representation += hex[3] | [
                     NSBackgroundColorAttributeName      : UIColor(white:0.6)
-                    ] | font
-                self.text.attributedText = representation | color | font
+                    ] | font | UIColor.white
+                self.text.attributedText = representation
             }
             else {
-                self.text.attributedText = "0x\(hex.joined())" | color | font
+                self.text.attributedText = "0x\(hex.joined())" | UIColor.black | font
             }
         }
     }

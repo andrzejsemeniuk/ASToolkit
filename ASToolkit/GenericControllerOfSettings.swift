@@ -61,9 +61,15 @@ open class GenericControllerOfSettings : UITableViewController
     
     open var elementCornerRadius            : CGFloat                               = 4
     open var elementBackgroundColor         : UIColor                               = UIColor(white:1,alpha:0.3)
+    
     open var colorForHeaderText             : UIColor?
     open var colorForFooterText             : UIColor?
     
+    open var fontForHeaderText              : UIFont?
+    open var fontForFooterText              : UIFont?
+    open var fontForLabelText               : UIFont?
+    open var fontForFieldText               : UIFont?
+
     
     static open var lastOffsetY             : [String:CGPoint]                      = [:]
     
@@ -206,6 +212,7 @@ open class GenericControllerOfSettings : UITableViewController
             if let color = colorForHeaderText {
                 view.textLabel?.textColor = color
             }
+            view.textLabel?.font          = fontForHeaderText ?? view.textLabel?.font
         }
         
     }
@@ -217,6 +224,7 @@ open class GenericControllerOfSettings : UITableViewController
             if let color = colorForFooterText {
                 view.textLabel?.textColor = color
             }
+            view.textLabel?.font          = fontForFooterText ?? view.textLabel?.font
         }
         
     }
@@ -357,13 +365,14 @@ open class GenericControllerOfSettings : UITableViewController
     
     open func createCellForTap                      (id:String? = nil, title:String, setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
         
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 if let action = action {
-                    self.addAction(indexPath: indexPath, action: action)
+                    self?.addAction(indexPath: indexPath, action: action)
                 }
             }
         }
@@ -373,12 +382,13 @@ open class GenericControllerOfSettings : UITableViewController
     
     open func createCellForTapOnQuestion            (id:String? = nil, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:Action? = nil) -> FunctionOnCell {
         
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
-                self.addAction(indexPath: indexPath) { [weak self] in
+                self?.addAction(indexPath: indexPath) {
                     self?.createAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
                         action?()
                     }
@@ -390,12 +400,13 @@ open class GenericControllerOfSettings : UITableViewController
     
     open func createCellForTapOnInput               (id:String? = nil, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, value:@escaping ()->String, action:@escaping (String)->()) -> FunctionOnCell {
         
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
-                self.addAction(indexPath: indexPath) { [weak self] in
+                self?.addAction(indexPath: indexPath) {
                     self?.createAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
                         action(result)
                     }
@@ -407,12 +418,13 @@ open class GenericControllerOfSettings : UITableViewController
     
     open func createCellForTapOnChoice              (id:String? = nil, title:String, message:String, choices:@escaping ()->([String]), cancel:String = "Cancel", setup:((UITableViewCell,IndexPath)->())? = nil, action:@escaping (String)->()) -> FunctionOnCell {
         
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
-                self.addAction(indexPath: indexPath) { [weak self] in
+                self?.addAction(indexPath: indexPath) {
                     self?.createAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
                         action(result)
                     }
@@ -428,9 +440,11 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 let accessory       = UILabel()
                 cell.accessoryView  = accessory
                 accessory.text      = value()
+                accessory.font      = self?.fontForLabelText ?? label.font
                 accessory.sizeToFit()
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
@@ -492,6 +506,7 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 cell.accessoryView  = self?.registerUISwitch(id:id, indexPath:indexPath, on: setting.value, update: { [weak setting] (myswitch:UISwitch) in
                     guard let `setting` = setting else { return }
@@ -530,9 +545,11 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
     open func createCellForUISlider             (_ setting:GenericSetting<Float>, id:String? = nil, title:String, minimum:Float = 0, maximum:Float = 1, continuous:Bool = false, setup:((UITableViewCell,IndexPath,UISlider)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+            guard let `self` = self else { return }
             if let label = cell.textLabel {
                 label.text          = title
+                label.font          = self.fontForLabelText ?? label.font
                 cell.accessoryType  = .none
                 cell.selectionStyle = .default
                 let view = self.registerUISlider(id:id, indexPath:indexPath, value: setting.value, minimum:minimum, maximum:maximum, continuous:continuous, update: { (myslider:UISlider) in
@@ -546,9 +563,11 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
     open func createCellForUISlider             (_ setting:GenericSetting<CGFloat>, id:String? = nil, title:String, minimum:Float = 0, maximum:Float = 1, continuous:Bool = false, setup:((UITableViewCell,IndexPath,UISlider)->())? = nil, action:Action? = nil ) -> FunctionOnCell {
-        return { (cell:UITableViewCell, indexPath:IndexPath) in
+        return { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+            guard let `self` = self else { return }
             if let label = cell.textLabel {
                 label.text          = title
+                label.font          = self.fontForLabelText ?? label.font
                 cell.accessoryType  = .none
                 cell.selectionStyle = .default
                 let view = self.registerUISlider(id:id, indexPath:indexPath, value: Float(setting.value), minimum:minimum, maximum:maximum, continuous:continuous, update: { (myslider:UISlider) in
@@ -572,6 +591,7 @@ open class GenericControllerOfSettings : UITableViewController
         view.isEnabled = false
         view.layer.cornerRadius = self.elementCornerRadius
         view.text = value
+        view.font = self.fontForFieldText ?? view.font
         view.textAlignment = .right
         view.textColor = .gray
         view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(attributes: [
@@ -586,6 +606,7 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel, let field = self?.registerUITextField(id:id, indexPath:indexPath, count:count, value: setting.value) {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 cell.accessoryView  = field
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
@@ -606,6 +627,7 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel, let field = self?.registerUITextField(id:id, indexPath:indexPath, count:count, value: String(setting.value)) {
                 cell.selectionStyle = .default
                 label.text          = title
+                label.font          = self?.fontForLabelText ?? label.font
                 cell.accessoryView  = field
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
@@ -634,7 +656,8 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel, let field = self?.registerUITextField(id:id, indexPath:indexPath, count:count, value: String(describing: setting.value)) {
                 cell.selectionStyle = .default
                 label.text          = title
-                cell.accessoryView = field
+                label.font          = self?.fontForLabelText ?? label.font
+                cell.accessoryView  = field
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
@@ -662,7 +685,8 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel, let field = self?.registerUITextField(id:id, indexPath:indexPath, count:count, value: String(describing: setting.value)) {
                 cell.selectionStyle = .default
                 label.text          = title
-                cell.accessoryView = field
+                label.font          = self?.fontForLabelText ?? label.font
+                cell.accessoryView  = field
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
@@ -690,7 +714,8 @@ open class GenericControllerOfSettings : UITableViewController
             if let label = cell.textLabel, let field = self?.registerUITextField(id:id, indexPath:indexPath, count:count, value: String(describing: setting.value)) {
                 cell.selectionStyle = .default
                 label.text          = title
-                cell.accessoryView = field
+                label.font          = self?.fontForLabelText ?? label.font
+                cell.accessoryView  = field
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
@@ -731,6 +756,7 @@ open class GenericControllerOfSettings : UITableViewController
                 if let label = cell.textLabel {
                     
                     label.text          = name
+                    label.font          = self?.fontForLabelText ?? label.font
                     if let detail = cell.detailTextLabel {
                         detail.text = font0
                     }
@@ -740,10 +766,10 @@ open class GenericControllerOfSettings : UITableViewController
                     setup?(cell,indexPath)
                     
                     self?.register(indexPath: indexPath, id: id)
-                    self?.addAction(indexPath: indexPath) { [weak self] in
+                    self?.addAction(indexPath: indexPath) {
                         
                         let fonts       = GenericControllerOfPickerOfFont()
-                        fonts.title     = title+" Font"
+                        fonts.title     = title + " Font"
                         fonts.selected  = font0
                         fonts.update    = {
                             action?(fonts.selected)
@@ -791,7 +817,8 @@ open class GenericControllerOfSettings : UITableViewController
                 if let label = cell.textLabel {
                     
                     label.text          = title
-                    
+                    label.font          = self?.fontForLabelText ?? label.font
+
                     if let detail = cell.detailTextLabel {
                         detail.text     = "  "
                         
