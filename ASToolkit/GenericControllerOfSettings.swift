@@ -173,12 +173,12 @@ open class GenericControllerOfSettings : UITableViewController
     
     override open func tableView                     (_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        return sections[section].header
+        return sections[safe:section]?.header
     }
     
     override open func tableView                     (_ tableView: UITableView, titleForFooterInSection section: Int) -> String?
     {
-        return sections[section].footer
+        return sections[safe:section]?.footer
     }
     
     override open func tableView                     (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
