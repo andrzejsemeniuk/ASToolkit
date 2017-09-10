@@ -21,11 +21,10 @@ open class GenericPickerOfColor : UIView {
     public var preferenceSliderSetValueAnimationDuration                    : Double                = 0.4
     
     public enum Operation {
-        case copy
-        case paste
-        case swap
-        case store
-        case spread // spread color to other indexes
+        case copy               // copy color into clipboard
+        case paste              // paste color from clipboard
+        case store              //
+        case spread             // spread color to other indexes
     }
     
     public enum Component {
@@ -405,8 +404,15 @@ open class GenericPickerOfColor : UIView {
         
         public let operations   : [Operation]
         
-        public var buttons      : [Operation:UIButtonWithCenteredCircle] = [:]
+        private struct OperationData {
+            public var button   : UIButtonWithCenteredCircle = UIButtonWithCenteredCircle()
+            public var label    : UILabelWithInsets = UILabelWithInsets()
+            public var title    : String = ""
+            public var function : ()->() = { _ in }
+        }
         
+        private var data      : [Operation:OperationData] = [:]
+
         required public init(coder aDecoder: NSCoder) {
             // TODO
             self.operations = []
@@ -416,7 +422,7 @@ open class GenericPickerOfColor : UIView {
         public init(height: CGFloat, operations:[Operation]) {
             self.operations = operations
 
-            // create buttons based on operations
+            // create data based on operations
             
             super.init(frame: CGRect(side:height))
             
@@ -424,12 +430,34 @@ open class GenericPickerOfColor : UIView {
             self.axis = .horizontal
             self.alignment = .center
             
-            // create buttons based on operations
+            // create data based on operations
             
             self.addArrangedSubview(UIView())
             for (index,operation) in operations.enumerated() {
                 let button = self.createButton(forOperation: operation)
-                self.buttons[operation] = button
+                var data = OperationData()
+                data.button = button
+                switch operation {
+                case .copy      :
+                    data.title      = "copy"
+                case .paste     :
+                    data.title      = "paste"
+                case .store     :
+                    data.title      = "store"
+                case .spread    :
+                    data.title      = "spread"
+                }
+
+                data.button.addSubview(data.label)
+                data.label.attributedText = data.title.uppercased() | UIColor.white
+                data.label.textAlignment = .center
+                data.label.sizeToFit()
+                data.label.translatesAutoresizingMaskIntoConstraints=false
+                data.label.constrainCenterToSuperview()
+                data.label.alpha = 0
+                data.label.isHidden = true
+
+                self.data[operation] = data
                 self.addArrangedSubview(button)
                 button.tag = index
             }
@@ -481,17 +509,25 @@ open class GenericPickerOfColor : UIView {
 //                Unicode: U+2981, UTF-8: E2 A6 81
                 button = createButton(title: "\u{2981}") // "+")
                 button.contentEdgeInsets.bottom = 0
-            case .swap      :
-//                Unicode: U+2194 U+FE0E, UTF-8: E2 86 94 EF B8 8E
-//                Unicode: U+21C4, UTF-8: E2 87 84
-                button = createButton(title: "\u{2194}")
             }
             return button
         }
         
-        func tapped(_ control:UIButton) {
+        open func tapped(_ control:UIButton) {
             if let operation = operations[safe:control.tag] {
-                if !(buttons[operation]?.isSelected ?? true) {
+                if let selected = data[operation]?.button.isSelected, !selected {
+                    
+                    if let data = data[operation] {
+                        data.label.alpha = 1
+                        data.label.isHidden = false
+                        UIView.animate(withDuration: 2, delay: 1, options: [], animations: {
+                            data.label.alpha = 0
+                        }) { flag in
+                            data.button.isSelected = false
+                            data.label.isHidden = true
+                        }
+                    }
+
                     switch operation {
                     case .copy      :
                         print("copy")
@@ -501,16 +537,39 @@ open class GenericPickerOfColor : UIView {
                         print("spread")
                     case .store     :
                         print("store")
-                    case .swap      :
-                        print("swap")
                     }
-                    buttons[operation]?.isSelected=true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                        self?.buttons[operation]?.isSelected=false
-                    }
+                    data[operation]?.button.isSelected=true
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+//                        self?.data[operation]?.button.isSelected=false
+//                    }
                 }
             }
         }
+        
+        public func title(for:Operation) -> String? {
+            return data[`for`]?.title
+        }
+        
+        public func button(for:Operation) -> UIButtonWithCenteredCircle? {
+            return data[`for`]?.button
+        }
+        
+        public func label(for:Operation) -> UILabelWithInsets? {
+            return data[`for`]?.label
+        }
+        
+        public func function(for:Operation) -> (()->())? {
+            return data[`for`]?.function
+        }
+        
+        public func set(function:@escaping ()->(), for:Operation) {
+            if var data = data[`for`] {
+                data.function = function
+                self.data[`for`] = data
+            }
+        }
+        
+
         
     }
     
