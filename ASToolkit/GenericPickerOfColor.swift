@@ -413,7 +413,7 @@ open class GenericPickerOfColor : UIView {
         public var data         : [Operation:OperationData] = [:]
 
         public var durationOfTap            : Double        = 0.3
-        public var durationOfLabelDisplay   : Double        = 0.3
+        public var durationOfLabelDisplay   : Double        = 1.0
         public var delayOfLabelDisplay      : Double        = 1.0
 
         required public init(coder aDecoder: NSCoder) {
@@ -422,7 +422,7 @@ open class GenericPickerOfColor : UIView {
             super.init(coder: aDecoder)
         }
 
-        public init(height: CGFloat, margin:CGFloat = 0, operations:[Operation]) {
+        public init(height: CGFloat, side:CGFloat = 36, operations:[Operation]) {
             self.operations = operations
 
             // create data based on operations
@@ -437,7 +437,6 @@ open class GenericPickerOfColor : UIView {
             
             self.addArrangedSubview(UIView())
             for (index,operation) in operations.enumerated() {
-                let side    = CGFloat(36)
                 let data    = OperationData()
                 
                 switch operation {
@@ -455,9 +454,10 @@ open class GenericPickerOfColor : UIView {
                 
                 data.button.addSubview(data.label)
                 data.label.textAlignment = .center
+                data.label.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
                 data.label.translatesAutoresizingMaskIntoConstraints=false
                 data.label.constrainCenterXToSuperview()
-                data.label.bottomAnchor.constraint(equalTo: data.button.centerYAnchor, constant:-margin-side/2).isActive=true
+                data.label.bottomAnchor.constraint(equalTo: data.button.centerYAnchor, constant:-side/2).isActive=true
                 data.label.alpha = 0
                 data.label.isHidden = true
 
