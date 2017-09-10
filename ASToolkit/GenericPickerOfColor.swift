@@ -436,24 +436,27 @@ open class GenericPickerOfColor : UIView {
             self.addArrangedSubview(UIView())
         }
         
-        private func createButton(title:String, side:CGFloat = 32, insets:UIEdgeInsets = UIEdgeInsets()) -> UIButtonWithCenteredCircle {
-            let result = UIButtonWithCenteredCircle(frame: CGRect(side:side))
-            result.circle(for: .normal).radius = side/2
-            result.circle(for: .normal).fillColor = UIColor.clear.cgColor
-            result.circle(for: .normal).strokeColor = UIColor.blue.cgColor
-            result.circle(for: .normal).lineWidth = 3
-            result.circle(for: .selected).radius = side/2
-            result.circle(for: .selected).fillColor = UIColor.blue.cgColor
-            result.circle(for: .selected).strokeColor = UIColor.blue.cgColor
-            result.circle(for: .selected).lineWidth = 3
-            result.circle(for: .disabled).radius = side/2
-            result.circle(for: .disabled).fillColor = UIColor.lightGray.cgColor
-            result.circle(for: .disabled).strokeColor = UIColor.gray.cgColor
-            result.circle(for: .disabled).lineWidth = 3
+        private func createButton(title:String, side:CGFloat = 36, insets:UIEdgeInsets = UIEdgeInsets()) -> UIButtonWithCenteredCircle {
+            let colorFill       = UIColor(white:0.3)
+            let colorStroke     = UIColor(white:1,alpha:0.5)
             
-            result.setAttributedTitle(title | UIColor.blue, for: .normal)
-            result.setAttributedTitle(title | UIColor.red, for: .selected)
-            result.setAttributedTitle(title | UIColor.gray, for: .disabled)
+            let result = UIButtonWithCenteredCircle(frame: CGRect(side:side))
+            
+            result.circle(for: .normal).fillColor       = colorFill.cgColor
+            result.circle(for: .normal).strokeColor     = colorStroke.cgColor
+            result.circle(for: .selected).fillColor     = UIColor.red.cgColor
+            result.circle(for: .selected).strokeColor   = colorStroke.cgColor
+            result.circle(for: .disabled).fillColor     = colorFill.cgColor
+            result.circle(for: .disabled).strokeColor   = colorStroke.cgColor
+            
+            for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
+                result.circle(for: state).radius = side/2.0
+                result.circle(for: state).lineWidth = 0.5
+            }
+            
+            result.setAttributedTitle(title | UIColor.white, for: .normal)
+            result.setAttributedTitle(title | UIColor.white, for: .selected)
+            result.setAttributedTitle(title | UIColor.white, for: .disabled)
             
             result.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
             
@@ -463,21 +466,27 @@ open class GenericPickerOfColor : UIView {
         }
         
         private func createButton(forOperation operation:Operation) -> UIButtonWithCenteredCircle {
+            let button : UIButtonWithCenteredCircle
             switch operation {
             case .copy      :
-                return createButton(title: "\u{2336}")
+                button = createButton(title: "\u{2335}") // "C")
+                button.contentEdgeInsets.bottom = 1
             case .paste     :
-                return createButton(title: "\u{1F4CB}")
+                button = createButton(title: "\u{2335}") // "P")
+                button.transform = button.transform.scaledBy(x: 1, y: -1)
+                button.contentEdgeInsets.bottom = 1
             case .spread    :
-                //        ⚙
-                //        Unicode: U+2699, UTF-8: E2 9A 99
-                return createButton(title: "\u{2699}")
+                button = createButton(title: "S")
             case .store     :
-                return createButton(title: "\u{2697}")
+//                Unicode: U+2981, UTF-8: E2 A6 81
+                button = createButton(title: "\u{2981}") // "+")
+                button.contentEdgeInsets.bottom = 0
             case .swap      :
-                return createButton(title: "\u{2698}")
+//                Unicode: U+2194 U+FE0E, UTF-8: E2 86 94 EF B8 8E
+//                Unicode: U+21C4, UTF-8: E2 87 84
+                button = createButton(title: "\u{2194}")
             }
-
+            return button
         }
         
         func tapped(_ control:UIButton) {
