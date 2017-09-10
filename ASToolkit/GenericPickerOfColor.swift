@@ -404,14 +404,17 @@ open class GenericPickerOfColor : UIView {
         
         public let operations   : [Operation]
         
-        private struct OperationData {
+        public struct OperationData {
             public var button   : UIButtonWithCenteredCircle = UIButtonWithCenteredCircle()
             public var label    : UILabelWithInsets = UILabelWithInsets()
-            public var title    : String = ""
             public var function : ()->() = { _ in }
         }
         
-        private var data      : [Operation:OperationData] = [:]
+        public var data         : [Operation:OperationData] = [:]
+
+        public var durationOfTap            : Double        = 0.3
+        public var durationOfLabelDisplay   : Double        = 0.3
+        public var delayOfLabelDisplay      : Double        = 1.0
 
         required public init(coder aDecoder: NSCoder) {
             // TODO
@@ -419,98 +422,79 @@ open class GenericPickerOfColor : UIView {
             super.init(coder: aDecoder)
         }
 
-        public init(height: CGFloat, operations:[Operation]) {
+        public init(height: CGFloat, margin:CGFloat = 0, operations:[Operation]) {
             self.operations = operations
 
             // create data based on operations
             
             super.init(frame: CGRect(side:height))
             
-            self.distribution = .equalCentering
-            self.axis = .horizontal
-            self.alignment = .center
+            self.distribution   = .equalCentering
+            self.axis           = .horizontal
+            self.alignment      = .center
             
             // create data based on operations
             
             self.addArrangedSubview(UIView())
             for (index,operation) in operations.enumerated() {
-                let button = self.createButton(forOperation: operation)
-                var data = OperationData()
-                data.button = button
+                let side    = CGFloat(36)
+                let data    = OperationData()
+                
                 switch operation {
                 case .copy      :
-                    data.title      = "copy"
+                    configure(button:data.button, title:"\u{2335}", side:side, insets: UIEdgeInsets(bottom:1))
                 case .paste     :
-                    data.title      = "paste"
-                case .store     :
-                    data.title      = "store"
+                    configure(button:data.button, title:"\u{2336}", side:side, insets: UIEdgeInsets(bottom:1))
+//                    data.button.transform = data.button.transform.scaledBy(x: 1, y: -1)
                 case .spread    :
-                    data.title      = "spread"
+                    configure(button:data.button, title:"S", side:side)
+                case .store     :
+                    configure(button:data.button, title:"\u{2981}", side:side)
                 }
 
+                
                 data.button.addSubview(data.label)
-                data.label.attributedText = data.title.uppercased() | UIColor.white
                 data.label.textAlignment = .center
-                data.label.sizeToFit()
                 data.label.translatesAutoresizingMaskIntoConstraints=false
-                data.label.constrainCenterToSuperview()
+                data.label.constrainCenterXToSuperview()
+                data.label.bottomAnchor.constraint(equalTo: data.button.centerYAnchor, constant:-margin-side/2).isActive=true
                 data.label.alpha = 0
                 data.label.isHidden = true
 
                 self.data[operation] = data
-                self.addArrangedSubview(button)
-                button.tag = index
+                
+                self.addArrangedSubview(data.button)
+                
+                data.button.tag = index
             }
             self.addArrangedSubview(UIView())
         }
         
-        private func createButton(title:String, side:CGFloat = 36, insets:UIEdgeInsets = UIEdgeInsets()) -> UIButtonWithCenteredCircle {
+        private func configure(button:UIButtonWithCenteredCircle, title:String, side:CGFloat = 36, insets:UIEdgeInsets = UIEdgeInsets()) {
             let colorFill       = UIColor(white:0.3)
             let colorStroke     = UIColor(white:1,alpha:0.5)
             
-            let result = UIButtonWithCenteredCircle(frame: CGRect(side:side))
+            button.frame = CGRect(side:side)
             
-            result.circle(for: .normal).fillColor       = colorFill.cgColor
-            result.circle(for: .normal).strokeColor     = colorStroke.cgColor
-            result.circle(for: .selected).fillColor     = UIColor.red.cgColor
-            result.circle(for: .selected).strokeColor   = colorStroke.cgColor
-            result.circle(for: .disabled).fillColor     = colorFill.cgColor
-            result.circle(for: .disabled).strokeColor   = colorStroke.cgColor
+            button.circle(for: .normal).fillColor       = colorFill.cgColor
+            button.circle(for: .normal).strokeColor     = colorStroke.cgColor
+            button.circle(for: .selected).fillColor     = UIColor.red.cgColor
+            button.circle(for: .selected).strokeColor   = colorStroke.cgColor
+            button.circle(for: .disabled).fillColor     = colorFill.cgColor
+            button.circle(for: .disabled).strokeColor   = colorStroke.cgColor
             
             for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
-                result.circle(for: state).radius = side/2.0
-                result.circle(for: state).lineWidth = 0.5
+                button.circle(for: state).radius = side/2.0
+                button.circle(for: state).lineWidth = 0.5
             }
             
-            result.setAttributedTitle(title | UIColor.white, for: .normal)
-            result.setAttributedTitle(title | UIColor.white, for: .selected)
-            result.setAttributedTitle(title | UIColor.white, for: .disabled)
+            button.setAttributedTitle(title | UIColor.white, for: .normal)
+            button.setAttributedTitle(title | UIColor.white, for: .selected)
+            button.setAttributedTitle(title | UIColor.white, for: .disabled)
             
-            result.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
             
-            result.titleEdgeInsets = insets
-            
-            return result
-        }
-        
-        private func createButton(forOperation operation:Operation) -> UIButtonWithCenteredCircle {
-            let button : UIButtonWithCenteredCircle
-            switch operation {
-            case .copy      :
-                button = createButton(title: "\u{2335}") // "C")
-                button.contentEdgeInsets.bottom = 1
-            case .paste     :
-                button = createButton(title: "\u{2335}") // "P")
-                button.transform = button.transform.scaledBy(x: 1, y: -1)
-                button.contentEdgeInsets.bottom = 1
-            case .spread    :
-                button = createButton(title: "S")
-            case .store     :
-//                Unicode: U+2981, UTF-8: E2 A6 81
-                button = createButton(title: "\u{2981}") // "+")
-                button.contentEdgeInsets.bottom = 0
-            }
-            return button
+            button.titleEdgeInsets = insets
         }
         
         open func tapped(_ control:UIButton) {
@@ -520,34 +504,23 @@ open class GenericPickerOfColor : UIView {
                     if let data = data[operation] {
                         data.label.alpha = 1
                         data.label.isHidden = false
-                        UIView.animate(withDuration: 2, delay: 1, options: [], animations: {
+                        UIView.animate(withDuration: durationOfLabelDisplay, delay: delayOfLabelDisplay, options: [], animations: {
                             data.label.alpha = 0
                         }) { flag in
-                            data.button.isSelected = false
                             data.label.isHidden = true
                         }
                     }
 
-                    switch operation {
-                    case .copy      :
-                        print("copy")
-                    case .paste     :
-                        print("paste")
-                    case .spread    :
-                        print("spread")
-                    case .store     :
-                        print("store")
-                    }
                     data[operation]?.button.isSelected=true
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-//                        self?.data[operation]?.button.isSelected=false
-//                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + durationOfTap) { [weak self] in
+                        self?.data[operation]?.button.isSelected=false
+                    }
                 }
             }
         }
         
-        public func title(for:Operation) -> String? {
-            return data[`for`]?.title
+        public func title(for:Operation) -> NSAttributedString? {
+            return data[`for`]?.label.attributedText
         }
         
         public func button(for:Operation) -> UIButtonWithCenteredCircle? {
