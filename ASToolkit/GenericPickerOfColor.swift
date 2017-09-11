@@ -33,9 +33,10 @@ open class GenericPickerOfColor : UIView {
         
         case colorDisplayDot                (height:CGFloat)
         case colorDisplayFill               (height:CGFloat)
-        case colorDisplaySplitDiagonal           (height:CGFloat)
+        case colorDisplaySplitDiagonal      (height:CGFloat)
         case colorDisplaySplitVertical      (height:CGFloat, count:Int)
         case colorDisplaySplitHorizontal    (height:CGFloat, count:Int)
+        case colorDisplayBackground
         case colorDisplayValueAsHexadecimal
         
         case mapHueSaturation               (height:CGFloat,reverse:Bool) // TODO
