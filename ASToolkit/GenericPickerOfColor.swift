@@ -513,6 +513,7 @@ open class GenericPickerOfColor : UIView {
                     }
 
                     data[operation]?.button.isSelected=true
+                    data[operation]?.function()
                     DispatchQueue.main.asyncAfter(deadline: .now() + durationOfTap) { [weak self] in
                         self?.data[operation]?.button.isSelected=false
                     }
@@ -536,7 +537,7 @@ open class GenericPickerOfColor : UIView {
             return data[`for`]?.function
         }
         
-        public func set(function:@escaping ()->(), for:Operation) {
+        public func set(for:Operation, function:@escaping ()->()) {
             if var data = data[`for`] {
                 data.function = function
                 self.data[`for`] = data
@@ -549,7 +550,8 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentStorage : UIView {
         
-        open func add     (color:UIColor) {
+        open func add     (color:UIColor, unique:Bool) -> Bool {
+            return false
         }
         
         open func remove  (color:UIColor) {
@@ -645,8 +647,20 @@ open class GenericPickerOfColor : UIView {
             setNeedsLayout()
         }
         
-        override open func add     (color:UIColor) {
+        override open func add     (color:UIColor, unique:Bool) -> Bool {
             let buttons = self.buttons.flatMap { $0 }
+            if unique, let components0 = color.cgColor.components {
+                for button in buttons {
+                    guard
+                        let color1 = button.circle(for: .normal).fillColor,
+                        color.cgColor.alpha == color1.alpha,
+                        let components1 = color1.components,
+                        components0 == components1 else {
+                            continue
+                    }
+                    return false
+                }
+            }
             var previous:CGColor?
             for button in buttons {
                 let circle = button.circle(for: .normal)
@@ -659,6 +673,7 @@ open class GenericPickerOfColor : UIView {
             if !buttons.isEmpty {
                 buttons[0].circle(for: .normal).fillColor = color.cgColor
             }
+            return true
         }
         
         override open func remove  (color:UIColor) {
@@ -802,7 +817,7 @@ open class GenericPickerOfColor : UIView {
     public func addComponentSliderRed        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         let slider = self.addComponentSlider(label  : "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
-                                             color  : UIColor(rgb:[1,0,0]),
+                                             color  : .red,
                                              side   : side)
         
         slider.update = { [weak self] slider,color,animate in
