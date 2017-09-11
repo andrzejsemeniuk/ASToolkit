@@ -28,19 +28,19 @@ extension UIColor
     }
     
     public convenience init(hsb:[CGFloat],alpha:CGFloat = 1) {
-        self.init(hue:hsb[0], saturation:hsb[1], brightness:hsb[2], alpha:alpha)
+        self.init(hue:hsb[safe:0] ?? 0, saturation:hsb[safe:1] ?? 0, brightness:hsb[safe:2] ?? 0, alpha:alpha)
     }
     
     public convenience init(hsba:[CGFloat]) {
-        self.init(hue:hsba[0], saturation:hsba[1], brightness:hsba[2], alpha:hsba[3])
+        self.init(hue:hsba[safe:0] ?? 0, saturation:hsba[safe:1] ?? 0, brightness:hsba[safe:2] ?? 0, alpha:hsba[safe:3] ?? 0)
     }
     
     public convenience init(rgb:[CGFloat],alpha:CGFloat = 1) {
-        self.init(red:rgb[0], green:rgb[1], blue:rgb[2], alpha:alpha)
+        self.init(red:rgb[safe:0] ?? 0, green:rgb[safe:1] ?? 0, blue:rgb[safe:2] ?? 0, alpha:alpha)
     }
     
     public convenience init(rgba:[CGFloat]) {
-        self.init(red:rgba[0], green:rgba[1], blue:rgba[2], alpha:rgba[3])
+        self.init(red:rgba[safe:0] ?? 0, green:rgba[safe:1] ?? 0, blue:rgba[safe:2] ?? 0, alpha:rgba[safe:3] ?? 0)
     }
     
     public convenience init(r:CGFloat,g:CGFloat,b:CGFloat,a:CGFloat = 1) {

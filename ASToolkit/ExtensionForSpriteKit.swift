@@ -888,7 +888,7 @@ extension SKNode
     }
     
 
-    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = UIColor(rgb: [1,0,0])) -> SKNode
+    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
     {
         if true
         {
@@ -928,7 +928,7 @@ extension SKNode
         return self
     }
     
-    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = UIColor(rgb: [1,0,0])) -> SKNode
+    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
     {
         if true
         {
@@ -968,7 +968,7 @@ extension SKNode
         return self
     }
     
-    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 16, color:UIColor = UIColor(rgb: [0,1,0])) -> SKNode
+    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 16, color:UIColor = .green) -> SKNode
     {
         if true
         {
