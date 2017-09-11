@@ -415,6 +415,7 @@ open class GenericPickerOfColor : UIView {
         public var durationOfTap            : Double        = 0.3
         public var durationOfLabelDisplay   : Double        = 1.0
         public var delayOfLabelDisplay      : Double        = 1.0
+        public var showLabel                : Bool          = true
 
         required public init(coder aDecoder: NSCoder) {
             // TODO
@@ -451,7 +452,6 @@ open class GenericPickerOfColor : UIView {
                     configure(button:data.button, title:"\u{2981}", side:side)
                 }
 
-                
                 data.button.addSubview(data.label)
                 data.label.textAlignment = .center
                 data.label.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
@@ -501,7 +501,7 @@ open class GenericPickerOfColor : UIView {
             if let operation = operations[safe:control.tag] {
                 if let selected = data[operation]?.button.isSelected, !selected {
                     
-                    if let data = data[operation] {
+                    if showLabel, let data = data[operation] {
                         data.label.alpha = 1
                         data.label.isHidden = false
                         UIView.animate(withDuration: durationOfLabelDisplay, delay: delayOfLabelDisplay, options: [], animations: {
