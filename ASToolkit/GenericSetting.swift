@@ -35,26 +35,26 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
         }
     }
     
-    public init(key:String, first:TYPE) {
-        self.key = key
-        self.first = first
-        self.value = first
+    public init                     (key:String, first:TYPE) {
+        self.key        = key
+        self.first      = first
+        self.value      = first
         
         if let stored = self.stored {
-            self.value = stored
+            self.value  = stored
         }
         else {
             store(first)
         }
     }
 
-    open func assign(_ value:TYPE?) {
+    open func assign                (_ value:TYPE?) {
         if value != nil {
             self.value = value!
         }
     }
     
-    open func assign(fromDictionary dictionary:[String:Any]) {
+    open func assign                (fromDictionary dictionary:[String:Any]) {
         if let data = dictionary[key] as? Data {
             if let value = NSKeyedUnarchiver.unarchiveObject(with: data) as? TYPE {
                 self.value = value
@@ -62,19 +62,19 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
         }
     }
 
-    open func assign(toDictionary dictionary:inout [String:Any]) {
+    open func assign                (toDictionary dictionary:inout [String:Any]) {
         dictionary[key] = NSKeyedArchiver.archivedData(withRootObject: value)
     }
     
-    open func remove() {
+    open func remove                () {
         UserDefaults.standard.removeObject(forKey: key)
     }
     
-    open func reset() {
+    open func reset                 () {
         self.value = first
     }
     
-    private func store(_ n:TYPE) {
+    open func store                 (_ n:TYPE) {
         if n is UIColor {
             UserDefaults.standard.set(n as! UIColor, forKey: key)
         }
@@ -86,26 +86,42 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
         }
     }
     
-    internal var stored:TYPE? {
+    open var stored                 : TYPE? {
         if first is UIColor             { return UserDefaults.standard.color(forKey: key) as? TYPE }
         if first is UIFont              { return UserDefaults.standard.font(forKey: key) as? TYPE }
         
         return UserDefaults.standard.value(forKey: key) as? TYPE
     }
     
-    open var description : String {
+    open var description            : String {
         return "GenericSetting<\(first.self)>(key:(\(key)), first:(\(first)), value:(\(value))"
     }
 }
 
-open class GenericSettingWithObserver<TYPE> : GenericSetting<TYPE> {
+//open class GenericSettingWithObserver<TYPE> : GenericSetting<TYPE> {
+//    
+//    public var observer                 : ((GenericSetting<TYPE>)->())?
+//    
+//    override open var value             : TYPE {
+//        didSet {
+//            observer?(self)
+//        }
+//    }
+//}
+
+open class GenericSettingOfArrayOfUIColor : GenericSetting<[UIColor]> {
     
-    public var observer                 : ((GenericSetting<TYPE>)->())?
+    override open func store            (_ n: [UIColor]) {
+        let array : [[CGFloat]] = n.map { $0.arrayOfRGBA }
+        UserDefaults.standard.set(array, forKey: key)
+    }
     
-    override open var value             : TYPE {
-        didSet {
-            observer?(self)
+    override open var stored            : [UIColor]? {
+        if let array = UserDefaults.standard.value(forKey: key) as? [[CGFloat]] {
+            let result = array.map { UIColor.init(rgba: $0) }
+            return result
         }
+        return nil
     }
 }
 
