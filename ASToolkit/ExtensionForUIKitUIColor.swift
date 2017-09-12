@@ -51,8 +51,8 @@ extension UIColor
         self.init(hue:h, saturation:s, brightness:b, alpha:a)
     }
     
-    
-    public func components_RGBA_UInt8() -> (red:UInt8,green:UInt8,blue:UInt8,alpha:UInt8) {
+    public typealias Components_RGBA_UInt8 = (red:UInt8,green:UInt8,blue:UInt8,alpha:UInt8)
+    public func components_RGBA_UInt8() -> Components_RGBA_UInt8 {
         let components        = RGBA
         let maximum:CGFloat   = 256
         
@@ -71,18 +71,24 @@ extension UIColor
         return result
     }
     
-    public func components_RGBA_UInt8_equals(_ another:UIColor) -> Bool {
+    public func components_RGBA_UInt8_equals(_ b:Components_RGBA_UInt8) -> Bool {
         let a = components_RGBA_UInt8()
-        let b = another.components_RGBA_UInt8()
         
         return a.red==b.red && a.green==b.green && a.blue==b.blue && a.alpha==b.alpha
     }
     
-    public func components_RGB_UInt8_equals(_ another:UIColor) -> Bool {
+    public func components_RGBA_UInt8_equals(_ another:UIColor) -> Bool {
+        return components_RGBA_UInt8_equals(another.components_RGBA_UInt8())
+    }
+    
+    public func components_RGB_UInt8_equals(_ b:Components_RGBA_UInt8) -> Bool {
         let a = components_RGBA_UInt8()
-        let b = another.components_RGBA_UInt8()
         
         return a.red==b.red && a.green==b.green && a.blue==b.blue
+    }
+    
+    public func components_RGB_UInt8_equals(_ another:UIColor) -> Bool {
+        return components_RGB_UInt8_equals(another.components_RGBA_UInt8())
     }
     
     
