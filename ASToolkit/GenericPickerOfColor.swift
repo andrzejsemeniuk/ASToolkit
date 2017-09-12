@@ -557,6 +557,10 @@ open class GenericPickerOfColor : UIView {
         open func remove  (color:UIColor) {
         }
         
+        open var colors : [UIColor] {
+            return []
+        }
+        
     }
     
     open class ComponentStorageDots : ComponentStorage {
@@ -572,6 +576,12 @@ open class GenericPickerOfColor : UIView {
         public typealias HandlerForTap = ((UIColor)->Void)
         
         public var handlerForTap : HandlerForTap?
+        
+        override open var colors : [UIColor] {
+            return buttons.flatMap { $0 }.map {
+                UIColor.init(cgColor:$0.circle(for: .normal).fillColor ?? UIColor.white.cgColor)
+            }
+        }
         
         func tapped(_ control:UIControl!) {
             if let button = control as? UIButtonWithCenteredCircle, let color = button.circle(for: .normal).fillColor {
@@ -704,6 +714,12 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
+    open class ComponentStorageHistory : ComponentStorageDots {
+    }
+    
+    open class ComponentStorageDrag : ComponentStorageDots {
+    }
+    
     open class ComponentSlider : UIView {
         
         public weak var title           : UILabelWithInsets!
@@ -714,7 +730,7 @@ open class GenericPickerOfColor : UIView {
         public weak var rightView       : UIViewCircleWithUILabel!
         
         public var update               : (ComponentSlider,UIColor,Bool)->() = { _ in }
-        public var action               : (Float)->() = { _ in }
+        public var action               : (_ value:Float,_ dragging:Bool)->() = { _ in }
         
         public var actionOnLeftButton   : (ComponentSlider)->() = { _ in }
         public var actionOnRightButton  : (ComponentSlider)->() = { _ in }
@@ -795,7 +811,7 @@ open class GenericPickerOfColor : UIView {
     public let colorArrayManager                                       = ColorArrayManager()
     public var componentSliders     : [ComponentSlider]         = []
     public var componentDisplays    : [ComponentColorDisplay]   = []
-    public var componentStorage     : [ComponentStorageDots]    = []
+    public var componentStorage     : [ComponentStorage]        = []
     
     public private(set) var color   : UIColor                   = .white
     
@@ -804,7 +820,7 @@ open class GenericPickerOfColor : UIView {
     override public init            (frame:CGRect) {
         super.init(frame:frame)
         self.colorArrayManager.listenersOfIndex.append { [weak self] index in
-            self?.set(color: self!.colorArrayManager.color, animated: true)
+            self?.set(color: self!.colorArrayManager.color, dragging:false, animated: true)
         }
     }
     
@@ -828,12 +844,12 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(rgba:[1,0,0,RGBA.red]))
         }
         
-        slider.action = { [weak slider, weak self] value in
+        slider.action = { [weak slider, weak self] value,dragging in
             guard let `self` = self else { return }
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.red = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -841,7 +857,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.red += 1.0/255.0
             RGBA.red = RGBA.red.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -849,7 +865,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.red += 1.0/255.0
             RGBA.red = RGBA.red.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         return slider
@@ -870,12 +886,12 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(rgba:[0,0.9,0,RGBA.green]))
         }
         
-        slider.action = { [weak slider, weak self] value in
+        slider.action = { [weak slider, weak self] value,dragging in
             guard let `self` = self else { return }
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.green = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -883,7 +899,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.green -= 1.0/255.0
             RGBA.green = RGBA.green.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -891,7 +907,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.green += 1.0/255.0
             RGBA.green = RGBA.green.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         return slider
@@ -912,12 +928,12 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(rgba:[0.4,0.6,1,RGBA.blue]))
         }
         
-        slider.action = { [weak slider, weak self] value in
+        slider.action = { [weak slider, weak self] value,dragging in
             guard let `self` = self else { return }
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.blue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -925,7 +941,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.blue -= 1.0/255.0
             RGBA.blue = RGBA.blue.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -933,7 +949,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.blue += 1.0/255.0
             RGBA.blue = RGBA.blue.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         return slider
@@ -954,12 +970,12 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(white:1.0,alpha:RGBA.alpha))
         }
         
-        slider.action = { [weak slider, weak self] value in
+        slider.action = { [weak slider, weak self] value,dragging in
             guard let `self` = self else { return }
             guard let `slider` = slider else { return }
             var RGBA = self.color.RGBA
             RGBA.alpha = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -967,7 +983,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.alpha -= 1.0/255.0
             RGBA.alpha = RGBA.alpha.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -975,7 +991,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.alpha += 1.0/255.0
             RGBA.alpha = RGBA.alpha.clampedTo01
-            self.set(color:UIColor(RGBA:RGBA), animated:false)
+            self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
         }
         
         return slider
@@ -1000,12 +1016,13 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,1,1,1]))
         }
         
-        slider.action = { [weak slider, weak self] value in
+        slider.action = { [weak slider, weak self] value,dragging in
+
             guard let `self` = self else { return }
             guard let `slider` = slider else { return }
             var HSBA = self.color.HSBA
             HSBA.hue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1013,7 +1030,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.hue -= 1.0/360.0
             HSBA.hue = HSBA.hue.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1021,7 +1038,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.hue += 1.0/360.0
             HSBA.hue = HSBA.hue.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
 
         return slider
@@ -1046,11 +1063,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,HSBA.saturation,1,1]))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var HSBA = self.color.HSBA
             HSBA.saturation = CGFloat(value)
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1058,7 +1075,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.saturation -= 1.0/255.0
             HSBA.saturation = HSBA.saturation.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1066,7 +1083,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.saturation += 1.0/255.0
             HSBA.saturation = HSBA.saturation.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
         
         return slider
@@ -1091,11 +1108,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,1,HSBA.brightness,1]))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var HSBA = self.color.HSBA
             HSBA.brightness = CGFloat(value)
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1103,7 +1120,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.brightness -= 1.0/255.0
             HSBA.brightness = HSBA.brightness.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1111,7 +1128,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.brightness += 1.0/255.0
             HSBA.brightness = HSBA.brightness.clampedTo01
-            self.set(color:UIColor(HSBA:HSBA), animated:false)
+            self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
         }
         
         return slider
@@ -1135,11 +1152,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor.cyan.withAlphaComponent(CMYK.cyan))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.cyan = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1147,7 +1164,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.cyan -= 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1155,7 +1172,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.cyan += 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         return slider
@@ -1179,11 +1196,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor.magenta.withAlphaComponent(CMYK.magenta))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.magenta = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1191,7 +1208,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.magenta -= 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1199,7 +1216,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.magenta += 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         return slider
@@ -1223,11 +1240,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor.yellow.withAlphaComponent(CMYK.yellow))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.yellow = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1235,7 +1252,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.yellow -= 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1243,7 +1260,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.yellow += 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         return slider
@@ -1269,11 +1286,11 @@ open class GenericPickerOfColor : UIView {
                        withRightViewBackgroundColor     : UIColor.black.withAlphaComponent(CMYK.key))
         }
         
-        slider.action = { [weak self] value in
+        slider.action = { [weak self] value,dragging in
             guard let `self` = self else { return }
             var CMYK = self.color.CMYK
             CMYK.key = CGFloat(value).clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1281,7 +1298,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.key -= 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1289,7 +1306,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.key += 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
-            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), animated:false)
+            self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
         }
         
         return slider
@@ -1361,7 +1378,9 @@ open class GenericPickerOfColor : UIView {
         
         result.build(side:side)
         
-        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEvent(_:)), for: .allEvents)
+        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventDragEnd(_:)), for: [.touchUpInside, .touchUpOutside])
+        
+        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventValueChanged(_:)), for: UIControlEvents.valueChanged)
         
         result.leftButton.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderLeftButtonEvent(_:)), for: .touchDown)
         
@@ -1370,10 +1389,18 @@ open class GenericPickerOfColor : UIView {
         return result
     }
     
-    func handleSliderEvent(_ control:UIControl) {
+    func handleSliderEventDragEnd(_ control:UIControl) {
         if let uislider = control as? UISlider {
             if let slider = self.componentSliders.find({ $0.slider == uislider }) {
-                slider.action(uislider.value)
+                slider.action(uislider.value,false)
+            }
+        }
+    }
+    
+    func handleSliderEventValueChanged(_ control:UIControl) {
+        if let uislider = control as? UISlider {
+            if let slider = self.componentSliders.find({ $0.slider == uislider }) {
+                slider.action(uislider.value,true)
             }
         }
     }
@@ -1513,7 +1540,7 @@ open class GenericPickerOfColor : UIView {
         return display
     }
     
-    open func addComponentStorageDots(radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
+    open func addComponentStorageDots       (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
         
         let storage = ComponentStorageDots()
         
@@ -1522,7 +1549,7 @@ open class GenericPickerOfColor : UIView {
         storage.rows     = rows
         storage.columns  = columns
         storage.set(radius: radius, colors: colors) { [weak self] color in
-            self?.set(color:color, animated:true)
+            self?.set(color:color, dragging:false, animated:true)
         }
         
         storage.translatesAutoresizingMaskIntoConstraints=false
@@ -1532,15 +1559,53 @@ open class GenericPickerOfColor : UIView {
         return storage
     }
 
+    open func addComponentStorageHistory    (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageHistory {
+        
+        let storage = ComponentStorageHistory()
+        
+        self.addSubview(storage)
+        
+        storage.rows     = rows
+        storage.columns  = columns
+        storage.set(radius: radius, colors: colors) { [weak self] color in
+            self?.set(color:color, dragging:false, animated:true)
+        }
+        
+        storage.translatesAutoresizingMaskIntoConstraints=false
+        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        return storage
+    }
+    
+    open func addComponentStorageDrag       (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDrag {
+        
+        let storage = ComponentStorageDrag()
+        
+        self.addSubview(storage)
+        
+        storage.rows     = rows
+        storage.columns  = columns
+        storage.set(radius: radius, colors: colors) { [weak self] color in
+            self?.set(color:color, dragging:false, animated:true)
+        }
+        
+        storage.translatesAutoresizingMaskIntoConstraints=false
+        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        return storage
+    }
     
     
     
-    open func set(color:UIColor, animated:Bool) {
+    
+    open func set(color:UIColor, dragging:Bool, animated:Bool) {
         self.color = color
         self.colorArrayManager.colorSet(color)
         componentSliders.forEach { $0.update(color:color, animated:animated) }
         componentDisplays.forEach { $0.updateFromColor() }
-        handlerForColor?(color)
+        handlerForColor?(color,dragging,animated)
     }
     
     open func clear(withLastColorArray:[UIColor]? = nil, lastColorIndex:Int? = nil) {
@@ -1584,7 +1649,7 @@ open class GenericPickerOfColor : UIView {
 
         self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
         self.componentDisplays  = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
-        self.componentStorage   = self.subviews.filter { $0 is ComponentStorageDots }.map { $0 as! ComponentStorageDots }
+        self.componentStorage   = self.subviews.filter { $0 is ComponentStorage }.map { $0 as! ComponentStorage }
         
         // update color array limit to highest limit supported
         self.colorArrayManager.colorLimit = self.componentDisplays.map{ $0.colorLimit }.reduce(0){ max($0,$1) }
@@ -1595,7 +1660,7 @@ open class GenericPickerOfColor : UIView {
     }
         
     /// This handler is called whenever the color changes
-    public var handlerForColor  : ((UIColor)->())?
+    public var handlerForColor  : ((_ color:UIColor,_ dragging:Bool,_ animated:Bool)->())?
     
     
     static public func create           (withComponents components:[Component]) -> GenericPickerOfColor {
@@ -1693,7 +1758,7 @@ func test() {
         picker.handlerForColor = { color in
             print("new color\(color)")
         }
-        picker.set(color:UIColor(rgb:[0.64,0.13,0.78]), animated:true)
+        picker.set(color:UIColor(rgb:[0.64,0.13,0.78]), dragging:false, animated:true)
         WINDOW.rootViewController = vc
         WINDOW.makeKeyAndVisible()
     }
