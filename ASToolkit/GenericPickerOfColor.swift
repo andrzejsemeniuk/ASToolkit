@@ -445,15 +445,18 @@ open class GenericPickerOfColor : UIView {
                 
                 switch operation {
                 case .copy      :
-                    configure(button:data.button, title:"\u{2335}", side:side, insets: UIEdgeInsets(bottom:1))
-                case .paste     :
-                    configure(button:data.button, title:"\u{2336}", side:side, insets: UIEdgeInsets(bottom:1))
+//                    configure(button:data.button, title:"\u{2335}", side:side, insets: UIEdgeInsets(bottom:1))
+                    // 29C9, 2295
+                    configure(button:data.button, title:"\u{2295}", side:side, insets: UIEdgeInsets(bottom:-1))
+                case .paste     : // 29bf, 29be, 29C8
+                    configure(button:data.button, title:"\u{2298}", side:side, insets: UIEdgeInsets(bottom:-1))
 //                    data.button.transform = data.button.transform.scaledBy(x: 1, y: -1)
                 case .spread    :
                     configure(button:data.button, title:"S", side:side)
                 case .store     :
                     configure(button:data.button, title:"\u{2981}", side:side)
                 }
+                
 
                 data.button.addSubview(data.label)
                 data.label.textAlignment = .center
