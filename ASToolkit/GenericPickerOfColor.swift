@@ -1380,7 +1380,7 @@ open class GenericPickerOfColor : UIView {
         
         result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventDragEnd(_:)), for: [.touchUpInside, .touchUpOutside])
         
-        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventValueChanged(_:)), for: UIControlEvents.valueChanged)
+        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventValueChanged(_:)), for: UIControlEvents.touchDragInside)
         
         result.leftButton.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderLeftButtonEvent(_:)), for: .touchDown)
         
