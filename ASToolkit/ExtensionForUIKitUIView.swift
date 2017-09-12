@@ -209,3 +209,26 @@ extension UIView {
     }
     
 }
+
+extension UIView {
+    
+    public func descendant(withTag tag:Int) -> UIView? {
+        for subview in subviews {
+            if subview.tag == tag {
+                return subview
+            }
+            else if let result = subview.descendant(withTag: tag) {
+                return result
+            }
+        }
+        return nil
+    }
+    
+}
+
+extension UIView {
+    
+    public static var association:[String:Weak<UIView>] = [:]
+    
+}
+
