@@ -913,10 +913,6 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         let picker                                  = GenericPickerOfColor()
                         
-                        picker.clear(withLastColorArray: [color0], lastColorIndex: 0)
-                        
-                        setupForPicker?(picker)
-
                         let vc                                      = UIViewController()
                         
                         let scroll                                  = UIScrollView()
@@ -934,18 +930,26 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         vc.view                                     = scroll
                         vc.title                                    = title.trimmed()
-
                         
-                        picker.build(margin:0)
+                        let viewColor                               = UIView(frame:CGRect(side:20))
+                        viewColor.backgroundColor                   = color0
+                        viewColor.layer.cornerRadius                = 10
+                        vc.navigationItem.rightBarButtonItem        = UIBarButtonItem(customView: viewColor)
+
+
+                        picker.clear(withLastColorArray: [color0], lastColorIndex: 0)
+                        
+                        setupForPicker?(picker)
+                        
                         picker.constrainTopLeftCornerToSuperview()
                         picker.constrainWidthToSuperview()
                         picker.set(color: color0, dragging: false, animated: true)
 
-                        picker.handlerForColor = { [weak picker] color,dragging,animated in
-                            if picker != nil {
-                                action?(color)
-                            }
-                        }
+//                        picker.handlerForColor = { [weak picker] color,dragging,animated in
+//                            if picker != nil, !dragging, !animated {
+//                                action?(color)
+//                            }
+//                        }
                         
                         self.navigationController?.pushViewController(vc, animated: true)
                     }

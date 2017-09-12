@@ -15,6 +15,8 @@ import UIKit
 // TODO: DISPLAY-DOT/ADD LABEL
 // TODO: OPERATION/ADD
 // TODO: REFACTOR INTO A FRAMEWORK
+// TODO: ADD COMPONENT-STORAGE-DOTS CREATION VIA SPACING AND RADIUS // NO COLUMNS // S+R // CURRENTLY: C+R
+// TODO: ADD COMPONENT-STORAGE-DOTS CREATION VIA COLUMNS AND SPACING // NO RADIUS // C+S
 
 open class GenericPickerOfColor : UIView {
 
@@ -739,8 +741,8 @@ open class GenericPickerOfColor : UIView {
         public weak var rightButton     : UIButtonWithCenteredCircle!
         public weak var rightView       : UIViewCircleWithUILabel!
         
-        public var update               : (ComponentSlider,UIColor,Bool)->() = { _ in }
-        public var action               : (_ value:Float,_ dragging:Bool)->() = { _ in }
+        public var update               : (_ slider:ComponentSlider, _ color:UIColor, _ animate:Bool)->() = { _ in }
+        public var action               : (_ value:Float, _ dragging:Bool)->() = { _ in }
         
         public var actionOnLeftButton   : (ComponentSlider)->() = { _ in }
         public var actionOnRightButton  : (ComponentSlider)->() = { _ in }
@@ -1148,7 +1150,9 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderCyan          (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderCyan          (side   : CGFloat = 32,
+                                                 title  : NSAttributedString? = nil,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "C" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
@@ -1171,6 +1175,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.cyan = CGFloat(value).clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1179,6 +1184,7 @@ open class GenericPickerOfColor : UIView {
             CMYK.cyan -= 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1187,12 +1193,15 @@ open class GenericPickerOfColor : UIView {
             CMYK.cyan += 1.0/255.0
             CMYK.cyan = CMYK.cyan.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderMagenta           (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderMagenta           (side   : CGFloat = 32,
+                                                     title  : NSAttributedString? = nil,
+                                                     action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "M" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
@@ -1215,6 +1224,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.magenta = CGFloat(value).clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1223,6 +1233,7 @@ open class GenericPickerOfColor : UIView {
             CMYK.magenta -= 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1231,12 +1242,15 @@ open class GenericPickerOfColor : UIView {
             CMYK.magenta += 1.0/255.0
             CMYK.magenta = CMYK.magenta.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderYellow        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderYellow        (side   : CGFloat = 32,
+                                                 title  : NSAttributedString? = nil,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "Y" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
@@ -1259,6 +1273,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.yellow = CGFloat(value).clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1267,6 +1282,7 @@ open class GenericPickerOfColor : UIView {
             CMYK.yellow -= 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1275,6 +1291,7 @@ open class GenericPickerOfColor : UIView {
             CMYK.yellow += 1.0/255.0
             CMYK.yellow = CMYK.yellow.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
@@ -1282,7 +1299,7 @@ open class GenericPickerOfColor : UIView {
     
     public func addComponentSliderKey           (side   : CGFloat = 32,
                                                  title  : NSAttributedString? = nil,
-                                                 action : ((Int)->Bool)? = nil) -> ComponentSlider {
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "K" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
@@ -1305,6 +1322,7 @@ open class GenericPickerOfColor : UIView {
             var CMYK = self.color.CMYK
             CMYK.key = CGFloat(value).clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1313,6 +1331,7 @@ open class GenericPickerOfColor : UIView {
             CMYK.key -= 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1321,7 +1340,24 @@ open class GenericPickerOfColor : UIView {
             CMYK.key += 1.0/255.0
             CMYK.key = CMYK.key.clampedTo01
             self.set(color:UIColor(CMYK:CMYK).withAlphaComponent(self.color.RGBAalpha), dragging:false, animated:false)
+            action?(slider)
         }
+        
+        return slider
+    }
+    
+    public func addComponentSliderCustom        (label                  : NSAttributedString,
+                                                 side                   : CGFloat = 32,
+                                                 title                  : NSAttributedString? = nil,
+                                                 color                  : UIColor) -> ComponentSlider {
+        
+        let slider = self.addComponentSlider(label  : label | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+                                             title  : title,
+                                             color  : color,
+                                             side   : side)
+        
+        slider.slider.maximumValue = 1
+        slider.slider.isContinuous = true
         
         return slider
     }
@@ -1343,7 +1379,7 @@ open class GenericPickerOfColor : UIView {
         slider.minimumValue = 0
         slider.maximumValue = 255
         slider.tintColor    = color
-        slider.isContinuous = false
+        slider.isContinuous = true
         
         leftView.backgroundColor            = color
         leftView.view.attributedText        = label
@@ -1622,18 +1658,14 @@ open class GenericPickerOfColor : UIView {
         handlerForColor?(color,dragging,animated)
     }
     
-    open func clear(withLastColorArray:[UIColor]? = nil, lastColorIndex:Int? = nil) {
+    open func clear(withLastColorArray array:[UIColor] = [.white], lastColorIndex index:Int = 0) {
         self.removeAllSubviews()
         self.removeAllConstraints()
         self.componentSliders = []
         self.componentStorage = []
         self.componentDisplays = []
-        if let array = withLastColorArray {
-            self.colorArrayManager.colors = array
-        }
-        if let index = lastColorIndex {
-            self.colorArrayManager.colorIndex = index
-        }
+        self.colorArrayManager.colors = array
+        self.colorArrayManager.colorIndex = index
         print("color-array-colors:\(colorArrayManager.colors.map{ $0.arrayOfRGBA })")
         print("color-array-index :\(colorArrayManager.colorIndex)")
         print("color-array-limit :\(colorArrayManager.colorLimit)")
