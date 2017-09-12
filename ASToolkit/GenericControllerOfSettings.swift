@@ -917,12 +917,6 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         setupForPicker?(picker)
 
-                        picker.handlerForColor = { [weak picker] color,dragging,animated in
-                            if let _ = picker {
-                                action?(color)
-                            }
-                        }
-                        
                         let vc                                      = UIViewController()
                         
                         let scroll                                  = UIScrollView()
@@ -947,6 +941,12 @@ open class GenericControllerOfSettings : UITableViewController
                         picker.constrainWidthToSuperview()
                         picker.set(color: color0, dragging: false, animated: true)
 
+                        picker.handlerForColor = { [weak picker] color,dragging,animated in
+                            if picker != nil {
+                                action?(color)
+                            }
+                        }
+                        
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
