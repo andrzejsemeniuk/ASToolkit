@@ -875,7 +875,99 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
+
+    open func createCellForUIColorWithGenericPickerOfColor
+        (_ color0       : UIColor,
+         id             : String? = nil,
+         title          : String,
+         setup          : ((UITableViewCell,IndexPath)->())? = nil,
+         setupForPicker : ((GenericPickerOfColor)->())? = nil,
+         action         : ((UIColor)->())? = nil) -> FunctionOnCell
+    {
+        return
+            { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+                if let label = cell.textLabel {
+                    
+                    label.text          = title
+                    label.font          = self?.fontForLabelText ?? label.font
+                    
+                    if let detail = cell.detailTextLabel {
+                        detail.text     = "  "
+                        
+                        let view = UIView()
+                        
+                        view.frame              = CGRect(x:-16,y:-2,width:24,height:24)
+                        view.layer.cornerRadius = self?.elementCornerRadius ?? 0
+                        view.backgroundColor    = color0
+                        
+                        detail.addSubview(view)
+                    }
+                    cell.selectionStyle = .default
+                    cell.accessoryType  = .disclosureIndicator
+                    
+                    self?.register(indexPath: indexPath, id: id)
+                    setup?(cell,indexPath)
+                    self?.addAction(indexPath: indexPath) {
+                        
+                        guard let `self` = self else { return }
+                        
+                        let picker                                  = GenericPickerOfColor()
+                        
+                        picker.clear(withLastColorArray: [color0], lastColorIndex: 0)
+                        
+                        setupForPicker?(picker)
+
+                        picker.handlerForColor = { [weak picker] color,dragging,animated in
+                            if let _ = picker {
+                                action?(color)
+                            }
+                        }
+                        
+                        let vc                                      = UIViewController()
+                        
+                        let scroll                                  = UIScrollView()
+                        
+                        scroll.contentInset.top                     = 4
+                        scroll.contentInset.bottom                  = 4
+                        scroll.showsVerticalScrollIndicator         = false
+                        scroll.showsHorizontalScrollIndicator       = false
+                        
+                        scroll.addSubview(picker)
+
+                        scroll.backgroundColor                      = .white
+                        
+                        picker.backgroundColor                      = .white
+                        
+                        vc.view                                     = scroll
+                        vc.title                                    = title.trimmed()
+
+                        
+                        picker.build(margin:0)
+                        picker.constrainTopLeftCornerToSuperview()
+                        picker.constrainWidthToSuperview()
+                        picker.set(color: color0, dragging: false, animated: true)
+
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+        }
+    }
     
+    open func createCellForUIColorWithGenericPickerOfColor
+        (_ setting      : GenericSetting<UIColor>,
+         id             : String? = nil,
+         title          : String,
+         setup          : ((UITableViewCell,IndexPath)->())? = nil,
+         setupForPicker : ((GenericPickerOfColor)->())? = nil,
+         action         : (()->())? = nil) -> FunctionOnCell
+    {
+        return createCellForUIColorWithGenericPickerOfColor(setting.value, id:id, title:title, setup:setup, setupForPicker:setupForPicker, action:{ color in
+            setting.value = color
+            action?()
+        })
+    }
+    
+
     
     
     

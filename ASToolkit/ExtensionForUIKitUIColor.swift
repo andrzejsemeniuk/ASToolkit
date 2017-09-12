@@ -303,28 +303,31 @@ extension UIColor {
     {
         var delta:Double
         
-        var colors:[[UIColor]]
+        var colors:[[UIColor]] = []
         
-        delta = 1.0/Double(columns * rowsOfGray - 1)
-        colors = stride(from:1.0,to:delta-0.001,by:-delta).asArray.asArrayOfCGFloat.map { UIColor(white:$0) }.appended(.black).split(by:columns)
+        if 0 < rowsOfGray {
+            delta = 1.0/Double(columns * rowsOfGray - 1)
+            colors = stride(from:1.0,to:delta-0.001,by:-delta).asArray.asArrayOfCGFloat.map { UIColor(white:$0) }.appended(.black).split(by:columns)
+        }
         
-        delta = 1.0/Double(rowsOfHues)
-        let hues        : [Float]   = stride(from:0.0,to:1.001-delta,by:delta).asArray.asArrayOfFloat
-        // stride(from:0.0,to:0.95,by:0.04).asArray.asArrayOfFloat
-        
-        delta = 1.0/Double(columns+1)
-        let saturations : [Float]   = stride(from:delta,to:1.0,by:delta).asArray.asArrayOfFloat
-        
-        let values      : [Float]   = [1]
-        
-        for h in hues {
-            var row:[UIColor] = []
-            for v in values {
-                for s in saturations {
-                    row.append(UIColor.HSBA(h,s,v,1))
+        if 0 < rowsOfHues {
+            delta = 1.0/Double(rowsOfHues)
+            let hues        : [Float]   = stride(from:0.0,to:1.0001-delta,by:delta).asArray.asArrayOfFloat
+            
+            delta = 1.0/Double(columns+1)
+            let saturations : [Float]   = stride(from:delta,to:1.0,by:delta).asArray.asArrayOfFloat
+            
+            let values      : [Float]   = [1]
+            
+            for h in hues {
+                var row:[UIColor] = []
+                for v in values {
+                    for s in saturations {
+                        row.append(UIColor.HSBA(h,s,v,1))
+                    }
                 }
+                colors.append(row)
             }
-            colors.append(row)
         }
         
         return colors

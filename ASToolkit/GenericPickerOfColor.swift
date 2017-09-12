@@ -554,6 +554,9 @@ open class GenericPickerOfColor : UIView {
             return false
         }
         
+        open func fill    (colors:[UIColor]) {
+        }
+        
         open func remove  (color:UIColor) {
         }
         
@@ -684,6 +687,13 @@ open class GenericPickerOfColor : UIView {
                 buttons[0].circle(for: .normal).fillColor = color.cgColor
             }
             return true
+        }
+        
+        override open func fill    (colors:[UIColor]) {
+            let buttons = self.buttons.flatMap { $0 }
+            for i in stride(from:0, to:min(buttons.count,colors.count), by:1) {
+                buttons[i].circle(for: .normal).fillColor = colors[i].cgColor
+            }
         }
         
         override open func remove  (color:UIColor) {
@@ -1089,11 +1099,12 @@ open class GenericPickerOfColor : UIView {
         return slider
     }
     
-    public func addComponentSliderBrightness    (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderBrightness    (side   : CGFloat = 32,
+                                                 title  : NSAttributedString? = nil,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : title,
-//                                             title  : "B R I G H T N E S S" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
                                              color  : UIColor(white:0,alpha:0.02),
                                              side   : side)
         
@@ -1105,14 +1116,15 @@ open class GenericPickerOfColor : UIView {
             let HSBA = color.HSBA
             slider.set(value                            : Float(HSBA.brightness)*slider.slider.maximumValue,
                        withAnimationDuration            : animate ? self.preferenceSliderSetValueAnimationDuration : nil,
-                       withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,1,HSBA.brightness,1]))
+                       withRightViewBackgroundColor     : UIColor(hsba:[HSBA.hue,0,HSBA.brightness,1]))
         }
         
-        slider.action = { [weak self] value,dragging in
-            guard let `self` = self else { return }
+        slider.action = { [weak self, weak slider] value,dragging in
+            guard let `self` = self, let slider = slider else { return }
             var HSBA = self.color.HSBA
             HSBA.brightness = CGFloat(value)
             self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1121,6 +1133,7 @@ open class GenericPickerOfColor : UIView {
             HSBA.brightness -= 1.0/255.0
             HSBA.brightness = HSBA.brightness.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1129,6 +1142,7 @@ open class GenericPickerOfColor : UIView {
             HSBA.brightness += 1.0/255.0
             HSBA.brightness = HSBA.brightness.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
