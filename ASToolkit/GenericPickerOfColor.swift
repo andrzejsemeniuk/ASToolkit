@@ -129,6 +129,7 @@ open class GenericPickerOfColor : UIView {
         }
         
         public var color : UIColor {
+            growIfNecessary(to: colorIndex)
             return colors[colorIndex]
         }
         

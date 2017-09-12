@@ -60,6 +60,7 @@ open class GenericControllerOfSettings : UITableViewController
     }
     
     open var elementCornerRadius            : CGFloat                               = 4
+    open var elementCornerSide              : CGFloat                               = 24
     open var elementBackgroundColor         : UIColor                               = UIColor(white:1,alpha:0.3)
     
     open var colorForHeaderText             : UIColor?
@@ -814,18 +815,20 @@ open class GenericControllerOfSettings : UITableViewController
     {
         return
             { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+                guard let `self` = self else { return }
+                
                 if let label = cell.textLabel {
                     
                     label.text          = title
-                    label.font          = self?.fontForLabelText ?? label.font
+                    label.font          = self.fontForLabelText
 
                     if let detail = cell.detailTextLabel {
                         detail.text     = "  "
                         
                         let view = UIView()
                         
-                        view.frame              = CGRect(x:-16,y:-2,width:24,height:24)
-                        view.layer.cornerRadius = self?.elementCornerRadius ?? 0
+                        view.frame              = CGRect(x:-16,y:-2,width:self.elementCornerSide,height:self.elementCornerSide)
+                        view.layer.cornerRadius = self.elementCornerRadius
                         view.backgroundColor    = color0
                         
                         detail.addSubview(view)
@@ -833,9 +836,9 @@ open class GenericControllerOfSettings : UITableViewController
                     cell.selectionStyle = .default
                     cell.accessoryType  = .disclosureIndicator
                     
-                    self?.register(indexPath: indexPath, id: id)
+                    self.register(indexPath: indexPath, id: id)
                     setup?(cell,indexPath)
-                    self?.addAction(indexPath: indexPath) {
+                    self.addAction(indexPath: indexPath) { [weak self] in
                         
                         guard let `self` = self else { return }
                         
@@ -886,18 +889,20 @@ open class GenericControllerOfSettings : UITableViewController
     {
         return
             { [weak self] (cell:UITableViewCell, indexPath:IndexPath) in
+                guard let `self` = self else { return }
+                
                 if let label = cell.textLabel {
                     
                     label.text          = title
-                    label.font          = self?.fontForLabelText ?? label.font
+                    label.font          = self.fontForLabelText
                     
                     if let detail = cell.detailTextLabel {
                         detail.text     = "  "
                         
                         let view = UIView()
                         
-                        view.frame              = CGRect(x:-16,y:-2,width:24,height:24)
-                        view.layer.cornerRadius = self?.elementCornerRadius ?? 0
+                        view.frame              = CGRect(x:-16,y:-2,width:self.elementCornerSide,height:self.elementCornerSide)
+                        view.layer.cornerRadius = self.elementCornerRadius
                         view.backgroundColor    = color0
                         
                         detail.addSubview(view)
@@ -905,9 +910,9 @@ open class GenericControllerOfSettings : UITableViewController
                     cell.selectionStyle = .default
                     cell.accessoryType  = .disclosureIndicator
                     
-                    self?.register(indexPath: indexPath, id: id)
+                    self.register(indexPath: indexPath, id: id)
                     setup?(cell,indexPath)
-                    self?.addAction(indexPath: indexPath) {
+                    self.addAction(indexPath: indexPath) { [weak self] in
                         
                         guard let `self` = self else { return }
                         
