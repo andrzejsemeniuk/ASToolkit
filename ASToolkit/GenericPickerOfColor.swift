@@ -68,21 +68,8 @@ open class GenericPickerOfColor : UIView {
         case storageFly                     (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) // TODO
     }
 
-    let tagForTitle = 5146
-    
-    open func addTitle(to:UIView, margin:CGFloat, title:NSAttributedString) -> UILabelWithInsets {
-        let result = UILabelWithInsets()
-        result.attributedText = title
-        to.addSubview(result)
-        result.constrainCenterXToSuperview()
-        result.sizeToFit()
-        result.tag = tagForTitle
-        result.topAnchor.constraint(equalTo: to.topAnchor, constant: margin)
-        return result
-    }
-    
-    open func removeTitle(from:UIView) {
-        from.removeSubview(withTag:tagForTitle)
+    public enum Tag : Int {
+        case title          = 5146
     }
     
     open class ColorArrayManager {
@@ -751,11 +738,11 @@ open class GenericPickerOfColor : UIView {
         public var actionOnLeftButton   : (ComponentSlider)->() = { _ in }
         public var actionOnRightButton  : (ComponentSlider)->() = { _ in }
         
-        public func update          (color:UIColor, animated:Bool) {
+        public func update              (color:UIColor, animated:Bool) {
             self.update(self,color,animated)
         }
         
-        public func build(side:CGFloat, margin:CGFloat = 16) {
+        public func build               (side:CGFloat, marginOnTop:CGFloat = 0, marginOnBottom:CGFloat = 0) {
             
             self.subviews.forEach { $0.removeFromSuperview() }
             
@@ -767,7 +754,7 @@ open class GenericPickerOfColor : UIView {
                 rightView
                 ])
             
-            var views : Dictionary<String,UIView> = [
+            let views : Dictionary<String,UIView> = [
                 "self"          : self,
                 "leftView"      : leftView,
                 "leftButton"    : leftButton,
@@ -776,31 +763,17 @@ open class GenericPickerOfColor : UIView {
                 "rightView"     : rightView
             ]
             
-            if let title = title {
-                self.insertSubview(title, at:0)
-                views["title"] = title
-            }
-            
             let builder = NSLayoutConstraintsBuilder(views:views)
             
             builder < "H:|-[leftView(\(side))]-[leftButton(\(side))]-[slider(>=8)]-[rightButton(\(side))]-[rightView(\(side))]-|"
 
-            builder < "V:|-(>=\(margin))-[leftView(\(side))]-(\(margin))-|"
-            builder < "V:|-(>=\(margin))-[leftButton(\(side))]-(\(margin))-|"
-            builder < "V:|-(>=\(margin))-[rightButton(\(side))]-(\(margin))-|"
-            builder < "V:|-(>=\(margin))-[rightView(\(side))]-(\(margin))-|"
-            builder < "V:|-(>=\(margin))-[slider(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(marginOnTop))-[leftView(\(side))]-(\(marginOnBottom))-|"
+            builder < "V:|-(>=\(marginOnTop))-[leftButton(\(side))]-(\(marginOnBottom))-|"
+            builder < "V:|-(>=\(marginOnTop))-[rightButton(\(side))]-(\(marginOnBottom))-|"
+            builder < "V:|-(>=\(marginOnTop))-[rightView(\(side))]-(\(marginOnBottom))-|"
+            builder < "V:|-(>=\(marginOnTop))-[slider(\(side))]-(\(marginOnBottom))-|"
 
-            if let title = title {
-                //                builder < "H:|-[title]-|" // THERE IS NO WAY TO X-CENTER A VIEW USING VFL
-                title.constrainCenterXToSuperview()
-                builder < "V:|[title]-[slider]"
-                builder < "V:[self(>=\(side+margin+margin))]"
-            }
-            else {
-                builder < "V:[self(\(side+margin+margin))]"
-            }
-            
+//            builder < "V:[self(\(side+marginOnTop+marginOnBottom))]" // not needed
             
             builder.activate()
             
@@ -808,7 +781,7 @@ open class GenericPickerOfColor : UIView {
 
         }
         
-        public func set(value:Float, withAnimationDuration duration:Double? = nil, withRightViewBackgroundColor color:UIColor? = nil) {
+        public func set                 (value:Float, withAnimationDuration duration:Double? = nil, withRightViewBackgroundColor color:UIColor? = nil) {
             if let duration = duration {
                 slider.setValue(value, withAnimationDuration:duration)
             }
@@ -845,6 +818,30 @@ open class GenericPickerOfColor : UIView {
     }
     
     // MARK: - Components
+    
+    public func addTitle(to:UIView, marginOnTop:CGFloat = 0, title:NSAttributedString?) -> UILabelWithInsets? {
+        
+        guard let title = title else { return nil }
+        
+        let label = UILabelWithInsets()
+        label.tag = Tag.title.rawValue
+        label.textAlignment = .center
+        label.attributedText = title
+        label.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
+        //            label?.layer.borderColor = UIColor(white:1,alpha:0.5).cgColor
+        //            label?.layer.borderWidth = 1
+        //            label?.sizeToFit()
+        
+        //            label?.layer.backgroundColor = GRAY.cgColor
+        
+        to.addSubview(label)
+        to.sendSubview(toBack: label)
+        
+        label.constrainCenterXToSuperview()
+        label.constrainTopToSuperviewTop(withMargin:marginOnTop)
+        
+        return label
+    }
     
     public func addComponentSliderRed        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
         let slider = self.addComponentSlider(label  : "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1399,29 +1396,8 @@ open class GenericPickerOfColor : UIView {
         rightButton.circle(for: .normal).radius = side/2
         rightButton.circle(for: .normal).fillColor = GRAY.cgColor
         
-        var titleLabel : UILabelWithInsets?
-        
-        if let title = title {
-            titleLabel = UILabelWithInsets()
-            titleLabel?.textAlignment = .center
-            titleLabel?.attributedText = title
-            titleLabel?.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
-//            titleLabel?.layer.borderColor = UIColor(white:1,alpha:0.5).cgColor
-//            titleLabel?.layer.borderWidth = 1
-//            titleLabel?.sizeToFit()
-            
-//            titleLabel?.layer.backgroundColor = GRAY.cgColor
-        }
-        
-//        var someObject:AnyObject = "whatever" as AnyObject
-//        let interval = someObject.timeIntervalSinceNow
-        
-        
         let result = ComponentSlider()
         
-        if let titleLabel = titleLabel {
-            result.title    = titleLabel
-        }
         result.leftView     = leftView
         result.leftButton   = leftButton
         result.slider       = slider
@@ -1430,7 +1406,11 @@ open class GenericPickerOfColor : UIView {
         
         self.addSubview(result)
         
-        result.build(side:side)
+        let marginOnTop     = CGFloat(title == nil ? 0 : 18) // TODO: REFACTOR CONSTANT/COMPUTE?
+        let marginOnBottom  = CGFloat(0)
+        result.build(side:side, marginOnTop:marginOnTop, marginOnBottom:marginOnBottom)
+        
+        result.title = addTitle(to: result, marginOnTop:2, title: title)
         
         result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventDragEnd(_:)), for: [.touchUpInside, .touchUpOutside])
         
@@ -1675,9 +1655,11 @@ open class GenericPickerOfColor : UIView {
         print("color-array-limit :\(colorArrayManager.colorLimit)")
     }
     
-    open func build(margin:CGFloat = 8) {
+    open func build(margin:CGFloat = 0) {
         
         if let first = self.subviews.first, let last = self.subviews.last {
+            
+            self.translatesAutoresizingMaskIntoConstraints=false
             
             // tie subviews together
             self.subviews.adjacent { a,b in
@@ -1692,7 +1674,6 @@ open class GenericPickerOfColor : UIView {
             
             // tie picker top anchor to top subview
             // tie picker bottom anchor to bottom subview
-            self.translatesAutoresizingMaskIntoConstraints=false
             first.topAnchor.constraint(equalTo: self.topAnchor).isActive=true
             self.bottomAnchor.constraint(equalTo: last.bottomAnchor).isActive=true
         }

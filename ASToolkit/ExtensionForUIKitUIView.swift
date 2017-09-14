@@ -154,10 +154,41 @@ extension UIView {
     }
     
     open func constrainSizeToFrameSize() {
+        self.translatesAutoresizingMaskIntoConstraints=false
         self.widthAnchor.constraint(equalToConstant: frame.width).isActive=true
         self.heightAnchor.constraint(equalToConstant: frame.height).isActive=true
     }
+    
+    open func constrainTopToSuperviewTop(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.topAnchor.constraint(equalTo: superview.topAnchor, constant: margin).isActive=true
+        }
+    }
+
+    open func constrainBottomToSuperviewBottom(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).isActive=true
+        }
+    }
+
+    open func constrainLeftToSuperviewLeft(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainRightToSuperviewRight(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).isActive=true
+        }
+    }
+    
 }
+
 
 extension UIView {
     
