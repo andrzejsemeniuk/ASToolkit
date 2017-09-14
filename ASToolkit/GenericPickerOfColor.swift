@@ -1580,9 +1580,9 @@ open class GenericPickerOfColor : UIView {
         return display
     }
     
-    open func addComponentOperations            (height side:CGFloat = 32, operations:[Operation]) -> ComponentOperations {
+    open func addComponentOperations            (height:CGFloat = 32, side:CGFloat = 36, operations:[Operation]) -> ComponentOperations {
         
-        let display = ComponentOperations(height:side, operations:operations)
+        let display = ComponentOperations(height:height, side:side, operations:operations)
         
         self.addSubview(display)
         
