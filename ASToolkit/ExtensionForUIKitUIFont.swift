@@ -109,6 +109,18 @@ extension UIFont {
         return UIFont.systemFont(ofSize: UIFont.systemFontSize)
     }()
     
+    static public let defaultFontForLabel : UIFont = {
+        return UIFont.systemFont(ofSize: UIFont.labelFontSize)
+    }()
+    
+}
+
+public func + (lhs:UIFont, rhs:CGFloat) -> UIFont {
+    return lhs.withSize(lhs.pointSize + rhs)
+}
+
+public func - (lhs:UIFont, rhs:CGFloat) -> UIFont {
+    return lhs.withSize(rhs < lhs.pointSize ? lhs.pointSize - rhs : 1)
 }
 
 // TODO: MOVE TO OWN FILE
