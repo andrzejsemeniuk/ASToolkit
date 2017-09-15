@@ -187,6 +187,24 @@ extension UIView {
         }
     }
     
+    open func constrainToSuperview(withInsets insets:UIEdgeInsets? = nil) {
+        if let insets = insets {
+            constrainTopToSuperviewTop          (withMargin: insets.top)
+            constrainBottomToSuperviewBottom    (withMargin: insets.bottom)
+            constrainLeftToSuperviewLeft        (withMargin: insets.left)
+            constrainRightToSuperviewRight      (withMargin: insets.right)
+        }
+        else {
+            constrainTopToSuperviewTop()
+            constrainBottomToSuperviewBottom()
+            constrainLeftToSuperviewLeft()
+            constrainRightToSuperviewRight()
+        }
+    }
+    
+    open func constrainToSuperview(withMargins insets:UIEdgeInsets) {
+        constrainToSuperview(withInsets: insets)
+    }
 }
 
 
