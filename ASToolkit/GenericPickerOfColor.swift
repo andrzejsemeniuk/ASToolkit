@@ -73,33 +73,211 @@ open class GenericPickerOfColor : UIView {
     }
     
     public struct Configuration {
-        public struct Label {
-            var insets                  = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
-            var marginOnTop             = CGFloat(2)
-            var marginOnBottom          = CGFloat(0)
+        
+        public var margin                       = CGFloat(0)
+        
+        public struct Display {
+            public var height                   = CGFloat(36)
         }
         
-        public var title                = Label()
+        public var display                      = Display()
+
+        public struct Storage {
+            public struct Dot {
+                public var radius               = CGFloat(32)
+            }
+            
+            public var dot                      = Dot()
+        }
+        
+        public var storage                      = Storage()
+        
+        public struct Title {
+            public var show                     = true
+            public var uppercase                = true
+            public var tweened                  = true
+            public var color                    = UIColor.black
+            public var background               = UIColor.yellow
+            public var font                     = UIFont.init(name:"GillSans", size:UIFont.smallSystemFontSize) ?? UIFont.defaultFontForLabel
+            public var insets                   = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
+            public var marginOnTop              = CGFloat(2)
+            public var marginOnBottom           = CGFloat(0)
+        }
+        
+        public var title                        = Title()
         
         public struct Slider {
-            var marginOnTop             = CGFloat(0)
-            var marginOnTopWithTitle    = CGFloat(18)
-            var marginOnBottom          = CGFloat(0)
+            public var margin                   = CGFloat(8)
+            public var side                     = CGFloat(32)
         }
         
-        public var slider               = Slider()
+        public var slider                       = Slider()
         
         public struct Operations {
-            var marginOnTop             = CGFloat(0)
-            var marginOnTopWithTitle    = CGFloat(48)
-            var marginAboveTitle        = CGFloat(2)
-            var marginOnBottom          = CGFloat(0)
+            public var side                     = CGFloat(41)
+            public struct ButtonState {
+                public var background           = UIColor.black
+                public var foreground           = UIColor.white
+                public var font                 = (UIFont.defaultFontForLabel + 11)
+            }
+            
+            public var buttonStateNormal        = ButtonState()
+            public var buttonStateSelected      = ButtonState()
+            
+            public init() {
+                buttonStateSelected.background  = .red
+            }
         }
         
-        public var operations           = Operations()
+        public var operations                   = Operations()
     }
     
     public var configuration            = Configuration()
+    
+    internal class UIViewTray <VIEW:UIView> : UIView {
+        let titleLabels     : [UILabelWithInsets]
+        let contentView     : VIEW!
+        
+        internal init(contentView   : VIEW,
+                      insets        : UIEdgeInsets = UIEdgeInsets(),
+                      titleMargin   : CGFloat,
+                      titleLabel    : UILabelWithInsets) {
+            self.contentView = contentView
+            self.titleLabels = [titleLabel]
+            
+            super.init(frame:.zero)
+
+            self.addSubview(titleLabel)
+            self.addSubview(contentView)
+            
+            self.translatesAutoresizingMaskIntoConstraints=false
+            contentView.translatesAutoresizingMaskIntoConstraints=false
+            
+            titleLabel.translatesAutoresizingMaskIntoConstraints=false
+            titleLabel.constrainCenterXToSuperview()
+            titleLabel.constrainTopToSuperviewTop(withMargin:titleMargin)
+            
+            contentView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: insets.top)
+            contentView.constrainLeftToSuperviewLeft(withMargin: insets.left)
+            contentView.constrainRightToSuperviewRight(withMargin: insets.right)
+            contentView.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
+        }
+        
+        internal init(contentView   : VIEW,
+                      insets        : UIEdgeInsets = UIEdgeInsets(),
+                      titleMargin   : CGFloat,
+                      titleLabels   : [(UILabelWithInsets,NSLayoutAnchor<NSLayoutXAxisAnchor>)]) {
+            self.contentView = contentView
+            self.titleLabels = titleLabels.map { $0.0 }
+            
+            super.init(frame:.zero)
+            
+            for titleLabel in titleLabels {
+                self.addSubview(titleLabel.0)
+                titleLabel.0.translatesAutoresizingMaskIntoConstraints=false
+                titleLabel.0.centerXAnchor.constraint(equalTo: titleLabel.1).isActive=true
+                titleLabel.0.constrainTopToSuperviewTop(withMargin:titleMargin)
+            }
+            
+            self.addSubview(contentView)
+            contentView.translatesAutoresizingMaskIntoConstraints=false
+            if let first = titleLabels.first {
+                contentView.topAnchor.constraint(equalTo: first.0.bottomAnchor, constant: insets.top)
+            }
+            else {
+                contentView.constrainTopToSuperviewTop(withMargin: insets.top)
+            }
+            contentView.constrainLeftToSuperviewLeft(withMargin: insets.left)
+            contentView.constrainRightToSuperviewRight(withMargin: insets.right)
+            contentView.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
+        }
+        
+        internal init(contentView:VIEW, insets:UIEdgeInsets = UIEdgeInsets()) {
+            self.contentView = contentView
+            self.titleLabels = []
+            
+            super.init(frame:.zero)
+
+            self.addSubview(contentView)
+
+            contentView.translatesAutoresizingMaskIntoConstraints=false
+            contentView.constrainToSuperview(withInsets:insets)
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    internal func addTray<VIEW:UIView>(withContentView content:VIEW, title:String) -> UIViewTray<VIEW> {
+        let result : UIViewTray<VIEW>
+        
+        if configuration.title.show {
+            let titleLabel = UILabelWithInsets()
+            titleLabel.tag = Tag.title.rawValue
+            titleLabel.textAlignment = .center
+            titleLabel.attributedText = title | configuration.title.color | configuration.title.font
+            titleLabel.backgroundColor = configuration.title.background
+            titleLabel.insets = configuration.title.insets
+            result = UIViewTray(contentView : content,
+                                insets      : UIEdgeInsets(all:0),
+                                titleMargin : configuration.title.marginOnTop,
+                                titleLabel  : titleLabel)
+            
+        }
+        else {
+            result = UIViewTray(contentView : content,
+                                insets      : UIEdgeInsets(bottom:configuration.margin))
+        }
+        
+        self.addSubview(result)
+        
+        result.isOpaque = false
+        
+        result.translatesAutoresizingMaskIntoConstraints=false
+//        display.heightAnchor.constraint(equalToConstant: side + margin).isActive=true
+        result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        return result
+    }
+    
+    internal func addTray<VIEW:UIView>(withContentView content:VIEW, titles:[(String,NSLayoutAnchor<NSLayoutXAxisAnchor>)]) -> UIViewTray<VIEW> {
+        let result : UIViewTray<VIEW>
+        
+        if configuration.title.show {
+            var titleLabels : [(UILabelWithInsets,NSLayoutAnchor<NSLayoutXAxisAnchor>)] = []
+            for title in titles {
+                let titleLabel = UILabelWithInsets()
+                titleLabel.tag = Tag.title.rawValue
+                titleLabel.textAlignment = .center
+                titleLabel.attributedText = title.0 | configuration.title.color | configuration.title.font
+                titleLabel.backgroundColor = configuration.title.background
+                titleLabel.insets = configuration.title.insets
+                titleLabels.append((titleLabel,title.1))
+            }
+            result = UIViewTray(contentView : content,
+                                insets      : UIEdgeInsets(all:0),
+                                titleMargin : configuration.title.marginOnTop,
+                                titleLabels : titleLabels)
+            
+        }
+        else {
+            result = UIViewTray(contentView : content,
+                                insets      : UIEdgeInsets(bottom:configuration.margin))
+        }
+        
+        self.addSubview(result)
+        
+        result.isOpaque = false
+        
+        result.translatesAutoresizingMaskIntoConstraints=false
+        //        display.heightAnchor.constraint(equalToConstant: side + margin).isActive=true
+        result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+        result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        
+        return result
+    }
     
     open class ColorArrayManager {
         public var listenersOfIndex : [(Int)->()]       = []
@@ -219,25 +397,21 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentColorDisplayDot : ComponentColorDisplay {
         
-        //        public weak var title       : UILabelWithInsets!
+        public weak var viewFill    : UIView!
         public weak var viewDot     : UIViewCircle!
         
         public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
-            super.init(height:height, colorLimit:1, colorArrayManager:colorArrayManager)
+            super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
             
-            let viewDot = UIViewCircle(side:height)
+            let viewFill = UIView()
+            self.addSubview(viewFill)
+            self.viewFill = viewFill
+            viewFill.constrainSizeToSuperview()
+            
+            let viewDot = UIViewCircle(side:height*0.666)
             self.addSubviewCentered(viewDot)
             viewDot.constrainSizeToFrameSize()
             self.viewDot = viewDot
-            
-            // let title = myslider.addTitle("hello" | .red | .fontGillSans)
-            //  title.superview = myslider.superview
-            //  myslider.superview=title
-            // title.backgroundColor = .black
-            // title.insets.left/right = 4
-            // title.margin.top/bottom=4
-            
-            // solution 2: increase top insets by title-height + margin + title-insets
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -247,6 +421,7 @@ open class GenericPickerOfColor : UIView {
         override open func updateFromColor() {
             super.updateFromColor()
             viewDot.backgroundColor = colorArrayManager.color(at: 0)
+            viewFill.backgroundColor = colorArrayManager.color(at:1)
         }
     }
     
@@ -285,6 +460,7 @@ open class GenericPickerOfColor : UIView {
 //            self.triangle.fillColor     = colors[1].cgColor
             super.draw(rect)
         }
+        
         override open func updateFromColor() {
             super.updateFromColor()
             view.backgroundColor      = colorArrayManager.color(at:0)
@@ -422,38 +598,16 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentOperations : UIStackView {
         
-        open var insets : UIEdgeInsets = UIEdgeInsets() {
-            didSet {
-                super.invalidateIntrinsicContentSize()
-            }
-        }
-        
-        open override var intrinsicContentSize: CGSize {
-            var size = super.intrinsicContentSize
-            size.width += insets.left + insets.right
-            size.height += insets.top + insets.bottom
-            return size
-        }
-        
-        override open func draw(_ rect: CGRect) {
-            return super.draw(UIEdgeInsetsInsetRect(rect, insets))
-        }
-
-        
         public let operations               : [Operation]
         
         public struct OperationData {
             public var button               : UIButtonWithCenteredCircle = UIButtonWithCenteredCircle()
-            public var label                : UILabelWithInsets = UILabelWithInsets()
             public var function             : ()->() = { _ in }
         }
         
         public var data                     : [Operation:OperationData] = [:]
 
         public var durationOfTap            : Double        = 0.3
-        public var durationOfLabelDisplay   : Double        = 1.0
-        public var delayOfLabelDisplay      : Double        = 1.0
-        public var showLabel                : Bool          = true
 
         required public init(coder aDecoder: NSCoder) {
             // TODO
@@ -473,7 +627,7 @@ open class GenericPickerOfColor : UIView {
             self.alignment      = .center
         }
         
-        public func build(side:CGFloat = 36, marginAboveTitle:CGFloat = 0, labels:[Operation:NSAttributedString]? = nil) {
+        public func build(withConfiguration configuration:Configuration.Operations) {
             // create data based on operations
             
             self.addArrangedSubview(UIView())
@@ -484,32 +638,18 @@ open class GenericPickerOfColor : UIView {
                 case .copy      :
 //                    configure(button:data.button, title:"\u{2335}", side:side, insets: UIEdgeInsets(bottom:1))
                     // 29C9, 2295
-                    configure(button:data.button, title:"\u{2295}", side:side, insets: UIEdgeInsets(bottom:-1))
+                    configure(button:data.button, title:"\u{2295}", side:configuration.side, insets: UIEdgeInsets(bottom:-1))
                 case .paste     : // 29bf, 29be, 29C8
-                    configure(button:data.button, title:"\u{2298}", side:side, insets: UIEdgeInsets(bottom:-1))
+                    configure(button:data.button, title:"\u{2298}", side:configuration.side, insets: UIEdgeInsets(bottom:-1))
 //                    data.button.transform = data.button.transform.scaledBy(x: 1, y: -1)
                 case .spread    :
-                    configure(button:data.button, title:"S", side:side)
+                    configure(button:data.button, title:"S", side:configuration.side)
                 case .store     :
-                    configure(button:data.button, title:"\u{2981}", side:side)
+                    configure(button:data.button, title:"\u{2981}", side:configuration.side)
                 }
                 
                 self.addArrangedSubview(data.button)
                 
-                if showLabel {
-                data.button.addSubview(data.label)
-                data.button.sendSubview(toBack: data.label)
-                
-                data.label.attributedText = labels?[operation]
-                data.label.textAlignment = .center
-//                data.label.insets = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
-                data.label.translatesAutoresizingMaskIntoConstraints=false
-                data.label.constrainCenterXToSuperview()
-                data.label.topAnchor.constraint(equalTo: self.topAnchor, constant:marginAboveTitle).isActive=true
-//                data.label.bottomAnchor.constraint(equalTo: data.button.centerYAnchor, constant:-side/2).isActive=true
-                data.label.isHidden = true
-                }
-
                 self.data[operation] = data
                 
                 data.button.tag = index
@@ -548,18 +688,10 @@ open class GenericPickerOfColor : UIView {
             if let operation = operations[safe:control.tag] {
                 if let selected = data[operation]?.button.isSelected, !selected {
                     
-//                    if !showLabel, let data = data[operation] {
-//                        data.label.alpha = 1
-//                        data.label.isHidden = false
-//                        UIView.animate(withDuration: durationOfLabelDisplay, delay: delayOfLabelDisplay, options: [], animations: {
-//                            data.label.alpha = 0
-//                        }) { flag in
-//                            data.label.isHidden = true
-//                        }
-//                    }
-
                     data[operation]?.button.isSelected=true
+
                     data[operation]?.function()
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + durationOfTap) { [weak self] in
                         self?.data[operation]?.button.isSelected=false
                     }
@@ -567,16 +699,8 @@ open class GenericPickerOfColor : UIView {
             }
         }
         
-        public func title(for:Operation) -> NSAttributedString? {
-            return data[`for`]?.label.attributedText
-        }
-        
         public func button(for:Operation) -> UIButtonWithCenteredCircle? {
             return data[`for`]?.button
-        }
-        
-        public func label(for:Operation) -> UILabelWithInsets? {
-            return data[`for`]?.label
         }
         
         public func function(for:Operation) -> (()->())? {
@@ -588,6 +712,10 @@ open class GenericPickerOfColor : UIView {
                 data.function = function
                 self.data[`for`] = data
             }
+        }
+        
+        public var buttons : [UIButtonWithCenteredCircle?] {
+            return operations.map { data[$0]?.button }
         }
         
 
@@ -778,7 +906,6 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentSlider : UIView {
         
-        public weak var title           : UILabelWithInsets!
         public weak var leftView        : UIViewCircleWithUILabel!
         public weak var leftButton      : UIButtonWithCenteredCircle!
         public weak var slider          : UISlider!
@@ -795,7 +922,7 @@ open class GenericPickerOfColor : UIView {
             self.update(self,color,animated)
         }
         
-        public func build               (side:CGFloat, marginOnTop:CGFloat = 0, marginOnBottom:CGFloat = 0) {
+        public func build               (side:CGFloat, margin:CGFloat = 0) {
             
             self.subviews.forEach { $0.removeFromSuperview() }
             
@@ -820,18 +947,15 @@ open class GenericPickerOfColor : UIView {
             
             builder < "H:|-[leftView(\(side))]-[leftButton(\(side))]-[slider(>=8)]-[rightButton(\(side))]-[rightView(\(side))]-|"
 
-            builder < "V:|-(>=\(marginOnTop))-[leftView(\(side))]-(\(marginOnBottom))-|"
-            builder < "V:|-(>=\(marginOnTop))-[leftButton(\(side))]-(\(marginOnBottom))-|"
-            builder < "V:|-(>=\(marginOnTop))-[rightButton(\(side))]-(\(marginOnBottom))-|"
-            builder < "V:|-(>=\(marginOnTop))-[rightView(\(side))]-(\(marginOnBottom))-|"
-            builder < "V:|-(>=\(marginOnTop))-[slider(\(side))]-(\(marginOnBottom))-|"
+            builder < "V:|-(>=\(margin))-[leftView(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[leftButton(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[rightButton(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[rightView(\(side))]-(\(margin))-|"
+            builder < "V:|-(>=\(margin))-[slider(\(side))]-(\(margin))-|"
 
 //            builder < "V:[self(\(side+marginOnTop+marginOnBottom))]" // not needed
             
             builder.activate()
-            
-            
-
         }
         
         public func set                 (value:Float, withAnimationDuration duration:Double? = nil, withRightViewBackgroundColor color:UIColor? = nil) {
@@ -897,7 +1021,9 @@ open class GenericPickerOfColor : UIView {
         return label
     }
     
-    public func addComponentSliderRed        (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
+    public func addComponentSliderRed           (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         let slider = self.addComponentSlider(label  : "R" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
                                              color  : .red,
@@ -917,6 +1043,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.red = CGFloat(value) / CGFloat(slider.slider.maximumValue)
             self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -925,6 +1052,7 @@ open class GenericPickerOfColor : UIView {
             RGBA.red += 1.0/255.0
             RGBA.red = RGBA.red.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -933,13 +1061,16 @@ open class GenericPickerOfColor : UIView {
             RGBA.red += 1.0/255.0
             RGBA.red = RGBA.red.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderGreen      (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        
+    public func addComponentSliderGreen         (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
+
         let slider = self.addComponentSlider(label  : "G" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
                                              color  : UIColor(rgb:[0,0.9,0]),
@@ -959,6 +1090,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.green = CGFloat(value) / CGFloat(slider.slider.maximumValue)
             self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -967,6 +1099,7 @@ open class GenericPickerOfColor : UIView {
             RGBA.green -= 1.0/255.0
             RGBA.green = RGBA.green.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -975,13 +1108,16 @@ open class GenericPickerOfColor : UIView {
             RGBA.green += 1.0/255.0
             RGBA.green = RGBA.green.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderBlue       (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        
+    public func addComponentSliderBlue          (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
+
         let slider = self.addComponentSlider(label  : "B" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
                                              color  : UIColor(rgb:[0.4,0.6,1]),
@@ -1001,6 +1137,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.blue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
             self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1009,6 +1146,7 @@ open class GenericPickerOfColor : UIView {
             RGBA.blue -= 1.0/255.0
             RGBA.blue = RGBA.blue.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1017,13 +1155,16 @@ open class GenericPickerOfColor : UIView {
             RGBA.blue += 1.0/255.0
             RGBA.blue = RGBA.blue.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderAlpha      (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        
+    public func addComponentSliderAlpha         (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
+
         let slider = self.addComponentSlider(label  : "A" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
                                              title  : title,
                                              color  : UIColor(white:1.0),
@@ -1043,6 +1184,7 @@ open class GenericPickerOfColor : UIView {
             var RGBA = self.color.RGBA
             RGBA.alpha = CGFloat(value) / CGFloat(slider.slider.maximumValue)
             self.set(color:UIColor(RGBA:RGBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1051,6 +1193,7 @@ open class GenericPickerOfColor : UIView {
             RGBA.alpha -= 1.0/255.0
             RGBA.alpha = RGBA.alpha.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1059,13 +1202,16 @@ open class GenericPickerOfColor : UIView {
             RGBA.alpha += 1.0/255.0
             RGBA.alpha = RGBA.alpha.clampedTo01
             self.set(color:UIColor(RGBA:RGBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
-    public func addComponentSliderHue       (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        
+    public func addComponentSliderHue           (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
+
         let slider = self.addComponentSlider(label  : "H" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : title,
 //                                             title  : "H U E" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
@@ -1090,6 +1236,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.hue = CGFloat(value) / CGFloat(slider.slider.maximumValue)
             self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1098,6 +1245,7 @@ open class GenericPickerOfColor : UIView {
             HSBA.hue -= 1.0/360.0
             HSBA.hue = HSBA.hue.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1106,13 +1254,16 @@ open class GenericPickerOfColor : UIView {
             HSBA.hue += 1.0/360.0
             HSBA.hue = HSBA.hue.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
 
         return slider
     }
     
-    public func addComponentSliderSaturation    (side:CGFloat = 32, title:NSAttributedString? = nil, action:((Int)->Bool)? = nil) -> ComponentSlider {
-        
+    public func addComponentSliderSaturation    (side   : CGFloat = 32,
+                                                 title  : String,
+                                                 action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
+
         let slider = self.addComponentSlider(label  : "S" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
                                              title  : title,
 //                                             title  : "S A T U R A T I O N" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 1),
@@ -1135,6 +1286,7 @@ open class GenericPickerOfColor : UIView {
             var HSBA = self.color.HSBA
             HSBA.saturation = CGFloat(value)
             self.set(color:UIColor(HSBA:HSBA), dragging:dragging, animated:false)
+            action?(slider)
         }
         
         slider.actionOnLeftButton = { [weak self] slider in
@@ -1143,6 +1295,7 @@ open class GenericPickerOfColor : UIView {
             HSBA.saturation -= 1.0/255.0
             HSBA.saturation = HSBA.saturation.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         slider.actionOnRightButton = { [weak self] slider in
@@ -1151,13 +1304,14 @@ open class GenericPickerOfColor : UIView {
             HSBA.saturation += 1.0/255.0
             HSBA.saturation = HSBA.saturation.clampedTo01
             self.set(color:UIColor(HSBA:HSBA), dragging:false, animated:false)
+            action?(slider)
         }
         
         return slider
     }
     
     public func addComponentSliderBrightness    (side   : CGFloat = 32,
-                                                 title  : NSAttributedString? = nil,
+                                                 title  : String,
                                                  action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "B" | UIColor.lightGray | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize - 2),
@@ -1206,7 +1360,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     public func addComponentSliderCyan          (side   : CGFloat = 32,
-                                                 title  : NSAttributedString? = nil,
+                                                 title  : String,
                                                  action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "C" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1255,7 +1409,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     public func addComponentSliderMagenta           (side   : CGFloat = 32,
-                                                     title  : NSAttributedString? = nil,
+                                                     title  : String,
                                                      action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "M" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1304,7 +1458,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     public func addComponentSliderYellow        (side   : CGFloat = 32,
-                                                 title  : NSAttributedString? = nil,
+                                                 title  : String,
                                                  action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "Y" | UIColor.black | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1353,7 +1507,7 @@ open class GenericPickerOfColor : UIView {
     }
     
     public func addComponentSliderKey           (side   : CGFloat = 32,
-                                                 title  : NSAttributedString? = nil,
+                                                 title  : String,
                                                  action : ((ComponentSlider)->())? = nil) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : "K" | UIColor.white | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1403,7 +1557,7 @@ open class GenericPickerOfColor : UIView {
     
     public func addComponentSliderCustom        (label                  : NSAttributedString,
                                                  side                   : CGFloat = 32,
-                                                 title                  : NSAttributedString? = nil,
+                                                 title                  : String,
                                                  color                  : UIColor) -> ComponentSlider {
         
         let slider = self.addComponentSlider(label  : label | UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
@@ -1419,7 +1573,7 @@ open class GenericPickerOfColor : UIView {
     
 
     open func addComponentSlider           (label       : NSAttributedString,
-                                            title       : NSAttributedString? = nil,
+                                            title       : String,
                                             color       : UIColor,
                                             side        : CGFloat = 32) -> ComponentSlider {
         
@@ -1458,14 +1612,9 @@ open class GenericPickerOfColor : UIView {
         result.rightButton  = rightButton
         result.rightView    = rightView
         
-        self.addSubview(result)
+        let tray = addTray(withContentView: result, title: title)
         
-        let marginOnTop     = CGFloat(title == nil ? configuration.slider.marginOnTop : configuration.slider.marginOnTopWithTitle) // TODO: REFACTOR CONSTANT/COMPUTE?
-        let marginOnBottom  = configuration.slider.marginOnBottom
-        
-        result.build(side:side, marginOnTop:marginOnTop, marginOnBottom:marginOnBottom)
-        
-        result.title = addTitle(to: result, marginOnTop: configuration.title.marginOnTop, title: title)
+        result.build(side:side, margin:configuration.slider.margin)
         
         result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventDragEnd(_:)), for: [.touchUpInside, .touchUpOutside])
         
@@ -1510,191 +1659,126 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open func addComponentColorDisplayFill    (height side:CGFloat = 32) -> ComponentColorDisplayFill {
+    open func addComponentColorDisplayFill    (title:String, height side:CGFloat = 32) -> ComponentColorDisplayFill {
         
         let display = ComponentColorDisplayFill(height:side, colorArrayManager:colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        let tray = addTray(withContentView: display, title: title)
         
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentColorDisplayDot     (height side:CGFloat = 32) -> ComponentColorDisplayDot {
+    open func addComponentColorDisplayDot     (title:String, height side:CGFloat = 32) -> ComponentColorDisplayDot {
         
         let display = ComponentColorDisplayDot(height:side, colorArrayManager:self.colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
+        let tray = addTray(withContentView: display, title: title)
+
         display.updateFromColor()
-        
-        if false {
-            let views = [UILabel(),UILabel(),UILabel()]
-//            let pile = UIViewPileCentered(frame: CGRect(side:32), pile:views.map { $0 as UIView })
-            views[0].attributedText = "\u{20dd}" | UIColor.black | UIFont.systemFont(ofSize: 32)
-            views[1].attributedText = "\u{20dd}" | UIColor.gray | UIFont.systemFont(ofSize: 24)
-            views[2].attributedText = "\u{20dd}" | UIColor.white | UIFont.systemFont(ofSize: 16)
-            display.pile(views: views, constrainCenters: true)
-        }
         
         return display
     }
     
-    open func addComponentColorDisplaySplitDiagonal  (height side:CGFloat = 32) -> ComponentColorDisplaySplitDiagonal {
+    open func addComponentColorDisplaySplitDiagonal  (title:String, height side:CGFloat = 32) -> ComponentColorDisplaySplitDiagonal {
         
         let display = ComponentColorDisplaySplitDiagonal(height:side, colorArrayManager:self.colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
+        let tray = addTray(withContentView: display, title: title)
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentColorDisplaySplitVertical (height side:CGFloat = 32) -> ComponentColorDisplaySplitVertical {
+    open func addComponentColorDisplaySplitVertical (title:String, height side:CGFloat = 32) -> ComponentColorDisplaySplitVertical {
         
         let display = ComponentColorDisplaySplitVertical(height:side, colorArrayManager:self.colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
+        let tray = addTray(withContentView: display, title: title)
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentColorDisplaySplitHorizontal (height side:CGFloat = 32) -> ComponentColorDisplaySplitHorizontal {
+    open func addComponentColorDisplaySplitHorizontal (title:String, height side:CGFloat = 32) -> ComponentColorDisplaySplitHorizontal {
         
         let display = ComponentColorDisplaySplitHorizontal(height:side, colorArrayManager:self.colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
+        let tray = addTray(withContentView: display, title: title)
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentColorDisplayValueAsHexadecimal (height side:CGFloat = 32) -> ComponentColorDisplayValueAsHexadecimal {
+    open func addComponentColorDisplayValueAsHexadecimal (title:String, height side:CGFloat = 32) -> ComponentColorDisplayValueAsHexadecimal {
         
         let display = ComponentColorDisplayValueAsHexadecimal(height:side, colorArrayManager:self.colorArrayManager)
         
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
+        let tray = addTray(withContentView: display, title: title)
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentOperations            (side:CGFloat = 36, operations:[Operation], labels:[Operation:NSAttributedString]? = nil) -> ComponentOperations {
+    open func addComponentOperations            (title:String, operations:[(operation:Operation,title:String)]) -> ComponentOperations {
         
-        let display = ComponentOperations(operations:operations)
+        let display = ComponentOperations(operations:operations.map { $0.operation })
         
-        display.build(side:side, marginAboveTitle:configuration.operations.marginAboveTitle, labels:labels)
+        display.build(withConfiguration: configuration.operations)
         
-        var margin = configuration.operations.marginOnTop
-        
-        if labels != nil {
-            margin = configuration.operations.marginOnTopWithTitle + configuration.operations.marginAboveTitle
-            
-            for operation in operations {
-                let data = display.data[operation]
-                data?.label.insets = configuration.title.insets
-            }
-        }
-        
-        self.addSubview(display)
-        
-        display.translatesAutoresizingMaskIntoConstraints=false
-        display.heightAnchor.constraint(equalToConstant: side + margin).isActive=true
-        display.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        display.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+        let tray = addTray(withContentView  : display,
+                           titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0?.centerXAnchor ?? self.centerXAnchor }))
+
         
         return display
     }
     
-    open func addComponentStorageDots       (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
+    open func addComponentStorageDots       (title:String, radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDots {
         
         let storage = ComponentStorageDots()
         
-        self.addSubview(storage)
-        
+        let tray = addTray(withContentView: storage, title: title)
+
         storage.rows     = rows
         storage.columns  = columns
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
-        
-        storage.translatesAutoresizingMaskIntoConstraints=false
-        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         return storage
     }
 
-    open func addComponentStorageHistory    (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageHistory {
+    open func addComponentStorageHistory    (title:String, radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageHistory {
         
         let storage = ComponentStorageHistory()
         
-        self.addSubview(storage)
-        
+        let tray = addTray(withContentView: storage, title: title)
+
         storage.rows     = rows
         storage.columns  = columns
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
-        
-        storage.translatesAutoresizingMaskIntoConstraints=false
-        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         return storage
     }
     
-    open func addComponentStorageDrag       (radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDrag {
+    open func addComponentStorageDrag       (title:String, radius:CGFloat, columns:Int, rows:Int, colors:[UIColor]) -> ComponentStorageDrag {
         
         let storage = ComponentStorageDrag()
         
-        self.addSubview(storage)
-        
+        let tray = addTray(withContentView: storage, title: title)
+
         storage.rows     = rows
         storage.columns  = columns
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
-        
-        storage.translatesAutoresizingMaskIntoConstraints=false
-        storage.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        storage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         return storage
     }
@@ -1723,7 +1807,7 @@ open class GenericPickerOfColor : UIView {
         print("color-array-limit :\(colorArrayManager.colorLimit)")
     }
     
-    open func build(margin:CGFloat = 0) {
+    open func build() {
         
         if let first = self.subviews.first, let last = self.subviews.last {
             
@@ -1731,7 +1815,7 @@ open class GenericPickerOfColor : UIView {
             
             // tie subviews together
             self.subviews.adjacent { a,b in
-                b.topAnchor.constraint(equalTo: a.bottomAnchor, constant:margin).isActive=true
+                b.topAnchor.constraint(equalTo: a.bottomAnchor).isActive=true
             }
             
             // tie left/right anchors of subviews to picker
@@ -1746,9 +1830,9 @@ open class GenericPickerOfColor : UIView {
             self.bottomAnchor.constraint(equalTo: last.bottomAnchor).isActive=true
         }
 
-        self.componentSliders   = self.subviews.filter { $0 is ComponentSlider }.map { $0 as! ComponentSlider }
-        self.componentDisplays  = self.subviews.filter { $0 is ComponentColorDisplay }.map { $0 as! ComponentColorDisplay }
-        self.componentStorage   = self.subviews.filter { $0 is ComponentStorage }.map { $0 as! ComponentStorage }
+        self.componentSliders   = self.subviews.filter { $0 is UIViewTray<ComponentSlider> }.map { ($0 as! UIViewTray<ComponentSlider>).contentView }
+        self.componentDisplays  = self.subviews.filter { $0 is UIViewTray<ComponentColorDisplay> }.map { ($0 as! UIViewTray<ComponentColorDisplay>).contentView }
+        self.componentStorage   = self.subviews.filter { $0 is UIViewTray<ComponentStorage> }.map { ($0 as! UIViewTray<ComponentStorage>).contentView }
         
         // update color array limit to highest limit supported
         self.colorArrayManager.colorLimit = self.componentDisplays.map{ $0.colorLimit }.reduce(0){ max($0,$1) }
@@ -1766,29 +1850,29 @@ open class GenericPickerOfColor : UIView {
         let result = GenericPickerOfColor()
         
         for component in components {
-            switch component {
-                
-            case .colorDisplayDot        (let height) :
-                _ = result.addComponentColorDisplayDot    (height:height)
-                
-            case .sliderRed             (let height)     : _ = result.addComponentSliderRed         (side:height)
-            case .sliderGreen           (let height)     : _ = result.addComponentSliderGreen       (side:height)
-            case .sliderBlue            (let height)     : _ = result.addComponentSliderBlue        (side:height)
-            case .sliderAlpha           (let height)     : _ = result.addComponentSliderAlpha       (side:height)
-            case .sliderHue             (let height)     : _ = result.addComponentSliderHue         (side:height)
-            case .sliderSaturation      (let height)     : _ = result.addComponentSliderSaturation  (side:height)
-            case .sliderBrightness      (let height)     : _ = result.addComponentSliderBrightness  (side:height)
-            case .sliderCyan            (let height)     : _ = result.addComponentSliderCyan        (side:height)
-            case .sliderMagenta         (let height)     : _ = result.addComponentSliderMagenta     (side:height)
-            case .sliderYellow          (let height)     : _ = result.addComponentSliderYellow      (side:height)
-            case .sliderKey             (let height)     : _ = result.addComponentSliderKey         (side:height)
-                
-            case .storageDots           (let radius, let columns, let rows, let colors) :
-                _ = result.addComponentStorageDots(radius:radius, columns:columns, rows:rows, colors:colors)
-                
-            default: _ = result.addComponentSliderRed(side:16)
-                
-            }
+//            switch component {
+//
+//            case .colorDisplayDot        (let height) :
+//                _ = result.addComponentColorDisplayDot    (height:height)
+//
+//            case .sliderRed             (let height)     : _ = result.addComponentSliderRed         (side:height)
+//            case .sliderGreen           (let height)     : _ = result.addComponentSliderGreen       (side:height)
+//            case .sliderBlue            (let height)     : _ = result.addComponentSliderBlue        (side:height)
+//            case .sliderAlpha           (let height)     : _ = result.addComponentSliderAlpha       (side:height)
+//            case .sliderHue             (let height)     : _ = result.addComponentSliderHue         (side:height)
+//            case .sliderSaturation      (let height)     : _ = result.addComponentSliderSaturation  (side:height)
+//            case .sliderBrightness      (let height)     : _ = result.addComponentSliderBrightness  (side:height)
+//            case .sliderCyan            (let height)     : _ = result.addComponentSliderCyan        (side:height)
+//            case .sliderMagenta         (let height)     : _ = result.addComponentSliderMagenta     (side:height)
+//            case .sliderYellow          (let height)     : _ = result.addComponentSliderYellow      (side:height)
+//            case .sliderKey             (let height)     : _ = result.addComponentSliderKey         (side:height)
+//
+//            case .storageDots           (let radius, let columns, let rows, let colors) :
+//                _ = result.addComponentStorageDots(radius:radius, columns:columns, rows:rows, colors:colors)
+//
+//            default: _ = result.addComponentSliderRed(side:16)
+//
+//            }
         }
 
         result.build()
