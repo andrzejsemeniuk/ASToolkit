@@ -136,3 +136,20 @@ extension Array where Element : Equatable {
         return nil
     }
 }
+
+public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
+    var r = [(A,B)]()
+    let limit = min(a.count,b.count)
+    for i in stride(from:0,to:limit,by:1) {
+        r.append((a[i],b[i]))
+    }
+    return r
+}
+
+extension Array {
+    
+    public func zipped<B>(with:[B]) -> [(Element,B)] {
+        return zippy(self,with)
+    }
+}
+
