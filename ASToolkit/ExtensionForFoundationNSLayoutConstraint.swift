@@ -38,23 +38,28 @@ extension NSLayoutConstraint {
         return newConstraint
     }
     
-    open func activate(_ value:Bool = true) -> NSLayoutConstraint {
+    open func activated         (_ value:Bool = true) -> NSLayoutConstraint {
         self.isActive=true
         return self
     }
     
-    open func deactivate() -> NSLayoutConstraint {
+    open func deactivated       () -> NSLayoutConstraint {
         self.isActive=false
         return self
     }
     
-    open func prioritize(_ value:UILayoutPriority) -> NSLayoutConstraint {
+    open func prioritized       (_ value:UILayoutPriority) -> NSLayoutConstraint {
         self.priority = value
         return self
     }
     
-    open func fix(_ value:CGFloat) -> NSLayoutConstraint {
+    open func extended          (_ value:CGFloat) -> NSLayoutConstraint {
         self.constant = value
+        return self
+    }
+    
+    open func identified        (_ value:String?) -> NSLayoutConstraint {
+        self.identifier = value
         return self
     }
     

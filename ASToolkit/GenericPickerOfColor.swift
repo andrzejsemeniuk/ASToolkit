@@ -130,6 +130,7 @@ open class GenericPickerOfColor : UIView {
         
         public struct Operations {
             public var side                     = CGFloat(41)
+            
             public struct ButtonState {
                 public var background           = UIColor.black
                 public var foreground           = UIColor.white
@@ -149,19 +150,39 @@ open class GenericPickerOfColor : UIView {
         }
         
         public var operations                   = Operations()
+        
+        public struct Stripes {
+            public var show                     = true
+            
+            public struct Entry {
+                public var background           = UIColor.clear
+            }
+            
+            public var odd                      = Entry(background: UIColor(white:0,alpha:0.01))
+            public var even                     = Entry(background: UIColor(white:1,alpha:0.01))
+        }
+        
+        public var stripes                      = Stripes()
     }
     
     public var configuration                    = Configuration()
     
     internal class UIViewTray : UIView {
         let titleLabels     : [UILabelWithInsets]
-        let contentView     : UIView
+        let view            : UIView
         
-        internal init(contentView   : UIView,
-                      margins insets: UIEdgeInsets = UIEdgeInsets(),
-                      titleMargin   : CGFloat,
-                      titleLabel    : UILabelWithInsets) {
-            self.contentView = contentView
+        internal static func contentView(of:AnyObject) -> UIView? {
+            if let tray = of as? UIViewTray {
+                return tray.view
+            }
+            return nil
+        }
+        
+        internal init(contentView view  : UIView,
+                      margins insets    : UIEdgeInsets = UIEdgeInsets(),
+                      titleMargin       : CGFloat,
+                      titleLabel        : UILabelWithInsets) {
+            self.view = view
             self.titleLabels = [titleLabel]
             
             super.init(frame:.zero)
@@ -169,11 +190,11 @@ open class GenericPickerOfColor : UIView {
             self.build(margins: insets, titleMargin: titleMargin, titleLabels: [(titleLabel,self.centerXAnchor)])
         }
         
-        internal init(contentView   : UIView,
-                      margins insets: UIEdgeInsets = UIEdgeInsets(),
-                      titleMargin   : CGFloat,
-                      titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
-            self.contentView = contentView
+        internal init(contentView view  : UIView,
+                      margins insets    : UIEdgeInsets = UIEdgeInsets(),
+                      titleMargin       : CGFloat,
+                      titleLabels       : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
+            self.view = view
             self.titleLabels = titleLabels.map { $0.label }
             
             super.init(frame:.zero)
@@ -181,28 +202,29 @@ open class GenericPickerOfColor : UIView {
             self.build(margins: insets, titleMargin: titleMargin, titleLabels: titleLabels)
         }
 
-        internal init(contentView:UIView, margins insets:UIEdgeInsets = UIEdgeInsets()) {
-            self.contentView = contentView
+        internal init(contentView view  : UIView,
+                      margins insets    : UIEdgeInsets = UIEdgeInsets()) {
+            self.view = view
             self.titleLabels = []
             
             super.init(frame:.zero)
             
-            self.addSubview(contentView)
+            self.addSubview(view)
             
             self.translatesAutoresizingMaskIntoConstraints=false
             
-            contentView.translatesAutoresizingMaskIntoConstraints=false
-            contentView.constrainToSuperview(withInsets:insets)
+            view.translatesAutoresizingMaskIntoConstraints=false
+            view.constrainToSuperview(withInsets:insets)
         }
         
         private func build(margins insets: UIEdgeInsets = UIEdgeInsets(),
                            titleMargin   : CGFloat,
                            titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
             
-            self.addSubview(contentView)
+            self.addSubview(view)
             self.translatesAutoresizingMaskIntoConstraints=false
             
-            contentView.translatesAutoresizingMaskIntoConstraints=false
+            view.translatesAutoresizingMaskIntoConstraints=false
             
             for titleLabel in titleLabels {
                 self.addSubview(titleLabel.label)
@@ -216,14 +238,14 @@ open class GenericPickerOfColor : UIView {
             }
             
             if let first = titleLabels.first {
-                contentView.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
+                view.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
             }
             else {
-                contentView.constrainTopToSuperviewTop(withMargin: insets.top)
+                view.constrainTopToSuperviewTop(withMargin: insets.top)
             }
-            contentView.constrainLeftToSuperviewLeft(withMargin: insets.left)
-            contentView.constrainRightToSuperviewRight(withMargin: insets.right)
-            contentView.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
+            view.constrainLeftToSuperviewLeft(withMargin: insets.left)
+            view.constrainRightToSuperviewRight(withMargin: insets.right)
+            view.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -245,7 +267,7 @@ open class GenericPickerOfColor : UIView {
         }
         else {
             result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(bottom:configuration.margin))
+                                margins     : UIEdgeInsets())
         }
         
         self.addSubview(result)
@@ -277,7 +299,7 @@ open class GenericPickerOfColor : UIView {
         }
         else {
             result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(bottom:configuration.margin))
+                                margins     : UIEdgeInsets())
         }
         
         self.addSubview(result)
@@ -670,7 +692,7 @@ open class GenericPickerOfColor : UIView {
             }
             self.addArrangedSubview(UIView())
             
-            self.heightAnchor.constraint(equalToConstant: configuration.side+8).isActive=true
+            self.heightAnchor.constraint(equalToConstant: configuration.side).isActive=true
         }
         
         private func configure(button:UIButtonWithCenteredCircle, title:String, configuration:Configuration.Operations, insets:UIEdgeInsets = UIEdgeInsets()) {
@@ -1004,7 +1026,7 @@ open class GenericPickerOfColor : UIView {
     public var componentDisplays    : [ComponentDisplay]        = []
     public var componentStorage     : [ComponentStorage]        = []
     public var components           : [UIView]                  {
-        return subviews.filter { $0 is UIViewTray }.map { ($0 as! UIViewTray).contentView }
+        return subviews.filter { $0 is UIViewTray }.map { ($0 as! UIViewTray).view }
     }
     
     public private(set) var color   : UIColor                   = .white
@@ -1817,7 +1839,7 @@ open class GenericPickerOfColor : UIView {
     
     
     
-    open func set(color:UIColor, dragging:Bool, animated:Bool) {
+    open func set       (color:UIColor, dragging:Bool, animated:Bool) {
         self.color = color
         self.colorArrayManager.colorSet(color)
         componentSliders.forEach { $0.update(color:color, animated:animated) }
@@ -1825,7 +1847,7 @@ open class GenericPickerOfColor : UIView {
         handlerForColor?(color,dragging,animated)
     }
     
-    open func clear(withLastColorArray array:[UIColor] = [.white], lastColorIndex index:Int = 0) {
+    open func clear     (withLastColorArray array:[UIColor] = [.white], lastColorIndex index:Int = 0) {
         self.removeAllSubviews()
         self.removeAllConstraints()
         self.componentSliders = []
@@ -1838,12 +1860,28 @@ open class GenericPickerOfColor : UIView {
         print("color-array-limit :\(colorArrayManager.colorLimit)")
     }
     
-    open func build() {
+    open func build     () {
         
         if let first = self.subviews.first, let last = self.subviews.last {
             
             self.translatesAutoresizingMaskIntoConstraints=false
             
+            // stripes
+            for i in 0..<subviews.count {
+                subviews[i].isOpaque = true
+                subviews[i].backgroundColor = i.isOdd ? configuration.stripes.odd.background : configuration.stripes.even.background
+            }
+
+            // margins
+            for subview in subviews {
+                let marginView = UIView(frame: .zero)
+                self.insertSubview(marginView, aboveSubview: subview)
+                marginView.backgroundColor = .red
+                marginView.isOpaque = true
+                marginView.translatesAutoresizingMaskIntoConstraints=false
+                marginView.heightAnchor.constraint(equalToConstant: configuration.margin).isActive=true
+            }
+
             // tie subviews together
             self.subviews.adjacent { a,b in
                 b.topAnchor.constraint(equalTo: a.bottomAnchor).isActive=true
@@ -1861,9 +1899,9 @@ open class GenericPickerOfColor : UIView {
             self.bottomAnchor.constraint(equalTo: last.bottomAnchor).isActive=true
         }
 
-        self.componentSliders   = self.subviews.filter { $0 is UIViewTray && ($0 as! UIViewTray).contentView is ComponentSlider }.map { ($0 as! UIViewTray).contentView as! ComponentSlider }
-        self.componentDisplays  = self.subviews.filter { $0 is UIViewTray && ($0 as! UIViewTray).contentView is ComponentDisplay }.map { ($0 as! UIViewTray).contentView as! ComponentDisplay }
-        self.componentStorage   = self.subviews.filter { $0 is UIViewTray && ($0 as! UIViewTray).contentView is ComponentStorage }.map { ($0 as! UIViewTray).contentView as! ComponentStorage }
+        self.componentSliders   = self.subviews.filter { UIViewTray.contentView(of: $0) is ComponentSlider }.map { UIViewTray.contentView(of: $0) as! ComponentSlider }
+        self.componentDisplays  = self.subviews.filter { UIViewTray.contentView(of: $0) is ComponentDisplay }.map { UIViewTray.contentView(of: $0) as! ComponentDisplay }
+        self.componentStorage   = self.subviews.filter { UIViewTray.contentView(of: $0) is ComponentStorage }.map { UIViewTray.contentView(of: $0) as! ComponentStorage }
         
         // update color array limit to highest limit supported
         self.colorArrayManager.colorLimit = self.componentDisplays.map{ $0.colorLimit }.reduce(0){ max($0,$1) }
