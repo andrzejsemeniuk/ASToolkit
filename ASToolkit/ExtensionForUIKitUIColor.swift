@@ -372,6 +372,29 @@ extension UIColor {
 }
 
 
+extension UIColor {
+    
+    open func withHue(_ value:CGFloat) -> UIColor {
+        var HSBA = self.HSBA
+        HSBA.hue = value
+        return UIColor(HSBA:HSBA)
+    }
+    
+    open func withSaturation(_ value:CGFloat) -> UIColor {
+        var HSBA = self.HSBA
+        HSBA.saturation = value
+        return UIColor(HSBA:HSBA)
+    }
+    
+    open func withBrightness(_ value:CGFloat) -> UIColor {
+        var HSBA = self.HSBA
+        HSBA.brightness = value
+        return UIColor(HSBA:HSBA)
+    }
+    
+}
+
+
 
 extension UIColor {
     
