@@ -133,7 +133,7 @@ open class GenericPickerOfColor : UIView {
             public struct ButtonState {
                 public var background           = UIColor.black
                 public var foreground           = UIColor.white
-                public var font                 = (UIFont.defaultFontForLabel + 18)
+                public var font                 = (UIFont.defaultFontForLabel + 11)
             }
             
             public var buttonStates             : [UIControlState:ButtonState] = [
@@ -679,21 +679,21 @@ open class GenericPickerOfColor : UIView {
             
             button.frame        = CGRect(side:configuration.side)
             
-            button.circle(for: .normal).fillColor       = colorFill.cgColor
-            button.circle(for: .normal).strokeColor     = colorStroke.cgColor
-            button.circle(for: .selected).fillColor     = UIColor.red.cgColor
-            button.circle(for: .selected).strokeColor   = colorStroke.cgColor
-            button.circle(for: .disabled).fillColor     = colorFill.cgColor
-            button.circle(for: .disabled).strokeColor   = colorStroke.cgColor
+            button.circle(for: .normal).fillColor       = configuration.buttonStates[.normal]?.background.cgColor
+            button.circle(for: .normal).strokeColor     = UIColor.clear.cgColor // configuration.buttonStates[.normal]?.foreground.cgColor
+            button.circle(for: .selected).fillColor     = configuration.buttonStates[.selected]?.background.cgColor
+            button.circle(for: .selected).strokeColor   = UIColor.clear.cgColor // configuration.buttonStates[.selected]?.foreground.cgColor
+            button.circle(for: .disabled).fillColor     = configuration.buttonStates[.disabled]?.background.cgColor
+            button.circle(for: .disabled).strokeColor   = UIColor.clear.cgColor // configuration.buttonStates[.disabled]?.foreground.cgColor
             
             for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
                 button.circle(for: state).radius        = configuration.side/2.0
                 button.circle(for: state).lineWidth     = 0.5
             }
             
-            button.setAttributedTitle(title | UIColor.white, for: .normal)
-            button.setAttributedTitle(title | UIColor.white, for: .selected)
-            button.setAttributedTitle(title | UIColor.white, for: .disabled)
+            button.setAttributedTitle(title | configuration.buttonStates[.normal]!.foreground | configuration.buttonStates[.normal]!.font, for: .normal)
+            button.setAttributedTitle(title | configuration.buttonStates[.selected]!.foreground | configuration.buttonStates[.selected]!.font, for: .selected)
+            button.setAttributedTitle(title | configuration.buttonStates[.disabled]!.foreground | configuration.buttonStates[.disabled]!.font, for: .disabled)
             
             button.titleEdgeInsets = insets
             
