@@ -60,6 +60,7 @@
 		5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */; };
 		5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C80C1F5A0FD100C5F6E6 /* Logic.swift */; };
 		57851D491F4B9C8900AEFA4B /* ExtensionForUIKitUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */; };
+		578872B01F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578872AF1F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift */; };
 		578F25F61F61EC24008C7C8C /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F25F51F61EC24008C7C8C /* Weak.swift */; };
 		5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */; };
 		5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48B1F3100CD002739A6 /* GenericSetting.swift */; };
@@ -177,6 +178,7 @@
 		5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolKeyable.swift; sourceTree = "<group>"; };
 		5778C80C1F5A0FD100C5F6E6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 		57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIImage.swift; sourceTree = "<group>"; };
+		578872AF1F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIControlState.swift; sourceTree = "<group>"; };
 		578F25F51F61EC24008C7C8C /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericManagerOfSettings.swift; sourceTree = "<group>"; };
 		5791F48B1F3100CD002739A6 /* GenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericSetting.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */,
 				570FC28B1F1124A300FEAC03 /* ExtensionForUIKitUIButton.swift */,
 				570FC28C1F1124A300FEAC03 /* ExtensionForUIKitUIColor.swift */,
+				578872AF1F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift */,
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIKitUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIKitUIFont.swift */,
 				57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */,
@@ -580,6 +583,7 @@
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
 				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
+				578872B01F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,
 				570FC2BD1F1124A300FEAC03 /* ExtensionForSwiftDouble.swift in Sources */,
 				570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */,

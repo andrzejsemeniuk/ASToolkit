@@ -102,6 +102,21 @@ open class GenericPickerOfColor : UIView {
             public var insets                   = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
             public var marginOnTop              = CGFloat(2)
             public var marginOnBottom           = CGFloat(0)
+            
+            public func apply                   (to:UILabelWithInsets, withTitle title:String) {
+                to.tag              = Tag.title.rawValue
+                to.textAlignment    = .center
+                var text            = title
+                if uppercase {
+                    text = text.uppercased()
+                }
+                if tweened {
+                    text = text.tweened(with: " ")
+                }
+                to.attributedText   = text | color | font
+                to.backgroundColor  = background
+                to.insets           = insets
+            }
         }
         
         public var title                        = Title()
@@ -118,14 +133,18 @@ open class GenericPickerOfColor : UIView {
             public struct ButtonState {
                 public var background           = UIColor.black
                 public var foreground           = UIColor.white
-                public var font                 = (UIFont.defaultFontForLabel + 11)
+                public var font                 = (UIFont.defaultFontForLabel + 18)
             }
             
-            public var buttonStateNormal        = ButtonState()
-            public var buttonStateSelected      = ButtonState()
-            
+            public var buttonStates             : [UIControlState:ButtonState] = [
+                UIControlState.normal           : ButtonState(),
+                UIControlState.selected         : ButtonState(),
+                UIControlState.disabled         : ButtonState()
+            ]
+
             public init() {
-                buttonStateSelected.background  = .red
+                buttonStates[.selected]?.background = .red
+                buttonStates[.disabled]?.background = .gray
             }
         }
         
@@ -147,32 +166,42 @@ open class GenericPickerOfColor : UIView {
             
             super.init(frame:.zero)
 
-            self.addSubview(titleLabel)
-            self.addSubview(contentView)
-            
-            self.translatesAutoresizingMaskIntoConstraints=false
-            contentView.translatesAutoresizingMaskIntoConstraints=false
-            titleLabel.translatesAutoresizingMaskIntoConstraints=false
-            
-            titleLabel.constrainCenterXToSuperview()
-            titleLabel.constrainTopToSuperviewTop(withMargin:titleMargin)
-            
-            contentView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: insets.top).isActive=true
-            contentView.constrainLeftToSuperviewLeft(withMargin: insets.left)
-            contentView.constrainRightToSuperviewRight(withMargin: insets.right)
-            contentView.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
+            self.build(margins: insets, titleMargin: titleMargin, titleLabels: [(titleLabel,self.centerXAnchor)])
         }
         
         internal init(contentView   : UIView,
                       margins insets: UIEdgeInsets = UIEdgeInsets(),
                       titleMargin   : CGFloat,
-                      titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutAnchor<NSLayoutXAxisAnchor>)]) {
+                      titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
             self.contentView = contentView
             self.titleLabels = titleLabels.map { $0.label }
             
             super.init(frame:.zero)
             
+            self.build(margins: insets, titleMargin: titleMargin, titleLabels: titleLabels)
+        }
+
+        internal init(contentView:UIView, margins insets:UIEdgeInsets = UIEdgeInsets()) {
+            self.contentView = contentView
+            self.titleLabels = []
+            
+            super.init(frame:.zero)
+            
             self.addSubview(contentView)
+            
+            self.translatesAutoresizingMaskIntoConstraints=false
+            
+            contentView.translatesAutoresizingMaskIntoConstraints=false
+            contentView.constrainToSuperview(withInsets:insets)
+        }
+        
+        private func build(margins insets: UIEdgeInsets = UIEdgeInsets(),
+                           titleMargin   : CGFloat,
+                           titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
+            
+            self.addSubview(contentView)
+            self.translatesAutoresizingMaskIntoConstraints=false
+            
             contentView.translatesAutoresizingMaskIntoConstraints=false
             
             for titleLabel in titleLabels {
@@ -180,12 +209,12 @@ open class GenericPickerOfColor : UIView {
                 self.sendSubview(toBack: titleLabel.label)
                 titleLabel.label.translatesAutoresizingMaskIntoConstraints=false
             }
-
+            
             for titleLabel in titleLabels {
                 titleLabel.label.centerXAnchor.constraint(equalTo: titleLabel.anchor).isActive=true
                 titleLabel.label.constrainTopToSuperviewTop(withMargin:titleMargin)
             }
-
+            
             if let first = titleLabels.first {
                 contentView.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
             }
@@ -195,18 +224,6 @@ open class GenericPickerOfColor : UIView {
             contentView.constrainLeftToSuperviewLeft(withMargin: insets.left)
             contentView.constrainRightToSuperviewRight(withMargin: insets.right)
             contentView.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
-        }
-        
-        internal init(contentView:UIView, margins insets:UIEdgeInsets = UIEdgeInsets()) {
-            self.contentView = contentView
-            self.titleLabels = []
-            
-            super.init(frame:.zero)
-
-            self.addSubview(contentView)
-
-            contentView.translatesAutoresizingMaskIntoConstraints=false
-            contentView.constrainToSuperview(withInsets:insets)
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -220,18 +237,7 @@ open class GenericPickerOfColor : UIView {
         
         if configuration.title.show {
             let titleLabel              = UILabelWithInsets()
-            titleLabel.tag              = Tag.title.rawValue
-            titleLabel.textAlignment    = .center
-            var text                    = title
-            if configuration.title.uppercase {
-                text = text.uppercased()
-            }
-            if configuration.title.tweened {
-                text = text.tweened(with: " ")
-            }
-            titleLabel.attributedText   = text | configuration.title.color | configuration.title.font
-            titleLabel.backgroundColor  = configuration.title.background
-            titleLabel.insets           = configuration.title.insets
+            configuration.title.apply(to:titleLabel, withTitle:title)
             result = UIViewTray(contentView : content,
                                 margins     : UIEdgeInsets(all:0),
                                 titleMargin : configuration.title.marginOnTop,
@@ -247,29 +253,24 @@ open class GenericPickerOfColor : UIView {
         result.isOpaque = false
         
         result.translatesAutoresizingMaskIntoConstraints=false
-//        display.heightAnchor.constraint(equalToConstant: side + margin).isActive=true
         result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
         result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
         return result
     }
     
-    internal func addTray(withContentView content:UIView, titles:[(String,NSLayoutAnchor<NSLayoutXAxisAnchor>)]) -> UIViewTray {
+    internal func addTray(withContentView content:UIView, titles:[(title:String,anchor:NSLayoutXAxisAnchor)]) -> UIViewTray {
         let result : UIViewTray
         
         if configuration.title.show {
-            var titleLabels : [(UILabelWithInsets,NSLayoutAnchor<NSLayoutXAxisAnchor>)] = []
+            var titleLabels : [(UILabelWithInsets,NSLayoutXAxisAnchor)] = []
             for title in titles {
                 let titleLabel = UILabelWithInsets()
-                titleLabel.tag = Tag.title.rawValue
-                titleLabel.textAlignment = .center
-                titleLabel.attributedText = title.0 | configuration.title.color | configuration.title.font
-                titleLabel.backgroundColor = configuration.title.background
-                titleLabel.insets = configuration.title.insets
+                configuration.title.apply(to:titleLabel, withTitle:title.title)
                 titleLabels.append((titleLabel,title.1))
             }
             result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(all:0),
+                                margins     : UIEdgeInsets(),
                                 titleMargin : configuration.title.marginOnTop,
                                 titleLabels : titleLabels)
             
@@ -284,7 +285,6 @@ open class GenericPickerOfColor : UIView {
         result.isOpaque = false
         
         result.translatesAutoresizingMaskIntoConstraints=false
-        //        display.heightAnchor.constraint(equalToConstant: side + margin).isActive=true
         result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
         result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
         
@@ -422,6 +422,7 @@ open class GenericPickerOfColor : UIView {
             self.addSubview(viewFill)
             self.viewFill = viewFill
             viewFill.constrainSizeToSuperview()
+            viewFill.constrainCenterToSuperview()
             
             let viewDot = UIViewCircle(side:height*0.666)
             self.addSubviewCentered(viewDot)
@@ -651,16 +652,14 @@ open class GenericPickerOfColor : UIView {
                 
                 switch operation {
                 case .copy      :
-//                    configure(button:data.button, title:"\u{2335}", side:side, insets: UIEdgeInsets(bottom:1))
-                    // 29C9, 2295
-                    configure(button:data.button, title:"\u{2295}", side:configuration.side, insets: UIEdgeInsets(bottom:-1))
+                    // 29C9, 2295, 2335
+                    configure(button:data.button, title:"\u{2295}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
                 case .paste     : // 29bf, 29be, 29C8
-                    configure(button:data.button, title:"\u{2298}", side:configuration.side, insets: UIEdgeInsets(bottom:-1))
-//                    data.button.transform = data.button.transform.scaledBy(x: 1, y: -1)
+                    configure(button:data.button, title:"\u{2298}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
                 case .spread    :
-                    configure(button:data.button, title:"S", side:configuration.side)
+                    configure(button:data.button, title:"S", configuration:configuration)
                 case .store     :
-                    configure(button:data.button, title:"\u{2981}", side:configuration.side)
+                    configure(button:data.button, title:"\u{2981}", configuration:configuration)
                 }
                 
                 self.addArrangedSubview(data.button)
@@ -670,13 +669,15 @@ open class GenericPickerOfColor : UIView {
                 data.button.tag = index
             }
             self.addArrangedSubview(UIView())
+            
+            self.heightAnchor.constraint(equalToConstant: configuration.side+8).isActive=true
         }
         
-        private func configure(button:UIButtonWithCenteredCircle, title:String, side:CGFloat = 36, insets:UIEdgeInsets = UIEdgeInsets()) {
+        private func configure(button:UIButtonWithCenteredCircle, title:String, configuration:Configuration.Operations, insets:UIEdgeInsets = UIEdgeInsets()) {
             let colorFill       = UIColor(white:0.3)
             let colorStroke     = UIColor(white:1,alpha:0.5)
             
-            button.frame        = CGRect(side:side)
+            button.frame        = CGRect(side:configuration.side)
             
             button.circle(for: .normal).fillColor       = colorFill.cgColor
             button.circle(for: .normal).strokeColor     = colorStroke.cgColor
@@ -686,7 +687,7 @@ open class GenericPickerOfColor : UIView {
             button.circle(for: .disabled).strokeColor   = colorStroke.cgColor
             
             for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
-                button.circle(for: state).radius        = side/2.0
+                button.circle(for: state).radius        = configuration.side/2.0
                 button.circle(for: state).lineWidth     = 0.5
             }
             
@@ -694,9 +695,9 @@ open class GenericPickerOfColor : UIView {
             button.setAttributedTitle(title | UIColor.white, for: .selected)
             button.setAttributedTitle(title | UIColor.white, for: .disabled)
             
-            button.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
-            
             button.titleEdgeInsets = insets
+            
+            button.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
         }
         
         open func tapped(_ control:UIButton) {
@@ -775,6 +776,16 @@ open class GenericPickerOfColor : UIView {
             }
         }
         
+        private var radius      : CGFloat = 16
+        
+        private var dx          : CGFloat {
+            return (UIScreen.main.bounds.width - self.alignmentRectInsets.left - self.alignmentRectInsets.right) / CGFloat(1 + columns)
+        }
+        
+        private var height      : CGFloat {
+            return CGFloat(1 + rows) * dx - dx/2
+        }
+        
         func tapped(_ control:UIControl!) {
             if let button = control as? UIButtonWithCenteredCircle, let color = button.circle(for: .normal).fillColor {
                 handlerForTap?(UIColor(cgColor:color))
@@ -784,6 +795,7 @@ open class GenericPickerOfColor : UIView {
         public func set     (radius:CGFloat, colors:[UIColor], handlerForTap:HandlerForTap? = nil) {
             
             self.handlerForTap = handlerForTap
+            self.radius = radius
             
             let side = radius*2
             
@@ -835,8 +847,6 @@ open class GenericPickerOfColor : UIView {
                 }
             }
             
-            let dx = (UIScreen.main.bounds.width - self.alignmentRectInsets.left - self.alignmentRectInsets.right) / CGFloat(1 + columns)
-            let height = CGFloat(1 + rows) * dx + alignmentRectInsets.top + alignmentRectInsets.bottom
             self.translatesAutoresizingMaskIntoConstraints=false
             if let constraint = heightConstraint {
                 self.removeConstraint(constraint)
@@ -891,11 +901,11 @@ open class GenericPickerOfColor : UIView {
         
         override open func layoutSubviews() {
             
-            let dx = (self.frame.width - self.alignmentRectInsets.left - self.alignmentRectInsets.right) / CGFloat(1 + columns)
+            let dx = self.dx
             let dy = dx
             
             let x0 = CGFloat(self.alignmentRectInsets.left + dx)
-            var y  = CGFloat(self.alignmentRectInsets.top + dy)
+            var y  = CGFloat(self.alignmentRectInsets.top + dy * 0.75)
             
             for row in buttons {
                 
@@ -1767,7 +1777,8 @@ open class GenericPickerOfColor : UIView {
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
-        
+        storage.backgroundColor = .clear
+
         return storage
     }
 
@@ -1782,6 +1793,7 @@ open class GenericPickerOfColor : UIView {
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
+        storage.backgroundColor = .clear
         
         return storage
     }
@@ -1797,7 +1809,8 @@ open class GenericPickerOfColor : UIView {
         storage.set(radius: radius, colors: colors) { [weak self] color in
             self?.set(color:color, dragging:false, animated:true)
         }
-        
+        storage.backgroundColor = .clear
+
         return storage
     }
     
