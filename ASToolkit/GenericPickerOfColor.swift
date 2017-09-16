@@ -134,7 +134,7 @@ open class GenericPickerOfColor : UIView {
             public struct ButtonState {
                 public var background           = UIColor.black
                 public var foreground           = UIColor.white
-                public var font                 = (UIFont.defaultFontForLabel + 11)
+                public var font                 = (UIFont.defaultFontForLabel + 0)
             }
             
             public var buttonStates             : [UIControlState:ButtonState] = [
@@ -690,14 +690,17 @@ open class GenericPickerOfColor : UIView {
                 
                 switch operation {
                 case .copy      :
-                    // 29C9, 2295, 2335
-                    configure(button:data.button, title:"\u{2295}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
-                case .paste     : // 29bf, 29be, 29C8
-                    configure(button:data.button, title:"\u{2298}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+                    // 29C9, 2295, 2335, 2228
+                    configure(button:data.button, title:"\u{2228}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+//                    configure(button:data.button, title:"\u{2295}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+                case .paste     : // 29bf, 29be, 29C8, 2227, 2298
+                    configure(button:data.button, title:"\u{2227}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+//                    configure(button:data.button, title:"\u{229B}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
                 case .spread    :
                     configure(button:data.button, title:"S", configuration:configuration)
-                case .store     :
-                    configure(button:data.button, title:"\u{2981}", configuration:configuration)
+                case .store     : // 2981, 2609, 2680, 2299, 22A1
+//                    configure(button:data.button, title:"\u{2981}", configuration:configuration)
+                    configure(button:data.button, title:"\u{22A1}", configuration:configuration)
                 }
                 
                 self.addArrangedSubview(data.button)
@@ -1883,21 +1886,11 @@ open class GenericPickerOfColor : UIView {
             self.translatesAutoresizingMaskIntoConstraints=false
             
             // stripes
-            for i in 0..<subviews.count {
-                subviews[i].isOpaque = true
-                subviews[i].backgroundColor = i.isOdd ? configuration.stripes.odd.background : configuration.stripes.even.background
-            }
-
-            // margins
-            if false {
-            for subview in subviews {
-                let marginView = UIView(frame: .zero)
-                self.insertSubview(marginView, aboveSubview: subview)
-                marginView.backgroundColor = .red
-                marginView.isOpaque = true
-                marginView.translatesAutoresizingMaskIntoConstraints=false
-                marginView.heightAnchor.constraint(equalToConstant: configuration.margin).isActive=true
-            }
+            if configuration.stripes.show {
+                for i in 0..<subviews.count {
+                    subviews[i].isOpaque = true
+                    subviews[i].backgroundColor = i.isOdd ? configuration.stripes.odd.background : configuration.stripes.even.background
+                }
             }
 
             // tie subviews together
