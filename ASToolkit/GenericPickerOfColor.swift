@@ -1040,7 +1040,7 @@ open class GenericPickerOfColor : UIView {
     
     // MARK: - Data
     
-    public let colorArrayManager                                       = ColorArrayManager()
+    public let colorArrayManager                                = ColorArrayManager()
     public var componentSliders     : [ComponentSlider]         = []
     public var componentDisplays    : [ComponentDisplay]        = []
     public var componentStorage     : [ComponentStorage]        = []
@@ -1049,6 +1049,9 @@ open class GenericPickerOfColor : UIView {
     }
     
     public private(set) var color   : UIColor                   = .white
+    
+    /// This handler is called whenever the color changes
+    public var handlerForColor      : ((_ color:UIColor,_ dragging:Bool,_ animated:Bool)->())?
     
     // MARK: - Initializers
     
@@ -1922,9 +1925,6 @@ open class GenericPickerOfColor : UIView {
         self.componentDisplays.forEach { $0.updateFromColor() }
     }
         
-    /// This handler is called whenever the color changes
-    public var handlerForColor  : ((_ color:UIColor,_ dragging:Bool,_ animated:Bool)->())?
-    
     
     static public func create           (withComponents components:[Component]) -> GenericPickerOfColor {
         let result = GenericPickerOfColor()

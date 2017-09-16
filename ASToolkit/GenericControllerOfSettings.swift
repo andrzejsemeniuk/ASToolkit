@@ -922,8 +922,8 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         let scroll                                  = UIScrollView()
                         
-                        scroll.contentInset.top                     = 4
-                        scroll.contentInset.bottom                  = 4
+                        scroll.contentInset.top                     = 0
+                        scroll.contentInset.bottom                  = 0
                         scroll.showsVerticalScrollIndicator         = false
                         scroll.showsHorizontalScrollIndicator       = false
                         
@@ -948,8 +948,9 @@ open class GenericControllerOfSettings : UITableViewController
                         
                         picker.constrainTopLeftCornerToSuperview()
                         picker.constrainWidthToSuperview()
-                        picker.set(color: color0, dragging: false, animated: true)
-
+                        picker.set(color: color0, dragging: false, animated: false)
+                        
+                        // IMPORTANT: DO NET SET handlerForColor
 //                        picker.handlerForColor = { [weak picker] color,dragging,animated in
 //                            if picker != nil, !dragging, !animated {
 //                                action?(color)
@@ -957,6 +958,11 @@ open class GenericControllerOfSettings : UITableViewController
 //                        }
                         
                         self.navigationController?.pushViewController(vc, animated: true)
+                        
+                        // hack: but it works -- need to set scroll content size, but can only do that once picker is laid out
+                        DispatchQueue.main.async {
+                            scroll.contentSize = picker.bounds.size
+                        }
                     }
                 }
         }
