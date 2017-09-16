@@ -100,8 +100,8 @@ open class GenericPickerOfColor : UIView {
             public var background               = UIColor.yellow
             public var font                     = UIFont.init(name:"GillSans", size:UIFont.smallSystemFontSize) ?? UIFont.defaultFontForLabel
             public var insets                   = UIEdgeInsets(top:1,left:4,bottom:1,right:4)
-            public var marginOnTop              = CGFloat(2)
-            public var marginOnBottom           = CGFloat(0)
+            public var marginAbove              = CGFloat(8)
+            public var marginBelow              = CGFloat(2)
             
             public func apply                   (to:UILabelWithInsets, withTitle title:String) {
                 to.tag              = Tag.title.rawValue
@@ -122,7 +122,7 @@ open class GenericPickerOfColor : UIView {
         public var title                        = Title()
         
         public struct Slider {
-            public var margin                   = CGFloat(8)
+            public var margin                   = CGFloat(0)
             public var side                     = CGFloat(32)
         }
         
@@ -180,26 +180,34 @@ open class GenericPickerOfColor : UIView {
         
         internal init(contentView view  : UIView,
                       margins insets    : UIEdgeInsets = UIEdgeInsets(),
-                      titleMargin       : CGFloat,
+                      titleMarginAbove  : CGFloat,
+                      titleMarginBelow  : CGFloat,
                       titleLabel        : UILabelWithInsets) {
             self.view = view
             self.titleLabels = [titleLabel]
             
             super.init(frame:.zero)
 
-            self.build(margins: insets, titleMargin: titleMargin, titleLabels: [(titleLabel,self.centerXAnchor)])
+            self.build(margins: insets,
+                       titleMarginAbove: titleMarginAbove,
+                       titleMarginBelow: titleMarginBelow,
+                       titleLabels: [(titleLabel,view)])
         }
         
         internal init(contentView view  : UIView,
                       margins insets    : UIEdgeInsets = UIEdgeInsets(),
-                      titleMargin       : CGFloat,
-                      titleLabels       : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
+                      titleMarginAbove  : CGFloat,
+                      titleMarginBelow  : CGFloat,
+                      titleLabels       : [(label:UILabelWithInsets,guide:UIView)]) {
             self.view = view
             self.titleLabels = titleLabels.map { $0.label }
             
             super.init(frame:.zero)
             
-            self.build(margins: insets, titleMargin: titleMargin, titleLabels: titleLabels)
+            self.build(margins: insets,
+                       titleMarginAbove: titleMarginAbove,
+                       titleMarginBelow: titleMarginBelow,
+                       titleLabels: titleLabels)
         }
 
         internal init(contentView view  : UIView,
@@ -217,9 +225,10 @@ open class GenericPickerOfColor : UIView {
             view.constrainToSuperview(withInsets:insets)
         }
         
-        private func build(margins insets: UIEdgeInsets = UIEdgeInsets(),
-                           titleMargin   : CGFloat,
-                           titleLabels   : [(label:UILabelWithInsets,anchor:NSLayoutXAxisAnchor)]) {
+        private func build(margins insets     : UIEdgeInsets = UIEdgeInsets(),
+                           titleMarginAbove   : CGFloat,
+                           titleMarginBelow   : CGFloat,
+                           titleLabels        : [(label:UILabelWithInsets,guide:UIView)]) {
             
             self.addSubview(view)
             self.translatesAutoresizingMaskIntoConstraints=false
@@ -233,12 +242,13 @@ open class GenericPickerOfColor : UIView {
             }
             
             for titleLabel in titleLabels {
-                titleLabel.label.centerXAnchor.constraint(equalTo: titleLabel.anchor).isActive=true
-                titleLabel.label.constrainTopToSuperviewTop(withMargin:titleMargin)
+                titleLabel.label.centerXAnchor.constraint(equalTo: titleLabel.guide.centerXAnchor).isActive=true
+                titleLabel.label.constrainTopToSuperviewTop(withMargin:titleMarginAbove)
+                titleLabel.label.bottomAnchor.constraint(equalTo: titleLabel.guide.topAnchor, constant: -titleMarginBelow).isActive=true
             }
             
             if let first = titleLabels.first {
-                view.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
+//                view.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
             }
             else {
                 view.constrainTopToSuperviewTop(withMargin: insets.top)
@@ -257,17 +267,20 @@ open class GenericPickerOfColor : UIView {
     internal func addTray(withContentView content:UIView, title:String) -> UIViewTray {
         let result : UIViewTray
         
+        let margin = configuration.margin/2
+        
         if configuration.title.show {
-            let titleLabel              = UILabelWithInsets()
+            let titleLabel = UILabelWithInsets()
             configuration.title.apply(to:titleLabel, withTitle:title)
-            result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(all:0),
-                                titleMargin : configuration.title.marginOnTop,
-                                titleLabel  : titleLabel)
+            result = UIViewTray(contentView      : content,
+                                margins          : UIEdgeInsets(bottom:-margin),
+                                titleMarginAbove : configuration.title.marginAbove + margin,
+                                titleMarginBelow : configuration.title.marginBelow,
+                                titleLabel       : titleLabel)
         }
         else {
             result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets())
+                                margins     : UIEdgeInsets(top:margin, bottom:-margin))
         }
         
         self.addSubview(result)
@@ -281,25 +294,28 @@ open class GenericPickerOfColor : UIView {
         return result
     }
     
-    internal func addTray(withContentView content:UIView, titles:[(title:String,anchor:NSLayoutXAxisAnchor)]) -> UIViewTray {
+    internal func addTray(withContentView content:UIView, titles:[(title:String,guide:UIView)]) -> UIViewTray {
         let result : UIViewTray
         
+        let margin = configuration.margin/2
+
         if configuration.title.show {
-            var titleLabels : [(UILabelWithInsets,NSLayoutXAxisAnchor)] = []
+            var titleLabels : [(UILabelWithInsets,UIView)] = []
             for title in titles {
                 let titleLabel = UILabelWithInsets()
                 configuration.title.apply(to:titleLabel, withTitle:title.title)
-                titleLabels.append((titleLabel,title.1))
+                titleLabels.append((titleLabel,title.guide))
             }
-            result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(),
-                                titleMargin : configuration.title.marginOnTop,
-                                titleLabels : titleLabels)
+            result = UIViewTray(contentView      : content,
+                                margins          : UIEdgeInsets(bottom:-margin),
+                                titleMarginAbove : configuration.title.marginAbove + margin,
+                                titleMarginBelow : configuration.title.marginBelow,
+                                titleLabels      : titleLabels)
             
         }
         else {
             result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets())
+                                margins     : UIEdgeInsets(top:margin, bottom:-margin))
         }
         
         self.addSubview(result)
@@ -1000,7 +1016,7 @@ open class GenericPickerOfColor : UIView {
             builder < "V:|-(>=\(margin))-[rightView(\(side))]-(\(margin))-|"
             builder < "V:|-(>=\(margin))-[slider(\(side))]-(\(margin))-|"
 
-//            builder < "V:[self(\(side+marginOnTop+marginOnBottom))]" // not needed
+//            builder < "V:[self(\(side+marginAbove+marginBelow))]" // not needed
             
             builder.activate()
         }
@@ -1046,7 +1062,7 @@ open class GenericPickerOfColor : UIView {
     
     // MARK: - Components
     
-    public func addTitle(to:UIView, marginOnTop:CGFloat = 0, title:NSAttributedString?) -> UILabelWithInsets? {
+    public func addTitle(to:UIView, marginAbove:CGFloat = 0, title:NSAttributedString?) -> UILabelWithInsets? {
         
         guard let title = title else { return nil }
         
@@ -1066,7 +1082,7 @@ open class GenericPickerOfColor : UIView {
         to.sendSubview(toBack: label)
         
         label.constrainCenterXToSuperview()
-        label.constrainTopToSuperviewTop(withMargin:marginOnTop)
+        label.constrainTopToSuperviewTop(withMargin:marginAbove)
         
         return label
     }
@@ -1782,7 +1798,7 @@ open class GenericPickerOfColor : UIView {
         display.build(withConfiguration: configuration.operations)
         
         let tray = addTray(withContentView  : display,
-                           titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0?.centerXAnchor ?? self.centerXAnchor }))
+                           titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0! as UIView }))
 
         
         return display
@@ -1873,6 +1889,7 @@ open class GenericPickerOfColor : UIView {
             }
 
             // margins
+            if false {
             for subview in subviews {
                 let marginView = UIView(frame: .zero)
                 self.insertSubview(marginView, aboveSubview: subview)
@@ -1880,6 +1897,7 @@ open class GenericPickerOfColor : UIView {
                 marginView.isOpaque = true
                 marginView.translatesAutoresizingMaskIntoConstraints=false
                 marginView.heightAnchor.constraint(equalToConstant: configuration.margin).isActive=true
+            }
             }
 
             // tie subviews together
