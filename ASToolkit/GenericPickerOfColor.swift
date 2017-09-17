@@ -78,6 +78,23 @@ open class GenericPickerOfColor : UIView {
         
         public struct Display {
             public var height                   = CGFloat(36)
+            public var font                     = UIFont.defaultFontForLabel
+            
+            public struct Colors {
+                public var none                 = UIColor.gray
+                public var alpha                = UIColor.white
+                public var red                  = UIColor.red
+                public var green                = UIColor(hsb:[0.40,1,0.70])
+                public var blue                 = UIColor(hsb:[0.62,1,0.95])
+            }
+            
+            public var colorsBackground         = Colors()
+            public var colorsForeground         = Colors(
+                none    : .white,
+                alpha   : .gray,
+                red     : .white,
+                green   : .white,
+                blue    : .white)
         }
         
         public var display                      = Display()
@@ -367,14 +384,15 @@ open class GenericPickerOfColor : UIView {
             self.colorIndex %= colorLimit
         }
         
-        public func colorSet(_ color:UIColor) {
-            growIfNecessary(to: colorIndex)
-            self.colors[self.colorIndex] = color
-        }
-        
         public var color : UIColor {
-            growIfNecessary(to: colorIndex)
-            return colors[colorIndex]
+            get {
+                growIfNecessary(to: colorIndex)
+                return colors[colorIndex]
+            }
+            set(newValue) {
+                growIfNecessary(to: colorIndex)
+                self.colors[self.colorIndex] = newValue
+            }
         }
         
         public func color(at:Int) -> UIColor {
@@ -592,15 +610,20 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open class ComponentDisplayValueAsHexadecimal : ComponentDisplay {
+    open class ComponentDisplayValueRGBAAsHexadecimal : ComponentDisplay {
         
         public var colorified = true
+        
+        public var configuration    : Configuration.Display
         
         public let text = {
             return UILabel()
         }()
         
-        public init(height: CGFloat, colorArrayManager:ColorArrayManager) {
+        public init(height: CGFloat, configuration:Configuration.Display, colorArrayManager:ColorArrayManager) {
+            
+            self.configuration = configuration
+            
             super.init(height:height, colorLimit:2, colorArrayManager:colorArrayManager)
             
             self.addSubview(self.text)
@@ -625,28 +648,138 @@ open class GenericPickerOfColor : UIView {
         
         override open func updateFromColor() {
             super.updateFromColor()
-            let font    = text.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+            let font    = configuration.font
             let hex     = colorArrayManager.color.representationOfRGBAasHexadecimal
             if colorified {
                 var representation = NSAttributedString.init()
-                representation += "0x" | font | UIColor.black
+                representation += "0x" | font
                 representation += hex[0] | [
-                    NSBackgroundColorAttributeName      : UIColor.red
-                    ] | font | UIColor.white
+                    NSBackgroundColorAttributeName      : configuration.colorsBackground.red
+                    ] | font | configuration.colorsForeground.red
                 representation += hex[1] | [
-                    NSBackgroundColorAttributeName      : UIColor(hsb:[0.3,1,0.7])
-                    ] | font | UIColor.white
+                    NSBackgroundColorAttributeName      : configuration.colorsBackground.green // UIColor(hsb:[0.3,1,0.7])
+                    ] | font | configuration.colorsForeground.green
                 representation += hex[2] | [
-                    NSBackgroundColorAttributeName      : UIColor(hsb:[0.61,1,1])
-                    ] | font | UIColor.white
+                    NSBackgroundColorAttributeName      : configuration.colorsBackground.blue // UIColor(hsb:[0.61,1,1])
+                    ] | font | configuration.colorsForeground.blue
                 representation += hex[3] | [
-                    NSBackgroundColorAttributeName      : UIColor(white:0.6)
-                    ] | font | UIColor.white
+                    NSBackgroundColorAttributeName      : configuration.colorsBackground.alpha // UIColor(white:0.6)
+                    ] | font | configuration.colorsForeground.alpha
                 self.text.attributedText = representation
             }
             else {
-                self.text.attributedText = "0x\(hex.joined())" | UIColor.black | font
+                self.text.backgroundColor = configuration.colorsBackground.none
+                self.text.attributedText = "0x\(hex.joined())" | configuration.colorsForeground.none | font
             }
+        }
+    }
+    
+    open class ComponentDisplayValueRGB : ComponentDisplay, UITextFieldDelegate {
+        
+        public var colorified = true
+        
+        public var configuration    : Configuration.Display
+        
+        public let fieldR = {
+            return UITextField()
+        }()
+        public let fieldG = {
+            return UITextField()
+        }()
+        public let fieldB = {
+            return UITextField()
+        }()
+
+        public let stack = {
+            return UIStackView()
+        }()
+        
+        public init(height: CGFloat, configuration:Configuration.Display, colorArrayManager:ColorArrayManager) {
+            
+            self.configuration = configuration
+            
+            super.init(height:height, colorLimit:1, colorArrayManager:colorArrayManager)
+            
+            self.addSubview(stack)
+            stack.constrainToSuperview()
+            
+            stack.axis          = .horizontal
+            stack.distribution  = .equalCentering
+            stack.alignment     = .center
+            
+            stack.addArrangedSubview(UIView())
+            for field in [fieldR,fieldG,fieldB] {
+                field.text = "0.000"
+                field.textColor = .white
+                field.backgroundColor = .gray //UIColor(white:0,alpha:0.1)
+                field.textAlignment = .center
+                field.sizeToFit()
+                stack.addArrangedSubview(field)
+                
+                field.delegate = self
+            }
+            stack.addArrangedSubview(UIView())
+
+            super.addTap()
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func tapped() {
+            colorified.flip()
+            self.updateFromColor()
+        }
+        
+        open func textFieldDidEndEditing(_ textField: UITextField) {
+            switch textField {
+            case fieldR:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    colorArrayManager.color = colorArrayManager.color.withRed(value)
+                }
+            case fieldG:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    colorArrayManager.color = colorArrayManager.color.withGreen(value)
+                }
+            case fieldB:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    colorArrayManager.color = colorArrayManager.color.withBlue(value)
+                }
+            default: break
+            }
+        }
+        
+        override open func updateFromColor() {
+            
+            super.updateFromColor()
+            
+            let RGBA = colorArrayManager.color.RGBA
+            
+            fieldR.font = configuration.font
+            fieldG.font = configuration.font
+            fieldB.font = configuration.font
+
+            if colorified {
+                fieldR.backgroundColor  = configuration.colorsBackground.red
+                fieldG.backgroundColor  = configuration.colorsBackground.green
+                fieldB.backgroundColor  = configuration.colorsBackground.blue
+                fieldR.textColor        = configuration.colorsForeground.red
+                fieldG.textColor        = configuration.colorsForeground.green
+                fieldB.textColor        = configuration.colorsForeground.blue
+            }
+            else {
+                fieldR.backgroundColor  = configuration.colorsBackground.none
+                fieldG.backgroundColor  = configuration.colorsBackground.none
+                fieldB.backgroundColor  = configuration.colorsBackground.none
+                fieldR.textColor        = configuration.colorsForeground.none
+                fieldG.textColor        = configuration.colorsForeground.none
+                fieldB.textColor        = configuration.colorsForeground.none
+            }
+            
+            fieldR.text = String.init(format: "%1.3f", RGBA.red)
+            fieldG.text = String.init(format: "%1.3f", RGBA.green)
+            fieldB.text = String.init(format: "%1.3f", RGBA.blue)
         }
     }
     
@@ -1786,11 +1919,23 @@ open class GenericPickerOfColor : UIView {
         return display
     }
     
-    open func addComponentDisplayValueAsHexadecimal (title:String, height side:CGFloat = 32) -> ComponentDisplayValueAsHexadecimal {
+    open func addComponentDisplayValueRGBAAsHexadecimal (title:String, height side:CGFloat = 32) -> ComponentDisplayValueRGBAAsHexadecimal {
         
-        let display = ComponentDisplayValueAsHexadecimal(height:side, colorArrayManager:self.colorArrayManager)
+        let display = ComponentDisplayValueRGBAAsHexadecimal(height:side, configuration:configuration.display, colorArrayManager:self.colorArrayManager)
         
         let tray = addTray(withContentView: display, title: title)
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentDisplayValueRGB (title:String, height side:CGFloat = 32) -> ComponentDisplayValueRGB {
+        
+        let display = ComponentDisplayValueRGB(height:side, configuration:configuration.display, colorArrayManager:self.colorArrayManager)
+        
+        let tray = addTray(withContentView  : display,
+                           titles           : ["red","green","blue"].zipped(with:[display.fieldR,display.fieldG,display.fieldB].map { $0 as UIView }))
 
         display.updateFromColor()
         
@@ -1863,7 +2008,7 @@ open class GenericPickerOfColor : UIView {
     
     open func set       (color:UIColor, dragging:Bool, animated:Bool) {
         self.color = color
-        self.colorArrayManager.colorSet(color)
+        self.colorArrayManager.color = color
         componentSliders.forEach { $0.update(color:color, animated:animated) }
         componentDisplays.forEach { $0.updateFromColor() }
         handlerForColor?(color,dragging,animated)
