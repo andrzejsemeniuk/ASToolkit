@@ -392,6 +392,24 @@ extension UIColor {
         return UIColor(HSBA:HSBA)
     }
     
+    open func withRed(_ value:CGFloat) -> UIColor {
+        var RGBA = self.RGBA
+        RGBA.red = value
+        return UIColor(RGBA:RGBA)
+    }
+    
+    open func withGreen(_ value:CGFloat) -> UIColor {
+        var RGBA = self.RGBA
+        RGBA.green = value
+        return UIColor(RGBA:RGBA)
+    }
+    
+    open func withBlue(_ value:CGFloat) -> UIColor {
+        var RGBA = self.RGBA
+        RGBA.blue = value
+        return UIColor(RGBA:RGBA)
+    }
+    
 }
 
 
