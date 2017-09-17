@@ -93,6 +93,10 @@ open class GenericPickerOfColor : UIView {
                     public var hue              = UIColor(hsb:[0.14,1,0.80])
                     public var saturation       = UIColor(hsb:[0.08,1,0.90])
                     public var brightness       = UIColor(hsb:[0.40,0,0.99])
+                    public var cyan             = UIColor.cyan
+                    public var magenta          = UIColor.magenta
+                    public var yellow           = UIColor.yellow
+                    public var key              = UIColor.black
                 }
                 
                 public var background     = Colors()
@@ -104,7 +108,11 @@ open class GenericPickerOfColor : UIView {
                     blue    : .white,
                     hue         : .lightGray,
                     saturation  : .lightGray,
-                    brightness  : .lightGray
+                    brightness  : .lightGray,
+                    cyan        : .black,
+                    magenta     : .white,
+                    yellow      : .black,
+                    key         : .white
                     )
             }
             
@@ -924,6 +932,125 @@ open class GenericPickerOfColor : UIView {
             fieldH.text = String.init(format: "%1.3f", HSBA.hue)
             fieldS.text = String.init(format: "%1.3f", HSBA.saturation)
             fieldB.text = String.init(format: "%1.3f", HSBA.brightness)
+        }
+    }
+    
+    open class ComponentDisplayValueCMYK : ComponentDisplayValue {
+        
+        public let fieldC = {
+            return UITextField()
+        }()
+        public let fieldM = {
+            return UITextField()
+        }()
+        public let fieldY = {
+            return UITextField()
+        }()
+        public let fieldK = {
+            return UITextField()
+        }()
+
+        public let stack = {
+            return UIStackView()
+        }()
+        
+        public init(configuration:Configuration.Display.Value, colorArrayManager:ColorArrayManager, handler:@escaping Handler) {
+            
+            stack.axis          = .horizontal
+            stack.distribution  = .equalCentering
+            stack.alignment     = .center
+            
+            stack.addArrangedSubview(UIView())
+            for field in [fieldC,fieldM,fieldY,fieldK] {
+                field.text              = "0.000"
+                field.textColor         = .white
+                field.backgroundColor   = .gray
+                field.textAlignment     = .center
+                field.sizeToFit()
+                stack.addArrangedSubview(field)
+            }
+            stack.addArrangedSubview(UIView())
+            
+            super.init(height           : fieldM.frame.height + configuration.margin*2,
+                       configuration    : configuration,
+                       colorLimit       : 1,
+                       colorArrayManager: colorArrayManager,
+                       handler          : handler)
+            
+            self.addSubview(stack)
+            
+            for field in [fieldC,fieldM,fieldY,fieldK] {
+                field.delegate = self
+            }
+            
+            stack.constrainCenterToSuperview()
+            stack.constrainWidthToSuperview()
+            
+            super.addTap()
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func textFieldDidEndEditing(_ textField: UITextField) {
+            switch textField {
+            case fieldC:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    handler(colorArrayManager.color.withCyan(value.clampedTo01))
+                }
+            case fieldM:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    handler(colorArrayManager.color.withMagenta(value.clampedTo01))
+                }
+            case fieldY:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    handler(colorArrayManager.color.withYellow(value.clampedTo01))
+                }
+            case fieldK:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    handler(colorArrayManager.color.withKey(value.clampedTo01))
+                }
+            default: break
+            }
+        }
+        
+        override open func updateFromColor() {
+            
+            super.updateFromColor()
+            
+            let CMYK = colorArrayManager.color.CMYK
+            
+            fieldC.font = configuration.font
+            fieldM.font = configuration.font
+            fieldY.font = configuration.font
+            fieldK.font = configuration.font
+
+            if configuration.colorize {
+                fieldC.backgroundColor  = configuration.background.cyan
+                fieldM.backgroundColor  = configuration.background.magenta
+                fieldY.backgroundColor  = configuration.background.yellow
+                fieldK.backgroundColor  = configuration.background.key
+                fieldC.textColor        = configuration.foreground.cyan
+                fieldM.textColor        = configuration.foreground.magenta
+                fieldY.textColor        = configuration.foreground.yellow
+                fieldK.textColor        = configuration.foreground.key
+            }
+            else {
+                fieldC.backgroundColor  = configuration.background.none
+                fieldM.backgroundColor  = configuration.background.none
+                fieldY.backgroundColor  = configuration.background.none
+                fieldK.backgroundColor  = configuration.background.none
+                fieldC.textColor        = configuration.foreground.none
+                fieldM.textColor        = configuration.foreground.none
+                fieldY.textColor        = configuration.foreground.none
+                fieldK.textColor        = configuration.foreground.none
+            }
+            
+            fieldC.text = String.init(format: "%1.3f", CMYK.cyan)
+            fieldM.text = String.init(format: "%1.3f", CMYK.magenta)
+            fieldY.text = String.init(format: "%1.3f", CMYK.yellow)
+            fieldK.text = String.init(format: "%1.3f", CMYK.key)
         }
     }
     
@@ -2098,6 +2225,21 @@ open class GenericPickerOfColor : UIView {
         
         let tray = addTray(withContentView  : display,
                            titles           : ["h","s","b"].zipped(with:[display.fieldH,display.fieldS,display.fieldB].map { $0 as UIView }))
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentDisplayValueCMYK (title:String, height side:CGFloat = 32) -> ComponentDisplayValueCMYK {
+        
+        let display = ComponentDisplayValueCMYK(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
+            self?.set(color: color, dragging: false, animated: true)
+        }
+        
+        let tray = addTray(withContentView  : display,
+                           titles           : ["c","m","y","k"].zipped(with:[
+                            display.fieldC,display.fieldM,display.fieldY,display.fieldK].map { $0 as UIView }))
         
         display.updateFromColor()
         
