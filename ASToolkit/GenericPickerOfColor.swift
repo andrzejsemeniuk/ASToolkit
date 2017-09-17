@@ -876,8 +876,6 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
-            
-            super.addTap()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -985,8 +983,6 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
-            
-            super.addTap()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -1051,6 +1047,84 @@ open class GenericPickerOfColor : UIView {
             fieldM.text = String.init(format: "%1.3f", CMYK.magenta)
             fieldY.text = String.init(format: "%1.3f", CMYK.yellow)
             fieldK.text = String.init(format: "%1.3f", CMYK.key)
+        }
+    }
+    
+    open class ComponentDisplayValueAlpha : ComponentDisplayValue {
+        
+        public let fieldA = {
+            return UITextField()
+        }()
+        
+        public let stack = {
+            return UIStackView()
+        }()
+        
+        public init(configuration:Configuration.Display.Value, colorArrayManager:ColorArrayManager, handler:@escaping Handler) {
+            
+            stack.axis          = .horizontal
+            stack.distribution  = .equalCentering
+            stack.alignment     = .center
+            
+            stack.addArrangedSubview(UIView())
+            for field in [fieldA] {
+                field.text              = "0.000"
+                field.textColor         = .white
+                field.backgroundColor   = .gray
+                field.textAlignment     = .center
+                field.sizeToFit()
+                stack.addArrangedSubview(field)
+            }
+            stack.addArrangedSubview(UIView())
+            
+            super.init(height           : fieldA.frame.height + configuration.margin*2,
+                       configuration    : configuration,
+                       colorLimit       : 1,
+                       colorArrayManager: colorArrayManager,
+                       handler          : handler)
+            
+            self.addSubview(stack)
+            
+            for field in [fieldA] {
+                field.delegate = self
+            }
+            
+            stack.constrainCenterToSuperview()
+            stack.constrainWidthToSuperview()
+        }
+        
+        required public init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override open func textFieldDidEndEditing(_ textField: UITextField) {
+            switch textField {
+            case fieldA:
+                if let text = textField.text, let value = CGFloat(text.trimmed()) {
+                    handler(colorArrayManager.color.withAlphaComponent(value.clampedTo01))
+                }
+            default: break
+            }
+        }
+        
+        override open func updateFromColor() {
+            
+            super.updateFromColor()
+            
+            let alpha = colorArrayManager.color.RGBAalpha
+            
+            fieldA.font = configuration.font
+            
+            if configuration.colorize {
+                fieldA.backgroundColor  = configuration.background.alpha
+                fieldA.textColor        = configuration.foreground.alpha
+            }
+            else {
+                fieldA.backgroundColor  = configuration.background.none
+                fieldA.textColor        = configuration.foreground.none
+            }
+            
+            fieldA.text = String.init(format: "%1.3f", alpha)
         }
     }
     
@@ -2240,6 +2314,20 @@ open class GenericPickerOfColor : UIView {
         let tray = addTray(withContentView  : display,
                            titles           : ["c","m","y","k"].zipped(with:[
                             display.fieldC,display.fieldM,display.fieldY,display.fieldK].map { $0 as UIView }))
+        
+        display.updateFromColor()
+        
+        return display
+    }
+    
+    open func addComponentDisplayValueAlpha (title:String, height side:CGFloat = 32) -> ComponentDisplayValueAlpha {
+        
+        let display = ComponentDisplayValueAlpha(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
+            self?.set(color: color, dragging: false, animated: true)
+        }
+        
+        let tray = addTray(withContentView  : display,
+                           title            : title)
         
         display.updateFromColor()
         
