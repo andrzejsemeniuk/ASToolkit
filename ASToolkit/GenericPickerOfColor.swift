@@ -615,7 +615,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open class ComponentDisplayValue : ComponentDisplay {
+    open class ComponentDisplayValue : ComponentDisplay, UITextFieldDelegate {
         
         public var colorified       = true
         
@@ -637,12 +637,21 @@ open class GenericPickerOfColor : UIView {
         required public init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
+        open func textFieldDidBeginEditing(_ textField: UITextField) {
+            textField.keyboardType = .decimalPad
+            textField.becomeFirstResponder()
+        }
+        
+        open func textFieldDidEndEditing(_ textField: UITextField) {
+        }
+
     }
     
     open class ComponentDisplayValueRGBAAsHexadecimal : ComponentDisplayValue {
         
         public let text = {
-            return UILabel()
+            return UITextField()
         }()
         
         public init(configuration:Configuration.Display.Value, colorArrayManager:ColorArrayManager, handler:@escaping Handler) {
@@ -660,6 +669,7 @@ open class GenericPickerOfColor : UIView {
 
             self.addSubview(self.text)
 
+            self.text.delegate = self
             self.text.constrainCenterToSuperview()
             
             super.addTap()
@@ -674,13 +684,19 @@ open class GenericPickerOfColor : UIView {
             self.updateFromColor()
         }
         
+        override open func textFieldDidEndEditing(_ textField: UITextField) {
+            if let text = textField.text, text.hasPrefix("0x"), let color = UIColor.init(RGBA:text.trimmed().substring(from:2)) {
+                handler(color)
+            }
+        }
+
         override open func updateFromColor() {
             super.updateFromColor()
             let font    = configuration.font
             let hex     = colorArrayManager.color.representationOfRGBAasHexadecimal
             if colorified {
                 var representation = NSAttributedString.init()
-                representation += "0x" | font
+                representation += "0x" | font | UIColor.gray
                 representation += hex[0] | [
                     NSBackgroundColorAttributeName      : configuration.background.red
                     ] | font | configuration.foreground.red
@@ -702,7 +718,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    open class ComponentDisplayValueRGB : ComponentDisplayValue, UITextFieldDelegate {
+    open class ComponentDisplayValueRGB : ComponentDisplayValue {
         
         public let fieldR = {
             return UITextField()
@@ -762,11 +778,7 @@ open class GenericPickerOfColor : UIView {
             self.updateFromColor()
         }
         
-        open func textFieldDidBeginEditing(_ textField: UITextField) {
-            textField.becomeFirstResponder()
-        }
-        
-        open func textFieldDidEndEditing(_ textField: UITextField) {
+        override open func textFieldDidEndEditing(_ textField: UITextField) {
             switch textField {
             case fieldR:
                 if let text = textField.text, let value = CGFloat(text.trimmed()) {
