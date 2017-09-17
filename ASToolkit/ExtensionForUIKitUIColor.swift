@@ -447,6 +447,31 @@ extension UIColor {
         return UIColor(RGBA:RGBA)
     }
     
+    open func withCyan(_ value:CGFloat) -> UIColor {
+        var CMYKA = self.CMYKA
+        CMYKA.cyan = value
+        return UIColor(CMYKA:CMYKA)
+    }
+    
+    open func withMagenta(_ value:CGFloat) -> UIColor {
+        var CMYKA = self.CMYKA
+        CMYKA.magenta = value
+        return UIColor(CMYKA:CMYKA)
+    }
+    
+    open func withYellow(_ value:CGFloat) -> UIColor {
+        var CMYKA = self.CMYKA
+        CMYKA.yellow = value
+        return UIColor(CMYKA:CMYKA)
+    }
+    
+    open func withKey(_ value:CGFloat) -> UIColor {
+        var CMYKA = self.CMYKA
+        CMYKA.key = value
+        return UIColor(CMYKA:CMYKA)
+    }
+    
+
 }
 
 
