@@ -369,6 +369,43 @@ extension UIColor {
         ]
 //        return String(format:"0x%02X%02X%02X%02X", v.red, v.green, v.blue, v.alpha)
     }
+    
+    public convenience init?(RGBA:String) {
+//        print(RGBA)
+        
+        guard 8 <= RGBA.length else {
+            return nil
+        }
+        
+        let R = RGBA.substring(from: 0, to: 2)
+        let G = RGBA.substring(from: 2, to: 4)
+        let B = RGBA.substring(from: 4, to: 6)
+        let A = RGBA.substring(from: 6, to: 8)
+        
+        guard
+            let R256 = UInt8(R,radix:16),
+            let G256 = UInt8(G,radix:16),
+            let B256 = UInt8(B,radix:16),
+            let A256 = UInt8(A,radix:16)
+            else {
+                return nil
+        }
+        
+        let rgba : [CGFloat] = [
+            CGFloat(R256)/255,
+            CGFloat(G256)/255,
+            CGFloat(B256)/255,
+            CGFloat(A256)/255
+        ]
+        
+        self.init(rgba:rgba)
+        
+//        print([R,G,B,A])
+//        print([R256,G256,B256,A256])
+//        print(rgba)
+//        print(self.representationOfRGBAasHexadecimal)
+        
+    }
 }
 
 
