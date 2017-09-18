@@ -651,7 +651,7 @@ open class GenericPickerOfColor : UIView {
         }
 
         open func addCopyButton() {
-            let title = "\u{2228}"
+            let title = "\u{2227}"
             
             let side = configuration.copyButton.side * 0.8
                 
@@ -678,7 +678,7 @@ open class GenericPickerOfColor : UIView {
                 button.setAttributedTitle(title | configuration.copyButton.buttonStates[.selected]!.foreground | configuration.copyButton.buttonStates[.selected]!.font, for: .selected)
                 button.setAttributedTitle(title | configuration.copyButton.buttonStates[.disabled]!.foreground | configuration.copyButton.buttonStates[.disabled]!.font, for: .disabled)
                 
-                button.titleEdgeInsets.bottom = -1
+                button.titleEdgeInsets.bottom = 0
                 
                 button.addTarget(self, action: #selector(ComponentDisplayValue.tapOnCopyButton(_:)), for: .touchUpInside)
             }
@@ -1247,10 +1247,10 @@ open class GenericPickerOfColor : UIView {
                 switch operation {
                 case .copy      :
                     // 29C9, 2295, 2335, 2228
-                    configure(button:data.button, title:"\u{2228}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+                    configure(button:data.button, title:"\u{2227}", configuration:configuration, insets: UIEdgeInsets(bottom:+1))
 //                    configure(button:data.button, title:"\u{2295}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
                 case .paste     : // 29bf, 29be, 29C8, 2227, 2298
-                    configure(button:data.button, title:"\u{2227}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
+                    configure(button:data.button, title:"\u{2228}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
 //                    configure(button:data.button, title:"\u{229B}", configuration:configuration, insets: UIEdgeInsets(bottom:-1))
                 case .spread    :
                     configure(button:data.button, title:"S", configuration:configuration)
