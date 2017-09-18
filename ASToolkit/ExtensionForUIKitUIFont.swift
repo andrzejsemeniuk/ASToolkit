@@ -123,6 +123,14 @@ public func - (lhs:UIFont, rhs:CGFloat) -> UIFont {
     return lhs.withSize(rhs < lhs.pointSize ? lhs.pointSize - rhs : 1)
 }
 
+public func += (lhs:inout UIFont, rhs:CGFloat) {
+    lhs = lhs + rhs
+}
+
+public func -= (lhs:inout UIFont, rhs:CGFloat) {
+    lhs = lhs - rhs
+}
+
 // TODO: MOVE TO OWN FILE
 public class Glypher {
     

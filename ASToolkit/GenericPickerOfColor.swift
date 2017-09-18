@@ -213,6 +213,7 @@ open class GenericPickerOfColor : UIView {
     public var configuration                    = Configuration()
     
     internal class UIViewTray : UIView {
+        let titleLabel      : UILabelWithInsets
         let titleLabels     : [UILabelWithInsets]
         let view            : UIView
         
@@ -227,79 +228,55 @@ open class GenericPickerOfColor : UIView {
                       margins insets    : UIEdgeInsets = UIEdgeInsets(),
                       titleMarginAbove  : CGFloat,
                       titleMarginBelow  : CGFloat,
-                      titleLabel        : UILabelWithInsets) {
+                      titleLabel        : UILabelWithInsets,
+                      titleLabels       : [(label:UILabelWithInsets,guide:UIView)] = []) {
             self.view = view
-            self.titleLabels = [titleLabel]
-            
-            super.init(frame:.zero)
-
-            self.build(margins: insets,
-                       titleMarginAbove: titleMarginAbove,
-                       titleMarginBelow: titleMarginBelow,
-                       titleLabels: [(titleLabel,view)])
-        }
-        
-        internal init(contentView view  : UIView,
-                      margins insets    : UIEdgeInsets = UIEdgeInsets(),
-                      titleMarginAbove  : CGFloat,
-                      titleMarginBelow  : CGFloat,
-                      titleLabels       : [(label:UILabelWithInsets,guide:UIView)]) {
-            self.view = view
+            self.titleLabel = titleLabel
             self.titleLabels = titleLabels.map { $0.label }
             
             super.init(frame:.zero)
+
+            self.addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints=false
             
-            self.build(margins: insets,
-                       titleMarginAbove: titleMarginAbove,
-                       titleMarginBelow: titleMarginBelow,
-                       titleLabels: titleLabels)
+            for titleLabel in [titleLabel]+self.titleLabels {
+                self.addSubview(titleLabel)
+                self.sendSubview(toBack: titleLabel)
+            }
+            
+            titleLabel.translatesAutoresizingMaskIntoConstraints=false
+            titleLabel.constrainCenterXToSuperview()
+            titleLabel.constrainTopToSuperviewTop(withMargin:titleMarginAbove)
+            
+            if self.titleLabels.isEmpty {
+                titleLabel.bottomAnchor.constraint(equalTo: view.topAnchor, constant: -titleMarginBelow).isActive=true
+            }
+            else {
+                for titleLabel in titleLabels {
+                    titleLabel.label.translatesAutoresizingMaskIntoConstraints=false
+                    titleLabel.label.centerXAnchor.constraint(equalTo: titleLabel.guide.centerXAnchor).isActive=true
+                    titleLabel.label.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: titleMarginBelow).isActive=true
+                    titleLabel.label.bottomAnchor.constraint(equalTo: titleLabels[0].guide.topAnchor, constant: -titleMarginBelow).isActive=true
+                }
+            }
+            
+            view.constrainLeftToSuperviewLeft(withMargin: insets.left)
+            view.constrainRightToSuperviewRight(withMargin: insets.right)
+            view.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
         }
 
         internal init(contentView view  : UIView,
                       margins insets    : UIEdgeInsets = UIEdgeInsets()) {
             self.view = view
+            self.titleLabel = UILabelWithInsets()
             self.titleLabels = []
             
             super.init(frame:.zero)
             
             self.addSubview(view)
             
-            self.translatesAutoresizingMaskIntoConstraints=false
-            
             view.translatesAutoresizingMaskIntoConstraints=false
             view.constrainToSuperview(withInsets:insets)
-        }
-        
-        private func build(margins insets     : UIEdgeInsets = UIEdgeInsets(),
-                           titleMarginAbove   : CGFloat,
-                           titleMarginBelow   : CGFloat,
-                           titleLabels        : [(label:UILabelWithInsets,guide:UIView)]) {
-            
-            self.addSubview(view)
-            self.translatesAutoresizingMaskIntoConstraints=false
-            view.translatesAutoresizingMaskIntoConstraints=false
-            
-            for titleLabel in titleLabels {
-                self.addSubview(titleLabel.label)
-                self.sendSubview(toBack: titleLabel.label)
-            }
-            
-            for titleLabel in titleLabels {
-                titleLabel.label.translatesAutoresizingMaskIntoConstraints=false
-                titleLabel.label.centerXAnchor.constraint(equalTo: titleLabel.guide.centerXAnchor).isActive=true
-                titleLabel.label.constrainTopToSuperviewTop(withMargin:titleMarginAbove)
-                titleLabel.label.bottomAnchor.constraint(equalTo: titleLabel.guide.topAnchor, constant: -titleMarginBelow).isActive=true
-            }
-            
-            if let first = titleLabels.first {
-//                view.topAnchor.constraint(equalTo: first.label.bottomAnchor, constant: insets.top).isActive=true
-            }
-            else {
-//                view.constrainTopToSuperviewTop(withMargin: insets.top)
-            }
-            view.constrainLeftToSuperviewLeft(withMargin: insets.left)
-            view.constrainRightToSuperviewRight(withMargin: insets.right)
-            view.constrainBottomToSuperviewBottom(withMargin: insets.bottom)
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -308,52 +285,57 @@ open class GenericPickerOfColor : UIView {
         
     }
     
-    internal func addTray(withContentView content:UIView, title:String) -> UIViewTray {
-        let result : UIViewTray
-        
-        let margin = configuration.margin/2
-        
-        if configuration.title.show {
-            let titleLabel = UILabelWithInsets()
-            configuration.title.apply(to:titleLabel, withTitle:title)
-            result = UIViewTray(contentView      : content,
-                                margins          : UIEdgeInsets(bottom:-margin),
-                                titleMarginAbove : configuration.title.marginAbove + margin,
-                                titleMarginBelow : configuration.title.marginBelow,
-                                titleLabel       : titleLabel)
-        }
-        else {
-            result = UIViewTray(contentView : content,
-                                margins     : UIEdgeInsets(top:margin, bottom:-margin))
-        }
-        
-        self.addSubview(result)
-        
-        result.isOpaque = false
-        
-        result.translatesAutoresizingMaskIntoConstraints=false
-        result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
-        result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
-        
-        return result
-    }
+//    internal func addTray(withContentView content:UIView, title:String) -> UIViewTray {
+//        let result : UIViewTray
+//
+//        let margin = configuration.margin/2
+//
+//        if configuration.title.show {
+//            let titleLabel = UILabelWithInsets()
+//            configuration.title.apply(to:titleLabel, withTitle:title)
+//            result = UIViewTray(contentView      : content,
+//                                margins          : UIEdgeInsets(bottom:-margin),
+//                                titleMarginAbove : configuration.title.marginAbove + margin,
+//                                titleMarginBelow : configuration.title.marginBelow,
+//                                titleLabel       : titleLabel)
+//        }
+//        else {
+//            result = UIViewTray(contentView : content,
+//                                margins     : UIEdgeInsets(top:margin, bottom:-margin))
+//        }
+//
+//        self.addSubview(result)
+//
+//        result.isOpaque = false
+//
+//        result.translatesAutoresizingMaskIntoConstraints=false
+//        result.widthAnchor.constraint(equalTo: self.widthAnchor).isActive=true
+//        result.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive=true
+//
+//        return result
+//    }
     
-    internal func addTray(withContentView content:UIView, titles:[(title:String,guide:UIView)]) -> UIViewTray {
+    internal func addTray(withContentView content:UIView, title:String, titles:[(title:String,guide:UIView)] = []) -> UIViewTray {
         let result : UIViewTray
         
         let margin = configuration.margin/2
 
         if configuration.title.show {
+            let titleLabel = UILabelWithInsets()
+            configuration.title.apply(to: titleLabel, withTitle: title)
+            
             var titleLabels : [(UILabelWithInsets,UIView)] = []
             for title in titles {
                 let titleLabel = UILabelWithInsets()
                 configuration.title.apply(to:titleLabel, withTitle:title.title)
                 titleLabels.append((titleLabel,title.guide))
             }
+            
             result = UIViewTray(contentView      : content,
                                 margins          : UIEdgeInsets(bottom:-margin),
                                 titleMarginAbove : configuration.title.marginAbove + margin,
                                 titleMarginBelow : configuration.title.marginBelow,
+                                titleLabel       : titleLabel,
                                 titleLabels      : titleLabels)
             
         }
@@ -727,27 +709,27 @@ open class GenericPickerOfColor : UIView {
     
     open class ComponentDisplayValueRGBAAsHexadecimal : ComponentDisplayValue {
         
-        public let text = {
+        public let field = {
             return UITextField()
         }()
         
         public init(configuration:Configuration.Display.Value, colorArrayManager:ColorArrayManager, handler:@escaping Handler) {
             
-            self.text.attributedText    = "0x00000000" | .white
-            self.text.backgroundColor   = UIColor(white:0,alpha:0.1)
-            self.text.textAlignment     = .center
-            self.text.sizeToFit()
+            self.field.attributedText    = "0x00000000" | .white
+            self.field.backgroundColor   = UIColor(white:0,alpha:0.1)
+            self.field.textAlignment     = .center
+            self.field.sizeToFit()
             
-            super.init(height           : self.text.frame.height + configuration.margin*2,
+            super.init(height           : self.field.frame.height + configuration.margin*2,
                        configuration    : configuration,
                        colorLimit       : 1,
                        colorArrayManager: colorArrayManager,
                        handler          : handler)
 
-            self.addSubview(self.text)
+            self.addSubview(self.field)
 
-            self.text.delegate = self
-            self.text.constrainCenterToSuperview()
+            self.field.delegate = self
+            self.field.constrainCenterToSuperview()
             
             super.addCopyButton()
         }
@@ -781,16 +763,16 @@ open class GenericPickerOfColor : UIView {
                 representation += hex[3] | [
                     NSBackgroundColorAttributeName      : configuration.background.alpha // UIColor(white:0.6)
                     ] | font | configuration.foreground.alpha
-                self.text.attributedText = representation
+                self.field.attributedText = representation
             }
             else {
-                self.text.backgroundColor = configuration.background.none
-                self.text.attributedText = "0x\(hex.joined())" | configuration.foreground.none | font
+                self.field.backgroundColor = configuration.background.none
+                self.field.attributedText = "0x\(hex.joined())" | configuration.foreground.none | font
             }
         }
         
         override open func performCopy() {
-            UIPasteboard.general.string = self.text.attributedText?.string.trimmed()
+            UIPasteboard.general.string = self.field.attributedText?.string.trimmed()
         }
         
     }
@@ -2307,7 +2289,7 @@ open class GenericPickerOfColor : UIView {
         
         let display = ComponentDisplayFill(height:side, colorArrayManager:colorArrayManager)
         
-        let tray = addTray(withContentView: display, title: title)
+        _ = addTray(withContentView: display, title: title)
         
         display.updateFromColor()
         
@@ -2318,7 +2300,7 @@ open class GenericPickerOfColor : UIView {
         
         let display = ComponentDisplayDot(height:side, colorArrayManager:self.colorArrayManager)
         
-        let tray = addTray(withContentView: display, title: title)
+        _ = addTray(withContentView: display, title: title)
 
         display.updateFromColor()
         
@@ -2329,7 +2311,7 @@ open class GenericPickerOfColor : UIView {
         
         let display = ComponentDisplaySplitDiagonal(height:side, colorArrayManager:self.colorArrayManager)
         
-        let tray = addTray(withContentView: display, title: title)
+        _ = addTray(withContentView: display, title: title)
 
         display.updateFromColor()
         
@@ -2340,7 +2322,7 @@ open class GenericPickerOfColor : UIView {
         
         let display = ComponentDisplaySplitVertical(height:side, colorArrayManager:self.colorArrayManager)
         
-        let tray = addTray(withContentView: display, title: title)
+        _ = addTray(withContentView: display, title: title)
 
         display.updateFromColor()
         
@@ -2351,91 +2333,93 @@ open class GenericPickerOfColor : UIView {
         
         let display = ComponentDisplaySplitHorizontal(height:side, colorArrayManager:self.colorArrayManager)
         
-        let tray = addTray(withContentView: display, title: title)
+        _ = addTray(withContentView: display, title: title)
 
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentDisplayValueRGBAAsHexadecimal (title:String, height side:CGFloat = 32) -> ComponentDisplayValueRGBAAsHexadecimal {
+    open func addComponentDisplayValueRGBAAsHexadecimal (title:String) -> ComponentDisplayValueRGBAAsHexadecimal {
         
         let display = ComponentDisplayValueRGBAAsHexadecimal(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
             self?.set(color: color, dragging: false, animated: true)
         }
         
-        let tray = addTray(withContentView: display, title: title)
-        
+        _ = addTray(withContentView: display, title: title, titles:[("RGBA",display.field)] + (display.copyButton==nil ? [] : [("copy",display.copyButton!)]))
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentDisplayValueRGB (title:String, height side:CGFloat = 32) -> ComponentDisplayValueRGB {
+    open func addComponentDisplayValueRGB (title:String) -> ComponentDisplayValueRGB {
         
         let display = ComponentDisplayValueRGB(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
             self?.set(color: color, dragging: false, animated: true)
         }
 
-        let tray = addTray(withContentView  : display,
-                           titles           : ["r","g","b"].zipped(with:[display.fieldR,display.fieldG,display.fieldB].map { $0 as UIView }))
+        _ = addTray(withContentView : display,
+                    title           : title,
+                    titles          : ["r","g","b"].zipped(with:[display.fieldR,display.fieldG,display.fieldB].map { $0 as UIView }) + (display.copyButton==nil ? [] : [("copy",display.copyButton!)]))
 
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentDisplayValueHSB (title:String, height side:CGFloat = 32) -> ComponentDisplayValueHSB {
+    open func addComponentDisplayValueHSB (title:String) -> ComponentDisplayValueHSB {
         
         let display = ComponentDisplayValueHSB(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
             self?.set(color: color, dragging: false, animated: true)
         }
         
-        let tray = addTray(withContentView  : display,
-                           titles           : ["h","s","b"].zipped(with:[display.fieldH,display.fieldS,display.fieldB].map { $0 as UIView }))
-        
+        _ = addTray(withContentView : display,
+                    title           : title,
+                    titles          : ["h","s","b"].zipped(with:[display.fieldH,display.fieldS,display.fieldB].map { $0 as UIView }) + (display.copyButton==nil ? [] : [("copy",display.copyButton!)]))
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentDisplayValueCMYK (title:String, height side:CGFloat = 32) -> ComponentDisplayValueCMYK {
+    open func addComponentDisplayValueCMYK (title:String) -> ComponentDisplayValueCMYK {
         
         let display = ComponentDisplayValueCMYK(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
             self?.set(color: color, dragging: false, animated: true)
         }
-        
-        let tray = addTray(withContentView  : display,
-                           titles           : ["c","m","y","k"].zipped(with:[
-                            display.fieldC,display.fieldM,display.fieldY,display.fieldK].map { $0 as UIView }))
-        
+
+        _ = addTray(withContentView : display,
+                    title           : title,
+                    titles          : ["c","m","y","k"].zipped(with:[display.fieldC,display.fieldM,display.fieldY,display.fieldK].map { $0 as UIView }) + (display.copyButton==nil ? [] : [("copy",display.copyButton!)]) )
+
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentDisplayValueAlpha (title:String, height side:CGFloat = 32) -> ComponentDisplayValueAlpha {
+    open func addComponentDisplayValueAlpha (title:String) -> ComponentDisplayValueAlpha {
         
         let display = ComponentDisplayValueAlpha(configuration:configuration.display.value, colorArrayManager:self.colorArrayManager) { [weak self] color in
             self?.set(color: color, dragging: false, animated: true)
         }
         
-        let tray = addTray(withContentView  : display,
-                           title            : title)
+        _ = addTray(withContentView: display, title: title, titles:[("ALPHA",display.fieldA)] + (display.copyButton==nil ? [] : [("copy",display.copyButton!)]))
         
         display.updateFromColor()
         
         return display
     }
     
-    open func addComponentOperations            (title:String, operations:[(operation:Operation,title:String)]) -> ComponentOperations {
+    open func addComponentOperations        (title:String, operations:[(operation:Operation,title:String)]) -> ComponentOperations {
         
         let display = ComponentOperations(operations:operations.map { $0.operation }, configuration:configuration.operations)
         
         display.build()
         
-        let tray = addTray(withContentView  : display,
-                           titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0! as UIView }))
+        _ = addTray(withContentView  : display,
+                    title            : title,
+                    titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0! as UIView }))
 
         
         return display
@@ -2445,7 +2429,7 @@ open class GenericPickerOfColor : UIView {
         
         let storage = ComponentStorageDots()
         
-        let tray = addTray(withContentView: storage, title: title)
+        _ = addTray(withContentView: storage, title: title)
 
         storage.rows     = rows
         storage.columns  = columns
@@ -2461,7 +2445,7 @@ open class GenericPickerOfColor : UIView {
         
         let storage = ComponentStorageHistory()
         
-        let tray = addTray(withContentView: storage, title: title)
+        _ = addTray(withContentView: storage, title: title)
 
         storage.rows     = rows
         storage.columns  = columns
@@ -2477,7 +2461,7 @@ open class GenericPickerOfColor : UIView {
         
         let storage = ComponentStorageDrag()
         
-        let tray = addTray(withContentView: storage, title: title)
+        _ = addTray(withContentView: storage, title: title)
 
         storage.rows     = rows
         storage.columns  = columns
