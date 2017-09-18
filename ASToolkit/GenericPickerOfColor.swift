@@ -74,6 +74,29 @@ open class GenericPickerOfColor : UIView {
     
     public struct Configuration {
         
+        public struct Button {
+            public var side                     = CGFloat(41)
+
+            public var durationOfTap            = 0.3
+            
+            public struct ButtonState {
+                public var background           = UIColor.black
+                public var foreground           = UIColor.white
+                public var font                 = (UIFont.defaultFontForLabel + 0)
+            }
+            
+            public var buttonStates             : [UIControlState:ButtonState] = [
+                UIControlState.normal           : ButtonState(),
+                UIControlState.selected         : ButtonState(),
+                UIControlState.disabled         : ButtonState()
+            ]
+            
+            public init() {
+                buttonStates[.selected]?.background = .red
+                buttonStates[.disabled]?.background = .gray
+            }
+        }
+        
         public var margin                       = CGFloat(0)
         
         public struct Display {
@@ -114,6 +137,8 @@ open class GenericPickerOfColor : UIView {
                     yellow      : .black,
                     key         : .white
                     )
+                
+                public var copyButton           = Button()
             }
             
             public var value                    = Value()
@@ -167,26 +192,7 @@ open class GenericPickerOfColor : UIView {
         
         public var slider                       = Slider()
         
-        public struct Operations {
-            public var side                     = CGFloat(41)
-            
-            public struct ButtonState {
-                public var background           = UIColor.black
-                public var foreground           = UIColor.white
-                public var font                 = (UIFont.defaultFontForLabel + 0)
-            }
-            
-            public var buttonStates             : [UIControlState:ButtonState] = [
-                UIControlState.normal           : ButtonState(),
-                UIControlState.selected         : ButtonState(),
-                UIControlState.disabled         : ButtonState()
-            ]
-
-            public init() {
-                buttonStates[.selected]?.background = .red
-                buttonStates[.disabled]?.background = .gray
-            }
-        }
+        public typealias Operations = Button
         
         public var operations                   = Operations()
         
@@ -639,6 +645,8 @@ open class GenericPickerOfColor : UIView {
         
         public var handler          : Handler = { _ in }
         
+        public var copyButton       : UIButtonWithCenteredCircle?
+        
         public init(height:CGFloat, configuration:Configuration.Display.Value, colorLimit:Int, colorArrayManager:ColorArrayManager, handler:@escaping Handler) {
             
             self.configuration  = configuration
@@ -660,6 +668,61 @@ open class GenericPickerOfColor : UIView {
         open func textFieldDidEndEditing(_ textField: UITextField) {
         }
 
+        open func addCopyButton() {
+            let title = "\u{2228}"
+            
+            let side = configuration.copyButton.side * 0.8
+                
+            copyButton = UIButtonWithCenteredCircle(frame: CGRect(side:side))
+            
+            if let button = copyButton {
+                self.addSubview(button)
+                button.constrainCenterYToSuperview()
+                button.constrainRightToSuperviewRight(withMargin: -8 )
+                
+                button.circle(for: .normal).fillColor       = configuration.copyButton.buttonStates[.normal]?.background.cgColor
+                button.circle(for: .normal).strokeColor     = configuration.copyButton.buttonStates[.normal]?.foreground.cgColor
+                button.circle(for: .selected).fillColor     = configuration.copyButton.buttonStates[.selected]?.background.cgColor
+                button.circle(for: .selected).strokeColor   = configuration.copyButton.buttonStates[.selected]?.foreground.cgColor
+                button.circle(for: .disabled).fillColor     = configuration.copyButton.buttonStates[.disabled]?.background.cgColor
+                button.circle(for: .disabled).strokeColor   = configuration.copyButton.buttonStates[.disabled]?.foreground.cgColor
+                
+                for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
+                    button.circle(for: state).radius        = side/2.0
+                    button.circle(for: state).lineWidth     = 0.5
+                }
+                
+                button.setAttributedTitle(title | configuration.copyButton.buttonStates[.normal]!.foreground | configuration.copyButton.buttonStates[.normal]!.font, for: .normal)
+                button.setAttributedTitle(title | configuration.copyButton.buttonStates[.selected]!.foreground | configuration.copyButton.buttonStates[.selected]!.font, for: .selected)
+                button.setAttributedTitle(title | configuration.copyButton.buttonStates[.disabled]!.foreground | configuration.copyButton.buttonStates[.disabled]!.font, for: .disabled)
+                
+                button.titleEdgeInsets.bottom = -1
+                
+                button.addTarget(self, action: #selector(ComponentDisplayValue.tapOnCopyButton(_:)), for: .touchUpInside)
+            }
+
+        }
+        
+        final public func tapOnCopyButton(_ button:UIButton) {
+            if let button = copyButton, !button.isSelected {
+                
+                button.isSelected=true
+                
+                performCopy()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + configuration.copyButton.durationOfTap) { [weak self] in
+                    self?.copyButton?.isSelected=false
+                }
+            }
+        }
+        
+        open func performCopy() {
+            
+        }
+        
+        func valueOf(_ field:UITextField) -> CGFloat {
+            return CGFloat(field.text ?? "0") ?? 0
+        }
     }
     
     open class ComponentDisplayValueRGBAAsHexadecimal : ComponentDisplayValue {
@@ -685,6 +748,8 @@ open class GenericPickerOfColor : UIView {
 
             self.text.delegate = self
             self.text.constrainCenterToSuperview()
+            
+            super.addCopyButton()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -723,6 +788,11 @@ open class GenericPickerOfColor : UIView {
                 self.text.attributedText = "0x\(hex.joined())" | configuration.foreground.none | font
             }
         }
+        
+        override open func performCopy() {
+            UIPasteboard.general.string = self.text.attributedText?.string.trimmed()
+        }
+        
     }
     
     open class ComponentDisplayValueRGB : ComponentDisplayValue {
@@ -772,6 +842,8 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
+            
+            super.addCopyButton()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -827,6 +899,10 @@ open class GenericPickerOfColor : UIView {
             fieldG.text = String.init(format: "%1.3f", RGBA.green)
             fieldB.text = String.init(format: "%1.3f", RGBA.blue)
         }
+        
+        override open func performCopy() {
+            UIPasteboard.general.string = "RGB=(\(valueOf(fieldR)),\(valueOf(fieldG)),\(valueOf(fieldB)))"
+        }
     }
     
     open class ComponentDisplayValueHSB : ComponentDisplayValue {
@@ -876,6 +952,8 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
+            
+            super.addCopyButton()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -931,6 +1009,10 @@ open class GenericPickerOfColor : UIView {
             fieldS.text = String.init(format: "%1.3f", HSBA.saturation)
             fieldB.text = String.init(format: "%1.3f", HSBA.brightness)
         }
+        
+        override open func performCopy() {
+            UIPasteboard.general.string = "HSB=(\(valueOf(fieldH)),\(valueOf(fieldS)),\(valueOf(fieldB)))"
+        }
     }
     
     open class ComponentDisplayValueCMYK : ComponentDisplayValue {
@@ -983,6 +1065,8 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
+            
+            super.addCopyButton()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -1048,6 +1132,10 @@ open class GenericPickerOfColor : UIView {
             fieldY.text = String.init(format: "%1.3f", CMYK.yellow)
             fieldK.text = String.init(format: "%1.3f", CMYK.key)
         }
+        
+        override open func performCopy() {
+            UIPasteboard.general.string = "CMYK=(\(valueOf(fieldC)),\(valueOf(fieldM)),\(valueOf(fieldY)),\(valueOf(fieldK)))"
+        }
     }
     
     open class ComponentDisplayValueAlpha : ComponentDisplayValue {
@@ -1091,6 +1179,8 @@ open class GenericPickerOfColor : UIView {
             
             stack.constrainCenterToSuperview()
             stack.constrainWidthToSuperview()
+            
+            super.addCopyButton()
         }
         
         required public init?(coder aDecoder: NSCoder) {
@@ -1126,9 +1216,15 @@ open class GenericPickerOfColor : UIView {
             
             fieldA.text = String.init(format: "%1.3f", alpha)
         }
+        
+        override open func performCopy() {
+            UIPasteboard.general.string = "\(valueOf(fieldA))"
+        }
     }
     
     open class ComponentOperations : UIStackView {
+        
+        public var configuration            : Configuration.Operations
         
         public let operations               : [Operation]
         
@@ -1139,16 +1235,16 @@ open class GenericPickerOfColor : UIView {
         
         public var data                     : [Operation:OperationData] = [:]
 
-        public var durationOfTap            : Double        = 0.3
-
         required public init(coder aDecoder: NSCoder) {
             // TODO
             self.operations = []
+            self.configuration = Configuration.Operations()
             super.init(coder: aDecoder)
         }
 
-        public init(operations:[Operation]) {
+        public init(operations:[Operation], configuration:Configuration.Operations) {
             self.operations = operations
+            self.configuration = configuration
 
             // create data based on operations
             
@@ -1159,7 +1255,7 @@ open class GenericPickerOfColor : UIView {
             self.alignment      = .center
         }
         
-        public func build(withConfiguration configuration:Configuration.Operations) {
+        public func build() {
             // create data based on operations
             
             self.addArrangedSubview(UIView())
@@ -1193,17 +1289,15 @@ open class GenericPickerOfColor : UIView {
         }
         
         private func configure(button:UIButtonWithCenteredCircle, title:String, configuration:Configuration.Operations, insets:UIEdgeInsets = UIEdgeInsets()) {
-            let colorFill       = UIColor(white:0.3)
-            let colorStroke     = UIColor(white:1,alpha:0.5)
             
             button.frame        = CGRect(side:configuration.side)
             
             button.circle(for: .normal).fillColor       = configuration.buttonStates[.normal]?.background.cgColor
-            button.circle(for: .normal).strokeColor     = UIColor.clear.cgColor // configuration.buttonStates[.normal]?.foreground.cgColor
+            button.circle(for: .normal).strokeColor     = configuration.buttonStates[.normal]?.foreground.cgColor
             button.circle(for: .selected).fillColor     = configuration.buttonStates[.selected]?.background.cgColor
-            button.circle(for: .selected).strokeColor   = UIColor.clear.cgColor // configuration.buttonStates[.selected]?.foreground.cgColor
+            button.circle(for: .selected).strokeColor   = configuration.buttonStates[.selected]?.foreground.cgColor
             button.circle(for: .disabled).fillColor     = configuration.buttonStates[.disabled]?.background.cgColor
-            button.circle(for: .disabled).strokeColor   = UIColor.clear.cgColor // configuration.buttonStates[.disabled]?.foreground.cgColor
+            button.circle(for: .disabled).strokeColor   = configuration.buttonStates[.disabled]?.foreground.cgColor
             
             for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
                 button.circle(for: state).radius        = configuration.side/2.0
@@ -1227,7 +1321,7 @@ open class GenericPickerOfColor : UIView {
 
                     data[operation]?.function()
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + durationOfTap) { [weak self] in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + configuration.durationOfTap) { [weak self] in
                         self?.data[operation]?.button.isSelected=false
                     }
                 }
@@ -2336,9 +2430,9 @@ open class GenericPickerOfColor : UIView {
     
     open func addComponentOperations            (title:String, operations:[(operation:Operation,title:String)]) -> ComponentOperations {
         
-        let display = ComponentOperations(operations:operations.map { $0.operation })
+        let display = ComponentOperations(operations:operations.map { $0.operation }, configuration:configuration.operations)
         
-        display.build(withConfiguration: configuration.operations)
+        display.build()
         
         let tray = addTray(withContentView  : display,
                            titles           : operations.map { $0.title }.zipped(with:display.buttons.map { $0! as UIView }))
