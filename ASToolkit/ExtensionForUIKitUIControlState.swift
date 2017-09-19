@@ -24,3 +24,7 @@ extension UIControlState : Hashable {
         }
     }
 }
+
+extension UIControlState : Equatable {
+    
+}
