@@ -24,21 +24,26 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
     public let key          : Key
     public let first        : TYPE
     
+    public var check        : ((TYPE)->(TYPE?))?
     public var inform       : ((TYPE)->())?
     
-    open var value          : TYPE {
-        willSet (newValue) {
-            store(newValue)
-        }
+    public var value        : TYPE {
         didSet {
-            inform?(value)
+            if let check = check, let other = check(value) {
+                self.value = other
+            }
+            else {
+                store(value)
+                inform?(value)
+            }
         }
     }
     
-    public init                     (key:String, first:TYPE) {
+    public init                     (key:String, first:TYPE, check:((TYPE)->TYPE?)? = nil) {
         self.key        = key
         self.first      = first
         self.value      = first
+        self.check      = check
         
         if let stored = self.stored {
             self.value  = stored
@@ -48,17 +53,19 @@ open class GenericSetting<TYPE> : CustomStringConvertible, Keyable, Removable, R
         }
     }
 
+    open func set                   (_ value:TYPE) {
+        assign(value)
+    }
+    
     open func assign                (_ value:TYPE?) {
-        if value != nil {
-            self.value = value!
+        if let value = value {
+            self.value = value
         }
     }
     
     open func assign                (fromDictionary dictionary:[String:Any]) {
         if let data = dictionary[key] as? Data {
-            if let value = NSKeyedUnarchiver.unarchiveObject(with: data) as? TYPE {
-                self.value = value
-            }
+            assign(NSKeyedUnarchiver.unarchiveObject(with: data) as? TYPE)
         }
     }
 
@@ -123,5 +130,9 @@ open class GenericSettingOfArrayOfUIColor : GenericSetting<[UIColor]> {
         }
         return nil
     }
+}
+
+public func << <TYPE>(lhs:GenericSetting<TYPE>, rhs:TYPE) {
+    lhs.value = rhs
 }
 
