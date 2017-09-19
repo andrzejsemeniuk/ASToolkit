@@ -112,12 +112,12 @@ open class GenericPickerOfColor : UIView {
                     public var alpha            = UIColor.white
                     public var red              = UIColor.red
                     public var green            = UIColor(hsb:[0.40,1,0.70])
-                    public var blue             = UIColor(hsb:[0.62,1,0.95])
+                    public var blue             = UIColor(hsb:[0.62,1,0.85])
                     public var hue              = UIColor(hsb:[0.14,1,0.80])
                     public var saturation       = UIColor(hsb:[0.08,1,0.90])
                     public var brightness       = UIColor(hsb:[0.40,0,0.99])
                     public var cyan             = UIColor.cyan
-                    public var magenta          = UIColor.magenta
+                    public var magenta          = UIColor(rgb:[1,0.75,1])
                     public var yellow           = UIColor.yellow
                     public var key              = UIColor.black
                 }
@@ -133,7 +133,7 @@ open class GenericPickerOfColor : UIView {
                     saturation  : .lightGray,
                     brightness  : .lightGray,
                     cyan        : .black,
-                    magenta     : .white,
+                    magenta     : .black,
                     yellow      : .black,
                     key         : .white
                     )
