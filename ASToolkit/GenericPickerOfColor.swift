@@ -749,7 +749,7 @@ open class GenericPickerOfColor : UIView {
             let font    = configuration.font
             let hex     = colorArrayManager.color.representationOfRGBAasHexadecimal
             if configuration.colorize {
-                var representation = NSAttributedString.init()
+                var representation = NSMutableAttributedString.init()
                 representation += "0x" | font | UIColor.gray
                 representation += hex[0] | [
                     NSBackgroundColorAttributeName      : configuration.background.red
