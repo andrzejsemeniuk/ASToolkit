@@ -51,6 +51,7 @@
 		570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* Block.swift */; };
 		570FC2DE1F1124A300FEAC03 /* Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* Loop.swift */; };
 		570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC31F1F17C76A00FEAC03 /* Environment.swift */; };
+		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
 		573D00B01F67BEEF00F2D5DE /* ExtensionForUIKitUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573D00AF1F67BEEF00F2D5DE /* ExtensionForUIKitUIViewController.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
 		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
@@ -169,6 +170,7 @@
 		570FC2A51F1124A300FEAC03 /* Block.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		570FC2A61F1124A300FEAC03 /* Loop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loop.swift; sourceTree = "<group>"; };
 		570FC31F1F17C76A00FEAC03 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
 		573D00AF1F67BEEF00F2D5DE /* ExtensionForUIKitUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIViewController.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
 		5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolRemovable.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 				5778C80C1F5A0FD100C5F6E6 /* Logic.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
+				572A8E031F71DC28008CC1C6 /* Bit.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -558,6 +561,7 @@
 				5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */,
 				5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */,
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
+				572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */,
 				570FC2BF1F1124A300FEAC03 /* ExtensionForSwiftInt.swift in Sources */,
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
