@@ -37,6 +37,10 @@ extension String
 
 extension String
 {
+    public subscript (safe i:Int) -> String? {
+        return 0 <= i && i < self.count ? self[i] : nil
+    }
+
     public subscript (i: Int) -> String {
         return self[Range(i ..< i + 1)]
     }
