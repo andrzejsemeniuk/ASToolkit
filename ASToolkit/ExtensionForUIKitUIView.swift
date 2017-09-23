@@ -158,6 +158,8 @@ extension UIView {
         self.widthAnchor.constraint(equalToConstant: frame.width).isActive=true
         self.heightAnchor.constraint(equalToConstant: frame.height).isActive=true
     }
+
+    
     
     open func constrainTopToSuperviewTop(withMargin margin:CGFloat = 0) {
         self.translatesAutoresizingMaskIntoConstraints=false
@@ -186,6 +188,8 @@ extension UIView {
             self.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).isActive=true
         }
     }
+
+    
     
     open func constrainTopToSuperviewBottom(withMargin margin:CGFloat = 0) {
         self.translatesAutoresizingMaskIntoConstraints=false
@@ -215,6 +219,8 @@ extension UIView {
         }
     }
     
+    
+    
     open func constrainToSuperview(withInsets insets:UIEdgeInsets? = nil) {
         if let insets = insets {
             constrainTopToSuperviewTop          (withMargin: insets.top)
@@ -233,6 +239,8 @@ extension UIView {
     open func constrainToSuperview(withMargins insets:UIEdgeInsets) {
         constrainToSuperview(withInsets: insets)
     }
+    
+    
     
     open func constrainCenterYToSuperviewTop(withMargin margin:CGFloat = 0) {
         self.translatesAutoresizingMaskIntoConstraints=false
@@ -264,18 +272,86 @@ extension UIView {
     
     
     
+    
+    open func constrainTopToTop(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.topAnchor.constraint(equalTo: of.topAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainBottomToBottom(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.bottomAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainLeftToLeft(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.leftAnchor.constraint(equalTo: of.leftAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainRightToRight(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.rightAnchor.constraint(equalTo: of.rightAnchor, constant: margin).isActive=true
+    }
+    
+
+    
+    
+    
+    open func constrainTopToBottom(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.topAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainBottomToTop(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.bottomAnchor.constraint(equalTo: of.topAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainLeftToRight(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.leftAnchor.constraint(equalTo: of.rightAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainRightToLeft(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.rightAnchor.constraint(equalTo: of.leftAnchor, constant: margin).isActive=true
+    }
+
+    
+    
+    
+    open func constrainCenterYToTop(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.centerYAnchor.constraint(equalTo: of.topAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainCenterYToBottom(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.centerYAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainCenterXToLeft(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.centerXAnchor.constraint(equalTo: of.leftAnchor, constant: margin).isActive=true
+    }
+    
+    open func constrainCenterXToRight(of:UIView, withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.centerXAnchor.constraint(equalTo: of.rightAnchor, constant: margin).isActive=true
+    }
+
+    
+    
+    
+    
     open func constrain(width:CGFloat) {
         self.translatesAutoresizingMaskIntoConstraints=false
-        if let superview = superview {
-            self.widthAnchor.constraint(equalToConstant: width).isActive=true
-        }
+        self.widthAnchor.constraint(equalToConstant: width).isActive=true
     }
     
     open func constrain(height:CGFloat) {
         self.translatesAutoresizingMaskIntoConstraints=false
-        if let superview = superview {
-            self.heightAnchor.constraint(equalToConstant: height).isActive=true
-        }
+        self.heightAnchor.constraint(equalToConstant: height).isActive=true
     }
     
 
