@@ -187,6 +187,34 @@ extension UIView {
         }
     }
     
+    open func constrainTopToSuperviewBottom(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.topAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainBottomToSuperviewTop(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.bottomAnchor.constraint(equalTo: superview.topAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainLeftToSuperviewRight(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.leftAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainRightToSuperviewLeft(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.rightAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).isActive=true
+        }
+    }
+    
     open func constrainToSuperview(withInsets insets:UIEdgeInsets? = nil) {
         if let insets = insets {
             constrainTopToSuperviewTop          (withMargin: insets.top)
@@ -205,6 +233,52 @@ extension UIView {
     open func constrainToSuperview(withMargins insets:UIEdgeInsets) {
         constrainToSuperview(withInsets: insets)
     }
+    
+    open func constrainCenterYToSuperviewTop(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.centerYAnchor.constraint(equalTo: superview.topAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainCenterYToSuperviewBottom(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.centerYAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainCenterXToSuperviewLeft(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.centerXAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    open func constrainCenterXToSuperviewRight(withMargin margin:CGFloat = 0) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.centerXAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).isActive=true
+        }
+    }
+    
+    
+    
+    open func constrain(width:CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.widthAnchor.constraint(equalToConstant: width).isActive=true
+        }
+    }
+    
+    open func constrain(height:CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            self.heightAnchor.constraint(equalToConstant: height).isActive=true
+        }
+    }
+    
+
 }
 
 
@@ -271,6 +345,25 @@ extension UIView {
             }
         }
         return nil
+    }
+    
+    public func descendants(withTag tag:Int) -> [UIView] {
+        var result : [UIView] = []
+        for subview in subviews {
+            if subview.tag == tag {
+                result.append(subview)
+            }
+            result += subview.descendants(withTag: tag)
+        }
+        return result
+    }
+    
+    public func descendants() -> [UIView] {
+        var result : [UIView] = subviews
+        for subview in subviews {
+            result += subview.descendants()
+        }
+        return result
     }
     
 }
