@@ -118,6 +118,15 @@ public func | (string:String,tuple:(name:String,value:Any)) -> NSAttributedStrin
 
 
 
+public func | (a:String,b:NSAttributedString) -> NSAttributedString {
+    let r = NSMutableAttributedString(string:a)
+    r.append(b)
+    return r
+}
+
+
+
+
 public func | (a:NSAttributedString,b:NSAttributedString) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString: a)
     r.append(b)
