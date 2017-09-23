@@ -116,15 +116,15 @@ extension UIView {
         }
     }
     
-    open func constrainCenterXToSuperview(withIdentifier:String? = nil) {
+    open func constrainCenterXToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil) {
         if let superview = superview {
-            constrainCenterX(to:superview, withIdentifier:withIdentifier)
+            constrainCenterX(to:superview, withMargin:withMargin, withIdentifier:withIdentifier)
         }
     }
     
-    open func constrainCenterYToSuperview(withIdentifier:String? = nil) {
+    open func constrainCenterYToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil) {
         if let superview = superview {
-            constrainCenterY(to:superview, withIdentifier:withIdentifier)
+            constrainCenterY(to:superview, withMargin:withMargin, withIdentifier:withIdentifier)
         }
     }
     
