@@ -88,14 +88,14 @@ extension UIView {
         self.removeConstraints(self.constraints)
     }
 
-    open func constrainCenterX(to:UIView) {
+    open func constrainCenterX(to:UIView, withMargin:CGFloat = 0) {
         self.translatesAutoresizingMaskIntoConstraints=false
-        self.centerXAnchor.constraint(equalTo: to.centerXAnchor).isActive = true
+        self.centerXAnchor.constraint(equalTo: to.centerXAnchor, constant:withMargin).isActive = true
     }
     
-    open func constrainCenterY(to:UIView) {
+    open func constrainCenterY(to:UIView, withMargin:CGFloat = 0) {
         self.translatesAutoresizingMaskIntoConstraints=false
-        self.centerYAnchor.constraint(equalTo: to.centerYAnchor).isActive = true
+        self.centerYAnchor.constraint(equalTo: to.centerYAnchor, constant:withMargin).isActive = true
     }
     
     open func constrainCenter(to:UIView) {
