@@ -60,6 +60,8 @@
 		5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */; };
 		5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */; };
 		5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C80C1F5A0FD100C5F6E6 /* Logic.swift */; };
+		577E07AB1F840A5C003808B6 /* TestForCGFloat01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */; };
+		577E07AD1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */; };
 		57851D491F4B9C8900AEFA4B /* ExtensionForUIKitUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */; };
 		578872B01F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578872AF1F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift */; };
 		578F25F61F61EC24008C7C8C /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F25F51F61EC24008C7C8C /* Weak.swift */; };
@@ -93,6 +95,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		570FC2081F111E0E00FEAC03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 570FC1F41F111E0E00FEAC03 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 570FC1FC1F111E0E00FEAC03;
+			remoteInfo = ASToolkit;
+		};
+		577E07A81F840863003808B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 570FC1F41F111E0E00FEAC03 /* Project object */;
 			proxyType = 1;
@@ -179,6 +188,8 @@
 		5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableToDictionary.swift; sourceTree = "<group>"; };
 		5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolKeyable.swift; sourceTree = "<group>"; };
 		5778C80C1F5A0FD100C5F6E6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
+		577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForCGFloat01.swift; sourceTree = "<group>"; };
+		577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForExtensionForCoreGraphics.swift; sourceTree = "<group>"; };
 		57851D481F4B9C8800AEFA4B /* ExtensionForUIKitUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIImage.swift; sourceTree = "<group>"; };
 		578872AF1F6D59C1009E1927 /* ExtensionForUIKitUIControlState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIKitUIControlState.swift; sourceTree = "<group>"; };
 		578F25F51F61EC24008C7C8C /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
@@ -346,12 +357,14 @@
 			children = (
 				570FC20D1F111E0E00FEAC03 /* Info.plist */,
 				570FC20B1F111E0E00FEAC03 /* ASToolkitTests.swift */,
+				57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */,
+				57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */,
 				5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */,
 				57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */,
-				57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */,
+				577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */,
+				577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */,
 				574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */,
 				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
-				57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */,
 			);
 			path = ASToolkitTests;
 			sourceTree = "<group>";
@@ -440,6 +453,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				577E07A91F840863003808B6 /* PBXTargetDependency */,
 			);
 			name = ASToolkitUITests;
 			productName = ASToolkitUITests;
@@ -630,6 +644,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */,
+				577E07AD1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift in Sources */,
+				577E07AB1F840A5C003808B6 /* TestForCGFloat01.swift in Sources */,
 				57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */,
 				5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */,
 				5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */,
@@ -664,6 +680,11 @@
 			isa = PBXTargetDependency;
 			target = 570FC1FC1F111E0E00FEAC03 /* ASToolkit */;
 			targetProxy = 570FC2081F111E0E00FEAC03 /* PBXContainerItemProxy */;
+		};
+		577E07A91F840863003808B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 570FC1FC1F111E0E00FEAC03 /* ASToolkit */;
+			targetProxy = 577E07A81F840863003808B6 /* PBXContainerItemProxy */;
 		};
 		57F0A0DE1F564FF90015169D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

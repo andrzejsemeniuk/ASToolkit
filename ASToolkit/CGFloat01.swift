@@ -12,17 +12,22 @@ public class CGFloat01 {
     
     public var value:CGFloat {
         didSet {
-            if value < 0 {
-                self.value = 0
-            }
-            else if 1 < value {
-                self.value = 1
-            }
+            correct(value)
+        }
+    }
+
+    private func correct(_ value:CGFloat) {
+        if value < 0 {
+            self.value = 0
+        }
+        else if 1 < value {
+            self.value = 1
         }
     }
     
     public init(_ value:CGFloat = 0) {
         self.value = value
+        correct(value)
     }
 }
 
