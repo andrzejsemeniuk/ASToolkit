@@ -66,6 +66,11 @@ extension UIView
 
 extension UIView {
     
+    open func removeAllConstraints() {
+        self.removeConstraints(self.constraints)
+    }
+    
+    
     open func constraintBetween(left:NSLayoutAnchor<NSLayoutXAxisAnchor>, right:NSLayoutAnchor<NSLayoutXAxisAnchor>) -> UILayoutGuide {
         let g = UILayoutGuide()
         self.addLayoutGuide(g)
@@ -83,12 +88,15 @@ extension UIView {
         self.centerYAnchor.constraint(equalTo: g.centerYAnchor).isActive=true
         return g
     }
-    
-    open func removeAllConstraints() {
-        self.removeConstraints(self.constraints)
+
+    open func constrainBetween(left:NSLayoutAnchor<NSLayoutXAxisAnchor>, right:NSLayoutAnchor<NSLayoutXAxisAnchor>) {
+        _ = constraintBetween(left: left, right: right)
     }
-
-
+    
+    open func constrainBetween(top:NSLayoutAnchor<NSLayoutYAxisAnchor>, bottom:NSLayoutAnchor<NSLayoutYAxisAnchor>) {
+        _ = constraintBetween(top: top, bottom: bottom)
+    }
+    
     open func addSubviewCentered(_ view:UIView) {
         self.addSubview(view)
         view.constrainCenterToSuperview()
@@ -345,7 +353,30 @@ extension UIView {
     
     
     
+    open func constrainTopToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.topAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).isActive=true
+    }
     
+    open func constrainBottomToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.bottomAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).isActive=true
+    }
+    
+    open func constrainLeftToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.leftAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).isActive=true
+    }
+    
+    open func constrainRightToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.rightAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).isActive=true
+    }
+    
+    
+    
+    
+
     open func constrain(width:CGFloat, withIdentifier:String? = nil) {
         self.translatesAutoresizingMaskIntoConstraints=false
         self.widthAnchor.constraint(equalToConstant: width).identified(withIdentifier).isActive=true
@@ -357,6 +388,28 @@ extension UIView {
     }
     
 
+    open func constrainWidth(to:CGFloat, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.widthAnchor.constraint(equalToConstant: to).identified(withIdentifier).isActive=true
+    }
+    
+    open func constrainHeight(to:CGFloat, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.heightAnchor.constraint(equalToConstant: to).identified(withIdentifier).isActive=true
+    }
+    
+    
+    open func constrainWidth(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.widthAnchor.constraint(equalTo:to.widthAnchor, constant:withMargin).identified(withIdentifier).isActive=true
+    }
+    
+    open func constrainHeight(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        self.heightAnchor.constraint(equalTo:to.heightAnchor, constant: withMargin).identified(withIdentifier).isActive=true
+    }
+    
+    
 }
 
 

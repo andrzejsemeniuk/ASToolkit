@@ -21,7 +21,7 @@ public class CGFloat01 {
         }
     }
     
-    init(value:CGFloat = 0) {
+    public init(_ value:CGFloat = 0) {
         self.value = value
     }
 }
