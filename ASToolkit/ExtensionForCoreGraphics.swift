@@ -15,12 +15,12 @@ extension CGPoint {
         self.init(x:x, y:y)
     }
     
-    public var asCGSize:CGSize {
-        return CGSize(width:x,height:y)
-    }
-    
     public init(xy:CGFloat) {
         self.init(x:xy, y:xy)
+    }
+    
+    public var asCGSize:CGSize {
+        return CGSize(width:x,height:y)
     }
     
     static public var almostZero:CGPoint = {
