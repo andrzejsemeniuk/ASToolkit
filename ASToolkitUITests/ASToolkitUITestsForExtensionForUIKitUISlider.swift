@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import ASToolkit
 
 class ASToolkitUITestsForExtensionForUIKitUISlider: XCTestCase {
         
