@@ -174,7 +174,7 @@ extension String {
         return self
     }
     
-    public func tweened(with:String) -> String {
+    public func tweened(with:String = " ") -> String {
         var result = self.substring(to: 1)
         for i in stride(from:1,to:length,by:1) {
             result += with + self[i]
