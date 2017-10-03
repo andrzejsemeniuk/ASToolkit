@@ -362,9 +362,9 @@
 				5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */,
 				57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */,
 				577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */,
+				577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */,
 				574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */,
 				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
-				577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */,
 			);
 			path = ASToolkitTests;
 			sourceTree = "<group>";
