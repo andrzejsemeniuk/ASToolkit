@@ -888,7 +888,7 @@ extension SKNode
     }
     
 
-    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = UIColor(rgb: [1,0,0])) -> SKNode
+    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
     {
         if true
         {
@@ -928,7 +928,7 @@ extension SKNode
         return self
     }
     
-    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = UIColor(rgb: [1,0,0])) -> SKNode
+    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
     {
         if true
         {
@@ -968,7 +968,7 @@ extension SKNode
         return self
     }
     
-    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 16, color:UIColor = UIColor(rgb: [0,1,0])) -> SKNode
+    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 16, color:UIColor = .green) -> SKNode
     {
         if true
         {
@@ -1107,8 +1107,8 @@ public func aFadeTo             (alpha:CGFloat,duration sec:TimeInterval,delay:T
 
 
 
-public func aSpriteColorTo      (color:UIColor,duration sec:TimeInterval)               -> SKAction { return SKAction.colorize(with: color,colorBlendFactor:color.alpha,duration:sec) }
-public func aSpriteColorTo      (color:UIColor,blendFactor:CGFloat,duration sec:TimeInterval) -> SKAction { return SKAction.colorize(with: color,colorBlendFactor:color.alpha,duration:sec) }
+public func aSpriteColorTo      (color:UIColor,duration sec:TimeInterval)               -> SKAction { return SKAction.colorize(with: color,colorBlendFactor:color.RGBAalpha,duration:sec) }
+public func aSpriteColorTo      (color:UIColor,blendFactor:CGFloat,duration sec:TimeInterval) -> SKAction { return SKAction.colorize(with: color,colorBlendFactor:color.RGBAalpha,duration:sec) }
 public func aSpriteColor        (blendFactorTo blendFactor:CGFloat,duration sec:TimeInterval) -> SKAction { return SKAction.colorize(withColorBlendFactor: blendFactor,duration:sec) }
 
 //public func aAnimate            (textures:[SKTexture],timePerFrame:NSTimeInterval) -> SKAction { return SKAction.animateWithNormalTextures(textures,timePerFrame:timePerFrame) }

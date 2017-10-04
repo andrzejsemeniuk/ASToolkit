@@ -1,5 +1,5 @@
 //
-//  ProtocolToDictionary.swift
+//  ProtocolAssignableToDictionary.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 7/31/17.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-public protocol ToDictionary {
-    func to(dictionary:inout [String:Any])
+public protocol AssignableToDictionary {
+    func assign(toDictionary:inout [String:Any])
 }

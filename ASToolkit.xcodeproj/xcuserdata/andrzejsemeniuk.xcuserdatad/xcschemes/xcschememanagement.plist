@@ -4,10 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ASTookitShowcase.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>ASToolkit.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>ASToolkitTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>ASToolkitUITests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -33,6 +48,16 @@
 			<true/>
 		</dict>
 		<key>570FC3071F16681C00FEAC03</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>57DBB01E1F4293E400AF2BEB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>57F0A0C71F564EE30015169D</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -35,40 +35,121 @@ extension Array
     }
 }
 
+
+extension Array where Element == Character {
+    
+    public var asArrayOfUInt32      : [UInt32]      { return self.map { $0.unicodeScalarCodePoint } }
+    
+}
+
+
+extension Array where Element == Int {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+
+}
+
+
+extension Array where Element == Float {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
+
+extension Array where Element == CGFloat {
+    
+    public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
+
+extension Array where Element == Double {
+    
+    public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
+    public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+    public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
 extension Array {
-    static public func convertToInt(array:[Double]) -> [Int] {
-        var result:[Int] = []
-        array.forEach({ result.append(Int($0)) })
-        return result
+    
+    public func adjacent(_ handle:(Element,Element)->()) {
+        for i in stride(from:1,to:count,by:1) {
+            handle(self[i-1],self[i])
+        }
     }
-    static public func convertToDouble(array:[Int]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
+
+    public func find(_ where:(Element)->Bool) -> Element? {
+        if let index = self.index(where:`where`) {
+            return self[index]
+        }
+        return nil
     }
-    static public func convertToFloat(array:[Double]) -> [Float] {
-        var result:[Float] = []
-        array.forEach({ result.append(Float($0)) })
-        return result
-    }
-    static public func convertToDouble(array:[Float]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
-    }
-    static public func convertToCGFloat(array:[Double]) -> [CGFloat] {
-        var result:[CGFloat] = []
-        array.forEach({ result.append(CGFloat($0)) })
-        return result
-    }
-    static public func convertToDouble(array:[CGFloat]) -> [Double] {
-        var result:[Double] = []
-        array.forEach({ result.append(Double($0)) })
-        return result
-    }
-    static public func convertToUInt32(array:[Character]) -> [UInt32] {
-        var result:[UInt32] = []
-        array.forEach({ result.append($0.unicodeScalarCodePoint) })
+}
+
+extension Array {
+    
+    public func appended(_ element:Element) -> Array<Element> {
+        var result = self
+        result.append(element)
         return result
     }
 }
+
+extension Array {
+    
+    public func split(by:Int) -> [[Element]] {
+        var result : [[Element]] = []
+        var row : [Element] = []
+        for element in self {
+            if row.count >= by {
+                result.append(row)
+                row = []
+            }
+            row.append(element)
+        }
+        
+        if !row.empty {
+            result.append(row)
+        }
+        
+        return result
+    }
+}
+
+extension Array where Element : Equatable {
+    
+    public func next(after:Element) -> Element? {
+        if let index = self.index(where: { $0 == after }) {
+            if index < (count-1) {
+                return self[index+1]
+            }
+            return self[0]
+        }
+        return nil
+    }
+}
+
+public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
+    var r = [(A,B)]()
+    let limit = min(a.count,b.count)
+    for i in stride(from:0,to:limit,by:1) {
+        r.append((a[i],b[i]))
+    }
+    return r
+}
+
+extension Array {
+    
+    public func zipped<B>(with:[B]) -> [(Element,B)] {
+        return zippy(self,with)
+    }
+}
+

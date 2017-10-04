@@ -26,14 +26,26 @@ extension NSMutableAttributedString {
 
 
 
-public func < (lhs:NSAttributedString, rhs:NSAttributedString) -> NSAttributedString {
+public func << (lhs:NSAttributedString, rhs:NSAttributedString) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString:lhs)
     r.append(rhs)
     return r
 }
 
+public func <<= (lhs:inout NSAttributedString, rhs:NSAttributedString) {
+    lhs = lhs << rhs
+}
+
 public func += (lhs:inout NSAttributedString, rhs:NSAttributedString) {
-    lhs = lhs < rhs
+    lhs = lhs << rhs
+}
+
+public func <<= (lhs:inout NSMutableAttributedString, rhs:NSAttributedString) {
+    lhs.setAttributedString(lhs << rhs)
+}
+
+public func += (lhs:inout NSMutableAttributedString, rhs:NSAttributedString) {
+    lhs.setAttributedString(lhs << rhs)
 }
 
 
@@ -100,6 +112,15 @@ public func | (string:NSAttributedString,tuple:(name:String,value:Any)) -> NSAtt
 public func | (string:String,tuple:(name:String,value:Any)) -> NSAttributedString {
     let r = NSMutableAttributedString(string:string)
     r.addAttributes([tuple.name:tuple.value], range: NSRange(location: 0,length: r.length))
+    return r
+}
+
+
+
+
+public func | (a:String,b:NSAttributedString) -> NSAttributedString {
+    let r = NSMutableAttributedString(string:a)
+    r.append(b)
     return r
 }
 

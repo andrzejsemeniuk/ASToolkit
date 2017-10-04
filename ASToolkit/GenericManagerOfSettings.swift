@@ -11,25 +11,15 @@ import UIKit
 
 public protocol GenericManagerOfSettings : class {
     func synchronize    ()
-    func encode         (data:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
-    func decode         (data:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
+    func encode         (dictionary:inout [String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
+    func decode         (dictionary:[String:Any], withPrefix prefix:String?, withSuffix suffix:String?)
     func reset          (withPrefix prefix:String?, withSuffix suffix:String?)
-//    var settings : [GenericSetting] { get }
+    func collect        (withPrefix prefix:String?, withSuffix suffix:String?) -> [(label:String,object:AnyObject)]
 }
 
 extension GenericManagerOfSettings {
     
-//    lazy public var settings : [GenericSetting] = {
-//        var result = [GenericSetting]()
-//        for child in Mirror(reflecting: self).children {
-//            if let setting = child.value as? GenericSetting {
-//                result.append(setting)
-//            }
-//        }
-//        return result
-//    }()
-    
-    public func encode(data:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
+    public func encode              (dictionary:inout [String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
             if let label = child.label {
                 if let prefix = prefix, !label.hasPrefix(prefix) {
@@ -39,13 +29,13 @@ extension GenericManagerOfSettings {
                     continue
                 }
             }
-            if let setting = child.value as? ToDictionary {
-                setting.to(dictionary:&data)
+            if let setting = child.value as? AssignableToDictionary {
+                setting.assign(toDictionary:&dictionary)
             }
         }
     }
     
-    public func decode(data:[String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
+    public func decode              (dictionary:[String:Any], withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
             if let label = child.label {
                 if let prefix = prefix, !label.hasPrefix(prefix) {
@@ -55,13 +45,13 @@ extension GenericManagerOfSettings {
                     continue
                 }
             }
-            if let setting = child.value as? FromDictionary {
-                setting.from(dictionary:data)
+            if let setting = child.value as? AssignableFromDictionary {
+                setting.assign(fromDictionary:dictionary)
             }
         }
     }
     
-    public func reset(withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
+    public func reset               (withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) {
         for child in Mirror(reflecting: self).children {
             if let label = child.label {
                 if let prefix = prefix, !label.hasPrefix(prefix) {
@@ -75,6 +65,25 @@ extension GenericManagerOfSettings {
                 setting.reset()
             }
         }
+    }
+    
+    public func collect             (withPrefix prefix:String? = nil, withSuffix suffix:String? = nil) -> [(label:String,object:AnyObject)] {
+        var result : [(label:String,object:AnyObject)] = []
+        for child in Mirror(reflecting: self).children {
+            if let label = child.label {
+                if let prefix = prefix, !label.hasPrefix(prefix) {
+                    continue
+                }
+                if let suffix = suffix, !label.hasSuffix(suffix) {
+                    continue
+                }
+                
+                let setting = child.value as AnyObject
+                
+                result.append((label:label,object:setting))
+            }
+        }
+        return result
     }
     
 }

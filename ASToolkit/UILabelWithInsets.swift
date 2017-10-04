@@ -28,3 +28,24 @@ open class UILabelWithInsets: UILabel {
     }
     
 }
+
+open class UITextFieldWithInsets: UITextField {
+    
+    open var insets : UIEdgeInsets = UIEdgeInsets() {
+        didSet {
+            super.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    open override var intrinsicContentSize: CGSize {
+        var size = super.intrinsicContentSize
+        size.width += insets.left + insets.right
+        size.height += insets.top + insets.bottom
+        return size
+    }
+    
+    override open func drawText(in rect: CGRect) {
+        return super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
+    }
+    
+}

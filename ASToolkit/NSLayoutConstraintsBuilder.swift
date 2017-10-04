@@ -22,6 +22,14 @@ public class NSLayoutConstraintsBuilder {
         self.views      = views
         self.options    = options
         self.metrics    = metrics
+        
+        self.views.forEach {
+            if let view = $0.value as? UIView {
+                view.translatesAutoresizingMaskIntoConstraints=false
+            }
+        }
+        
+
     }
     
     public func activate(clear:Bool = true) {

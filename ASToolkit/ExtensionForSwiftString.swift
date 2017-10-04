@@ -37,6 +37,10 @@ extension String
 
 extension String
 {
+    public subscript (safe i:Int) -> String? {
+        return 0 <= i && i < self.count ? self[i] : nil
+    }
+
     public subscript (i: Int) -> String {
         return self[Range(i ..< i + 1)]
     }
@@ -61,11 +65,11 @@ extension String
     }
     
     public func substring(to: Int) -> String {
-        return self[Range(0 ..< max(0, to))]
+        return self[Range(0 ..< min(to, length))]
     }
     
     public func substring(from: Int, to: Int) -> String {
-        return self[Range(min(from, length) ..< max(0, to))]
+        return self[Range(min(from, length) ..< min(to, length))]
     }
 
     public func substring(from:Int = 0, length:Int) -> String {
@@ -168,5 +172,13 @@ extension String {
             return self[0].uppercased() + self.substring(from: 1)
         }
         return self
+    }
+    
+    public func tweened(with:String = " ") -> String {
+        var result = self.substring(to: 1)
+        for i in stride(from:1,to:length,by:1) {
+            result += with + self[i]
+        }
+        return result
     }
 }

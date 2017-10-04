@@ -31,7 +31,7 @@ public class UILabelWithInsetsAndCenteredCircle : UILabelWithInsets {
     }
     
     public override func draw(_ rect: CGRect) {
-        circle.path = UIBezierPath(arcCenter    : CGPoint(x:frame.size.width/2, y:frame.size.height/2),
+        circle.path = UIBezierPath(arcCenter    : bounds.center,
                                    radius       : circle.radius,
                                    startAngle   : 0,
                                    endAngle     : 2 * .pi,

@@ -1,5 +1,5 @@
 //
-//  UtilityLoop.swift
+//  Loop.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 2/7/17.
