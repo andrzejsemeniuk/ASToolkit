@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "ASToolkit"
-  s.version      = "0.1.2"
+  s.version      = "0.1.3"
   s.summary      = "A utility framework of useful and convenient additions and extensions to iOS in Swift"
   s.description  = "A utility framework of useful and convenient additions and extensions to iOS in Swift!"
   s.homepage     = "https://github.com/andrzejsemeniuk/ASToolkit"
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
 
   s.pod_target_xcconfig =  {
-        'SWIFT_VERSION' => '3.0',
+        'SWIFT_VERSION' => '3.2',
   }
 
 end
