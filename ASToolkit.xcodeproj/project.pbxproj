@@ -58,6 +58,8 @@
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */; };
+		576B29AC1F868F960001DC97 /* BindingValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B29AB1F868F960001DC97 /* BindingValue.swift */; };
+		576B29AE1F868FCE0001DC97 /* TestForBindingValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */; };
 		5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */; };
 		5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C80C1F5A0FD100C5F6E6 /* Logic.swift */; };
 		577E07AB1F840A5C003808B6 /* TestForCGFloat01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */; };
@@ -186,6 +188,8 @@
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableToDictionary.swift; sourceTree = "<group>"; };
+		576B29AB1F868F960001DC97 /* BindingValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingValue.swift; sourceTree = "<group>"; };
+		576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForBindingValue.swift; sourceTree = "<group>"; };
 		5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolKeyable.swift; sourceTree = "<group>"; };
 		5778C80C1F5A0FD100C5F6E6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 		577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForCGFloat01.swift; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
 				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				570FC2A51F1124A300FEAC03 /* Block.swift */,
+				576B29AB1F868F960001DC97 /* BindingValue.swift */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
@@ -365,6 +370,7 @@
 				577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */,
 				574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */,
 				5708C7411F33E15B0029DE65 /* TestVariable.swift */,
+				576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */,
 			);
 			path = ASToolkitTests;
 			sourceTree = "<group>";
@@ -574,6 +580,7 @@
 			files = (
 				5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */,
 				5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */,
+				576B29AC1F868F960001DC97 /* BindingValue.swift in Sources */,
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
 				572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */,
 				570FC2BF1F1124A300FEAC03 /* ExtensionForSwiftInt.swift in Sources */,
@@ -650,6 +657,7 @@
 				5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */,
 				5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */,
 				570FC20C1F111E0E00FEAC03 /* ASToolkitTests.swift in Sources */,
+				576B29AE1F868FCE0001DC97 /* TestForBindingValue.swift in Sources */,
 				574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */,
 				57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */,
 			);
