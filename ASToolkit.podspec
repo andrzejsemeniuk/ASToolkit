@@ -9,14 +9,14 @@
 Pod::Spec.new do |s|
 
   s.name         = "ASToolkit"
-  s.version      = "0.1.4"
+  s.version      = "0.1.4.1"
   s.summary      = "A utility framework of useful and convenient additions and extensions to iOS in Swift"
   s.description  = "A utility framework of useful and convenient additions and extensions to iOS in Swift!"
   s.homepage     = "https://github.com/andrzejsemeniuk/ASToolkit"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = "Andrzej Semeniuk"
   s.platform     = :ios, "10.0"
-  s.source       = { :git => "https://github.com/andrzejsemeniuk/ASToolkit.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/andrzejsemeniuk/ASToolkit.git", :tag => "release/#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
