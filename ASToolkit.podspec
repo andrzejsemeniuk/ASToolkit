@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "ASToolkit"
-  s.version      = "0.1.4.1"
+  s.version      = "0.1.4.2"
   s.summary      = "A utility framework of useful and convenient additions and extensions to iOS in Swift"
   s.description  = "A utility framework of useful and convenient additions and extensions to iOS in Swift!"
   s.homepage     = "https://github.com/andrzejsemeniuk/ASToolkit"
