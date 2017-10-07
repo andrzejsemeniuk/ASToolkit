@@ -182,3 +182,19 @@ extension String {
         return result
     }
 }
+
+extension String {
+    
+    public func appended(with:String, delimiter:String) -> String {
+        if isEmpty {
+            return with
+        }
+        else if with.isEmpty {
+            return self
+        }
+        else {
+            return "\(self)\(delimiter)\(with)"
+        }
+    }
+
+}

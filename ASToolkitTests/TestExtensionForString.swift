@@ -32,6 +32,13 @@ class TestExtensionForString: XCTestCase {
         XCTAssertEqual("".tweened(with:" "),"")
     }
     
+    func test_appended() {
+        XCTAssertEqual("abc".appended(with:"d",delimiter:"/"),"abc/d")
+        XCTAssertEqual("abc".appended(with:"",delimiter:"/"),"abc")
+        XCTAssertEqual("".appended(with:"d",delimiter:"/"),"d")
+        XCTAssertEqual("".appended(with:"",delimiter:"/"),"")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
