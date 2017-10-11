@@ -76,6 +76,11 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertEqual(a.trim(to:5).count,0)
     }
     
+    func testisNotEmpty() {
+        XCTAssertTrue([1,2,3].isNotEmpty)
+        XCTAssertFalse([].isNotEmpty)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

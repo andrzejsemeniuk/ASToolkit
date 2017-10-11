@@ -10,6 +10,11 @@ import Foundation
 
 extension Array
 {
+    
+    public var isNotEmpty : Bool {
+        return !isEmpty
+    }
+    
     public mutating func trim(to:Int) -> Array {
         let to = Swift.min(to,count)
         let result = subarray(from:to, length:count-to)
