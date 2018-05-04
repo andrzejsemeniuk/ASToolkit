@@ -69,6 +69,9 @@ extension Date {
     public func hour   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.hour, from: self) }
     public func minute (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.minute, from: self) }
     public func second (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.second, from: self) }
+    public func millisecond (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int {
+        return Int(Int64(timeIntervalSinceReferenceDate * 1000) % 1000)
+    }
 
 }
 
@@ -124,5 +127,20 @@ extension Date {
         }
         return false
     }
+}
+
+extension Date {
+    
+    public var asYYYYMMDDHHMMSSMS : UInt64 {
+        let yyyy = UInt64(year())   * 10000000000000
+        let   mm = UInt64(month())  *   100000000000
+        let   dd = UInt64(day())    *     1000000000
+        let   hh = UInt64(hour())   *       10000000
+        let   mi = UInt64(minute()) *         100000
+        let   ss = UInt64(second()) *           1000
+        let   ms = UInt64(millisecond())
+        return yyyy + mm + dd + hh + mi + ss + ms
+    }
+
 }
 

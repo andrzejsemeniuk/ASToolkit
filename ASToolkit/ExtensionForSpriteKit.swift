@@ -328,8 +328,8 @@ public func / (left: CGPoint, right: CGPoint) -> CGPoint {
 
 extension SKNode
 {
-    var width   :CGFloat                                                                    { return 0 }
-    var height  :CGFloat                                                                    { return 0 }
+    @objc var width   :CGFloat                                                                    { return 0 }
+    @objc var height  :CGFloat                                                                    { return 0 }
     
     public func hFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.width * ratio }
     public func vFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.height * ratio }
@@ -346,7 +346,7 @@ extension SKNode
     public func pointFromRatio         (ratio:CGPoint)                                 -> CGPoint  { return CGPoint(x: hFrom(ratio:ratio.x), y: vFrom(ratio:ratio.y)) }
     public func pointFromRatio         (h:CGFloat, v:CGFloat)                          -> CGPoint  { return CGPoint(x: hFrom(ratio:h),y: vFrom(ratio:v)) }
     
-    public func positionFromRatio      (x:CGFloat, y:CGFloat)                          -> CGPoint  { return position + pointFromRatio(h:x,v:y) }
+    @objc public func positionFromRatio      (x:CGFloat, y:CGFloat)                          -> CGPoint  { return position + pointFromRatio(h:x,v:y) }
     
     
     public var z:CGFloat {

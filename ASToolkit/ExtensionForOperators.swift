@@ -12,7 +12,7 @@ import Foundation
 
 prefix operator ++
 
-public prefix func ++<T: Integer>(rhs:inout T) -> T {
+public prefix func ++<T: BinaryInteger>(rhs:inout T) -> T {
     rhs = rhs + 1
     return rhs
 }

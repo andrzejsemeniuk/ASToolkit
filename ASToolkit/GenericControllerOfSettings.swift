@@ -412,7 +412,7 @@ open class GenericControllerOfSettings : UITableViewController
         return view
     }
     
-    open func handleUISwitch                    (control:UISwitch?) {
+    @objc open func handleUISwitch                    (control:UISwitch?) {
         if let myswitch = control, let update = registeredUISwitches[myswitch] {
             update(myswitch)
         }
@@ -461,7 +461,7 @@ open class GenericControllerOfSettings : UITableViewController
         return view
     }
     
-    open func handleUISlider                    (control:UISlider?) {
+    @objc open func handleUISlider                    (control:UISlider?) {
         if let myslider = control, let update = registeredUISliders[myslider] {
             update(myslider)
         }
@@ -517,8 +517,8 @@ open class GenericControllerOfSettings : UITableViewController
         view.font = self.fontForFieldText ?? view.font
         view.textAlignment = .right
         view.textColor = .gray
-        view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(attributes: [
-            NSFontAttributeName : view.font ?? UIFont.defaultFont
+        view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(withAttributes: [
+            NSAttributedStringKey.font : view.font ?? UIFont.defaultFont
             ])
         register(indexPath:indexPath, id:id)
         return view

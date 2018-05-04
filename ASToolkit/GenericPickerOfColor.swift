@@ -443,7 +443,7 @@ open class GenericPickerOfColor : UIView {
             fatalError("init(coder:) has not been implemented")
         }
         
-        open func tapped() {
+        @objc open func tapped() {
             colorArrayManager.colorIndexAdvance(withLimit:colorLimit)
         }
         
@@ -685,7 +685,7 @@ open class GenericPickerOfColor : UIView {
 
         }
         
-        final public func tapOnCopyButton(_ button:UIButton) {
+        @objc final public func tapOnCopyButton(_ button:UIButton) {
             if let button = copyButton, !button.isSelected {
                 
                 button.isSelected=true
@@ -752,16 +752,16 @@ open class GenericPickerOfColor : UIView {
                 var representation = NSMutableAttributedString.init()
                 representation += "0x" | font | UIColor.gray
                 representation += hex[0] | [
-                    NSBackgroundColorAttributeName      : configuration.background.red
+                    NSAttributedStringKey.backgroundColor      : configuration.background.red
                     ] | font | configuration.foreground.red
                 representation += hex[1] | [
-                    NSBackgroundColorAttributeName      : configuration.background.green // UIColor(hsb:[0.3,1,0.7])
+                    NSAttributedStringKey.backgroundColor      : configuration.background.green // UIColor(hsb:[0.3,1,0.7])
                     ] | font | configuration.foreground.green
                 representation += hex[2] | [
-                    NSBackgroundColorAttributeName      : configuration.background.blue // UIColor(hsb:[0.61,1,1])
+                    NSAttributedStringKey.backgroundColor      : configuration.background.blue // UIColor(hsb:[0.61,1,1])
                     ] | font | configuration.foreground.blue
                 representation += hex[3] | [
-                    NSBackgroundColorAttributeName      : configuration.background.alpha // UIColor(white:0.6)
+                    NSAttributedStringKey.backgroundColor      : configuration.background.alpha // UIColor(white:0.6)
                     ] | font | configuration.foreground.alpha
                 self.field.attributedText = representation
             }
@@ -1212,7 +1212,7 @@ open class GenericPickerOfColor : UIView {
         
         public struct OperationData {
             public var button               : UIButtonWithCenteredCircle = UIButtonWithCenteredCircle()
-            public var function             : ()->() = { _ in }
+            public var function             : ()->() = {  }
         }
         
         public var data                     : [Operation:OperationData] = [:]
@@ -1295,7 +1295,7 @@ open class GenericPickerOfColor : UIView {
             button.addTarget(self, action: #selector(ComponentOperations.tapped(_:)), for: .touchUpInside)
         }
         
-        open func tapped(_ control:UIButton) {
+        @objc open func tapped(_ control:UIButton) {
             if let operation = operations[safe:control.tag] {
                 if let selected = data[operation]?.button.isSelected, !selected {
                     
@@ -1381,7 +1381,7 @@ open class GenericPickerOfColor : UIView {
             return CGFloat(1 + rows) * dx - dx/2
         }
         
-        func tapped(_ control:UIControl!) {
+        @objc func tapped(_ control:UIControl!) {
             if let button = control as? UIButtonWithCenteredCircle, let color = button.circle(for: .normal).fillColor {
                 handlerForTap?(UIColor(cgColor:color))
             }
@@ -1532,8 +1532,8 @@ open class GenericPickerOfColor : UIView {
         public weak var rightButton     : UIButtonWithCenteredCircle!
         public weak var rightView       : UIViewCircleWithUILabel!
         
-        public var update               : (_ slider:ComponentSlider, _ color:UIColor, _ animate:Bool)->() = { _ in }
-        public var action               : (_ value:Float, _ dragging:Bool)->() = { _ in }
+        public var update               : (_ slider:ComponentSlider, _ color:UIColor, _ animate:Bool)->() = { _,_,_  in }
+        public var action               : (_ value:Float, _ dragging:Bool)->() = { _,_  in }
         
         public var actionOnLeftButton   : (ComponentSlider)->() = { _ in }
         public var actionOnRightButton  : (ComponentSlider)->() = { _ in }
@@ -2253,7 +2253,7 @@ open class GenericPickerOfColor : UIView {
         return result
     }
     
-    func handleSliderEventDragEnd(_ control:UIControl) {
+    @objc func handleSliderEventDragEnd(_ control:UIControl) {
         if let uislider = control as? UISlider {
             if let slider = self.componentSliders.find({ $0.slider == uislider }) {
                 slider.action(uislider.value,false)
@@ -2261,7 +2261,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    func handleSliderEventValueChanged(_ control:UIControl) {
+    @objc func handleSliderEventValueChanged(_ control:UIControl) {
         if let uislider = control as? UISlider {
             if let slider = self.componentSliders.find({ $0.slider == uislider }) {
                 slider.action(uislider.value,true)
@@ -2269,7 +2269,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    func handleSliderLeftButtonEvent(_ control:UIControl) {
+    @objc func handleSliderLeftButtonEvent(_ control:UIControl) {
         if let button = control as? UIButton {
             if let slider = self.componentSliders.find({ $0.leftButton == button }) {
                 slider.actionOnLeftButton(slider)
@@ -2277,7 +2277,7 @@ open class GenericPickerOfColor : UIView {
         }
     }
     
-    func handleSliderRightButtonEvent(_ control:UIControl) {
+    @objc func handleSliderRightButtonEvent(_ control:UIControl) {
         if let button = control as? UIButton {
             if let slider = self.componentSliders.find({ $0.rightButton == button }) {
                 slider.actionOnRightButton(slider)
@@ -2633,8 +2633,8 @@ func test() {
         picker.frame = UIScreen.main.bounds
         vc.view = picker
         picker.backgroundColor = UIColor(white:0.95)
-        picker.handlerForColor = { color in
-            print("new color\(color)")
+        picker.handlerForColor = { color,dragging,animated in
+//			Swift.print("new color\(color)")
         }
         picker.set(color:UIColor(rgb:[0.64,0.13,0.78]), dragging:false, animated:true)
         WINDOW.rootViewController = vc

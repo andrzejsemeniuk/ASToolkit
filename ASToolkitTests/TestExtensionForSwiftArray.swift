@@ -81,6 +81,14 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertFalse([].isNotEmpty)
     }
     
+    func testTransposed() {
+        XCTAssertEqual([[1]].transposed(), [[1]])
+        XCTAssertEqual([[1,2,3],[4,5]].transposed(), [[1,4],[2,5],[3]])
+        XCTAssertEqual([[4,1],[5,2],[3]].transposed(),[[4,5,3],[1,2]])
+        XCTAssertEqual([[1,2,3]].transposed(), [[1],[2],[3]])
+        XCTAssertEqual([[1],[2],[3]].transposed(),[[1,2,3]])
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

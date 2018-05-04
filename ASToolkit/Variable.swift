@@ -8,8 +8,15 @@
 
 import Foundation
 
+// TODO MAKE GENERIC
+
+public protocol ValueListener {
+    func didSet     (value:Double)
+}
+
 public protocol Variable {
     var value       : Double { get set }
+    var listener    : ValueListener? { get set }
 }
 
 public protocol VariableWithDefaultValue : Variable {
@@ -22,7 +29,10 @@ public protocol VariableWithRange : Variable {
     var range       : Double { get }
 }
 
-
+public struct VariableWithEnablement <V> {
+    public var variable : V
+    public var enabled  : Bool
+}
 
 public class VariableWithImmutableRange : VariableWithRange
 {
@@ -33,6 +43,7 @@ public class VariableWithImmutableRange : VariableWithRange
     public let lowerbound   : Double
     public let upperbound   : Double
     public let range        : Double
+    public var listener     : ValueListener?
     
     public var value        : Double {
         didSet {
@@ -42,6 +53,7 @@ public class VariableWithImmutableRange : VariableWithRange
             else if upperbound < value {
                 value = upperbound
             }
+            listener?.didSet(value:value)
         }
     }
     
@@ -159,6 +171,8 @@ public class VariableNN : VariableWithImmutableRange
 
 public class VariableWithMutableRange : VariableWithRange
 {
+    public var listener: ValueListener?
+    
     public var lowerbound   : Double {
         didSet {
             if value < lowerbound {

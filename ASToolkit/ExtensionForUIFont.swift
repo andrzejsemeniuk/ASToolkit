@@ -25,7 +25,7 @@ extension UIFont {
     }
     
     public func isMember(character:UInt32) -> Bool {
-        if let cs = self.fontDescriptor.object(forKey: UIFontDescriptorCharacterSetAttribute) as? NSCharacterSet {
+        if let cs = self.fontDescriptor.object(forKey: UIFontDescriptor.AttributeName.characterSet) as? NSCharacterSet {
 //            return cs.characterIsMember(unichar(character))
             return cs.longCharacterIsMember(character)
         }
@@ -43,8 +43,8 @@ extension UIFont {
         
 //        var code_point: [UniChar] = [UInt16(point) & 0xFFFF, UInt16(point >> 16) & 0xFFFF]
         var code_point: [UniChar] = [
-            UniChar.init(truncatingBitPattern: character),
-            UniChar.init(truncatingBitPattern: character >> 16)
+            UniChar.init(truncatingIfNeeded: character),
+            UniChar.init(truncatingIfNeeded: character >> 16)
         ]
         var glyphs: [CGGlyph] = [0,0]
         let result = CTFontGetGlyphsForCharacters(self as CTFont, &code_point, &glyphs, glyphs.count)
@@ -159,8 +159,8 @@ public class Glypher {
         for font in support {
             //            var code_point: [UniChar] = [UInt16(point) & 0xFFFF, UInt16(point >> 16) & 0xFFFF]
             var code_point: [UniChar] = [
-                UniChar.init(truncatingBitPattern: point),
-                UniChar.init(truncatingBitPattern: point >> 16)
+                UniChar.init(truncatingIfNeeded: point),
+                UniChar.init(truncatingIfNeeded: point >> 16)
             ]
             var glyphs: [CGGlyph] = [0, 0]
             let result = CTFontGetGlyphsForCharacters(font as CTFont, &code_point, &glyphs, glyphs.count)

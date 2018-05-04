@@ -13,7 +13,7 @@ extension UIEdgeInsets {
     /// Initializes all edges with same value
     ///
     /// - Parameter all: value for all edges
-    public init(all:CGFloat) {
+	public init(all:CGFloat) {
         self.init(top:all,left:all,bottom:all,right:all)
     }
     
@@ -25,6 +25,10 @@ extension UIEdgeInsets {
         self.init(top:top, left:0, bottom:0, right:0)
     }
     
+	public init(top:CGFloat,left:CGFloat) {
+		self.init(top:top, left:left, bottom:0, right:0)
+	}
+
     public init(bottom:CGFloat) {
         self.init(top:0, left:0, bottom:bottom, right:0)
     }

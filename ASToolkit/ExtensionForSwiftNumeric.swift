@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Integer {
+extension BinaryInteger {
     public mutating func increment(increment:Self) -> Self {
         self = self + increment
         return self

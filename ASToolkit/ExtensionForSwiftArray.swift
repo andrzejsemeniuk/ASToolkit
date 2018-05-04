@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Array
+public extension Array
 {
     
     public var isNotEmpty : Bool {
@@ -158,3 +158,19 @@ extension Array {
     }
 }
 
+//extension Array where Element: Collection, Element.Iterator.Element: Collection {
+extension Array where Element: Collection {
+
+    public func transposed() -> [[Element.Iterator.Element]] {
+        var result : [[Element.Iterator.Element]] = [[]]
+        for row in self {
+            for (y,column) in row.enumerated() {
+                while (result.count <= y) {
+                    result.append([])
+                }
+                result[y].append(column)
+            }
+        }
+        return result
+    }
+}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension UserDefaults
+public extension UserDefaults
 {
     public class func clear()
     {
@@ -22,7 +22,7 @@ extension UserDefaults
     }
 }
 
-extension UserDefaults {
+public extension UserDefaults {
     open func date(forKey key:String) -> Date? {
         return value(forKey: key) as? Date
     }

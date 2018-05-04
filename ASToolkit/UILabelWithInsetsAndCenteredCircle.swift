@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class UILabelWithInsetsAndCenteredCircle : UILabelWithInsets {
+open class UILabelWithInsetsAndCenteredCircle : UILabelWithInsets {
     
     public class Circle : CAShapeLayer {
         open var radius : CGFloat = 0
@@ -30,7 +30,7 @@ public class UILabelWithInsetsAndCenteredCircle : UILabelWithInsets {
         self.layer.insertSublayer(circle, at:0)
     }
     
-    public override func draw(_ rect: CGRect) {
+	open override func draw(_ rect: CGRect) {
         circle.path = UIBezierPath(arcCenter    : bounds.center,
                                    radius       : circle.radius,
                                    startAngle   : 0,

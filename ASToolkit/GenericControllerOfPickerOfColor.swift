@@ -221,7 +221,7 @@ open class GenericControllerOfPickerOfColor : UITableViewController
     
     
     
-    open func handleTapOnCircle(_ control:UIControl) {
+    @objc open func handleTapOnCircle(_ control:UIControl) {
         
         if let button = control as? UIButtonWithCenteredCircle {
             self.selected = UIColor.init(cgColor:button.circle(for: .normal).fillColor ?? UIColor.clear.cgColor)
