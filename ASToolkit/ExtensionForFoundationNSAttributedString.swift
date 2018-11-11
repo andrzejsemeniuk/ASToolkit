@@ -124,6 +124,11 @@ public func | (a:String,b:NSAttributedString) -> NSAttributedString {
     return r
 }
 
+public func | (a:NSAttributedString,b:String) -> NSAttributedString {
+    let r = NSMutableAttributedString(string:b)
+    return a | r
+}
+
 
 
 
