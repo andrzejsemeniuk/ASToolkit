@@ -8,6 +8,14 @@
 
 import XCTest
 
+//func ==<Element : Equatable> (lhs: [[Element]], rhs: [[Element]]) -> Bool {
+//	return lhs.count == rhs.count && !zip(lhs, rhs).contains {$0 != $1 }
+//}
+func ==<Element : Equatable> (lhs: [[Element]], rhs: [[Element]]) -> Bool {
+	return lhs.elementsEqual(rhs, by: ==)
+}
+
+
 class TestExtensionForSwiftArray: XCTestCase {
     
     override func setUp() {
@@ -80,6 +88,23 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertTrue([1,2,3].isNotEmpty)
         XCTAssertFalse([].isNotEmpty)
     }
+
+    func testTransposed() {
+        XCTAssertTrue([[1]].transposed() == [[1]])
+        XCTAssertTrue([[1,2,3],[4,5]].transposed() == [[1,4],[2,5],[3]])
+        XCTAssertTrue([[4,1],[5,2],[3]].transposed() == [[4,5,3],[1,2]])
+        XCTAssertTrue([[1,2,3]].transposed() == [[1],[2],[3]])
+        XCTAssertTrue([[1],[2],[3]].transposed() == [[1,2,3]])
+    }
+
+	func testDimensions() {
+		XCTAssertTrue([[]].dimensions == (rows:1,columns:0))
+		XCTAssertTrue([[2],[1]].dimensions == (rows:2,columns:1))
+		XCTAssertTrue([[2,3],[1]].dimensions == (rows:2,columns:2))
+		XCTAssertTrue([[2,3]].dimensions == (rows:1,columns:2))
+		XCTAssertTrue([[2],[1,2]].dimensions == (rows:2,columns:2))
+		XCTAssertTrue([[2]].dimensions == (rows:1,columns:1))
+	}
     
     func testPerformanceExample() {
         // This is an example of a performance test case.

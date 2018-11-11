@@ -1,8 +1,8 @@
 //
-//  UIBorder.swift
-//  UIPage
+//  UIViewWithBorder.swift
+//  ASToolkit
 //
-//  Created by andrej on 4/9/18.
+//  Created by andrzej on 4/9/18.
 //  Copyright © 2018 Andrzej Semeniuk. All rights reserved.
 //
 
@@ -11,39 +11,12 @@ import UIKit
 
 open class UIViewWithBorder : UIView {
 
-	public enum LineCap {
-		case butt
-		case round
-		case square
-
-		public var string : String {
-			switch self {
-			case .round				: return kCALineCapRound
-			case .butt				: return kCALineCapButt
-			case .square			: return kCALineCapSquare
-			}
-		}
-	}
-
-	public enum LineJoin {
-		case round
-		case bevel
-		case miter(limit:CGFloat)
-
-		public var string : String {
-			switch self {
-			case .round				: return kCALineJoinRound
-			case .bevel				: return kCALineJoinBevel
-			case .miter				: return kCALineJoinMiter
-			}
-		}
-	}
-
 	public var margin 			: UIEdgeInsets			= UIEdgeInsets()
 	public var color 			: UIColor				= .white
 	public var lineWidth		: CGFloat				= 1
-	public var lineCap 			: LineCap 				= .butt
-	public var lineJoin			: LineJoin				= .bevel
+	public var lineCap 			: CGLineCap 			= .butt
+	public var lineJoin			: CGLineJoin			= .bevel
+	public var miterLimit		: CGFloat				= 0
 	public var lineDashPattern	: [NSNumber]			= []
 	public var lineDashPhase	: CGFloat 				= 0
 
@@ -56,27 +29,31 @@ open class UIViewWithBorder : UIView {
 								 length			: CGFloat,
 								 spacing		: CGFloat,
 								 phase			: CGFloat? = 0,
-								 join			: LineJoin? = .bevel,
-								 cap			: LineCap? = .butt)
+								 join			: CGLineJoin? = .bevel,
+								 miterLimit		: CGFloat? = nil,
+								 cap			: CGLineCap? = .butt)
 	{
 		self.lineWidth 			= thickness ?? self.lineWidth
 		self.lineDashPattern 	= [NSNumber(value:length),NSNumber(value:spacing)]
 		self.lineDashPhase 		= phase ?? self.lineDashPhase
 		self.lineJoin			= join ?? self.lineJoin
+		self.miterLimit			= miterLimit ?? self.miterLimit
 		self.lineCap			= cap ?? self.lineCap
 	}
 
 	open func makeDotted		(thickness		: CGFloat? = nil,
 								 spacing		: CGFloat,
 								 phase			: CGFloat? = 0,
-								 join			: LineJoin? = .round,
-								 cap			: LineCap? = .round)
+								 join			: CGLineJoin? = .round,
+								 miterLimit		: CGFloat? = nil,
+								 cap			: CGLineCap? = .round)
 	{
 		let width 				= thickness ?? self.lineWidth
 		self.lineWidth 			= width
 		self.lineDashPattern 	= [NSNumber(value:width),NSNumber(value:spacing)]
 		self.lineDashPhase 		= phase ?? self.lineDashPhase
 		self.lineJoin			= join ?? self.lineJoin
+		self.miterLimit			= miterLimit ?? self.miterLimit
 		self.lineCap			= cap ?? self.lineCap
 	}
 
@@ -162,9 +139,9 @@ open class UIViewWithBorder : UIView {
 		switch self.lineJoin {
 		case .bevel				: border.lineJoin = kCALineJoinBevel
 		case .round				: border.lineJoin = kCALineJoinRound
-		case .miter(limit: let limit) :
+		case .miter				:
 			border.lineJoin 	= kCALineJoinMiter
-			border.miterLimit 	= limit
+			border.miterLimit 	= miterLimit
 		}
 	}
 }

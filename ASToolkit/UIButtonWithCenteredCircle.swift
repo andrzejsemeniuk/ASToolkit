@@ -9,31 +9,28 @@
 import Foundation
 import UIKit
 
-public class UIButtonWithCenteredCircle : UIButton {
+open class UIButtonWithCenteredCircle : UIButton {
     
     open class Circle : CAShapeLayer {
-        open var radius                 : CGFloat           = 0
+        open var radius				  : CGFloat           = 0
     }
     
-    private var circles:[String:Circle] = [:]
+    private var circles:[UIControlState:Circle] = [:]
     
-    
-    public func circle(for state:UIControlState) -> Circle {
-        let key = UIButton.name(state: state)
-        if let r = self.circles[key] {
+    open func circle(for state:UIControlState) -> Circle {
+        if let r = self.circles[state] {
             return r
         }
         let r = Circle()
-        self.circles[key] = r
+        self.circles[state] = r
         self.layer.insertSublayer(r, at: 0)
         return r
     }
     
-    public override func draw(_ rect: CGRect) {
-        let stateName = UIButton.name(state: state)
+    open override func draw(_ rect: CGRect) {
         for (key,circle) in circles {
-            if key==stateName {
-                circle.path = UIBezierPath(arcCenter    : CGPoint(x:frame.size.width/2, y:frame.size.height/2),
+            if key==state {
+                circle.path = UIBezierPath(arcCenter    : rect.center,
                                            radius       : circle.radius,
                                            startAngle   : 0,
                                            endAngle     : 2 * CGFloat.pi,

@@ -24,5 +24,9 @@ public enum Indexes {
 	case exceptSome([Int])
 	case exceptSpan(Int,Int)
 	case exceptRanges([Indexes])
+
+	public func array(count:Int) -> [Int] {
+		return Array<Int>(0..<count).indexes(self)
+	}
 }
 

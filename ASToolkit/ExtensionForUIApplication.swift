@@ -7,3 +7,12 @@
 //
 
 import Foundation
+import UIKit
+
+extension UIApplication
+{
+    static public var rootViewController : UIViewController! {
+        return UIApplication.shared.keyWindow!.rootViewController
+    }    
+}
+

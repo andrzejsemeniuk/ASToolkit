@@ -8,10 +8,11 @@
 
 import Foundation
 
-extension Comparable {
+public extension Comparable {
 
     public func clamped             (minimum:Self, maximum:Self) -> Self {
         return self < minimum ? minimum : maximum < self ? maximum : self
     }
 
 }
+

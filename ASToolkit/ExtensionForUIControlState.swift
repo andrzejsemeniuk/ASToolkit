@@ -8,6 +8,32 @@
 
 import Foundation
 
+extension UIControlState : RawRepresentable {
+
+}
+
+extension UIControlState : CustomStringConvertible {
+
+	public var description: String {
+		return name
+	}
+
+	public var name : String {
+		switch self {
+		case .application                 : return "application"
+		case .disabled                    : return "disabled"
+		case .focused                     : return "focused"
+		case .highlighted                 : return "highlighted"
+		case .normal                      : return "normal"
+		case .reserved                    : return "reserved"
+		case .selected                    : return "selected"
+		default:
+			return String(self.rawValue)
+		}
+	}
+
+}
+
 extension UIControlState : Hashable {
     
     public var hashValue : Int {

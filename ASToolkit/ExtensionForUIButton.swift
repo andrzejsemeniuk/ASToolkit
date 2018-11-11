@@ -9,33 +9,32 @@
 import Foundation
 
 extension UIButton {
-    
-    public static func name(state:UIControlState) -> String {
-        switch state {
-        case UIControlState.application                 : return "application"
-        case UIControlState.disabled                    : return "disabled"
-        case UIControlState.focused                     : return "focused"
-        case UIControlState.highlighted                 : return "highlighted"
-        case UIControlState.normal                      : return "normal"
-        case UIControlState.reserved                    : return "reserved"
-        case UIControlState.selected                    : return "selected"
-        default:
-            return String(state.rawValue)
-        }
-    }
+
+	open func addTap(named: String = "", action: @escaping () -> ()) {
+		self.addAction(named: named, for: .touchUpInside, action: action)
+	}
+
 }
 
 extension UIButton {
     
-    public func decorate(margin:CGFloat) {
-        self.contentEdgeInsets    = UIEdgeInsets(all:margin)
+    open func decorate(margin:CGFloat) {
+        self.contentEdgeInsets = UIEdgeInsets(all:margin)
     }
     
-    public func decorate(borderWidth:CGFloat) {
+    open func decorate(borderWidth:CGFloat) {
         self.layer.borderWidth = borderWidth
     }
     
-    public func decorate(borderColor:UIColor) {
+    open func decorate(borderColor:UIColor) {
         self.layer.borderColor = borderColor.cgColor
     }
+}
+
+extension UIButton {
+
+	open func setAttributedTitle(_ string: String, for state: UIControlState) {
+		self.setAttributedTitle(NSAttributedString(string:string), for: state)
+	}
+
 }

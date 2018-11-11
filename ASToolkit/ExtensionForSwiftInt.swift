@@ -36,6 +36,17 @@ extension Int {
     public mutating func advance(by n:Int) {
         self = self + n
     }
+
+	@discardableResult public mutating func assign(max v:Int) -> Int {
+		self = Swift.max(self,v)
+		return self
+	}
+
+	@discardableResult public mutating func assign(min v:Int) -> Int {
+		self = Swift.min(self,v)
+		return self
+	}
+
 }
 
 extension Int {

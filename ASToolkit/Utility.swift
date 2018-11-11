@@ -20,47 +20,37 @@ public struct UITableViewTap
     }
 }
 
+protocol EnumCollection: Hashable {
+	static var allValues: [Self] { get }
+}
 
+// zbigniew kalafarski
+extension EnumCollection {
+	static func cases() -> AnySequence<Self> {
+		typealias S = Self
+		return AnySequence { () -> AnyIterator<S> in
+			var raw = 0
+			return AnyIterator {
+				let current : Self = withUnsafePointer(to: &raw) { $0.withMemoryRebound(to: S.self, capacity: 1) { $0.pointee } }
+				guard current.hashValue == raw else { return nil }
+				raw += 1
+				return current
+			}
+		}
+	}
 
-extension UIApplication
-{
-    static public var rootViewController : UIViewController! {
-        return UIApplication.shared.keyWindow!.rootViewController
-    }
-    
+	static var allValues: [Self] {
+		return Array(self.cases())
+	}
+}
+
+extension String {
+	var localized: String {
+		return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
+	}
 }
 
 
-
-public func not(_ A:Bool) -> Bool
-{
-    return !A
-}
-
-public func and(_ A:Bool,_ B:Bool) -> Bool
-{
-    return A && B
-}
-
-public func nand(_ A:Bool,_ B:Bool) -> Bool
-{
-    return not(and(A,B))
-}
-
-public func or(_ A:Bool,_ B:Bool) -> Bool
-{
-    return A || B
-}
-
-public func nor(_ A:Bool,_ B:Bool) -> Bool
-{
-    return not(or(A,B))
-}
-
-public func xor(_ A:Bool,_ B:Bool) -> Bool
-{
-    return (A && !B) || (!A && B)
-}
 
 
 

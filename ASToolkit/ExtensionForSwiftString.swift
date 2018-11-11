@@ -10,8 +10,12 @@
 
 extension String
 {
+    public var substring : Substring {
+        return Substring(self)
+    }
+    
     public var length: Int {
-        return characters.count
+        return count
     }
     
     public var empty: Bool {
@@ -37,43 +41,43 @@ extension String
 
 extension String
 {
-    public subscript (safe i:Int) -> String? {
+    public subscript (safe i:Int) -> Substring? {
         return 0 <= i && i < self.count ? self[i] : nil
     }
 
-    public subscript (i: Int) -> String {
+    public subscript (i: Int) -> Substring {
         return self[Range(i ..< i + 1)]
     }
     
-    public subscript (r: Range<Int>) -> String {
-        let start = characters.index(startIndex, offsetBy: r.lowerBound)
-        let end = characters.index(start, offsetBy: r.upperBound - r.lowerBound)
-        return self[Range(start ..< end)]
+    public subscript (r: Range<Int>) -> Substring {
+        let start = self.index(startIndex, offsetBy: r.lowerBound)
+        let end = self.index(start, offsetBy: r.upperBound - r.lowerBound)
+        return self[start..<end]
     }
 
     public func at(_ i: Int) -> String {
-        let c = self[self.characters.index(self.startIndex, offsetBy: i)]
+        let c = self[self.index(self.startIndex, offsetBy: i)]
         return String(c as Character)
     }
 
     public func character(at i: Int) -> Character {
-        return self[self.characters.index(self.startIndex, offsetBy: i)] as Character
+        return self[self.index(self.startIndex, offsetBy: i)] as Character
     }
     
-    public func substring(from: Int) -> String {
+    public func substring(from: Int) -> Substring {
         return self[Range(min(from, length) ..< length)]
     }
     
-    public func substring(to: Int) -> String {
+    public func substring(to: Int) -> Substring {
         return self[Range(0 ..< min(to, length))]
     }
     
-    public func substring(from: Int, to: Int) -> String {
+    public func substring(from: Int, to: Int) -> Substring {
         return self[Range(min(from, length) ..< min(to, length))]
     }
 
-    public func substring(from:Int = 0, length:Int) -> String {
-        return self.substring(with: Range<String.Index>(self.characters.index(self.startIndex, offsetBy: from)..<self.characters.index(self.startIndex, offsetBy: from+length)))
+    public func substring(from:Int = 0, length:Int) -> Substring {
+        return self[from..<max(from,from+length)]
     }
     
 }
@@ -84,7 +88,7 @@ extension String
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    public func trimIfBeyondDigitCount(_ count:Int) -> String {
+    public func trimIfBeyondDigitCount(_ count:Int) -> Substring {
         var count = count
         let digits:Set<Character> = ["0","1","2","3","4","5","6","7","8","9"]
         var i = 0
@@ -97,7 +101,7 @@ extension String
                 }
             }
         }
-        return self
+        return Substring(self)
     }
     
     public func prefixWithPlusIfPositive() -> String
@@ -108,11 +112,11 @@ extension String
         return self
     }
     
-    public func trimmedFromEndIfLongerThan(_ count:Int) -> String {
+    public func trimmedFromEndIfLongerThan(_ count:Int) -> Substring {
         if count < length {
             return substring(from:0,length:count)
         }
-        return self
+        return Substring(self)
     }
     
 }
@@ -174,7 +178,7 @@ extension String {
         return self
     }
     
-    public func tweened(with:String = " ") -> String {
+    public func tweened(with:String = " ") -> Substring {
         var result = self.substring(to: 1)
         for i in stride(from:1,to:length,by:1) {
             result += with + self[i]

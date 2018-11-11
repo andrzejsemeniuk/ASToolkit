@@ -17,12 +17,12 @@ extension NSLayoutConstraint {
      - parameter multiplier: CGFloat
      - returns: NSLayoutConstraint
      */
-    open func set(multiplier:CGFloat) -> NSLayoutConstraint {
+    @discardableResult open func set(multiplier:CGFloat) -> NSLayoutConstraint {
         
         NSLayoutConstraint.deactivate([self])
         
         let newConstraint = NSLayoutConstraint(
-            item: firstItem,
+			item: firstItem as Any,
             attribute: firstAttribute,
             relatedBy: relation,
             toItem: secondItem,
@@ -38,29 +38,66 @@ extension NSLayoutConstraint {
         return newConstraint
     }
     
-    open func activated         (_ value:Bool = true) -> NSLayoutConstraint {
+    @discardableResult open func activated         (_ value:Bool = true) -> NSLayoutConstraint {
         self.isActive=true
         return self
     }
     
-    open func deactivated       () -> NSLayoutConstraint {
+    @discardableResult open func deactivated       () -> NSLayoutConstraint {
         self.isActive=false
         return self
     }
     
-    open func prioritized       (_ value:UILayoutPriority) -> NSLayoutConstraint {
-        self.priority = value
+    @discardableResult open func prioritized       (priority:UILayoutPriority) -> NSLayoutConstraint {
+		if false {
+		if isActive {
+			isActive=false
+			self.priority = priority
+			isActive=true
+		}
+		else {
+        	self.priority = priority
+		}
+		}
         return self
     }
     
-    open func extended          (_ value:CGFloat) -> NSLayoutConstraint {
+	@discardableResult open func prioritized       (_ value:Double) -> NSLayoutConstraint {
+		if false {
+		if isActive {
+			isActive=false
+			self.priority = UILayoutPriority.init(Float(value))
+			isActive=true
+		}
+		else {
+			self.priority = UILayoutPriority.init(Float(value))
+		}
+		}
+		return self
+	}
+
+    @discardableResult open func extended          (_ value:CGFloat) -> NSLayoutConstraint {
         self.constant = value
         return self
     }
     
-    open func identified        (_ value:String?) -> NSLayoutConstraint {
+    @discardableResult open func identified        (_ value:String?) -> NSLayoutConstraint {
         self.identifier = value
         return self
     }
     
 }
+
+
+extension Array where Element : NSLayoutConstraint {
+
+	public func get(_ identifier:String) -> NSLayoutConstraint? {
+		return self.find { constraint in
+			return constraint.identifier == identifier
+		}
+	}
+
+}
+
+
+

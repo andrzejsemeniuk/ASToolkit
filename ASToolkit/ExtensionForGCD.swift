@@ -8,10 +8,14 @@
 
 import Foundation
 
-extension DispatchQueue {
+public extension DispatchQueue {
     
     public var background: DispatchQueue {
         return DispatchQueue.global(qos: .background)
     }
     
+	public var utility: DispatchQueue {
+		return DispatchQueue.global(qos: .utility)
+	}
+
 }

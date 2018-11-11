@@ -49,5 +49,17 @@ extension Double {
     public static func random(min: Double, max: Double) -> Double {
         return Double.random * (max - min) + min
     }
+
+	@discardableResult public mutating func assign(max v:Double) -> Double {
+		self = Swift.max(self,v)
+		return self
+	}
+
+	@discardableResult public mutating func assign(min v:Double) -> Double {
+		self = Swift.min(self,v)
+		return self
+	}
+
+
     
 }

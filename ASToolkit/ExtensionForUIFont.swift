@@ -25,7 +25,7 @@ extension UIFont {
     }
     
     public func isMember(character:UInt32) -> Bool {
-        if let cs = self.fontDescriptor.object(forKey: UIFontDescriptorCharacterSetAttribute) as? NSCharacterSet {
+        if let cs = self.fontDescriptor.object(forKey: UIFontDescriptor.AttributeName.characterSet) as? NSCharacterSet {
 //            return cs.characterIsMember(unichar(character))
             return cs.longCharacterIsMember(character)
         }
@@ -43,8 +43,8 @@ extension UIFont {
         
 //        var code_point: [UniChar] = [UInt16(point) & 0xFFFF, UInt16(point >> 16) & 0xFFFF]
         var code_point: [UniChar] = [
-            UniChar.init(truncatingBitPattern: character),
-            UniChar.init(truncatingBitPattern: character >> 16)
+            UniChar.init(truncatingIfNeeded: character),
+            UniChar.init(truncatingIfNeeded: character >> 16)
         ]
         var glyphs: [CGGlyph] = [0,0]
         let result = CTFontGetGlyphsForCharacters(self as CTFont, &code_point, &glyphs, glyphs.count)
@@ -104,6 +104,28 @@ extension UIFont {
 }
 
 extension UIFont {
+
+	public func sibling(withPhrase phrase:String) -> UIFont? {
+		if let name = UIFont.fontNames(forFamilyName: familyName).find({ $0.lowercased().range(of:phrase) != nil }) {
+			return UIFont.init(name: name, size: self.pointSize)
+		}
+		return nil
+	}
+
+	public func siblings(withPhrase phrase:String) -> [UIFont] {
+		return UIFont.fontNames(forFamilyName: familyName).filter({ $0.lowercased().range(of:phrase) != nil }).flatMap {
+			UIFont.init(name: $0, size: self.pointSize)
+		}
+	}
+
+	public func boldSibling() -> UIFont? { return sibling(withPhrase:"bold") }
+	public func boldSiblings() -> [UIFont] { return siblings(withPhrase:"bold") }
+	public func italicSibling() -> UIFont? { return sibling(withPhrase:"italic") }
+	public func italicSiblings() -> [UIFont] { return siblings(withPhrase:"italic") }
+
+}
+
+extension UIFont {
     
     static public let defaultFont : UIFont = {
         return UIFont.systemFont(ofSize: UIFont.systemFontSize)
@@ -112,7 +134,11 @@ extension UIFont {
     static public let defaultFontForLabel : UIFont = {
         return UIFont.systemFont(ofSize: UIFont.labelFontSize)
     }()
-    
+
+	static public let defaultFontForSmallSize : UIFont = {
+		return UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+	}()
+
 }
 
 public func + (lhs:UIFont, rhs:CGFloat) -> UIFont {
@@ -159,8 +185,8 @@ public class Glypher {
         for font in support {
             //            var code_point: [UniChar] = [UInt16(point) & 0xFFFF, UInt16(point >> 16) & 0xFFFF]
             var code_point: [UniChar] = [
-                UniChar.init(truncatingBitPattern: point),
-                UniChar.init(truncatingBitPattern: point >> 16)
+                UniChar.init(truncatingIfNeeded: point),
+                UniChar.init(truncatingIfNeeded: point >> 16)
             ]
             var glyphs: [CGGlyph] = [0, 0]
             let result = CTFontGetGlyphsForCharacters(font as CTFont, &code_point, &glyphs, glyphs.count)

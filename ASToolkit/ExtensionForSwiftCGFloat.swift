@@ -37,6 +37,16 @@ extension CGFloat
     public func progress01          () -> CGFloat {
         return progress(from:0,to:1)
     }
+
+	@discardableResult public mutating func assign(max v:CGFloat) -> CGFloat {
+		self = Swift.max(self,v)
+		return self
+	}
+
+	@discardableResult public mutating func assign(min v:CGFloat) -> CGFloat {
+		self = Swift.min(self,v)
+		return self
+	}
 }
 
 extension CGFloat {
