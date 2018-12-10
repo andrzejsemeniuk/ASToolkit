@@ -111,6 +111,7 @@
 		77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DF095920D9AC5000E4F49D /* CGStroke.swift */; };
 		77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB445420C05715002CE0BB /* TokenizedCollection.swift */; };
 		77FB80AE20DE824400C50726 /* Indexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB80AD20DE824400C50726 /* Indexes.swift */; };
+		77FD704221A95DCA00F6636B /* ExtensionForSwiftDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -318,6 +319,7 @@
 		77DF095920D9AC5000E4F49D /* CGStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGStroke.swift; sourceTree = "<group>"; };
 		77FB445420C05715002CE0BB /* TokenizedCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizedCollection.swift; sourceTree = "<group>"; };
 		77FB80AD20DE824400C50726 /* Indexes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexes.swift; sourceTree = "<group>"; };
+		77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +414,7 @@
 				570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */,
 				570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */,
 				570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */,
+				77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */,
 				570FC2851F1124A300FEAC03 /* ExtensionForSwiftDouble.swift */,
 				570FC2861F1124A300FEAC03 /* ExtensionForSwiftFloat.swift */,
 				570FC2871F1124A300FEAC03 /* ExtensionForSwiftInt.swift */,
@@ -863,6 +866,7 @@
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
 				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
 				5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */,
+				77FD704221A95DCA00F6636B /* ExtensionForSwiftDictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

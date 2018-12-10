@@ -378,3 +378,36 @@ extension Array {
 	}
 
 }
+
+
+public func + <T:Equatable>(lhs:Array<T>, rhs:Array<T>) -> Array<T> {
+	var r = lhs
+	r.append(contentsOf:rhs)
+	return r
+}
+
+public func + <T:Equatable>(lhs:Array<T>, rhs:T) -> Array<T> {
+	return lhs + [rhs]
+}
+
+
+public func - <T:Equatable>(lhs:Array<T>, rhs:Array<T>) -> Array<T> {
+	return lhs.filter { v in
+		return !rhs.contains(v)
+	}
+}
+
+public func -= <T:Equatable>(lhs: inout Array<T>, rhs: Array<T>) {
+	lhs = lhs - rhs
+}
+
+public func - <T:Equatable>(lhs:Array<T>, rhs:T) -> Array<T> {
+	return lhs.filter { v in
+		return v != rhs
+	}
+}
+
+public func -= <T:Equatable>(lhs: inout Array<T>, rhs: T) {
+	lhs = lhs - rhs
+}
+

@@ -38,7 +38,7 @@ open class UIViewWithAdditions : UIViewWithDrawings {
 									 join			: CGLineJoin = .bevel,
 									 miterLimit		: CGFloat? = nil,
 									 pattern		: [CGFloat] = [],
-									 phase			: CGFloat = 0)
+									 phase			: CGFloat = 0) -> CAShapeLayer
 	{
 		let border = CAShapeLayer()
 		//				self.layer.insertSublayer(shape, at: 0)
@@ -90,6 +90,7 @@ open class UIViewWithAdditions : UIViewWithDrawings {
 				border.removeFromSuperlayer()
 		}))
 
+		return border
 	}
 
 

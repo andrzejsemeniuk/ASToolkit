@@ -88,6 +88,16 @@ extension Date {
     public var iso8601: String {
         return Date.iso8601Formatter.string(from: self)
     }
+    
+    public func formatted(_ format:String) -> String {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        //        formatter.timeZone = TimeZone.local
+        formatter.dateFormat = format
+        return formatter.string(from: self)
+    }
+
 }
 
 extension String {
@@ -131,7 +141,7 @@ extension Date {
 
 extension Date {
     
-    public var asYYYYMMDDHHMMSSMS : UInt64 {
+    public var toYYYYMMDDHHMMSSMS : UInt64 {
         let yyyy = UInt64(year())   * 10000000000000
         let   mm = UInt64(month())  *   100000000000
         let   dd = UInt64(day())    *     1000000000
@@ -140,6 +150,23 @@ extension Date {
         let   ss = UInt64(second()) *           1000
         let   ms = UInt64(millisecond())
         return yyyy + mm + dd + hh + mi + ss + ms
+    }
+
+    public var toYYYYMMDDHHMMSS : UInt64 {
+        let yyyy = UInt64(year())   * 10000000000
+        let   mm = UInt64(month())  *   100000000
+        let   dd = UInt64(day())    *     1000000
+        let   hh = UInt64(hour())   *       10000
+        let   mi = UInt64(minute()) *         100
+        let   ss = UInt64(second())
+        return yyyy + mm + dd + hh + mi + ss
+    }
+
+    public var toYYYYMMDD : UInt64 {
+        let yyyy = UInt64(year())   * 10000
+        let   mm = UInt64(month())  *   100
+        let   dd = UInt64(day())
+        return yyyy + mm + dd
     }
 
 }
@@ -152,6 +179,29 @@ extension Date {
 
 	var weekday:WeekDay {
 		return WeekDay(rawValue:Calendar(identifier: .gregorian).component(.weekday, from: self))!
+	}
+}
+
+extension Date {
+
+	public var midnight : Date {
+		let calendar = Calendar.current
+//		return self.adding(withCalendar: calendar,
+//						   years: 0,
+//						   months: 0,
+//						   days: 0,
+//						   hours: -self.hour(),
+//						   minutes: -self.minute(),
+//						   seconds: -self.second())!
+
+		var components      = DateComponents()
+
+		components.hour     = -self.hour()
+		components.minute   = -self.minute()
+		components.second   = -self.second()
+
+		return calendar.date(byAdding: components, to: self)!
+
 	}
 }
 
