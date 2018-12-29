@@ -33,7 +33,7 @@ extension UIButton {
 
 extension UIButton {
 
-	open func setAttributedTitle(_ string: String, for state: UIControlState) {
+	open func setAttributedTitle(_ string: String, for state: UIControl.State) {
 		self.setAttributedTitle(NSAttributedString(string:string), for: state)
 	}
 

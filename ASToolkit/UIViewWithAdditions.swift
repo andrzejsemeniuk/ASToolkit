@@ -30,6 +30,7 @@ open class UIViewWithAdditions : UIViewWithDrawings {
 	// 8< -----------------------------------------------------------------------------------
 
 
+	@discardableResult
 	open func setBorder(			 fill			: UIColor? = nil,
 									 color			: UIColor? = nil,
 									 insets			: UIEdgeInsets = UIEdgeInsets(),

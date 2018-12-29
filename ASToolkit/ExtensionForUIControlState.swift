@@ -1,5 +1,5 @@
 //
-//  ExtensionForUIKitUIControlState.swift
+//  ExtensionForUIKitUIControl.State.swift
 //  ASToolkit
 //
 //  Created by andrzej semeniuk on 9/16/17.
@@ -8,11 +8,11 @@
 
 import Foundation
 
-extension UIControlState : RawRepresentable {
+extension UIControl.State : RawRepresentable {
 
 }
 
-extension UIControlState : CustomStringConvertible {
+extension UIControl.State : CustomStringConvertible {
 
 	public var description: String {
 		return name
@@ -34,7 +34,7 @@ extension UIControlState : CustomStringConvertible {
 
 }
 
-extension UIControlState : Hashable {
+extension UIControl.State : Hashable {
     
     public var hashValue : Int {
         switch self {
@@ -51,6 +51,6 @@ extension UIControlState : Hashable {
     }
 }
 
-extension UIControlState : Equatable {
+extension UIControl.State : Equatable {
     
 }

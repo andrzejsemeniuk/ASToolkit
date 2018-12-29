@@ -10,12 +10,22 @@ import Foundation
 
 public extension DispatchQueue {
     
-    public var background: DispatchQueue {
+    public static var ui: DispatchQueue {
+        return DispatchQueue.main
+    }
+    
+    public static var background: DispatchQueue {
         return DispatchQueue.global(qos: .background)
     }
     
-	public var utility: DispatchQueue {
+	public static var utility: DispatchQueue {
 		return DispatchQueue.global(qos: .utility)
 	}
 
+    public func asyncLater(_ sec:TimeInterval, block:@escaping ()->Void) {
+        self.asyncAfter(deadline: .now() + sec, execute: block)
+    }
+    
 }
+
+public typealias Q = DispatchQueue

@@ -203,18 +203,18 @@ extension UIView {
 		return nil
     }
     
-    @discardableResult open func constrainWidthToSuperview(withIdentifier:String? = nil) -> NSLayoutConstraint? {
+	@discardableResult open func constrainWidthToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0) -> NSLayoutConstraint? {
         if let superview = superview {
             self.translatesAutoresizingMaskIntoConstraints=false
-            return self.widthAnchor.constraint(equalTo: superview.widthAnchor).identified(withIdentifier).activated()
+			return self.widthAnchor.constraint(equalTo: superview.widthAnchor).extended(withMargin).identified(withIdentifier).activated()
         }
 		return nil
     }
     
-    @discardableResult open func constrainHeightToSuperview(withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainHeightToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0) -> NSLayoutConstraint? {
         if let superview = superview {
             self.translatesAutoresizingMaskIntoConstraints=false
-            return self.heightAnchor.constraint(equalTo: superview.heightAnchor).identified(withIdentifier).activated()
+            return self.heightAnchor.constraint(equalTo: superview.heightAnchor).extended(withMargin).identified(withIdentifier).activated()
         }
 		return nil
     }
@@ -848,3 +848,65 @@ extension UIView {
 	}
 
 }
+
+extension UIView {
+
+	// NOTE: VERY IMPORTANT!!! SUBVIEWS OF SELF MUST ALREADY BE PLACED!  OTHERWISE THEY'LL BE OBSCURED
+	@discardableResult
+	open func blur(style:UIBlurEffectStyle) -> UIVisualEffectView? {
+
+		if !UIAccessibilityIsReduceTransparencyEnabled() {
+
+			let blurEffect = UIBlurEffect(style: style)
+
+			let blurEffectView = UIVisualEffectView(effect: blurEffect)
+
+			blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+			self.insertSubview(blurEffectView, at:0) //if you have more UIViews, use an insertSubview API to place it where needed
+
+			blurEffectView.constrainToSuperview()
+
+			return blurEffectView
+		} else {
+			return nil
+		}
+
+	}
+
+
+	// NOTE: VERY IMPORTANT!!! SUBVIEWS OF SELF MUST ALREADY BE PLACED!  OTHERWISE THEY'LL BE OBSCURED
+	@discardableResult
+	open func blur(value:CGFloat) -> UIVisualEffectView? {
+
+		if !UIAccessibilityIsReduceTransparencyEnabled() {
+
+			let blurEffect = (NSClassFromString("_UICustomBlurEffect") as! UIBlurEffect.Type).init()
+
+			blurEffect.setValue(value, forKey: "blurRadius")
+
+			let blurEffectView = UIVisualEffectView(effect: blurEffect)
+
+			blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+			self.insertSubview(blurEffectView, at:0) //if you have more UIViews, use an insertSubview API to place it where needed
+
+			blurEffectView.constrainToSuperview()
+
+			return blurEffectView
+
+		} else {
+			return nil
+		}
+
+	}
+
+
+}
+
+
+
+
+
+
+

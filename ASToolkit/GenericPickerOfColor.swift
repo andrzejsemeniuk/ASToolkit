@@ -85,10 +85,10 @@ open class GenericPickerOfColor : UIView {
                 public var font                 = (UIFont.defaultFontForLabel + 0)
             }
             
-            public var buttonStates             : [UIControlState:ButtonState] = [
-                UIControlState.normal           : ButtonState(),
-                UIControlState.selected         : ButtonState(),
-                UIControlState.disabled         : ButtonState()
+            public var buttonStates             : [UIControl.State:ButtonState] = [
+                UIControl.State.normal           : ButtonState(),
+                UIControl.State.selected         : ButtonState(),
+                UIControl.State.disabled         : ButtonState()
             ]
             
             public init() {
@@ -669,7 +669,7 @@ open class GenericPickerOfColor : UIView {
                 button.circle(for: .disabled).fillColor     = configuration.copyButton.buttonStates[.disabled]?.background.cgColor
                 button.circle(for: .disabled).strokeColor   = configuration.copyButton.buttonStates[.disabled]?.foreground.cgColor
                 
-                for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
+                for state in [UIControl.State.normal, UIControl.State.selected, UIControl.State.disabled] {
                     button.circle(for: state).radius        = side/2.0
                     button.circle(for: state).lineWidth     = 0.5
                 }
@@ -752,16 +752,16 @@ open class GenericPickerOfColor : UIView {
                 var representation = NSMutableAttributedString.init()
                 representation += "0x" | font | UIColor.gray
                 representation += hex[0] | [
-                    NSAttributedStringKey.backgroundColor      : configuration.background.red
+                    NSAttributedString.Key.backgroundColor      : configuration.background.red
                     ] | font | configuration.foreground.red
                 representation += hex[1] | [
-                    NSAttributedStringKey.backgroundColor      : configuration.background.green // UIColor(hsb:[0.3,1,0.7])
+                    NSAttributedString.Key.backgroundColor      : configuration.background.green // UIColor(hsb:[0.3,1,0.7])
                     ] | font | configuration.foreground.green
                 representation += hex[2] | [
-                    NSAttributedStringKey.backgroundColor      : configuration.background.blue // UIColor(hsb:[0.61,1,1])
+                    NSAttributedString.Key.backgroundColor      : configuration.background.blue // UIColor(hsb:[0.61,1,1])
                     ] | font | configuration.foreground.blue
                 representation += hex[3] | [
-                    NSAttributedStringKey.backgroundColor      : configuration.background.alpha // UIColor(white:0.6)
+                    NSAttributedString.Key.backgroundColor      : configuration.background.alpha // UIColor(white:0.6)
                     ] | font | configuration.foreground.alpha
                 self.field.attributedText = representation
             }
@@ -1281,7 +1281,7 @@ open class GenericPickerOfColor : UIView {
             button.circle(for: .disabled).fillColor     = configuration.buttonStates[.disabled]?.background.cgColor
             button.circle(for: .disabled).strokeColor   = configuration.buttonStates[.disabled]?.foreground.cgColor
             
-            for state in [UIControlState.normal, UIControlState.selected, UIControlState.disabled] {
+            for state in [UIControl.State.normal, UIControl.State.selected, UIControl.State.disabled] {
                 button.circle(for: state).radius        = configuration.side/2.0
                 button.circle(for: state).lineWidth     = 0.5
             }
@@ -2244,7 +2244,7 @@ open class GenericPickerOfColor : UIView {
         
         result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventDragEnd(_:)), for: [.touchUpInside, .touchUpOutside])
         
-        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventValueChanged(_:)), for: UIControlEvents.touchDragInside)
+        result.slider.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderEventValueChanged(_:)), for: UIControl.Event.touchDragInside)
         
         result.leftButton.addTarget(self, action: #selector(GenericPickerOfColor.handleSliderLeftButtonEvent(_:)), for: .touchDown)
         
@@ -2512,7 +2512,7 @@ open class GenericPickerOfColor : UIView {
             }
 
             // tie subviews together
-            self.subviews.adjacent { a,b in
+            self.subviews.forEachAdjacent { a,b in
                 b.topAnchor.constraint(equalTo: a.bottomAnchor).isActive=true
             }
             

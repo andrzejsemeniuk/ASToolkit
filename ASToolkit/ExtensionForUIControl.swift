@@ -10,7 +10,7 @@ import Foundation
 
 public extension UIControl {
 
-	public func addAction(named: String = "", for controlEvents: UIControlEvents, action: @escaping () -> ()) {
+	public func addAction(named: String = "", for controlEvents: UIControl.Event, action: @escaping () -> ()) {
 		let sleeve = AssociationForClosure(attachTo: self, named: named, closure: action)
 		addTarget(sleeve, action: #selector(AssociationForClosure.invoke), for: controlEvents)
 	}

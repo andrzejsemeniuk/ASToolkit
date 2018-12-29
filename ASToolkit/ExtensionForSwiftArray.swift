@@ -119,11 +119,17 @@ extension Array where Element == Double {
 
 extension Array {
     
-    public func adjacent(_ handle:(Element,Element)->()) {
+    public func forEachAdjacent(_ handle:(Element,Element)->Void) {
         for i in stride(from:1,to:count,by:1) {
             handle(self[i-1],self[i])
         }
     }
+
+	mutating public func forEachSubsequent(_ handle:(Element,inout Element)->Void) {
+		for i in stride(from:1,to:count,by:1) {
+			handle(self[i-1],&self[i])
+		}
+	}
 
     public func find(_ where:(Element)->Bool) -> Element? {
         if let index = self.index(where:`where`) {

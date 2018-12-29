@@ -14,9 +14,9 @@ open class UIViewWithDrawings : UIView {
 
 	public struct Drawing : Equatable {
 
-		public typealias FunctionForUpdate = (_ view:UIView,_ before:Bool)->()
-		public typealias FunctionForDraw = (_ view:UIView,_ rect:CGRect,_ before:Bool)->()
-		public typealias FunctionForUninstall = ()->()
+		public typealias FunctionForUpdate 		= (_ view:UIView,_ before:Bool)->Void
+		public typealias FunctionForDraw 		= (_ view:UIView,_ rect:CGRect,_ before:Bool)->Void
+		public typealias FunctionForUninstall 	= ()->Void
 
 		public var name			: String
 		public var update		: FunctionForUpdate?
@@ -44,8 +44,8 @@ open class UIViewWithDrawings : UIView {
 		self.drawings = []
 	}
 
-	public func drawing(add:Drawing) {
-		if let index = drawings.index(of: add) {
+	public func drawing(add: Drawing) {
+		if let index = drawings.index(where: { $0 == add || $0.name == add.name }) {
 			let previous = drawings[index]
 			previous.uninstall?()
 			drawings[index] = add

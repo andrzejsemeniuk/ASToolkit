@@ -18,8 +18,12 @@ extension NSLayoutConstraint {
      - returns: NSLayoutConstraint
      */
     @discardableResult open func set(multiplier:CGFloat) -> NSLayoutConstraint {
-        
-        NSLayoutConstraint.deactivate([self])
+
+		let active = isActive
+
+		if active {
+        	NSLayoutConstraint.deactivate([self])
+		}
         
         let newConstraint = NSLayoutConstraint(
 			item: firstItem as Any,
@@ -33,8 +37,11 @@ extension NSLayoutConstraint {
         newConstraint.priority = priority
         newConstraint.shouldBeArchived = self.shouldBeArchived
         newConstraint.identifier = self.identifier
-        
-        NSLayoutConstraint.activate([newConstraint])
+
+		if active {
+        	NSLayoutConstraint.activate([newConstraint])
+		}
+		
         return newConstraint
     }
     
@@ -85,6 +92,10 @@ extension NSLayoutConstraint {
         self.identifier = value
         return self
     }
+
+	@discardableResult open func multiplied			(_ value:CGFloat) -> NSLayoutConstraint {
+		return self.set(multiplier: value)
+	}
     
 }
 

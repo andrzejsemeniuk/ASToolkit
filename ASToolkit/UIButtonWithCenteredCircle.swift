@@ -15,9 +15,9 @@ open class UIButtonWithCenteredCircle : UIButton {
         open var radius				  : CGFloat           = 0
     }
     
-    private var circles:[UIControlState:Circle] = [:]
+    private var circles:[UIControl.State:Circle] = [:]
     
-    open func circle(for state:UIControlState) -> Circle {
+    open func circle(for state:UIControl.State) -> Circle {
         if let r = self.circles[state] {
             return r
         }

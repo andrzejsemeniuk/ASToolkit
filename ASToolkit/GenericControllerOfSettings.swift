@@ -518,7 +518,7 @@ open class GenericControllerOfSettings : UITableViewController
         view.textAlignment = .right
         view.textColor = .gray
         view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(withAttributes: [
-            NSAttributedStringKey.font : view.font ?? UIFont.defaultFont
+            NSAttributedString.Key.font : view.font ?? UIFont.defaultFont
             ])
         register(indexPath:indexPath, id:id)
         return view

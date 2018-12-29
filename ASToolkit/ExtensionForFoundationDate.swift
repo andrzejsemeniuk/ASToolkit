@@ -98,6 +98,14 @@ extension Date {
         return formatter.string(from: self)
     }
 
+	public static func formatter(withFormat format:String) -> DateFormatter {
+		let formatter = DateFormatter()
+		formatter.calendar = Calendar(identifier: .iso8601)
+		formatter.locale = Locale(identifier: "en_US_POSIX")
+		//        formatter.timeZone = TimeZone.local
+		formatter.dateFormat = format
+		return formatter
+	}
 }
 
 extension String {
