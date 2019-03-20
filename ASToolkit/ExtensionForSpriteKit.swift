@@ -21,6 +21,16 @@ extension SKNode
     public func hFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.width * ratio }
     public func vFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.height * ratio }
     
+    public func hFrom                  (ratio01:CGFloat)                                 -> CGFloat  { return self.width * ratio01 }
+    public func vFrom                  (ratio01:CGFloat)                                 -> CGFloat  { return self.height * ratio01 }
+    
+    public func hFrom                  (ratio11:CGFloat)                                 -> CGFloat  { return self.width * (ratio11+1)/2 }
+    public func vFrom                  (ratio11:CGFloat)                                 -> CGFloat  { return self.height * (ratio11+1)/2 }
+    
+    public func hFrom                  (ratio55:CGFloat)                                 -> CGFloat  { return self.width * (ratio55+0.5) }
+    public func vFrom                  (ratio55:CGFloat)                                 -> CGFloat  { return self.height * (ratio55+0.5) }
+    
+
     public func xFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.position.x + hFrom(ratio:ratio) }
     public func yFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.position.y + vFrom(ratio:ratio) }
     
@@ -36,7 +46,57 @@ extension SKNode
     @objc public func positionFromRatio      (x:CGFloat, y:CGFloat)                          -> CGPoint  { return position + pointFromRatio(h:x,v:y) }
     
     
-    public var z:CGFloat {
+    open func place_01(x: CGFloat? = nil, y: CGFloat? = nil) {
+        guard let parent = parent else {
+            return
+        }
+        if let x = x {
+            self.position.x = parent.hFrom(ratio01: x - 0.5)
+        }
+        if let y = y {
+            self.position.y = parent.vFrom(ratio01: y - 0.5)
+        }
+    }
+    
+    open func place_11(x: CGFloat? = nil, y: CGFloat? = nil) {
+        guard let parent = parent else {
+            return
+        }
+        if let x = x {
+            self.position.x = parent.hFrom(ratio11: x) - parent.width/2
+        }
+        if let y = y {
+            self.position.y = parent.vFrom(ratio11: y) - parent.height/2
+        }
+    }
+    
+    open func place_55(x: CGFloat? = nil, y: CGFloat? = nil) {
+        guard let parent = parent else {
+            return
+        }
+        if let x = x {
+            self.position.x = parent.hFrom(ratio55: x) - parent.width/2
+        }
+        if let y = y {
+            self.position.y = parent.vFrom(ratio55: y) - parent.height/2
+        }
+    }
+    
+
+
+    public var s: CGFloat {
+        get {
+            return (xScale + yScale) / 2
+        }
+        set {
+            xScale = newValue
+            yScale = newValue
+        }
+    }
+    
+
+
+    public var z: CGFloat {
         get {
             return zPosition
         }
@@ -44,7 +104,6 @@ extension SKNode
             zPosition = newValue
         }
     }
-    
     
     class public func resolveResourceImageName(name:String, suffix:String = ".png") -> String {
         
@@ -605,7 +664,8 @@ extension SKNode
     }
 
 
-    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
+    @discardableResult
+    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -645,7 +705,8 @@ extension SKNode
         return self
     }
     
-    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
+    @discardableResult
+    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -685,7 +746,8 @@ extension SKNode
         return self
     }
     
-    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 16, color:UIColor = .green) -> SKNode
+    @discardableResult
+    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 0, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -701,6 +763,7 @@ extension SKNode
         
         return self
     }
+    
 }
 
 
@@ -719,6 +782,13 @@ extension SKAction {
         return self
     }
 
+    public static func wait(_ duration: TimeInterval) -> SKAction {
+        return SKAction.wait(forDuration: duration)
+    }
+    
+    public static func block(_ block: @escaping ()->Void) -> SKAction {
+        return SKAction.run(block)
+    }
 }
 
 
