@@ -352,6 +352,21 @@ extension SKShapeNode
             self.lineJoin = lineJoin
         }
     }
+    
+    open func with(strokeColor    : UIColor? = nil,
+                     lineWidth      : CGFloat? = nil,
+                     glowWidth      : CGFloat? = nil) -> Self
+    {
+        self.strokeColor = strokeColor ?? self.strokeColor
+        self.lineWidth = lineWidth ?? self.lineWidth
+        self.glowWidth = glowWidth ?? self.glowWidth
+        return self
+    }
+    
+    open func addDashes(phase: CGFloat = 0, lengths: [CGFloat]) {
+        path = path?.copy(dashingWithPhase: phase, lengths: lengths)
+    }
+
 }
 
 
@@ -574,6 +589,21 @@ extension SKNode
         self.run(aDelayed(delay:delay, action: aGroup(group)), withKey: key)
     }
     
+    
+    public convenience init(named: String) {
+        self.init()
+        self.name = named
+    }
+    
+    open func pointFromCenter(rx: CGFloat, ry: CGFloat) -> CGPoint {
+        return CGPoint.init(x: rx * self.frame.size.width + self.frame.size.width/2,
+                            y: ry * self.frame.size.height + self.frame.size.height/2)
+    }
+    
+    open func pointFromFrameOrigin(rx: CGFloat, ry: CGFloat) -> CGPoint {
+        return self.frame.origin + CGPoint.init(x: rx * self.frame.size.width, y: ry * self.frame.size.height)
+    }
+
 
     open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .red) -> SKNode
     {
@@ -679,10 +709,16 @@ extension SKNode
 
 extension SKAction {
     
-    public func runOn(node:SKNode,delay sec:TimeInterval = 0) -> SKAction {
+    open func runOn(node:SKNode,delay sec:TimeInterval = 0) -> SKAction {
         let _ = aRun(on:node,action:self,delay:sec)
         return self
     }
+    
+    open func with(timingMode: SKActionTimingMode) -> Self {
+        self.timingMode = timingMode
+        return self
+    }
+
 }
 
 

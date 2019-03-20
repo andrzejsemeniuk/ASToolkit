@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SWXMLHash
 
 public typealias XMLParser = SWXMLHash
 
