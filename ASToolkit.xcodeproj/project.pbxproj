@@ -110,6 +110,7 @@
 		777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */; };
 		777B9F082087F47100D3FBBD /* UIViewWithBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F072087F47100D3FBBD /* UIViewWithBorder.swift */; };
 		777B9F3F2088E56800D3FBBD /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F3E2088E56800D3FBBD /* State.swift */; };
+		77A2D3482290A2B600890472 /* CyclicQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2D3472290A2B600890472 /* CyclicQueue.swift */; };
 		77A3E68D2110AAE400B4FD9D /* ExtensionForSWXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */; };
 		77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DF095920D9AC5000E4F49D /* CGStroke.swift */; };
 		77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB445420C05715002CE0BB /* TokenizedCollection.swift */; };
@@ -265,6 +266,7 @@
 		777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIControl.swift; sourceTree = "<group>"; };
 		777B9F072087F47100D3FBBD /* UIViewWithBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithBorder.swift; sourceTree = "<group>"; };
 		777B9F3E2088E56800D3FBBD /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		77A2D3472290A2B600890472 /* CyclicQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclicQueue.swift; sourceTree = "<group>"; };
 		77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSWXML.swift; sourceTree = "<group>"; };
 		77DF095920D9AC5000E4F49D /* CGStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGStroke.swift; sourceTree = "<group>"; };
 		77FB445420C05715002CE0BB /* TokenizedCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizedCollection.swift; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
+				77A2D3472290A2B600890472 /* CyclicQueue.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -694,6 +697,7 @@
 				57743A8D20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
 				573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */,
+				77A2D3482290A2B600890472 /* CyclicQueue.swift in Sources */,
 				5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */,
 				571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,

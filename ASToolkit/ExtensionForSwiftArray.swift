@@ -246,6 +246,17 @@ extension Array where Element: Equatable {
 
 extension Array {
 
+	public func compacted() -> [Element] {
+//		return self.filter({ $0 != nil }).map { $0! })
+		return self.compactMap({
+			return $0
+		})
+	}
+	
+}
+
+extension Array {
+
 	public func index(where q: (Element)->Bool) -> Int? {
 		for i in 0..<count {
 			if q(self[i]) {

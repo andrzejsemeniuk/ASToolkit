@@ -57,3 +57,11 @@ extension Int {
 extension Int {
     public func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
 }
+
+extension Int {
+	@discardableResult
+	public mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
+		self = (self + increment) % modulo
+		return self
+	}
+}

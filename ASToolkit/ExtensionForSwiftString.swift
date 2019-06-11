@@ -202,3 +202,20 @@ extension String {
     }
 
 }
+
+
+extension String {
+
+	public func matches(regex: String) -> Bool {
+		return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+	}
+
+	public func substring(regex: String) -> Substring? {
+		if let range = self.range(of: regex, options: .regularExpression, range: nil, locale: nil) {
+			return self[range]
+			//			return self.substring(from: range.lowerBound.encodedOffset, to: range.upperBound.encodedOffset)
+		}
+		return nil
+	}
+
+}

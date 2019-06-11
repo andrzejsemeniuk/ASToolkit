@@ -95,6 +95,45 @@ extension UIEdgeInsets {
 		bottom = 0
 	}
 
+	public mutating func set(w: CGFloat, h: CGFloat? = nil) {
+		self.left = w
+		self.right = w
+		if let h = h {
+			self.top = h
+			self.bottom = h
+		}
+	}
+
+	public mutating func set(h: CGFloat, w: CGFloat? = nil) {
+		self.top = h
+		self.bottom = h
+		if let w = w {
+			self.left = w
+			self.right = w
+		}
+	}
+
+	public mutating func set(all: CGFloat) {
+		set(w: all, h: all)
+	}
+
+	public mutating func set(left	: CGFloat? = nil,
+							 right	: CGFloat? = nil,
+							 top	: CGFloat? = nil,
+							 bottom	: CGFloat? = nil) {
+		if let left = left {
+			self.left = left
+		}
+		if let right = right {
+			self.right = right
+		}
+		if let top = top {
+			self.top = top
+		}
+		if let bottom = bottom {
+			self.bottom = bottom
+		}
+	}
 }
 
 

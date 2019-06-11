@@ -14,6 +14,37 @@ extension UIButton {
 		self.addAction(named: named, for: .touchUpInside, action: action)
 	}
 
+	open func addTapIfSelected(named: String = "", deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
+		self.addAction(named: named, for: .touchUpInside, action: {
+			if self.isSelected {
+				action()
+				if let after = after {
+					DispatchQueue.main.asyncAfter(deadline: .now() + after) { [weak self] in
+						self?.isSelected = false
+					}
+				}
+			}
+		})
+	}
+
+	open func addTapIfNotSelected(named: String = "", select: Bool = true, deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
+		self.addAction(named: named, for: .touchUpInside, action: {
+			if !self.isSelected {
+				action()
+				if select {
+					DispatchQueue.main.async {
+						self.isSelected = true
+					}
+				}
+				if let after = after {
+					DispatchQueue.main.asyncAfter(deadline: .now() + after) { [weak self] in
+						self?.isSelected = false
+					}
+				}
+			}
+		})
+	}
+
 }
 
 extension UIButton {
