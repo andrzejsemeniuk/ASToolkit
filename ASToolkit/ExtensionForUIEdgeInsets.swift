@@ -120,7 +120,8 @@ extension UIEdgeInsets {
 	public mutating func set(left	: CGFloat? = nil,
 							 right	: CGFloat? = nil,
 							 top	: CGFloat? = nil,
-							 bottom	: CGFloat? = nil) {
+							 bottom	: CGFloat? = nil)
+	{
 		if let left = left {
 			self.left = left
 		}

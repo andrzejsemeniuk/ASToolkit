@@ -218,4 +218,19 @@ extension String {
 		return nil
 	}
 
+	public func escaped() -> String {
+		var r = ""
+		for (_,char) in self.enumerated() {
+			r += "\\\(char)"
+		}
+		return r
+	}
+}
+
+extension String {
+
+	public func ends(with: String) -> Bool {
+		return matches(regex: ".*\(with.escaped())$")
+	}
+
 }

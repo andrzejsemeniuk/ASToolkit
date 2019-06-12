@@ -141,6 +141,46 @@ extension UIFont {
 
 }
 
+extension UIFont {
+
+	public var fontFace : String {
+		return fontName.split(familyName).last ?? ""
+	}
+
+	static public var compactedFamilyNames : [String] = {
+		var r : [String] = []
+
+		for family in UIFont.familyNames {
+			r.append(family.replacingOccurrences(of: " ", with: ""))
+		}
+
+		return r
+	}()
+
+	static public var faceNames : [String] = {
+		var faces : Set<String> = .init()
+
+		for family in UIFont.familyNames {
+			for name in UIFont.fontNames(forFamilyName: family) {
+				let family = family.replacingOccurrences(of: " ", with: "")
+				faces.insert(name.split(name).last ?? "")
+			}
+		}
+
+		return faces.asArray
+	}()
+
+	static public var fontNames : [String] = {
+		var names : [String] = []
+
+		for family in UIFont.familyNames {
+			names += UIFont.fontNames(forFamilyName: family)
+		}
+
+		return names
+	}()
+}
+
 public func + (lhs:UIFont, rhs:CGFloat) -> UIFont {
     return lhs.withSize(lhs.pointSize + rhs)
 }

@@ -110,6 +110,7 @@
 		777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */; };
 		777B9F082087F47100D3FBBD /* UIViewWithBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F072087F47100D3FBBD /* UIViewWithBorder.swift */; };
 		777B9F3F2088E56800D3FBBD /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F3E2088E56800D3FBBD /* State.swift */; };
+		778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */; };
 		77A2D3482290A2B600890472 /* CyclicQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2D3472290A2B600890472 /* CyclicQueue.swift */; };
 		77A3E68D2110AAE400B4FD9D /* ExtensionForSWXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */; };
 		77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DF095920D9AC5000E4F49D /* CGStroke.swift */; };
@@ -266,6 +267,7 @@
 		777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIControl.swift; sourceTree = "<group>"; };
 		777B9F072087F47100D3FBBD /* UIViewWithBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithBorder.swift; sourceTree = "<group>"; };
 		777B9F3E2088E56800D3FBBD /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftSubstring.swift; sourceTree = "<group>"; };
 		77A2D3472290A2B600890472 /* CyclicQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclicQueue.swift; sourceTree = "<group>"; };
 		77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSWXML.swift; sourceTree = "<group>"; };
 		77DF095920D9AC5000E4F49D /* CGStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGStroke.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 				570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */,
 				57FBB1091F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift */,
 				570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */,
+				778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */,
 				570FC28A1F1124A300FEAC03 /* ExtensionForSwiftUInt.swift */,
 				57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */,
 				77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */,
@@ -679,6 +682,7 @@
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
+				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,
