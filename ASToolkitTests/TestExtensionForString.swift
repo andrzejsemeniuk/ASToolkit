@@ -45,5 +45,15 @@ class TestExtensionForString: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-    
+
+	func testRegex() {
+
+		XCTAssertTrue("abcd".matches(regex: "[ab][ab]c[d]"))
+		XCTAssertTrue("abcd".matches(regex: "[ab][ab]..$"))
+		XCTAssertTrue("abcd".matches(regex: "^[ab].*$"))
+		XCTAssertFalse("abcd".matches(regex: "b[ab]..$"))
+		XCTAssertFalse("abcd".matches(regex: "^...$"))
+		XCTAssertTrue("abcd".matches(regex: "^...."))
+		XCTAssertTrue("abcd".matches(regex: "[^cd]b..$"))
+	}
 }
