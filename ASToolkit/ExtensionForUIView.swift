@@ -12,7 +12,12 @@ import UIKit
 extension UIView
 {
 	public var isVisible : Bool {
-		return !isHidden
+		get {
+			return !isHidden
+		}
+		set {
+			isHidden = !newValue
+		}
 	}
 	
     public class func create(withBackgroundColor color:UIColor = .clear, frame:CGRect = CGRect.zero) -> UIView
@@ -21,6 +26,16 @@ extension UIView
         result.backgroundColor = color
         return result
     }
+}
+
+extension UIView
+{
+	public var asUIImage : UIImage {
+		let renderer = UIGraphicsImageRenderer(bounds: bounds)
+		return renderer.image { rendererContext in
+			layer.render(in: rendererContext.cgContext)
+		}
+	}
 }
 
 extension UIView

@@ -74,6 +74,16 @@ public extension Array
 	}
 }
 
+extension Array {
+
+	public init(creating: ()->Element, count: Int) {
+		self.init()
+		count.loop {
+			self.append(creating())
+		}
+	}
+}
+
 
 extension Array where Element == Character {
     

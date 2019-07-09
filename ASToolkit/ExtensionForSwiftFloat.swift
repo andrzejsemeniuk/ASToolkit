@@ -41,7 +41,7 @@ extension Float
 
 extension Float {
     
-    public static var random:Float {
+    public static var random: Float {
         return Float(arc4random()) / 0xFFFFFFFF
     }
     public static func random(min: Float, max: Float) -> Float {

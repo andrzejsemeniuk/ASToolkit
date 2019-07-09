@@ -15,7 +15,22 @@ extension Int
     }
     public var isOdd:Bool {
         return self % 2 == 1
-    }    
+    }
+
+	public func loop(_ block: ()->()) {
+		let limit = self
+		for _ in 1...limit {
+			block()
+		}
+	}
+
+	public func counter(_ block: (Int)->()) {
+		let limit = self
+		for index in 0..<limit {
+			block(index)
+		}
+	}
+
 }
 
 extension Int
