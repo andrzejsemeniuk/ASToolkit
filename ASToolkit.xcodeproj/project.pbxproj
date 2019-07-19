@@ -110,6 +110,7 @@
 		772D916522E2068E00DEBC6A /* UICalibratorForStorableProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */; };
 		775E433920A67C6200911E85 /* UIViewWithDrawings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775E433820A67C6200911E85 /* UIViewWithDrawings.swift */; };
 		77612A7420B11EA3007C18D7 /* UIViewWithAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77612A7320B11EA3007C18D7 /* UIViewWithAdditions.swift */; };
+		776C3B2122E22EEF0080211E /* UICalibrator+PropertyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */; };
 		777B9EFE2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFD2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift */; };
 		777B9F002087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFF2087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift */; };
 		777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */; };
@@ -272,6 +273,7 @@
 		772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICalibratorForStorableProperties.swift; sourceTree = "<group>"; };
 		775E433820A67C6200911E85 /* UIViewWithDrawings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithDrawings.swift; sourceTree = "<group>"; };
 		77612A7320B11EA3007C18D7 /* UIViewWithAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithAdditions.swift; sourceTree = "<group>"; };
+		776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICalibrator+PropertyFactory.swift"; sourceTree = "<group>"; };
 		777B9EEE2087ADB300D3FBBD /* ASToolkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ASToolkit.xcodeproj; sourceTree = "<group>"; };
 		777B9EFD2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSNumber.swift; sourceTree = "<group>"; };
 		777B9EFF2087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSObject.swift; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 				772D915F22E2068E00DEBC6A /* UICalibrator.swift */,
 				772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */,
 				772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */,
+				776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */,
 				772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -718,6 +721,7 @@
 				5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */,
 				772D916122E2068E00DEBC6A /* UICalibrator+Property.swift in Sources */,
 				5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */,
+				776C3B2122E22EEF0080211E /* UICalibrator+PropertyFactory.swift in Sources */,
 				570FC2C61F1124A300FEAC03 /* ExtensionForUIFont.swift in Sources */,
 				57743A8D20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
