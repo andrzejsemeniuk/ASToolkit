@@ -14,7 +14,7 @@ extension UIEdgeInsets {
     ///
     /// - Parameter all: value for all edges
 	public init(all:CGFloat) {
-        self.init(top:all,left:all,bottom:all,right:all)
+        self.init(top:all,left:all,bottom:-all,right:-all)
     }
     
 	public init(framed v:CGFloat) {
@@ -22,7 +22,7 @@ extension UIEdgeInsets {
 	}
 
 	public init(tlbr:[CGFloat]) {
-		self.init(top:tlbr[0],left:tlbr[1],bottom:tlbr[2],right:tlbr[3])
+		self.init(top:tlbr[0], left:tlbr[1], bottom:tlbr[2], right:tlbr[3])
 	}
 
 	public init(tl:CGFloat, br:CGFloat) {
@@ -62,27 +62,27 @@ extension UIEdgeInsets {
     }
 
 	public init(h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:h)
+		self.init(top:0, left:h, bottom:0, right:-h)
 	}
 
 	public init(lr h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:h)
+		self.init(top:0, left:h, bottom:0, right:-h)
 	}
 
 	public init(v:CGFloat) {
-		self.init(top:v, left:0, bottom:v, right:0)
+		self.init(top:v, left:0, bottom:-v, right:0)
 	}
 
 	public init(tb v:CGFloat) {
-		self.init(top:v, left:0, bottom:v, right:0)
+		self.init(top:v, left:0, bottom:-v, right:0)
 	}
 
 	public init(h:CGFloat, v:CGFloat) {
-		self.init(top:v, left:h, bottom:v, right:h)
+		self.init(top:v, left:h, bottom:-v, right:-h)
 	}
 
 	public init(v:CGFloat, h:CGFloat) {
-		self.init(top:v, left:h, bottom:v, right:h)
+		self.init(top:v, left:h, bottom:-v, right:-h)
 	}
 }
 

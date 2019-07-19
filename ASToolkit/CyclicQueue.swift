@@ -10,7 +10,7 @@ import Foundation
 
 open class CyclicQueue<T> : NSObject {
 
-	public private(set) var array : [T]
+	public var array : [T]
 
 	public init(_ array: [T]) {
 		self.array = array
