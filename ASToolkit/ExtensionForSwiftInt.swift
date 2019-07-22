@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Int
 {
@@ -78,5 +79,20 @@ extension Int {
 	public mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
 		self = (self + increment) % modulo
 		return self
+	}
+}
+
+extension Int {
+
+	public var asFloat : Float {
+		return Float(self)
+	}
+
+	public var asCGFloat : CGFloat {
+		return CGFloat(self)
+	}
+
+	public var asDouble : Double {
+		return Double(self)
 	}
 }

@@ -526,7 +526,7 @@ open class UICalibrator : UIView {
 		let styleLabelTitle : (UILabelWithInsets)->() = { label in
 			label.font 				= font
 			label.textColor 		= ctext
-			label.backgroundColor 	= .clear // backgroundColor
+			label.backgroundColor 	= backgroundColor
 			label.borderColor 		= .clear
 			label.borderWidth 		= 0
 			label.insets.left 		= 8
@@ -538,7 +538,7 @@ open class UICalibrator : UIView {
 		let styleLabelValue : (UILabelWithInsets,CGFloat)->() = { label,alpha in
 			label.font 				= font
 			label.textColor 		= ctext
-			label.backgroundColor 	= .clear // backgroundColor
+			label.backgroundColor 	= backgroundColor
 			label.borderColor 		= UIColor.init(white: 1, alpha: alpha)
 			label.borderWidth 		= 1
 			label.insets.left 		= 8
@@ -2599,3 +2599,5 @@ extension NSObject {
 // TODO ADD SUPPORT FOR SLIDER MARKINGS ON/OFF (TAP ON TITLE LABEL?)
 // TODO ADD FILTER BAR TO PROPERTY LIST TABLE
 // TODO ADD CLOSE BUTTON TO PROPERTY LIST TABLE
+
+// TODO VARIABLE STEPPING THROUGH A RANGE OF A VARIABLE .. EX. TIME BETWEEN 1 AND 3 WILL BE STEPPED BY 0.1, OTHERWISE BY 1

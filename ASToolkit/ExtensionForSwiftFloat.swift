@@ -57,6 +57,20 @@ extension Float {
 
 }
 
+extension Float {
+
+	public var asInt : Int {
+		return Int(self)
+	}
+
+	public var asCGFloat : CGFloat {
+		return CGFloat(self)
+	}
+
+	public var asDouble : Double {
+		return Double(self)
+	}
+}
 
 
 
