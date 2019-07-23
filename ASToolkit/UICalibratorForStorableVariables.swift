@@ -1,5 +1,5 @@
 //
-//  UICalibratorForStorableProperties.swift
+//  UICalibratorForStorableVariables.swift
 //  ASToolkit
 //
 //  Created by andrej on 6/8/19.
@@ -12,16 +12,16 @@ import UIKit
 
 
 
-class UICalibratorForStorableProperties : UICalibrator {
+class UICalibratorForStorableVariables : UICalibrator {
 
 
 
-	var manager 				: StorablePropertyManager
+	var manager 				: StorableVariableManager
 
 
 
 
-	init(manager: StorablePropertyManager, listener: @escaping Listener) {
+	init(manager: StorableVariableManager, listener: @escaping Listener) {
 
 		self.manager = manager
 
@@ -38,7 +38,7 @@ class UICalibratorForStorableProperties : UICalibrator {
 	}
 
 	convenience init(key: String, listener: @escaping Listener) {
-		self.init(manager: StorablePropertyManager.init(key: key), listener: listener)
+		self.init(manager: StorableVariableManager.init(key: key), listener: listener)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -51,7 +51,7 @@ class UICalibratorForStorableProperties : UICalibrator {
 
 
 
-	public func put(properties: [StorableProperty], overwrite: Bool) {
+	public func put(properties: [StorableVariable], overwrite: Bool) {
 		manager.put(properties: properties, overwrite: overwrite)
 
 		define(properties: manager.properties.map { .from(storableProperty: $0) })
@@ -65,11 +65,11 @@ class UICalibratorForStorableProperties : UICalibrator {
 
 
 
-extension UICalibratorForStorableProperties {
+extension UICalibratorForStorableVariables {
 
-	static func create(on view: UIView, for key: String, listener: @escaping Listener) -> UICalibratorForStorableProperties {
+	static func create(on view: UIView, for key: String, listener: @escaping Listener) -> UICalibratorForStorableVariables {
 
-		let editor = UICalibratorForStorableProperties.init(key: key, listener: listener)
+		let editor = UICalibratorForStorableVariables.init(key: key, listener: listener)
 
 		view.addSubview(editor)
 
@@ -78,9 +78,9 @@ extension UICalibratorForStorableProperties {
 		return editor
 	}
 
-	static func create(on view: UIView, with properties: [StorableProperty], for key: String, listener: @escaping Listener) -> UICalibratorForStorableProperties {
+	static func create(on view: UIView, with properties: [StorableVariable], for key: String, listener: @escaping Listener) -> UICalibratorForStorableVariables {
 
-		let editor = UICalibratorForStorableProperties.init(key: key, listener: listener)
+		let editor = UICalibratorForStorableVariables.init(key: key, listener: listener)
 
 		view.addSubview(editor)
 
@@ -92,9 +92,9 @@ extension UICalibratorForStorableProperties {
 	}
 
 
-	static func create(on view: UIView, with manager: StorablePropertyManager, listener: @escaping Listener) -> UICalibratorForStorableProperties {
+	static func create(on view: UIView, with manager: StorableVariableManager, listener: @escaping Listener) -> UICalibratorForStorableVariables {
 
-		let editor = UICalibratorForStorableProperties.init(manager: manager, listener: listener)
+		let editor = UICalibratorForStorableVariables.init(manager: manager, listener: listener)
 
 		view.addSubview(editor)
 

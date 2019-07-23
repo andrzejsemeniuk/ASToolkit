@@ -1,5 +1,5 @@
 //
-//  StorableProperty.swift
+//  StorableVariable.swift
 //  ASToolkit
 //
 //  Created by andrzej on 5/14/19.
@@ -19,7 +19,7 @@ private func log(_ string: String, file: String = #file, line: Int = #line) {
 
 
 
-open class StorableProperty : Codable {
+open class StorableVariable : Codable {
 
 
 
@@ -501,7 +501,7 @@ open class StorableProperty : Codable {
 
 
 
-	public func assign(from: StorableProperty) {
+	public func assign(from: StorableVariable) {
 		self.key				= from.key
 		if true {
 			let listener = self.variableForFloat?.listener
@@ -555,7 +555,7 @@ open class StorableProperty : Codable {
 
 
 
-	public init(from: StorableProperty) {
+	public init(from: StorableVariable) {
 		self.key = from.key
 		self.assign(from: from)
 	}
@@ -594,23 +594,23 @@ open class StorableProperty : Codable {
 
 	}
 
-	public func copy(cloneListener: Bool) -> StorableProperty? {
+	public func copy(cloneListener: Bool) -> StorableVariable? {
 
 		let property0 = self
 
-		var property1 : StorableProperty!
+		var property1 : StorableVariable!
 
 		if let v = property0.variableForFloat {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
+			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
 		}
 		if let v = property0.variableForString {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
+			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
 		}
 		if let v = property0.variableForUIFont {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
 		}
 		if let v = property0.variableForUIColor {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
 		}
 
 		return property1
@@ -618,12 +618,12 @@ open class StorableProperty : Codable {
 }
 
 
-open class StorablePropertyManager : CustomStringConvertible {
+open class StorableVariableManager : CustomStringConvertible {
 
 
 	public let key 							: String
 
-	public private(set) var properties 		: [StorableProperty] = []
+	public private(set) var properties 		: [StorableVariable] = []
 
 
 
@@ -632,7 +632,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 		self.key = key
 	}
 
-	public init(key: String, properties: [StorableProperty]) {
+	public init(key: String, properties: [StorableVariable]) {
 		self.key = key
 		self.properties = properties
 	}
@@ -640,11 +640,11 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 
 
-	public func copy(key: String, cloneListeners: Bool) -> StorablePropertyManager {
+	public func copy(key: String, cloneListeners: Bool) -> StorableVariableManager {
 
-		let result = StorablePropertyManager.init(key: key)
+		let result = StorableVariableManager.init(key: key)
 
-		var properties1 : [StorableProperty] = []
+		var properties1 : [StorableVariable] = []
 
 		for property0 in properties {
 			if let property1 = property0.copy(cloneListener: cloneListeners) {
@@ -661,17 +661,17 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 
 
-	open func filtered(forKeyRegexPattern pattern: String) -> [StorableProperty] {
+	open func filtered(forKeyRegexPattern pattern: String) -> [StorableVariable] {
 		return properties.filter({ $0.key.matches(regex: pattern) }).map { $0 }
 	}
 
-	open func property(_ key: String) -> StorableProperty! {
+	open func property(_ key: String) -> StorableVariable! {
 		return properties.first(where: { $0.key == key } )
 	}
 
 
 
-	open func put(property p: StorableProperty, overwrite: Bool, store: Bool = true) {
+	open func put(property p: StorableVariable, overwrite: Bool, store: Bool = true) {
 		if let variable = self.properties.first(where: { $0.key == p.key }) {
 			if overwrite {
 				variable.assign(from: p)
@@ -694,7 +694,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 		self.properties = []
 	}
 
-	open func put(properties: [StorableProperty], clear: Bool = false, overwrite: Bool, store: Bool = false) {
+	open func put(properties: [StorableVariable], clear: Bool = false, overwrite: Bool, store: Bool = false) {
 		if clear {
 			self.properties = []
 		}
@@ -710,7 +710,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 		let array = self.properties.sorted(by: { $0.key < $1.key })
 
-		var buffer = "StorablePropertyManager: properties=\(array.count), key=\"\(key)\""
+		var buffer = "StorableVariableManager: properties=\(array.count), key=\"\(key)\""
 
 		for (index,property) in array.enumerated() {
 			buffer += "\n property[\(index)] = \(property) for key \"\(property.key)\""
@@ -741,7 +741,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 				log("load, for key \(key) data: \(String(describing: String.init(data: data, encoding: .utf8)))")
 
-				let decoded = try JSONDecoder.init().decode([StorableProperty].self, from: data)
+				let decoded = try JSONDecoder.init().decode([StorableVariable].self, from: data)
 
 				self.put(properties: decoded, clear: clear, overwrite: overwrite)
 
@@ -754,7 +754,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 	open func purge() {
 		do {
-			let array : [StorableProperty] = []
+			let array : [StorableVariable] = []
 
 			let data = try JSONEncoder.init().encode(array)
 

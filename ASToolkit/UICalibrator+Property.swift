@@ -42,7 +42,7 @@ extension UICalibrator {
 
 		let title 						: String
 
-		public typealias Configurator 			= (String)->[Variable]
+		public typealias Configurator 	= (String)->[Variable]
 
 		private var configurator 		: Configurator = { _ in [] }
 		private(set) var configurations : [String]
@@ -67,7 +67,7 @@ extension UICalibrator {
 			self.title = title
 			self.valuator = { nil }
 			self.configurations = ["*"] // [variables.map { $0.title }.joined(separator: "/")]
-//			self.configurator = { _ in return [] }
+			//			self.configurator = { _ in return [] }
 			self.cache[configuration] = (index: 0, variables: variables)
 		}
 
@@ -76,7 +76,7 @@ extension UICalibrator {
 		}
 
 		var variables : [Variable] {
-//			return cache[configuration]!.variables
+			//			return cache[configuration]!.variables
 			return variablesForConfiguration(configuration)
 		}
 
@@ -99,7 +99,7 @@ extension UICalibrator {
 
 extension UICalibrator.Property {
 
-	static func from(storableProperty: StorableProperty) -> UICalibrator.Property {
+	static func from(storableProperty: StorableVariable) -> UICalibrator.Property {
 
 		if let value = storableProperty.variableForUIColor {
 
@@ -111,46 +111,46 @@ extension UICalibrator.Property {
 																		 max 		: value.max.a,
 																		 step	 	: step,
 																		 snap		: true),
-												getter		: { value.value.a },
-												setter		: { value.valueAssignRGBA(a: $0) },
-												listener	: { String($0) }
+											   getter		: { value.value.a },
+											   setter		: { value.valueAssignRGBA(a: $0) },
+											   listener	: { String($0) }
 			)
 
 			let abgr = [
 				a,
 
 				UICalibrator.Variable.init(title: "B", slider: .init(	initial		: value.value.b,
-																	 default	: value.default.b,
-																	 min		: value.min.b,
-																	 max 		: value.max.b,
-																	 step	 	: step,
-																	 snap		: true),
-											getter		: { value.value.b },
-											setter		: { value.valueAssignRGBA(b: $0) },
-											listener	: { String($0) }
+																		 default	: value.default.b,
+																		 min		: value.min.b,
+																		 max 		: value.max.b,
+																		 step	 	: step,
+																		 snap		: true),
+										   getter		: { value.value.b },
+										   setter		: { value.valueAssignRGBA(b: $0) },
+										   listener	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: "G", slider: .init(	initial		: value.value.g,
-																	 default	: value.default.g,
-																	 min		: value.min.g,
-																	 max 		: value.max.g,
-																	 step	 	: step,
-																	 snap		: true),
-											getter		: { value.value.g },
-											setter		: { value.valueAssignRGBA(g: $0) },
-											listener	: { String($0) }
+																		 default	: value.default.g,
+																		 min		: value.min.g,
+																		 max 		: value.max.g,
+																		 step	 	: step,
+																		 snap		: true),
+										   getter		: { value.value.g },
+										   setter		: { value.valueAssignRGBA(g: $0) },
+										   listener	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: "R",
-											slider: .init(	initial		: value.value.r,
-														 default		: value.default.r,
-														 min			: value.min.r,
-														 max 		: value.max.r,
-														 step	 	: step,
-														 snap		: true),
-											getter		: { value.value.r },
-											setter		: { value.valueAssignRGBA(r: $0) },
-											listener	: { String($0) }
+										   slider: .init(	initial		: value.value.r,
+															 default		: value.default.r,
+															 min			: value.min.r,
+															 max 		: value.max.r,
+															 step	 	: step,
+															 snap		: true),
+										   getter		: { value.value.r },
+										   setter		: { value.valueAssignRGBA(r: $0) },
+										   listener	: { String($0) }
 				)
 
 			]
@@ -159,14 +159,14 @@ extension UICalibrator.Property {
 			let aw = [a,
 
 					  UICalibrator.Variable.init(title: "W", slider: .init(	initial		: Float(value.value.toUIColor().WA.white),
-																		   default	: Float(value.default.toUIColor().WA.white),
-																		   min		: 0, //value.min.b,
+																			   default	: Float(value.default.toUIColor().WA.white),
+																			   min		: 0, //value.min.b,
 						max 		: 1, //value.max.b,
 						step	 	: step,
 						snap		: true),
-												  getter	: { value.value.wa.w },
-												  setter	: { value.valueAssignRGBA(r: $0, g: $0, b: $0) },
-												  listener	: { String($0) }
+												 getter	: { value.value.wa.w },
+												 setter	: { value.valueAssignRGBA(r: $0, g: $0, b: $0) },
+												 listener	: { String($0) }
 				)
 			]
 
@@ -178,36 +178,36 @@ extension UICalibrator.Property {
 
 
 						UICalibrator.Variable.init(title: "V", slider: .init(	initial		: Float(value.value.toUIColor().HSBA.brightness),
-																			 default	: Float(value.default.toUIColor().HSBA.brightness),
-																			 min		: 0, //value.min.b,
+																				 default	: Float(value.default.toUIColor().HSBA.brightness),
+																				 min		: 0, //value.min.b,
 							max 		: 1, //value.max.b,
 							step	 	: step,
 							snap		: true),
-													getter	: { Float(value.value.hsba.brightness) },
-													setter	: { value.valueAssignHSBA(b: $0) },
-													listener: { String($0) }
+												   getter	: { Float(value.value.hsba.brightness) },
+												   setter	: { value.valueAssignHSBA(b: $0) },
+												   listener: { String($0) }
 				),
 
 						UICalibrator.Variable.init(title: "S", slider: .init(	initial		: Float(value.value.toUIColor().HSBA.saturation),
-																			 default	: Float(value.default.toUIColor().HSBA.saturation),
-																			 min		: 0, //value.min.g,
+																				 default	: Float(value.default.toUIColor().HSBA.saturation),
+																				 min		: 0, //value.min.g,
 							max 		: 1, //value.max.g,
 							step	 	: step,
 							snap		: true),
-													getter	: { Float(value.value.hsba.saturation) },
-													setter	: { value.valueAssignHSBA(s: $0) },
-													listener: { String($0) }
+												   getter	: { Float(value.value.hsba.saturation) },
+												   setter	: { value.valueAssignHSBA(s: $0) },
+												   listener: { String($0) }
 				),
 
 						UICalibrator.Variable.init(title: "H", slider: .init(	initial		: Float(value.value.toUIColor().HSBA.hue),
-																			 default	: Float(value.default.toUIColor().HSBA.hue),
-																			 min		: 0, //value.min.r,
+																				 default	: Float(value.default.toUIColor().HSBA.hue),
+																				 min		: 0, //value.min.r,
 							max 		: 1, //value.max.r,
 							step	 	: step,
 							snap		: true),
-													getter	: { Float(value.value.hsba.hue) },
-													setter	: { value.valueAssignHSBA(h: $0) },
-													listener: { String($0) }
+												   getter	: { Float(value.value.hsba.hue) },
+												   setter	: { value.valueAssignHSBA(h: $0) },
+												   listener: { String($0) }
 				)
 
 			]
@@ -215,9 +215,9 @@ extension UICalibrator.Property {
 
 
 			let property = UICalibrator.Property.init(kind	: .color,
-													title	: storableProperty.key,
-													valuator: { [weak value] in value?.value.toUIColor() },
-													configurations: ["RGBA","HSVA","WA"])
+													  title	: storableProperty.key,
+													  valuator: { [weak value] in value?.value.toUIColor() },
+													  configurations: ["RGBA","HSVA","WA"])
 			{ configuration in
 
 				switch configuration
@@ -228,9 +228,9 @@ extension UICalibrator.Property {
 				}
 			}
 
-//			property.valueAsString = {
-//
-//			}
+			//			property.valueAsString = {
+			//
+			//			}
 
 			return property
 		}
@@ -257,7 +257,7 @@ extension UICalibrator.Property {
 				}
 			}
 
-//			print("families=\(families.count)")
+			//			print("families=\(families.count)")
 
 			class Holder : NSObject {
 				var family 	: String 	= ""
@@ -271,11 +271,11 @@ extension UICalibrator.Property {
 
 
 			return UICalibrator.Property.init(kind: .font,
-													title: storableProperty.key,
-													valuator: { [weak value] in
-														return value?.value.toUIFont()
+											  title: storableProperty.key,
+											  valuator: { [weak value] in
+												return value?.value.toUIFont()
 				},
-													configurations: ["Name+Size", "Family+Name+Size"])
+											  configurations: ["Name+Size", "Family+Name+Size"])
 			{ configuration in
 
 				// "Name" -> "N" // cut
@@ -291,27 +291,27 @@ extension UICalibrator.Property {
 
 
 				let s = UICalibrator.Variable.init(title	: "Size",
-													slider	: .init(		initial		: Float(value.value.size),
-																		 default		: Float(value.default.size),
-																		 min			: Float(value.min),
-																		 max 		: Float(value.max),
-																		 step	 	: Float(1),
-																		 snap		: true),
-													getter: { value.value.size },
-													setter: { value.valueAssign(size: $0) }
+												   slider	: .init(		initial		: Float(value.value.size),
+																			 default		: Float(value.default.size),
+																			 min			: Float(value.min),
+																			 max 		: Float(value.max),
+																			 step	 	: Float(1),
+																			 snap		: true),
+												   getter: { value.value.size },
+												   setter: { value.valueAssign(size: $0) }
 				)
 
 
 
 				let n1 = UICalibrator.Variable.init(title	: "Name",
-													 slider	: .init(	  initial			: Float(names.index(of:value.value.name) ?? 0),
-																		default		: Float(names.index(of:value.default.name) ?? 0),
-																		min			: Float(0),
-																		max 			: Float(names.count-1),
-																		step	 		: Float(1),
-																		snap			: true),
-													 getter		: { Float(names.index(of: value.value.name) ?? 0) },
-													 setter		: { v in
+													slider	: .init(	  initial			: Float(names.index(of:value.value.name) ?? 0),
+																			default		: Float(names.index(of:value.default.name) ?? 0),
+																			min			: Float(0),
+																			max 			: Float(names.count-1),
+																			step	 		: Float(1),
+																			snap			: true),
+													getter		: { Float(names.index(of: value.value.name) ?? 0) },
+													setter		: { v in
 
 														let index = Int(round(v))
 
@@ -322,7 +322,7 @@ extension UICalibrator.Property {
 
 														value.valueAssign(name: name)
 				},
-													 listener		: { _ in value.value.name }
+													listener		: { _ in value.value.name }
 				)
 
 
@@ -333,11 +333,11 @@ extension UICalibrator.Property {
 				let n2 = UICalibrator.Variable.init(
 					title	: "Name",
 					slider	: .init(	  initial			: Float(0),
-									   default		: Float(0),
-									   min			: Float(0),
-									   max 			: Float(0),
-									   step	 		: Float(1),
-									   snap			: true),
+											default		: Float(0),
+											min			: Float(0),
+											max 			: Float(0),
+											step	 		: Float(1),
+											snap			: true),
 					getter		: { Float(holder.names.index(of: value.value.name) ?? 0) },
 					setter		: { v in
 
@@ -359,11 +359,11 @@ extension UICalibrator.Property {
 				let f = UICalibrator.Variable.init(
 					title	: "Family",
 					slider	: .init(	  initial			: Float(families.index(of: value.value.toUIFont()?.familyName ?? "") ?? 0),
-									   default		: Float(families.index(of: value.default.toUIFont()?.familyName ?? "") ?? 0),
-									   min			: Float(0),
-									   max 			: Float(families.count - 1),
-									   step	 		: Float(1),
-									   snap			: true),
+											default		: Float(families.index(of: value.default.toUIFont()?.familyName ?? "") ?? 0),
+											min			: Float(0),
+											max 			: Float(families.count - 1),
+											step	 		: Float(1),
+											snap			: true),
 					getter		: {
 						Float(families.index(of: holder.family) ?? 0)
 				},
@@ -377,7 +377,7 @@ extension UICalibrator.Property {
 						//						value.value.name = UIFont.familiesAndNames[family]?.first ?? UIFont.defaultFont.fontName
 
 						n2?.slider.max = Float((UIFont.familiesAndNames[family]?.count ?? 1) - 1)
-//						print("slider=\(String(describing: n2?.slider))")
+						//						print("slider=\(String(describing: n2?.slider))")
 						n2?.value = Float(holder.names.index(of: value.value.name) ?? 0)
 						n2?.redefine = true
 					},
@@ -410,19 +410,19 @@ extension UICalibrator.Property {
 		if let value = storableProperty.variableForFloat {
 
 			return UICalibrator.Property.init(kind	: .float,
-													title	: storableProperty.key,
-													valuator: { [weak value] in
-														return value?.value
+											  title	: storableProperty.key,
+											  valuator: { [weak value] in
+												return value?.value
 				},
-													configurations	: ["Float"])
+											  configurations	: ["Float"])
 			{ configuration in
 
 				let r = UICalibrator.Variable.init(title: "Value", slider: .init(	initial		: value.value,
-																				 default	: value.default,
-																				 min		: value.min,
-																				 max 		: value.max,
-																				 step	 	: abs(value.step),
-																				 snap		: value.isSnappy))
+																					 default	: value.default,
+																					 min		: value.min,
+																					 max 		: value.max,
+																					 step	 	: abs(value.step),
+																					 snap		: value.isSnappy))
 				{ [weak storableProperty] v in
 
 					guard let storableProperty = storableProperty else { return "" }
@@ -439,19 +439,19 @@ extension UICalibrator.Property {
 		if let value = storableProperty.variableForString {
 
 			return UICalibrator.Property.init(kind	: .string,
-													title	: storableProperty.key,
-													valuator: { [weak value] in
-														return value?.value
+											  title	: storableProperty.key,
+											  valuator: { [weak value] in
+												return value?.value
 				},
-													configurations: ["String"])
+											  configurations: ["String"])
 			{ configuration in
 
 				let r = UICalibrator.Variable.init(title: "Value", slider: .init(	initial			: Float(value.allowable.index(of:value.value)!),
-																				 default		: Float(value.allowable.index(of:value.default)!),
-																				 min			: 0,
-																				 max 			: Float(value.allowable.count-1),
-																				 step	 		: 1,
-																				 snap			: true))
+																					 default		: Float(value.allowable.index(of:value.default)!),
+																					 min			: 0,
+																					 max 			: Float(value.allowable.count-1),
+																					 step	 		: 1,
+																					 snap			: true))
 				{ [weak storableProperty] v in
 
 					guard let storableProperty = storableProperty else { return "" }
@@ -469,10 +469,10 @@ extension UICalibrator.Property {
 		}
 
 		return UICalibrator.Property.init(kind	: .float,
-												title	: storableProperty.key,
-												valuator: { nil },
-												configurations: ["Error"]) { _ in
-													return []
+										  title	: storableProperty.key,
+										  valuator: { nil },
+										  configurations: ["Error"]) { _ in
+											return []
 		}
 
 	}
@@ -494,4 +494,5 @@ extension Array {
 	}
 
 }
+
 

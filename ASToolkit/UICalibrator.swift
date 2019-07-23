@@ -624,7 +624,7 @@ open class UICalibrator : UIView {
 	//	}
 
 
-	var styleManager : [String : StorablePropertyManager]
+	var styleManager : [String : StorableVariableManager]
 
 
 
@@ -750,8 +750,8 @@ open class UICalibrator : UIView {
 		let FONT0 = UIFont.init(name: "Gill Sans", size: UIFont.labelFontSize)!
 
 		let variableForDefaultUIFont = {
-//			return StorableProperty.VariableForUIFont.from(font: .defaultFontForLabel, families2names: UIFont.familiesAndNames, min: 5, max: 36) { [weak self] string in
-			return StorableProperty.VariableForUIFont.from(font: FONT0,
+//			return StorableVariable.VariableForUIFont.from(font: .defaultFontForLabel, families2names: UIFont.familiesAndNames, min: 5, max: 36) { [weak self] string in
+			return StorableVariable.VariableForUIFont.from(font: FONT0,
 														families2names: UIFont.familiesAndNames,
 														min: 5,
 														max: 36)
@@ -762,7 +762,7 @@ open class UICalibrator : UIView {
 		}
 
 		let variableForUIFont = { (name: String, size: CGFloat? ) in
-			return StorableProperty.VariableForUIFont.from(font: UIFont.init(name: name, size: size ?? UIFont.defaultFontForLabel.pointSize) ?? .defaultFontForLabel,
+			return StorableVariable.VariableForUIFont.from(font: UIFont.init(name: name, size: size ?? UIFont.defaultFontForLabel.pointSize) ?? .defaultFontForLabel,
 														families2names: UIFont.familiesAndNames, //.filter({ key,value in key.contains(name) }),
 														min: 5,
 														max: 36) { [weak self] string in
@@ -772,14 +772,14 @@ open class UICalibrator : UIView {
 		}
 
 		let variableForUIColor = { (color: UIColor) in
-			return StorableProperty.VariableForUIColor.from(color: color) { [weak self] string in
+			return StorableVariable.VariableForUIColor.from(color: color) { [weak self] string in
 				self?.restyle()
 				print("color change for key: \(string)")
 			}
 		}
 
 		let variableForBorderInsets = {
-			return StorableProperty.VariableForFloat.init(value: 0, default: 0, min: 0, max: 16, step: 1) { [weak self] string in
+			return StorableVariable.VariableForFloat.init(value: 0, default: 0, min: 0, max: 16, step: 1) { [weak self] string in
 				self?.restyle()
 				print("float change for key: \(string)")
 			}
@@ -788,28 +788,28 @@ open class UICalibrator : UIView {
 		let variableForBorderWidth = variableForBorderInsets
 
 //		let variableForDefaultCircleRadius = {
-//			return StorableProperty.VariableForFloat.init(value: 16, default: 16, min: 0, max: 48, step: 1) { [weak self] string in
+//			return StorableVariable.VariableForFloat.init(value: 16, default: 16, min: 0, max: 48, step: 1) { [weak self] string in
 //				self?.restyle()
 //				print("float change for key: \(string)")
 //			}
 //		}
 
 		let variableForCircleRadius = { (radius: Float) in
-			return StorableProperty.VariableForFloat.init(value: radius, default: radius, min: 0, max: 48, step: 1) { [weak self] string in
+			return StorableVariable.VariableForFloat.init(value: radius, default: radius, min: 0, max: 48, step: 1) { [weak self] string in
 				self?.restyle()
 				print("float change for key: \(string)")
 			}
 		}
 
 //		let variableForDefaultCircleStrokeWidth = {
-//			return StorableProperty.VariableForFloat.init(value: 0, default: 0, min: 0, max: 48, step: 1) { [weak self] string in
+//			return StorableVariable.VariableForFloat.init(value: 0, default: 0, min: 0, max: 48, step: 1) { [weak self] string in
 //				self?.restyle()
 //				print("float change for key: \(string)")
 //			}
 //		}
 
 		let variableForCircleStrokeWidth = { (width: Float) in
-			return StorableProperty.VariableForFloat.init(value: width, default: width, min: 0, max: 48, step: 1) { [weak self] string in
+			return StorableVariable.VariableForFloat.init(value: width, default: width, min: 0, max: 48, step: 1) { [weak self] string in
 				self?.restyle()
 				print("float change for key: \(string)")
 			}
@@ -817,42 +817,42 @@ open class UICalibrator : UIView {
 
 //		let propertiesForButton = {
 //			return [
-//				StorableProperty.init(key: "button/normal.text:font"					, value: variableForDefaultUIFont()),
-//				StorableProperty.init(key: "button/normal.text:color"					, value: variableForUIColor(.white)),
-//				//				StorableProperty.init(key: "button/normal.fill:color", value: variableForUIColor(.black)),
-//				StorableProperty.init(key: "button/normal.circle.radius:float"			, value: variableForDefaultCircleRadius()),
-//				StorableProperty.init(key: "button/normal.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableProperty.init(key: "button/normal.circle.stroke:color"			, value: variableForUIColor(.white)),
-//				StorableProperty.init(key: "button/normal.circle.fill:color"			, value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/normal.text:font"					, value: variableForDefaultUIFont()),
+//				StorableVariable.init(key: "button/normal.text:color"					, value: variableForUIColor(.white)),
+//				//				StorableVariable.init(key: "button/normal.fill:color", value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/normal.circle.radius:float"			, value: variableForDefaultCircleRadius()),
+//				StorableVariable.init(key: "button/normal.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
+//				StorableVariable.init(key: "button/normal.circle.stroke:color"			, value: variableForUIColor(.white)),
+//				StorableVariable.init(key: "button/normal.circle.fill:color"			, value: variableForUIColor(.black)),
 //
 //
-//				StorableProperty.init(key: "button/selected.text:font"					, value: variableForDefaultUIFont()),
-//				StorableProperty.init(key: "button/selected.text:color"					, value: variableForUIColor(.white)),
-//				//			StorableProperty.init(key: "button/selected.fill:color"					, value: variableForUIColor(.black)),
-//				StorableProperty.init(key: "button/selected.circle.radius:float"		, value: variableForDefaultCircleRadius()),
-//				StorableProperty.init(key: "button/selected.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableProperty.init(key: "button/selected.circle.stroke:color"		, value: variableForUIColor(.white)),
-//				StorableProperty.init(key: "button/selected.circle.fill:color"			, value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/selected.text:font"					, value: variableForDefaultUIFont()),
+//				StorableVariable.init(key: "button/selected.text:color"					, value: variableForUIColor(.white)),
+//				//			StorableVariable.init(key: "button/selected.fill:color"					, value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/selected.circle.radius:float"		, value: variableForDefaultCircleRadius()),
+//				StorableVariable.init(key: "button/selected.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
+//				StorableVariable.init(key: "button/selected.circle.stroke:color"		, value: variableForUIColor(.white)),
+//				StorableVariable.init(key: "button/selected.circle.fill:color"			, value: variableForUIColor(.black)),
 //
 //
-//				StorableProperty.init(key: "button/disabled.text:font"					, value: variableForDefaultUIFont()),
-//				StorableProperty.init(key: "button/disabled.text:color"					, value: variableForUIColor(.white)),
-//				//			StorableProperty.init(key: "button/disabled.fill:color"					, value: variableForUIColor(.black)),
-//				StorableProperty.init(key: "button/disabled.circle.radius:float"		, value: variableForDefaultCircleRadius()),
-//				StorableProperty.init(key: "button/disabled.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableProperty.init(key: "button/disabled.circle.stroke:color"		, value: variableForUIColor(.white)),
-//				StorableProperty.init(key: "button/disabled.circle.fill:color"			, value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/disabled.text:font"					, value: variableForDefaultUIFont()),
+//				StorableVariable.init(key: "button/disabled.text:color"					, value: variableForUIColor(.white)),
+//				//			StorableVariable.init(key: "button/disabled.fill:color"					, value: variableForUIColor(.black)),
+//				StorableVariable.init(key: "button/disabled.circle.radius:float"		, value: variableForDefaultCircleRadius()),
+//				StorableVariable.init(key: "button/disabled.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
+//				StorableVariable.init(key: "button/disabled.circle.stroke:color"		, value: variableForUIColor(.white)),
+//				StorableVariable.init(key: "button/disabled.circle.fill:color"			, value: variableForUIColor(.black)),
 //				]
 //		}
 
 		let propertiesForLabel = { (key: String) in
 			return [
-				StorableProperty.init(key: "\(key)/text:font"							, value: variableForDefaultUIFont()),
-				StorableProperty.init(key: "\(key)/text:color"							, value: variableForUIColor(.white)),
-				StorableProperty.init(key: "\(key)/fill:color"							, value: variableForUIColor(.gray)),
-//				StorableProperty.init(key: "\(key)/border.insets:float"					, value: variableForBorderInsets()),
-//				StorableProperty.init(key: "\(key)/border.width:float"					, value: variableForBorderWidth()),
-//				StorableProperty.init(key: "\(key)/border:color"						, value: variableForUIColor(.white)),
+				StorableVariable.init(key: "\(key)/text:font"							, value: variableForDefaultUIFont()),
+				StorableVariable.init(key: "\(key)/text:color"							, value: variableForUIColor(.white)),
+				StorableVariable.init(key: "\(key)/fill:color"							, value: variableForUIColor(.gray)),
+//				StorableVariable.init(key: "\(key)/border.insets:float"					, value: variableForBorderInsets()),
+//				StorableVariable.init(key: "\(key)/border.width:float"					, value: variableForBorderWidth()),
+//				StorableVariable.init(key: "\(key)/border:color"						, value: variableForUIColor(.white)),
 				]
 		}
 
@@ -900,7 +900,7 @@ open class UICalibrator : UIView {
 				bfont = "GillSans"
 			}
 
-			var array : [StorableProperty] = []
+			var array : [StorableVariable] = []
 
 			array += propertiesForLabel("label")
 			//				array += propertiesForLabel("label/key")
@@ -910,16 +910,16 @@ open class UICalibrator : UIView {
 
 
 			array += [
-				StorableProperty.init(key: "button/text:font"				, value: variableForUIFont(bfont,nil)),
-				StorableProperty.init(key: "button/text:color"				, value: variableForUIColor(bcolor1)),
-				StorableProperty.init(key: "button/fill:color"				, value: variableForUIColor(bcolor0)),
-				StorableProperty.init(key: "button/rim:color"				, value: variableForUIColor(bcolorstroke)),
-				StorableProperty.init(key: "button/radius:float"			, value: variableForCircleRadius(bradius)),
-				StorableProperty.init(key: "button/band:float"				, value: variableForCircleStrokeWidth(bborder)),
+				StorableVariable.init(key: "button/text:font"				, value: variableForUIFont(bfont,nil)),
+				StorableVariable.init(key: "button/text:color"				, value: variableForUIColor(bcolor1)),
+				StorableVariable.init(key: "button/fill:color"				, value: variableForUIColor(bcolor0)),
+				StorableVariable.init(key: "button/rim:color"				, value: variableForUIColor(bcolorstroke)),
+				StorableVariable.init(key: "button/radius:float"			, value: variableForCircleRadius(bradius)),
+				StorableVariable.init(key: "button/band:float"				, value: variableForCircleStrokeWidth(bborder)),
 			]
 
 
-			styleManager[style] = StorablePropertyManager.init(key: "@/style/\(style)", properties: array)
+			styleManager[style] = StorableVariableManager.init(key: "@/style/\(style)", properties: array)
 
 			styleManager[style]?.load(overwrite: true)
 
@@ -927,7 +927,7 @@ open class UICalibrator : UIView {
 
 		for style in userStyles {
 
-			let manager = StorablePropertyManager.init(key: "@/style/\(style)")
+			let manager = StorableVariableManager.init(key: "@/style/\(style)")
 
 			manager.load()
 
@@ -2022,7 +2022,7 @@ open class UICalibrator : UIView {
 	}
 
 	@discardableResult
-	public func add(title: String, properties: [StorableProperty]) -> Bool {
+	public func add(title: String, properties: [StorableVariable]) -> Bool {
 		return add(manager: PropertyGroup.init(title: title, properties: properties.map { Property.from(storableProperty: $0) }))
 	}
 
@@ -2038,7 +2038,7 @@ open class UICalibrator : UIView {
 			self.store = store
 		}
 
-		public init(title: String, properties: [StorableProperty], store:@escaping ()->()) {
+		public init(title: String, properties: [StorableVariable], store:@escaping ()->()) {
 			self.title = title
 			self.properties = properties.map { Property.from(storableProperty: $0) }
 			self.store = store

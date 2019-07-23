@@ -104,13 +104,13 @@
 		57FBB10C1F44B3C1008FA2D9 /* GenericPickerOfColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FBB10B1F44B3C1008FA2D9 /* GenericPickerOfColor.swift */; };
 		7724E76B20B080D3006F54A0 /* UIViewWithoutInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7724E76A20B080D3006F54A0 /* UIViewWithoutInteraction.swift */; };
 		772D916122E2068E00DEBC6A /* UICalibrator+Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */; };
-		772D916222E2068E00DEBC6A /* StorableProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915D22E2068E00DEBC6A /* StorableProperty.swift */; };
+		772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915D22E2068E00DEBC6A /* StorableVariable.swift */; };
 		772D916322E2068E00DEBC6A /* UICalibratorPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */; };
 		772D916422E2068E00DEBC6A /* UICalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915F22E2068E00DEBC6A /* UICalibrator.swift */; };
-		772D916522E2068E00DEBC6A /* UICalibratorForStorableProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */; };
+		772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */; };
 		775E433920A67C6200911E85 /* UIViewWithDrawings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775E433820A67C6200911E85 /* UIViewWithDrawings.swift */; };
 		77612A7420B11EA3007C18D7 /* UIViewWithAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77612A7320B11EA3007C18D7 /* UIViewWithAdditions.swift */; };
-		776C3B2122E22EEF0080211E /* UICalibrator+PropertyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */; };
+		776C3B2122E22EEF0080211E /* UICalibrator+VariableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776C3B2022E22EEF0080211E /* UICalibrator+VariableFactory.swift */; };
 		777B9EFE2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFD2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift */; };
 		777B9F002087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFF2087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift */; };
 		777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */; };
@@ -267,13 +267,13 @@
 		57FBB10B1F44B3C1008FA2D9 /* GenericPickerOfColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericPickerOfColor.swift; sourceTree = "<group>"; };
 		7724E76A20B080D3006F54A0 /* UIViewWithoutInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithoutInteraction.swift; sourceTree = "<group>"; };
 		772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICalibrator+Property.swift"; sourceTree = "<group>"; };
-		772D915D22E2068E00DEBC6A /* StorableProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorableProperty.swift; sourceTree = "<group>"; };
+		772D915D22E2068E00DEBC6A /* StorableVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorableVariable.swift; sourceTree = "<group>"; };
 		772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICalibratorPropertyList.swift; sourceTree = "<group>"; };
 		772D915F22E2068E00DEBC6A /* UICalibrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICalibrator.swift; sourceTree = "<group>"; };
-		772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICalibratorForStorableProperties.swift; sourceTree = "<group>"; };
+		772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICalibratorForStorableVariables.swift; sourceTree = "<group>"; };
 		775E433820A67C6200911E85 /* UIViewWithDrawings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithDrawings.swift; sourceTree = "<group>"; };
 		77612A7320B11EA3007C18D7 /* UIViewWithAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewWithAdditions.swift; sourceTree = "<group>"; };
-		776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICalibrator+PropertyFactory.swift"; sourceTree = "<group>"; };
+		776C3B2022E22EEF0080211E /* UICalibrator+VariableFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICalibrator+VariableFactory.swift"; sourceTree = "<group>"; };
 		777B9EEE2087ADB300D3FBBD /* ASToolkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ASToolkit.xcodeproj; sourceTree = "<group>"; };
 		777B9EFD2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSNumber.swift; sourceTree = "<group>"; };
 		777B9EFF2087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationNSObject.swift; sourceTree = "<group>"; };
@@ -425,15 +425,15 @@
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
 				57F804092198B31C009B4DE2 /* Sigma.swift */,
 				777B9F3E2088E56800D3FBBD /* State.swift */,
-				772D915D22E2068E00DEBC6A /* StorableProperty.swift */,
+				772D915D22E2068E00DEBC6A /* StorableVariable.swift */,
 				571C6DB421E91F7800E326CC /* SWXMLHash.swift */,
 				571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */,
 				77FB445420C05715002CE0BB /* TokenizedCollection.swift */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				772D915F22E2068E00DEBC6A /* UICalibrator.swift */,
 				772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */,
-				772D916022E2068E00DEBC6A /* UICalibratorForStorableProperties.swift */,
-				776C3B2022E22EEF0080211E /* UICalibrator+PropertyFactory.swift */,
+				772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */,
+				776C3B2022E22EEF0080211E /* UICalibrator+VariableFactory.swift */,
 				772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -704,7 +704,7 @@
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
-				772D916522E2068E00DEBC6A /* UICalibratorForStorableProperties.swift in Sources */,
+				772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,
@@ -721,7 +721,7 @@
 				5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */,
 				772D916122E2068E00DEBC6A /* UICalibrator+Property.swift in Sources */,
 				5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */,
-				776C3B2122E22EEF0080211E /* UICalibrator+PropertyFactory.swift in Sources */,
+				776C3B2122E22EEF0080211E /* UICalibrator+VariableFactory.swift in Sources */,
 				570FC2C61F1124A300FEAC03 /* ExtensionForUIFont.swift in Sources */,
 				57743A8D20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
@@ -784,7 +784,7 @@
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
 				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
 				5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */,
-				772D916222E2068E00DEBC6A /* StorableProperty.swift in Sources */,
+				772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */,
 				772D916322E2068E00DEBC6A /* UICalibratorPropertyList.swift in Sources */,
 				77FD704221A95DCA00F6636B /* ExtensionForSwiftDictionary.swift in Sources */,
 			);

@@ -1,5 +1,5 @@
 //
-//  UICalibrator+PropertyFactory.swift
+//  UICalibrator+VariableFactory.swift
 //  ASToolkit
 //
 //  Created by andrej on 7/19/19.
@@ -12,11 +12,11 @@ extension UICalibrator {
 
 
 
-	open class PropertyFactory {
+	open class VariableFactory {
 
 		public typealias Updater = (_ key: String, _ representation: Any)->()
 
-		static public func create(_ updater: @escaping Updater = { _,_ in }) -> PropertyFactory {
+		static public func create(_ updater: @escaping Updater = { _,_ in }) -> VariableFactory {
 			return .init(updater)
 		}
 
@@ -27,40 +27,40 @@ extension UICalibrator {
 		public var updater : Updater
 
 
-		open func propertyForColor(_ key: String,
+		open func variableForColor(_ key: String,
 								   binding: UnsafeMutablePointer<UIColor>,
-								   min: StorableProperty.VariableForUIColor.Value = .zero,
-								   max: StorableProperty.VariableForUIColor.Value = .one) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.VariableForUIColor.from(binding: binding, min: min, max: max, listener: { [weak self] v in
+								   min: StorableVariable.VariableForUIColor.Value = .zero,
+								   max: StorableVariable.VariableForUIColor.Value = .one) -> StorableVariable {
+			return StorableVariable.init(key: key, value: StorableVariable.VariableForUIColor.from(binding: binding, min: min, max: max, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
 
-		open func propertyForFont(_ key: String,
+		open func variableForFont(_ key: String,
 								  binding: UnsafeMutablePointer<UIFont>,
 								  names: [String] = UIFont.fontNames,
-								  size: (min: Float, max:Float) = (3,144)) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.VariableForUIFont.from(binding: binding, min: size.min, max: size.max, listener: { [weak self] v in
+								  size: (min: Float, max:Float) = (3,144)) -> StorableVariable {
+			return StorableVariable.init(key: key, value: StorableVariable.VariableForUIFont.from(binding: binding, min: size.min, max: size.max, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
 
-		open func propertyForFloat(_ key: String,
+		open func variableForFloat(_ key: String,
 								   binding: UnsafeMutablePointer<Float>,
 								   min: Float = 0,
 								   max: Float = 1,
-								   step: Float = 0.01) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.VariableForFloat.from(binding: binding, min: min, max: max, step: step, listener: { [weak self] v in
+								   step: Float = 0.01) -> StorableVariable {
+			return StorableVariable.init(key: key, value: StorableVariable.VariableForFloat.from(binding: binding, min: min, max: max, step: step, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
 
-		open func propertyForCGFloat(_ key: String,
+		open func variableForCGFloat(_ key: String,
 									 binding: UnsafeMutablePointer<CGFloat>,
 									 min: Float = 0,
 									 max: Float = 1,
-									 step: Float = 0.01) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.VariableForFloat.init(value: Float(binding.pointee), default: Float(binding.pointee), min: min, max: max, step: step, listener: { [weak self] v in
+									 step: Float = 0.01) -> StorableVariable {
+			return StorableVariable.init(key: key, value: StorableVariable.VariableForFloat.init(value: Float(binding.pointee), default: Float(binding.pointee), min: min, max: max, step: step, listener: { [weak self] v in
 				binding.pointee = CGFloat(v)
 				self?.updater(key,v)
 			}))
