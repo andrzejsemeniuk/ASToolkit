@@ -23,25 +23,25 @@ open class StorableProperty : Codable {
 
 
 
-	public class ValueForUIColor : Codable {
+	public class VariableForUIColor : Codable {
 
-//		public struct Representation : Codable {
-//			var h,s,b,a : Float
-//
-//			public mutating func fromUIColor(_ color: UIColor) {
-//				let hsba = color.HSBA
-//				self.h = Float(hsba.hue)
-//				self.s = Float(hsba.saturation)
-//				self.b = Float(hsba.brightness)
-//				self.a = Float(hsba.alpha)
-//			}
-//
-//			public func toUIColor() -> UIColor {
-//				return UIColor.init(hsba: [CGFloat(h),CGFloat(s),CGFloat(b),CGFloat(a)])
-//			}
-//		}
+		//		public struct Value : Codable {
+		//			var h,s,b,a : Float
+		//
+		//			public mutating func fromUIColor(_ color: UIColor) {
+		//				let hsba = color.HSBA
+		//				self.h = Float(hsba.hue)
+		//				self.s = Float(hsba.saturation)
+		//				self.b = Float(hsba.brightness)
+		//				self.a = Float(hsba.alpha)
+		//			}
+		//
+		//			public func toUIColor() -> UIColor {
+		//				return UIColor.init(hsba: [CGFloat(h),CGFloat(s),CGFloat(b),CGFloat(a)])
+		//			}
+		//		}
 
-		public class Representation : Codable, CustomDebugStringConvertible {
+		public class Value : Codable, CustomDebugStringConvertible {
 
 			public var debugDescription: String {
 				return "rgba=(\(r),\(g),\(b),\(a))"
@@ -78,33 +78,33 @@ open class StorableProperty : Codable {
 				return (w: Float((r+b+g)/3.0), a: a)
 			}
 
-			public static func from(w: Float, a: Float = 1) -> Representation {
+			public static func from(w: Float, a: Float = 1) -> Value {
 				return .init(r: w, g: w, b: w, a: a)
 			}
-			public static func from(constant c: Float) -> Representation {
+			public static func from(constant c: Float) -> Value {
 				return .init(r: c, g: c, b: c, a: c)
 			}
-			public static func from(rgba: [Float]) -> Representation {
+			public static func from(rgba: [Float]) -> Value {
 				return .init(r: rgba[0], g: rgba[1], b: rgba[2], a: rgba[3])
 			}
-			public static func from(color: UIColor) -> Representation {
+			public static func from(color: UIColor) -> Value {
 				return .from(rgba: color.arrayOfRGBA.map { Float($0) })
 			}
-			public static var zero : Representation = {
+			public static var zero : Value = {
 				return .from(constant:0)
 			}()
-			public static var one : Representation = {
+			public static var one : Value = {
 				return .from(constant:1)
 			}()
-			public static var white : Representation = {
+			public static var white : Value = {
 				return .from(constant:1)
 			}()
-			public static var black : Representation = {
+			public static var black : Value = {
 				return .from(w:0, a:1)
 			}()
 		}
 
-		public var value		: Representation {
+		public var value		: Value {
 			didSet {
 				if  value.r < min.r || value.r > max.r ||
 					value.g < min.g || value.g > max.g ||
@@ -122,13 +122,13 @@ open class StorableProperty : Codable {
 				}
 			}
 		}
-		public var `default`	: Representation
-		public var min			: Representation = .init(r: 0, g: 0, b: 0, a: 0)
-		public var max			: Representation = .init(r: 1, g: 1, b: 1, a: 1)
+		public var `default`	: Value
+		public var min			: Value = .init(r: 0, g: 0, b: 0, a: 0)
+		public var max			: Value = .init(r: 1, g: 1, b: 1, a: 1)
 
 
 
-		public typealias Listener = ((Representation)->())
+		public typealias Listener = ((Value)->())
 
 		public var listener		: Listener!
 
@@ -139,7 +139,7 @@ open class StorableProperty : Codable {
 
 
 
-		public init(value: Representation, default: Representation, min: Representation, max: Representation, listener: Listener? = nil) {
+		public init(value: Value, default: Value, min: Value, max: Value, listener: Listener? = nil) {
 			self.value = value
 			self.default = `default`
 			self.min = min
@@ -179,43 +179,43 @@ open class StorableProperty : Codable {
 			self.fromUIColor(UIColor.init(HSBA: v0))
 		}
 
-		public static func from(value	: Representation,
-								default	: Representation? = nil,
-								min		: Representation = .zero,
-								max		: Representation = .one,
-								listener: Listener? = nil) -> ValueForUIColor {
+		public static func from(value	: Value,
+								default	: Value? = nil,
+								min		: Value = .zero,
+								max		: Value = .one,
+								listener: Listener? = nil) -> VariableForUIColor {
 			return .init(value: value, default: `default` ?? value, min: .zero, max: .one, listener: listener)
 		}
 
-		public static var white: ValueForUIColor {
+		public static var white: VariableForUIColor {
 			return .init(value: .white, default: .white, min: .zero, max: .one)
 		}
 
-		public static var black: ValueForUIColor {
+		public static var black: VariableForUIColor {
 			return .init(value: .black, default: .black, min: .zero, max: .one)
 		}
-		
+
 		public static func from(color	: UIColor,
 								default	: UIColor? = nil,
-								min		: Representation = .zero,
-								max		: Representation = .one,
-								listener: Listener? = nil) -> ValueForUIColor {
+								min		: Value = .zero,
+								max		: Value = .one,
+								listener: Listener? = nil) -> VariableForUIColor {
 			return .init(value: .from(color: color), default: .from(color: `default` ?? color), min: min, max: max, listener: listener)
 		}
 
 		public static func from(binding	: UnsafeMutablePointer<UIColor>,
 								default	: UIColor? = nil,
-								min		: Representation = .zero,
-								max		: Representation = .one,
-								listener: Listener? = nil) -> ValueForUIColor {
+								min		: Value = .zero,
+								max		: Value = .one,
+								listener: Listener? = nil) -> VariableForUIColor {
 
 			return .init(value		: .from(color: binding.pointee),
 						 default	: .from(color: `default` ?? binding.pointee),
 						 min		: min,
 						 max		: max,
 						 listener	: { v in
-				binding.pointee = v.toUIColor()
-				listener?(v)
+							binding.pointee = v.toUIColor()
+							listener?(v)
 			})
 		}
 
@@ -224,9 +224,9 @@ open class StorableProperty : Codable {
 
 
 
-	public class ValueForUIFont : Codable {
+	public class VariableForUIFont : Codable {
 
-		public class Representation : Codable, CustomDebugStringConvertible {
+		public class Value : Codable, CustomDebugStringConvertible {
 
 			public var debugDescription: String {
 				return "font=(\(name),\(size))"
@@ -234,7 +234,7 @@ open class StorableProperty : Codable {
 
 			public var name			: String
 			public var size			: Float
-//			public var range		: [CGFloat]?
+			//			public var range		: [CGFloat]?
 
 			public init(name: String, size: Float) {
 				self.name = name
@@ -249,12 +249,12 @@ open class StorableProperty : Codable {
 				self.size = Float(font.pointSize)
 			}
 
-			static public func from(font: UIFont) -> Representation {
-				return Representation.init(name: font.fontName, size: Float(font.pointSize))
+			static public func from(font: UIFont) -> Value {
+				return Value.init(name: font.fontName, size: Float(font.pointSize))
 			}
 		}
 
-		public var value		: Representation {
+		public var value		: Value {
 			didSet {
 				if value.size < min {
 					value.size = min
@@ -265,7 +265,7 @@ open class StorableProperty : Codable {
 				self.listener?(value)
 			}
 		}
-		public var `default`		: Representation
+		public var `default`		: Value
 		public var families2names	: [String : [String]]
 		public var min				: Float
 		public var max 				: Float
@@ -273,7 +273,7 @@ open class StorableProperty : Codable {
 
 
 
-		public typealias Listener = ((Representation)->())
+		public typealias Listener = ((Value)->())
 
 		public var listener		: Listener!
 
@@ -283,8 +283,8 @@ open class StorableProperty : Codable {
 
 
 
-		public init(value: Representation,
-					`default`: Representation,
+		public init(value: Value,
+					`default`: Value,
 					families2names: [String : [String]],
 					min: Float,
 					max: Float,
@@ -306,20 +306,20 @@ open class StorableProperty : Codable {
 			value = v0
 		}
 
-		public static func from(representation	: Representation,
+		public static func from(value	: Value,
 								families2names	: [String : [String]],
 								min				: Float,
 								max				: Float,
 								step			: Float = 1,
-								listener		: Listener? = nil) -> ValueForUIFont
+								listener		: Listener? = nil) -> VariableForUIFont
 		{
-			return ValueForUIFont.init(value			: representation,
-									   default  		: representation,
-									   families2names	: families2names,
-									   min				: min,
-									   max				: max,
-									   step				: step,
-									   listener			: listener)
+			return VariableForUIFont.init(value			: value,
+										  default  		: value,
+										  families2names	: families2names,
+										  min				: min,
+										  max				: max,
+										  step				: step,
+										  listener			: listener)
 		}
 
 		public static func from(font			: UIFont,
@@ -327,15 +327,15 @@ open class StorableProperty : Codable {
 								min				: Float,
 								max				: Float,
 								step			: Float = 1,
-								listener		: Listener? = nil) -> ValueForUIFont
+								listener		: Listener? = nil) -> VariableForUIFont
 		{
-			return ValueForUIFont.init(value			: .from(font: font),
-									   default			: .from(font: font),
-									   families2names	: families2names,
-									   min      		: min,
-									   max      		: max,
-									   step				: step,
-									   listener			: listener)
+			return VariableForUIFont.init(value			: .from(font: font),
+										  default			: .from(font: font),
+										  families2names	: families2names,
+										  min      		: min,
+										  max      		: max,
+										  step				: step,
+										  listener			: listener)
 		}
 
 		public static func from(binding			: UnsafeMutablePointer<UIFont>,
@@ -344,19 +344,19 @@ open class StorableProperty : Codable {
 								min				: Float = 1,
 								max				: Float = 256,
 								step			: Float = 1,
-								listener		: Listener? = nil) -> ValueForUIFont
+								listener		: Listener? = nil) -> VariableForUIFont
 		{
-			return ValueForUIFont.init(value	: .from(font: binding.pointee),
-									   default	: .from(font: `default` ?? binding.pointee),
-									   families2names	: families2names,
-									   min		: min,
-									   max		: max,
-									   step     : step,
-									   listener	: { v in
-										if let font = v.toUIFont() {
-											binding.pointee = font
-										}
-										listener?(v)
+			return VariableForUIFont.init(value	: .from(font: binding.pointee),
+										  default	: .from(font: `default` ?? binding.pointee),
+										  families2names	: families2names,
+										  min		: min,
+										  max		: max,
+										  step     : step,
+										  listener	: { v in
+											if let font = v.toUIFont() {
+												binding.pointee = font
+											}
+											listener?(v)
 			})
 		}
 
@@ -371,7 +371,7 @@ open class StorableProperty : Codable {
 
 
 
-	public class ValueForFloat : Codable {
+	public class VariableForFloat : Codable {
 
 		public var value		: Float {
 			didSet {
@@ -413,7 +413,7 @@ open class StorableProperty : Codable {
 								min		: Float,
 								max		: Float,
 								step    : Float,
-								listener: Listener? = nil) -> ValueForFloat {
+								listener: Listener? = nil) -> VariableForFloat {
 
 			return .init(value		: binding.pointee,
 						 default	: `default` ?? binding.pointee,
@@ -430,7 +430,7 @@ open class StorableProperty : Codable {
 	}
 
 
-	public class ValueForString : Codable {
+	public class VariableForString : Codable {
 
 		public var value		: String {
 			didSet {
@@ -472,7 +472,7 @@ open class StorableProperty : Codable {
 		public static func from(binding		: UnsafeMutablePointer<String>,
 								default		: String? = nil,
 								allowable	: [String],
-								listener	: Listener? = nil) -> ValueForString {
+								listener	: Listener? = nil) -> VariableForString {
 
 			return .init(value		: binding.pointee,
 						 default	: `default` ?? binding.pointee,
@@ -490,12 +490,13 @@ open class StorableProperty : Codable {
 
 
 
-	public var key					: String
+	public var key						: String
 
-	public var valueForFloat		: ValueForFloat! = nil
-	public var valueForString		: ValueForString! = nil
-	public var valueForUIColor		: ValueForUIColor! = nil
-	public var valueForUIFont		: ValueForUIFont! = nil
+	public var variableForFloat			: VariableForFloat! = nil
+	public var variableForString		: VariableForString! = nil
+	public var variableForUIColor		: VariableForUIColor! = nil
+	public var variableForUIFont		: VariableForUIFont! = nil
+
 
 
 
@@ -503,24 +504,24 @@ open class StorableProperty : Codable {
 	public func assign(from: StorableProperty) {
 		self.key				= from.key
 		if true {
-			let listener = self.valueForFloat?.listener
-			self.valueForFloat			= from.valueForFloat
-			self.valueForFloat?.listener = listener
+			let listener = self.variableForFloat?.listener
+			self.variableForFloat			= from.variableForFloat
+			self.variableForFloat?.listener = listener
 		}
 		if true {
-			let listener = self.valueForString?.listener
-			self.valueForString		= from.valueForString
-			self.valueForString?.listener = listener
+			let listener = self.variableForString?.listener
+			self.variableForString		= from.variableForString
+			self.variableForString?.listener = listener
 		}
 		if true {
-			let listener = self.valueForUIFont?.listener
-			self.valueForUIFont		= from.valueForUIFont
-			self.valueForUIFont?.listener = listener
+			let listener = self.variableForUIFont?.listener
+			self.variableForUIFont		= from.variableForUIFont
+			self.variableForUIFont?.listener = listener
 		}
 		if true {
-			let listener = self.valueForUIColor?.listener
-			self.valueForUIColor	= from.valueForUIColor
-			self.valueForUIColor?.listener = listener
+			let listener = self.variableForUIColor?.listener
+			self.variableForUIColor	= from.variableForUIColor
+			self.variableForUIColor?.listener = listener
 		}
 	}
 
@@ -529,27 +530,27 @@ open class StorableProperty : Codable {
 	//		public init(from decoder: Decoder) throws {
 	//			let values = decoder.container(keyedBy: self)
 	//			self.key = try values.decode(String.self, forKey: .key)
-	//			self.value = try? values.decode(ValueForFloat.self, forKey: .value) ?? try? values.decode(ValueForString.self, forKey: .value)
+	//			self.value = try? values.decode(VariableForFloat.self, forKey: .value) ?? try? values.decode(VariableForString.self, forKey: .value)
 	//		}
 
-	public init(key: String, value: ValueForString) {
+	public init(key: String, value: VariableForString) {
 		self.key = key
-		self.valueForString = value
+		self.variableForString = value
 	}
 
-	public init(key: String, value: ValueForFloat) {
+	public init(key: String, value: VariableForFloat) {
 		self.key = key
-		self.valueForFloat = value
+		self.variableForFloat = value
 	}
 
-	public init(key: String, value: ValueForUIColor) {
+	public init(key: String, value: VariableForUIColor) {
 		self.key = key
-		self.valueForUIColor = value
+		self.variableForUIColor = value
 	}
 
-	public init(key: String, value: ValueForUIFont) {
+	public init(key: String, value: VariableForUIFont) {
 		self.key = key
-		self.valueForUIFont = value
+		self.variableForUIFont = value
 	}
 
 
@@ -561,31 +562,31 @@ open class StorableProperty : Codable {
 
 
 	public var color			: UIColor! {
-		return valueForUIColor.toUIColor()
+		return variableForUIColor.toUIColor()
 	}
 
 	public var font				: UIFont! {
-		return valueForUIFont.toUIFont()
+		return variableForUIFont.toUIFont()
 	}
 
 
 	public func assign(listener: @escaping (Any)->()) {
-		if let p = valueForUIColor {
+		if let p = variableForUIColor {
 			p.listener = { v in
 				listener(v)
 			}
 		}
-		if let p = valueForUIFont {
+		if let p = variableForUIFont {
 			p.listener = { v in
 				listener(v)
 			}
 		}
-		if let p = valueForFloat {
+		if let p = variableForFloat {
 			p.listener = { v in
 				listener(v)
 			}
 		}
-		if let p = valueForString {
+		if let p = variableForString {
 			p.listener = { v in
 				listener(v)
 			}
@@ -599,17 +600,17 @@ open class StorableProperty : Codable {
 
 		var property1 : StorableProperty!
 
-		if let v = property0.valueForFloat {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.ValueForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
+		if let v = property0.variableForFloat {
+			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
 		}
-		if let v = property0.valueForString {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.ValueForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
+		if let v = property0.variableForString {
+			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
 		}
-		if let v = property0.valueForUIFont {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.ValueForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+		if let v = property0.variableForUIFont {
+			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
 		}
-		if let v = property0.valueForUIColor {
-			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.ValueForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+		if let v = property0.variableForUIColor {
+			property1 = StorableProperty.init(key: property0.key, value: StorableProperty.VariableForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
 		}
 
 		return property1
@@ -640,7 +641,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 
 	public func copy(key: String, cloneListeners: Bool) -> StorablePropertyManager {
-		
+
 		let result = StorablePropertyManager.init(key: key)
 
 		var properties1 : [StorableProperty] = []
@@ -718,7 +719,7 @@ open class StorablePropertyManager : CustomStringConvertible {
 		return buffer
 	}
 
-	
+
 
 	open func store() {
 		do {
@@ -766,4 +767,5 @@ open class StorablePropertyManager : CustomStringConvertible {
 
 
 }
+
 

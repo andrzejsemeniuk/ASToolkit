@@ -29,9 +29,9 @@ extension UICalibrator {
 
 		open func propertyForColor(_ key: String,
 								   binding: UnsafeMutablePointer<UIColor>,
-								   min: StorableProperty.ValueForUIColor.Representation = .zero,
-								   max: StorableProperty.ValueForUIColor.Representation = .one) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.ValueForUIColor.from(binding: binding, min: min, max: max, listener: { [weak self] v in
+								   min: StorableProperty.VariableForUIColor.Value = .zero,
+								   max: StorableProperty.VariableForUIColor.Value = .one) -> StorableProperty {
+			return StorableProperty.init(key: key, value: StorableProperty.VariableForUIColor.from(binding: binding, min: min, max: max, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
@@ -40,7 +40,7 @@ extension UICalibrator {
 								  binding: UnsafeMutablePointer<UIFont>,
 								  names: [String] = UIFont.fontNames,
 								  size: (min: Float, max:Float) = (3,144)) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.ValueForUIFont.from(binding: binding, min: size.min, max: size.max, listener: { [weak self] v in
+			return StorableProperty.init(key: key, value: StorableProperty.VariableForUIFont.from(binding: binding, min: size.min, max: size.max, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
@@ -50,7 +50,7 @@ extension UICalibrator {
 								   min: Float = 0,
 								   max: Float = 1,
 								   step: Float = 0.01) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.ValueForFloat.from(binding: binding, min: min, max: max, step: step, listener: { [weak self] v in
+			return StorableProperty.init(key: key, value: StorableProperty.VariableForFloat.from(binding: binding, min: min, max: max, step: step, listener: { [weak self] v in
 				self?.updater(key,v)
 			}))
 		}
@@ -60,7 +60,7 @@ extension UICalibrator {
 									 min: Float = 0,
 									 max: Float = 1,
 									 step: Float = 0.01) -> StorableProperty {
-			return StorableProperty.init(key: key, value: StorableProperty.ValueForFloat.init(value: Float(binding.pointee), default: Float(binding.pointee), min: min, max: max, step: step, listener: { [weak self] v in
+			return StorableProperty.init(key: key, value: StorableProperty.VariableForFloat.init(value: Float(binding.pointee), default: Float(binding.pointee), min: min, max: max, step: step, listener: { [weak self] v in
 				binding.pointee = CGFloat(v)
 				self?.updater(key,v)
 			}))

@@ -101,7 +101,7 @@ extension UICalibrator.Property {
 
 	static func from(storableProperty: StorableProperty) -> UICalibrator.Property {
 
-		if let value = storableProperty.valueForUIColor {
+		if let value = storableProperty.variableForUIColor {
 
 			let step = Float(1.0/255.0)
 
@@ -235,7 +235,7 @@ extension UICalibrator.Property {
 			return property
 		}
 
-		if let value = storableProperty.valueForUIFont {
+		if let value = storableProperty.variableForUIFont {
 
 
 			let families : [String] = value.families2names.keys.compactMap({ $0 }).sorted()
@@ -407,7 +407,7 @@ extension UICalibrator.Property {
 			}
 		}
 
-		if let value = storableProperty.valueForFloat {
+		if let value = storableProperty.variableForFloat {
 
 			return UICalibrator.Property.init(kind	: .float,
 													title	: storableProperty.key,
@@ -427,7 +427,7 @@ extension UICalibrator.Property {
 
 					guard let storableProperty = storableProperty else { return "" }
 
-					storableProperty.valueForFloat.value = v
+					storableProperty.variableForFloat.value = v
 
 					return String(v)
 				}
@@ -436,7 +436,7 @@ extension UICalibrator.Property {
 			}
 		}
 
-		if let value = storableProperty.valueForString {
+		if let value = storableProperty.variableForString {
 
 			return UICalibrator.Property.init(kind	: .string,
 													title	: storableProperty.key,
@@ -458,9 +458,9 @@ extension UICalibrator.Property {
 
 					let index = Int(round(v))
 
-					storableProperty.valueForString.value = value.allowable[index]
+					storableProperty.variableForString.value = value.allowable[index]
 
-					return storableProperty.valueForString.value
+					return storableProperty.variableForString.value
 				}
 
 				return [r]
