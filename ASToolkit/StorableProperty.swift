@@ -631,9 +631,9 @@ open class StorablePropertyManager : CustomStringConvertible {
 		self.key = key
 	}
 
-	public init(key: String, array: [StorableProperty]) {
+	public init(key: String, properties: [StorableProperty]) {
 		self.key = key
-		self.properties = array
+		self.properties = properties
 	}
 
 

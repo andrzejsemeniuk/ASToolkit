@@ -919,7 +919,7 @@ open class UICalibrator : UIView {
 			]
 
 
-			styleManager[style] = StorablePropertyManager.init(key: "@/style/\(style)", array: array)
+			styleManager[style] = StorablePropertyManager.init(key: "@/style/\(style)", properties: array)
 
 			styleManager[style]?.load(overwrite: true)
 
@@ -2601,3 +2601,5 @@ extension NSObject {
 // TODO ADD CLOSE BUTTON TO PROPERTY LIST TABLE
 
 // TODO VARIABLE STEPPING THROUGH A RANGE OF A VARIABLE .. EX. TIME BETWEEN 1 AND 3 WILL BE STEPPED BY 0.1, OTHERWISE BY 1
+
+// TODO ADD BACKGROUND VIEW/SHADE TO SLIDERS JUST LIKE BG COLOR OF LABELS .. PERHAPS ENTIRE ROW?
