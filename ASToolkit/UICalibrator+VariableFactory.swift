@@ -132,8 +132,8 @@ extension UICalibrator {
 		}
 
 		open func variableForDetailedCGFloat(_ title	: String,
-											 getter	: @escaping ()->CGFloat,
-											 setter  : @escaping (CGFloat)->(),
+											 getter		: @escaping ()->CGFloat,
+											 setter  	: @escaping (CGFloat)->(),
 											 min		: Float = 0,
 											 max		: Float = 1,
 											 step		: Float = 0,
@@ -204,8 +204,8 @@ extension UICalibrator {
 			)
 		}
 
-		open func variableForDetailedInt(_ title		: String,
-										 getter	: @escaping ()->Int,
+		open func variableForDetailedInt(_ title	: String,
+										 getter		: @escaping ()->Int,
 										 setter  	: @escaping (Int)->(),
 										 min		: Int,
 										 max		: Int,

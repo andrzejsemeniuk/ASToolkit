@@ -2022,8 +2022,11 @@ open class UICalibrator : UIView {
 	}
 
 	@discardableResult
-	public func add(title: String, properties: [StorableVariable]) -> Bool {
-		return add(manager: PropertyGroup.init(title: title, properties: properties.map { Property.from(storableVariable: $0) }))
+	public func add(title: String, variables: [StorableVariable]) -> Bool {
+//		return add(manager: PropertyGroup.init(title: title, properties: variables.map { Property.from(storableVariable: $0) }))
+		return add(manager: PropertyGroup.init(title: title, properties: [
+			Property.from(key: title, storableVariables: variables) // variables.map { Property.from(storableVariable: $0) }
+			]))
 	}
 
 
