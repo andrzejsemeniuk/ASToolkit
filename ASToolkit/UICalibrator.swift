@@ -45,7 +45,7 @@ open class UICalibrator : UIView {
 	}
 
 	func font(_ size: CGFloat) -> UIFont {
-		if let font = styleManager[style]?.property("label/text:font")?.variableForUIFont?.toUIFont() {
+		if let font = styleManager[style]?.variable("label/text:font")?.variableForUIFont?.toUIFont() {
 			return font.withSize(font.pointSize + size)
 		}
 		return
@@ -58,25 +58,25 @@ open class UICalibrator : UIView {
 		return FONT
 	}
 	var colorForLabelText : UIColor {
-		return styleManager[style]?.property("label/text:color")?.variableForUIColor?.toUIColor() ?? .white
+		return styleManager[style]?.variable("label/text:color")?.variableForUIColor?.toUIColor() ?? .white
 	}
 	var colorForLabelFill : UIColor {
-		return styleManager[style]?.property("label/fill:color")?.variableForUIColor?.toUIColor() ?? .gray
+		return styleManager[style]?.variable("label/fill:color")?.variableForUIColor?.toUIColor() ?? .gray
 	}
 	var fontForButton : UIFont {
-		return styleManager[style]?.property("button/text:font")?.variableForUIFont?.toUIFont() ?? FONT
+		return styleManager[style]?.variable("button/text:font")?.variableForUIFont?.toUIFont() ?? FONT
 	}
 	var colorForButtonText : UIColor {
-		return styleManager[style]?.property("button/text:color")?.variableForUIColor?.toUIColor() ?? .white
+		return styleManager[style]?.variable("button/text:color")?.variableForUIColor?.toUIColor() ?? .white
 	}
 	var colorForButtonTextSelected : UIColor {
 		return colorForButtonFill
 	}
 	var colorForButtonFill : UIColor {
-		return styleManager[style]?.property("button/fill:color")?.variableForUIColor?.toUIColor() ?? .white
+		return styleManager[style]?.variable("button/fill:color")?.variableForUIColor?.toUIColor() ?? .white
 	}
 	var colorForButtonRim : UIColor {
-		return styleManager[style]?.property("button/rim:color")?.variableForUIColor?.toUIColor() ?? .white
+		return styleManager[style]?.variable("button/rim:color")?.variableForUIColor?.toUIColor() ?? .white
 	}
 	var colorForButtonBackgroundSelected : UIColor {
 		return colorForButtonText
@@ -88,10 +88,10 @@ open class UICalibrator : UIView {
 		return selected ? colorForButtonBackgroundSelected : colorForButtonBackgroundNormal
 	}
 	var thicknessForButtonBand : CGFloat {
-		return CGFloat(styleManager[style]?.property("button/band:float")?.variableForFloat?.value ?? 8)
+		return CGFloat(styleManager[style]?.variable("button/band:float")?.variableForFloat?.value ?? 8)
 	}
 	var radiusForButton : CGFloat {
-		return CGFloat(styleManager[style]?.property("button/radius:float")?.variableForFloat?.value ?? 16)
+		return CGFloat(styleManager[style]?.variable("button/radius:float")?.variableForFloat?.value ?? 16)
 	}
 
 
@@ -919,7 +919,7 @@ open class UICalibrator : UIView {
 			]
 
 
-			styleManager[style] = StorableVariableManager.init(key: "@/style/\(style)", properties: array)
+			styleManager[style] = StorableVariableManager.init(key: "@/style/\(style)", variables: array)
 
 			styleManager[style]?.load(overwrite: true)
 
@@ -933,7 +933,7 @@ open class UICalibrator : UIView {
 
 			styleManager[style] = manager
 
-			for property in manager.properties {
+			for property in manager.variables {
 				property.assign(listener: { [weak self] _ in
 					self?.restyle()
 				})
@@ -941,7 +941,7 @@ open class UICalibrator : UIView {
 		}
 
 		for manager in styleManager.values.sorted(by: { $0.key < $1.key }) {
-			add(manager: UICalibrator.PropertyGroup.init(title: manager.key, properties: manager.properties, store: { [weak manager] in
+			add(manager: UICalibrator.PropertyGroup.init(title: manager.key, properties: manager.variables, store: { [weak manager] in
 				manager?.store()
 			}), calibration: true)
 		}
@@ -1329,7 +1329,7 @@ open class UICalibrator : UIView {
 
 					self.styleManager[style] = manager1
 
-					self.add(manager: UICalibrator.PropertyGroup.init(title: manager1.key, properties: manager1.properties, store: { [weak manager1] in
+					self.add(manager: UICalibrator.PropertyGroup.init(title: manager1.key, properties: manager1.variables, store: { [weak manager1] in
 						manager1?.store()
 					}), calibration: true)
 
@@ -2023,7 +2023,7 @@ open class UICalibrator : UIView {
 
 	@discardableResult
 	public func add(title: String, properties: [StorableVariable]) -> Bool {
-		return add(manager: PropertyGroup.init(title: title, properties: properties.map { Property.from(storableProperty: $0) }))
+		return add(manager: PropertyGroup.init(title: title, properties: properties.map { Property.from(storableVariable: $0) }))
 	}
 
 
@@ -2040,7 +2040,7 @@ open class UICalibrator : UIView {
 
 		public init(title: String, properties: [StorableVariable], store:@escaping ()->()) {
 			self.title = title
-			self.properties = properties.map { Property.from(storableProperty: $0) }
+			self.properties = properties.map { Property.from(storableVariable: $0) }
 			self.store = store
 		}
 

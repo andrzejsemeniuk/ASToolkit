@@ -501,37 +501,16 @@ open class StorableVariable : Codable {
 
 
 
-	public func assign(from: StorableVariable) {
-		self.key				= from.key
-		if true {
-			let listener = self.variableForFloat?.listener
-			self.variableForFloat			= from.variableForFloat
-			self.variableForFloat?.listener = listener
-		}
-		if true {
-			let listener = self.variableForString?.listener
-			self.variableForString		= from.variableForString
-			self.variableForString?.listener = listener
-		}
-		if true {
-			let listener = self.variableForUIFont?.listener
-			self.variableForUIFont		= from.variableForUIFont
-			self.variableForUIFont?.listener = listener
-		}
-		if true {
-			let listener = self.variableForUIColor?.listener
-			self.variableForUIColor	= from.variableForUIColor
-			self.variableForUIColor?.listener = listener
-		}
-	}
-
-
 
 	//		public init(from decoder: Decoder) throws {
 	//			let values = decoder.container(keyedBy: self)
 	//			self.key = try values.decode(String.self, forKey: .key)
 	//			self.value = try? values.decode(VariableForFloat.self, forKey: .value) ?? try? values.decode(VariableForString.self, forKey: .value)
 	//		}
+
+	public init(key: String) {
+		self.key = key
+	}
 
 	public init(key: String, value: VariableForString) {
 		self.key = key
@@ -570,6 +549,10 @@ open class StorableVariable : Codable {
 	}
 
 
+
+
+
+	
 	public func assign(listener: @escaping (Any)->()) {
 		if let p = variableForUIColor {
 			p.listener = { v in
@@ -594,178 +577,62 @@ open class StorableVariable : Codable {
 
 	}
 
-	public func copy(cloneListener: Bool) -> StorableVariable? {
-
-		let property0 = self
-
-		var property1 : StorableVariable!
-
-		if let v = property0.variableForFloat {
-			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
+	public func assign(key: String? = nil, from: StorableVariable) {
+		self.key = key ?? from.key
+		if true {
+			let listener = self.variableForFloat?.listener
+			self.variableForFloat			= from.variableForFloat
+			self.variableForFloat?.listener = listener
 		}
-		if let v = property0.variableForString {
-			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
+		if true {
+			let listener = self.variableForString?.listener
+			self.variableForString		= from.variableForString
+			self.variableForString?.listener = listener
 		}
-		if let v = property0.variableForUIFont {
-			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+		if true {
+			let listener = self.variableForUIFont?.listener
+			self.variableForUIFont		= from.variableForUIFont
+			self.variableForUIFont?.listener = listener
 		}
-		if let v = property0.variableForUIColor {
-			property1 = StorableVariable.init(key: property0.key, value: StorableVariable.VariableForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+		if true {
+			let listener = self.variableForUIColor?.listener
+			self.variableForUIColor	= from.variableForUIColor
+			self.variableForUIColor?.listener = listener
+		}
+	}
+	
+	public func copy(key: String? = nil, cloneListener: Bool) -> StorableVariable? {
+
+		let variable0 = self
+
+		var variable1 : StorableVariable!
+
+		if let v = variable0.variableForFloat {
+			variable1 = StorableVariable.init(key: key ?? variable0.key, value: StorableVariable.VariableForFloat.init(value: v.value, default: v.default, min: v.min, max: v.max, step: v.step, listener: cloneListener ? v.listener : nil))
+		}
+		if let v = variable0.variableForString {
+			variable1 = StorableVariable.init(key: key ?? variable0.key, value: StorableVariable.VariableForString.init(value: v.value, default: v.default, allowable: v.allowable, listener: cloneListener ? v.listener : nil))
+		}
+		if let v = variable0.variableForUIFont {
+			variable1 = StorableVariable.init(key: key ?? variable0.key, value: StorableVariable.VariableForUIFont.init(value: v.value, default: v.default, families2names: v.families2names, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
+		}
+		if let v = variable0.variableForUIColor {
+			variable1 = StorableVariable.init(key: key ?? variable0.key, value: StorableVariable.VariableForUIColor.init(value: v.value, default: v.default, min: v.min, max: v.max, listener: cloneListener ? v.listener : nil))
 		}
 
-		return property1
+		return variable1
+	}
+
+	public func clone(key: String? = nil) -> StorableVariable {
+
+		let clone = StorableVariable.init(key: key ?? self.key)
+
+		clone.variableForFloat 		= self.variableForFloat
+		clone.variableForString 	= self.variableForString
+		clone.variableForUIFont 	= self.variableForUIFont
+		clone.variableForUIColor 	= self.variableForUIColor
+
+		return clone
 	}
 }
-
-
-open class StorableVariableManager : CustomStringConvertible {
-
-
-	public let key 							: String
-
-	public private(set) var properties 		: [StorableVariable] = []
-
-
-
-
-	public init(key: String) {
-		self.key = key
-	}
-
-	public init(key: String, properties: [StorableVariable]) {
-		self.key = key
-		self.properties = properties
-	}
-
-
-
-
-	public func copy(key: String, cloneListeners: Bool) -> StorableVariableManager {
-
-		let result = StorableVariableManager.init(key: key)
-
-		var properties1 : [StorableVariable] = []
-
-		for property0 in properties {
-			if let property1 = property0.copy(cloneListener: cloneListeners) {
-				properties1.append(property1)
-			} else {
-				// ???
-			}
-		}
-
-		result.properties = properties1
-
-		return result
-	}
-
-
-
-	open func filtered(forKeyRegexPattern pattern: String) -> [StorableVariable] {
-		return properties.filter({ $0.key.matches(regex: pattern) }).map { $0 }
-	}
-
-	open func property(_ key: String) -> StorableVariable! {
-		return properties.first(where: { $0.key == key } )
-	}
-
-
-
-	open func put(property p: StorableVariable, overwrite: Bool, store: Bool = true) {
-		if let variable = self.properties.first(where: { $0.key == p.key }) {
-			if overwrite {
-				variable.assign(from: p)
-				if store {
-					self.store()
-				}
-			}
-		} else {
-			self.properties.append(p)
-			if store {
-				self.store()
-			}
-		}
-	}
-
-	open func clear(store: Bool = false) {
-		if store {
-			self.store()
-		}
-		self.properties = []
-	}
-
-	open func put(properties: [StorableVariable], clear: Bool = false, overwrite: Bool, store: Bool = false) {
-		if clear {
-			self.properties = []
-		}
-		properties.forEach {
-			put(property: $0, overwrite: overwrite, store: false)
-		}
-		if store {
-			self.store()
-		}
-	}
-
-	open var description : String {
-
-		let array = self.properties.sorted(by: { $0.key < $1.key })
-
-		var buffer = "StorableVariableManager: properties=\(array.count), key=\"\(key)\""
-
-		for (index,property) in array.enumerated() {
-			buffer += "\n property[\(index)] = \(property) for key \"\(property.key)\""
-		}
-
-		return buffer
-	}
-
-
-
-	open func store() {
-		do {
-			log("store: \n\(self)")
-
-			let data = try JSONEncoder.init().encode(properties)
-
-			log("store, data: \(data)")
-
-			UserDefaults.standard.set(data, forKey: key)
-		} catch let error {
-			log(error)
-		}
-	}
-
-	open func load(clear: Bool = false, overwrite: Bool = false) {
-		do {
-			if let data = UserDefaults.standard.data(forKey: key) {
-
-				log("load, for key \(key) data: \(String(describing: String.init(data: data, encoding: .utf8)))")
-
-				let decoded = try JSONDecoder.init().decode([StorableVariable].self, from: data)
-
-				self.put(properties: decoded, clear: clear, overwrite: overwrite)
-
-				log("loaded: \n\(self)")
-			}
-		} catch let error {
-			log(error)
-		}
-	}
-
-	open func purge() {
-		do {
-			let array : [StorableVariable] = []
-
-			let data = try JSONEncoder.init().encode(array)
-
-			UserDefaults.standard.set(data, forKey: key)
-		} catch let error {
-			log(error)
-		}
-
-	}
-
-
-}
-
 

@@ -34,7 +34,7 @@ class UICalibratorForStorableVariables : UICalibrator {
 			//			self?.view.isUserInteractionEnabled = editor?.isHidden ?? true
 		}
 
-		define(properties: manager.properties.map { .from(storableProperty: $0) })
+		define(properties: manager.variables.map { .from(storableVariable: $0) })
 	}
 
 	convenience init(key: String, listener: @escaping Listener) {
@@ -51,10 +51,10 @@ class UICalibratorForStorableVariables : UICalibrator {
 
 
 
-	public func put(properties: [StorableVariable], overwrite: Bool) {
-		manager.put(properties: properties, overwrite: overwrite)
+	public func put(variables: [StorableVariable], overwrite: Bool) {
+		manager.put(variables: variables, overwrite: overwrite)
 
-		define(properties: manager.properties.map { .from(storableProperty: $0) })
+		define(properties: manager.variables.map { .from(storableVariable: $0) })
 	}
 
 
@@ -78,7 +78,7 @@ extension UICalibratorForStorableVariables {
 		return editor
 	}
 
-	static func create(on view: UIView, with properties: [StorableVariable], for key: String, listener: @escaping Listener) -> UICalibratorForStorableVariables {
+	static func create(on view: UIView, with variables: [StorableVariable], for key: String, listener: @escaping Listener) -> UICalibratorForStorableVariables {
 
 		let editor = UICalibratorForStorableVariables.init(key: key, listener: listener)
 
@@ -86,7 +86,7 @@ extension UICalibratorForStorableVariables {
 
 		editor.constrainToSuperview()
 
-		editor.put(properties: properties, overwrite: true)
+		editor.put(variables: variables, overwrite: true)
 
 		return editor
 	}

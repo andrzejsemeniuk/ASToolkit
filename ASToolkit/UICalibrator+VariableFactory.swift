@@ -27,6 +27,9 @@ extension UICalibrator {
 		public var updater : Updater
 
 
+
+
+
 		open func variableForColor(_ key: String,
 								   binding: UnsafeMutablePointer<UIColor>,
 								   min: StorableVariable.VariableForUIColor.Value = .zero,
@@ -65,6 +68,11 @@ extension UICalibrator {
 				self?.updater(key,v)
 			}))
 		}
+
+
+
+
+
 
 		public typealias BlockVoidVoid = ()->()
 
@@ -273,6 +281,20 @@ extension UICalibrator {
 			)
 		}
 
+
+
+		open func variables(from: [StorableVariable]) -> [UICalibrator.Variable] {
+
+			var r = [UICalibrator.Variable]()
+
+			for v in from {
+				if let V = v.variableForUIColor {
+//					r += variableForColor(v.key, binding: &V.value, min: V.min, max: V.max)
+				}
+			}
+
+			return r
+		}
 
 
 	}

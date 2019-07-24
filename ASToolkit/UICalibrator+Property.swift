@@ -99,9 +99,9 @@ extension UICalibrator {
 
 extension UICalibrator.Property {
 
-	static func from(storableProperty: StorableVariable) -> UICalibrator.Property {
+	static func from(storableVariable: StorableVariable) -> UICalibrator.Property {
 
-		if let value = storableProperty.variableForUIColor {
+		if let value = storableVariable.variableForUIColor {
 
 			let step = Float(1.0/255.0)
 
@@ -215,7 +215,7 @@ extension UICalibrator.Property {
 
 
 			let property = UICalibrator.Property.init(kind	: .color,
-													  title	: storableProperty.key,
+													  title	: storableVariable.key,
 													  valuator: { [weak value] in value?.value.toUIColor() },
 													  configurations: ["RGBA","HSVA","WA"])
 			{ configuration in
@@ -235,7 +235,7 @@ extension UICalibrator.Property {
 			return property
 		}
 
-		if let value = storableProperty.variableForUIFont {
+		if let value = storableVariable.variableForUIFont {
 
 
 			let families : [String] = value.families2names.keys.compactMap({ $0 }).sorted()
@@ -271,7 +271,7 @@ extension UICalibrator.Property {
 
 
 			return UICalibrator.Property.init(kind: .font,
-											  title: storableProperty.key,
+											  title: storableVariable.key,
 											  valuator: { [weak value] in
 												return value?.value.toUIFont()
 				},
@@ -407,10 +407,10 @@ extension UICalibrator.Property {
 			}
 		}
 
-		if let value = storableProperty.variableForFloat {
+		if let value = storableVariable.variableForFloat {
 
 			return UICalibrator.Property.init(kind	: .float,
-											  title	: storableProperty.key,
+											  title	: storableVariable.key,
 											  valuator: { [weak value] in
 												return value?.value
 				},
@@ -423,11 +423,11 @@ extension UICalibrator.Property {
 																					 max 		: value.max,
 																					 step	 	: abs(value.step),
 																					 snap		: value.isSnappy))
-				{ [weak storableProperty] v in
+				{ [weak storableVariable] v in
 
-					guard let storableProperty = storableProperty else { return "" }
+					guard let storableVariable = storableVariable else { return "" }
 
-					storableProperty.variableForFloat.value = v
+					storableVariable.variableForFloat.value = v
 
 					return String(v)
 				}
@@ -436,10 +436,10 @@ extension UICalibrator.Property {
 			}
 		}
 
-		if let value = storableProperty.variableForString {
+		if let value = storableVariable.variableForString {
 
 			return UICalibrator.Property.init(kind	: .string,
-											  title	: storableProperty.key,
+											  title	: storableVariable.key,
 											  valuator: { [weak value] in
 												return value?.value
 				},
@@ -452,15 +452,15 @@ extension UICalibrator.Property {
 																					 max 			: Float(value.allowable.count-1),
 																					 step	 		: 1,
 																					 snap			: true))
-				{ [weak storableProperty] v in
+				{ [weak storableVariable] v in
 
-					guard let storableProperty = storableProperty else { return "" }
+					guard let storableVariable = storableVariable else { return "" }
 
 					let index = Int(round(v))
 
-					storableProperty.variableForString.value = value.allowable[index]
+					storableVariable.variableForString.value = value.allowable[index]
 
-					return storableProperty.variableForString.value
+					return storableVariable.variableForString.value
 				}
 
 				return [r]
@@ -469,7 +469,7 @@ extension UICalibrator.Property {
 		}
 
 		return UICalibrator.Property.init(kind	: .float,
-										  title	: storableProperty.key,
+										  title	: storableVariable.key,
 										  valuator: { nil },
 										  configurations: ["Error"]) { _ in
 											return []

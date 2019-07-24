@@ -120,6 +120,7 @@
 		778C9D9D22B17C3B005631C1 /* TestExtensionForSUIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778C9D9C22B17C3B005631C1 /* TestExtensionForSUIFont.swift */; };
 		77A2D3482290A2B600890472 /* CyclicQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A2D3472290A2B600890472 /* CyclicQueue.swift */; };
 		77A3E68D2110AAE400B4FD9D /* ExtensionForSWXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */; };
+		77CD2A2222E883890020CAB5 /* StorableVariableManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CD2A2122E883890020CAB5 /* StorableVariableManager.swift */; };
 		77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DF095920D9AC5000E4F49D /* CGStroke.swift */; };
 		77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB445420C05715002CE0BB /* TokenizedCollection.swift */; };
 		77FB80AE20DE824400C50726 /* Indexes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB80AD20DE824400C50726 /* Indexes.swift */; };
@@ -284,6 +285,7 @@
 		778C9D9C22B17C3B005631C1 /* TestExtensionForSUIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForSUIFont.swift; sourceTree = "<group>"; };
 		77A2D3472290A2B600890472 /* CyclicQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclicQueue.swift; sourceTree = "<group>"; };
 		77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSWXML.swift; sourceTree = "<group>"; };
+		77CD2A2122E883890020CAB5 /* StorableVariableManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorableVariableManager.swift; sourceTree = "<group>"; };
 		77DF095920D9AC5000E4F49D /* CGStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGStroke.swift; sourceTree = "<group>"; };
 		77FB445420C05715002CE0BB /* TokenizedCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizedCollection.swift; sourceTree = "<group>"; };
 		77FB80AD20DE824400C50726 /* Indexes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexes.swift; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 				57F804092198B31C009B4DE2 /* Sigma.swift */,
 				777B9F3E2088E56800D3FBBD /* State.swift */,
 				772D915D22E2068E00DEBC6A /* StorableVariable.swift */,
+				77CD2A2122E883890020CAB5 /* StorableVariableManager.swift */,
 				571C6DB421E91F7800E326CC /* SWXMLHash.swift */,
 				571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */,
 				77FB445420C05715002CE0BB /* TokenizedCollection.swift */,
@@ -771,6 +774,7 @@
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
 				570FC2C21F1124A300FEAC03 /* ExtensionForSwiftUInt.swift in Sources */,
 				570FC2C91F1124A300FEAC03 /* Math.swift in Sources */,
+				77CD2A2222E883890020CAB5 /* StorableVariableManager.swift in Sources */,
 				570FC2C71F1124A300FEAC03 /* ExtensionForUIView.swift in Sources */,
 				570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */,
 				570FC2B51F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift in Sources */,
