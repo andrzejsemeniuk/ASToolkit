@@ -703,7 +703,7 @@ extension UICalibrator.Property {
 
 extension UICalibrator.Property {
 
-	static func from(key: String, storableVariables: [StorableVariable], truncateKeyPrefix prefix: String? = nil) -> UICalibrator.Property {
+	static public func from(key: String, storableVariables: [StorableVariable], truncateKeyPrefix prefix: String? = nil) -> UICalibrator.Property {
 
 		// if truncate==nil, don't truncate
 		// if found key prefix
