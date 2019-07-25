@@ -2225,6 +2225,10 @@ open class UICalibrator : UIView {
 
 					self.currentProperty.configurationIndex = index
 
+					self.variables.forEach {
+						$0.redefine = true
+					}
+					
 					self.defineProperty()
 				}
 
