@@ -91,6 +91,12 @@ open class UICalibrator : UIView {
 	var radiusForButton : CGFloat {
 		return CGFloat(styleManager[style]?.variable("button/radius:float")?.variableForFloat?.value ?? 16)
 	}
+	var bandForGroup : CGFloat {
+		return CGFloat(styleManager[style]?.variable("group/band:float")?.variableForFloat?.value ?? 4)
+	}
+	var colorForGroup : UIColor {
+		return styleManager[style]?.variable("group/band:color")?.variableForUIColor?.toUIColor() ?? UIColor.init(white: 1, alpha: 0.3)
+	}
 
 
 	var pane										: UIView!						= UIView.init()
@@ -225,9 +231,13 @@ open class UICalibrator : UIView {
 		SliderRow.init(index: 7),
 		SliderRow.init(index: 8),
 		SliderRow.init(index: 9),
+		SliderRow.init(index: 10),
 		]
 
 
+	private var groups : [UIView] {
+		return pane?.subviews(withTag:473) ?? []
+	}
 
 
 	private var adding = false {
@@ -575,6 +585,26 @@ open class UICalibrator : UIView {
 
 	}
 
+	fileprivate func restyleGroups() {
+
+		let bg = colorForGroup
+		let f = bandForGroup
+		let r = radiusForButton
+
+		for group in groups {
+
+			group.backgroundColor 			= bg
+
+			group.layoutMargins.left 		= -f-r
+			group.layoutMargins.right 		= +f+r
+			group.layoutMargins.bottom 		= +f+r
+			group.layoutMargins.top 		= -f-r
+
+			group.updateConstraints()
+		}
+
+	}
+
 
 
 
@@ -583,6 +613,8 @@ open class UICalibrator : UIView {
 		restyleButtons()
 
 		restyleLabels()
+
+		restyleGroups()
 
 	}
 
@@ -854,7 +886,7 @@ open class UICalibrator : UIView {
 				]
 		}
 
-//		UserDefaults.clear()
+		UserDefaults.clear()
 
 
 
@@ -866,6 +898,8 @@ open class UICalibrator : UIView {
 			let bfont   			: String
 			var bborder    			: Float = 0 // circle-stroke-width
 			let bradius				: Float = 16
+			var gcolor				: UIColor = UIColor.init(white: 1, alpha: 0.3)
+			var gband				: Float = 2
 
 			switch style {
 
@@ -879,10 +913,12 @@ open class UICalibrator : UIView {
 				bfont = "GillSans"
 				bborder = 1
 				bcolorstroke = .init(white: 1, alpha:0.34)
+				gband = 2
 			case "gray/white":
 				bcolor0 = .white
 				bcolor1 = .gray
 				bfont = UIFont.defaultFontForLabel.fontName
+				gcolor = UIColor.init(white: 0, alpha: 0.3)
 			case "paper":
 //				[color : "button/normal.circle.fill:color" : HSVA=["(A=1.0)", "(V=0.7294118)", "(S=0.6039217)", "(H=0.10588239)"]]
 //				[color : "button/normal.circle.fill:color" : HSVA=["(A=1.0)", "(V=0.70980394)", "(S=0.6666667)", "(H=0.09019565)"]]
@@ -914,6 +950,11 @@ open class UICalibrator : UIView {
 				StorableVariable.init(key: "button/rim:color"				, value: variableForUIColor(bcolorstroke)),
 				StorableVariable.init(key: "button/radius:float"			, value: variableForCircleRadius(bradius)),
 				StorableVariable.init(key: "button/band:float"				, value: variableForCircleStrokeWidth(bborder)),
+			]
+
+			array += [
+				StorableVariable.init(key: "group/band:color"				, value: variableForUIColor(gcolor)),
+				StorableVariable.init(key: "group/band:float"				, value: variableForCircleStrokeWidth(gband)),
 			]
 
 
@@ -1570,9 +1611,20 @@ open class UICalibrator : UIView {
 		buttonStyle.constrainViewsRightToLeft(for: [buttonStyleAdd, labelStyle], offset: -16)
 
 
+		
+
+		add(group: "PROPERTY NAVIGATION", left: buttonPropertyPrev, right: buttonPropertyNext, top: buttonPropertyNext, bottom: buttonPropertyNext)
+
+
+
+
+
 
 		pane.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTap(_:))))
 		pane.addGestureRecognizer(UIPanGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForPan(_:))))
+
+
+
 
 
 		registerViewAction(on: labelPropertyTitle) { [weak self] in
@@ -1821,6 +1873,32 @@ open class UICalibrator : UIView {
 		table.contentInset = .init(tlbr: [16,16,8,-16])
 	}
 
+	fileprivate func add(group name: String, left: UIView, right: UIView, top: UIView, bottom: UIView) {
+		let group = UIView.init()
+		group.tag = 473
+//		group.put("group.name", name)
+
+		self.pane.insertSubview(group, at: 1)
+
+		let band = 0 //bandForGroup
+
+		let radius = 0 //radiusForButton
+
+		group.constrainLeftToLeft(of: left) //, withMargin: -band - radius)
+		group.constrainRightToRight(of: right) //, withMargin: band + radius)
+		group.constrainTopToTop(of: top) //, withMargin: -band - radius)
+		group.constrainBottomToBottom(of: bottom) //, withMargin: band + radius)
+
+		group.cornerRadius = radiusForButton // radius + band
+	}
+
+
+
+
+
+
+
+
 	private var viewActions : [UIView? : ()->()] = [:]
 
 	func registerViewAction(on view: UIView, action: (()->())?) {
@@ -2032,6 +2110,9 @@ open class UICalibrator : UIView {
 	}
 
 
+
+
+
 	public class PropertyGroup {
 		let title 			: String
 		var properties 		: [Property]
@@ -2052,7 +2133,13 @@ open class UICalibrator : UIView {
 		var store : ()->()
 	}
 
+
+
+
 	static private let defaultPropertyGroup			= PropertyGroup.init(title: "???", properties: [UICalibrator.defaultProperty], store: { } )
+
+
+
 
 	var isCalibrating : Bool {
 		return buttonCalibration.isSelected
@@ -2077,6 +2164,11 @@ open class UICalibrator : UIView {
 			definePropertyGroup()
 		}
 	}
+
+
+
+
+
 
 	class ManagerOfPropertyGroups {
 

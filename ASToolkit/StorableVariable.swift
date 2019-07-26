@@ -457,15 +457,15 @@ open class StorableVariable : Codable {
 
 
 
-		public init(value: String, `default`: String, allowable: [String], listener: Listener? = nil) {
+		public init(value: String, `default`: String? = nil, allowable: [String], listener: Listener? = nil) {
 			self.value = value
-			self.default = `default`
+			self.default = `default` ?? value
 			self.allowable = Set<String>.init(allowable).asArray
 			if !self.allowable.contains(value) {
 				self.allowable.append(value)
 			}
-			if !self.allowable.contains(`default`) {
-				self.allowable.append(`default`)
+			if !self.allowable.contains(self.default) {
+				self.allowable.append(self.default)
 			}
 			self.allowable.sort()
 			self.listener = listener

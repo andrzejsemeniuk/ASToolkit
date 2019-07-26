@@ -814,13 +814,11 @@ extension UIView {
 extension UIView {
 
 	open func subview(withTag:Int) -> UIView? {
-		var result:UIView?
-		if let index = self.subviews.index(where: {
-			$0.tag == withTag
-		}) {
-			result = self.subviews[index]
-		}
-		return result
+		return subviews.first { $0.tag == withTag }
+	}
+
+	open func subviews(withTag:Int) -> [UIView] {
+		return subviews.filter { $0.tag == withTag }
 	}
 
     open func removeAllSubviews() {
