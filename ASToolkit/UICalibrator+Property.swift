@@ -27,11 +27,11 @@ extension UICalibrator {
 			case array
 		}
 
-		let kind        	: Kind
+		public let kind        		: Kind
 
-		let valuator 		: ()->Any?
+		public let valuator 		: ()->Any?
 
-		var selectedIndex	: Int {
+		var selectedIndex			: Int {
 			get {
 				return cache[configuration]!.index
 			}
@@ -40,7 +40,7 @@ extension UICalibrator {
 			}
 		}
 
-		let title 						: String
+		public let title 				: String
 
 		public typealias Configurator 	= (String)->[Variable]
 
@@ -49,6 +49,7 @@ extension UICalibrator {
 		var configurationIndex 			: Int = 0
 
 		typealias Configuration 		= (index: Int, variables: [Variable])
+
 		private var cache 				: [String : Configuration] = [:]
 
 		public init(kind: Kind, title: String, valuator: @escaping ()->Any?, configurations: [String], configurator: @escaping Configurator) {
@@ -129,7 +130,7 @@ extension UICalibrator.Property {
 																			snap		: true),
 										   getter		: { value.value.a },
 										   setter		: { value.valueAssignRGBA(a: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 		)
 
 		switch configuration {
@@ -146,7 +147,7 @@ extension UICalibrator.Property {
 						snap		: true),
 											   getter	: { value.value.wa.w },
 											   setter	: { value.valueAssignRGBA(r: $0, g: $0, b: $0) },
-											   listener	: { String($0) }
+											   converter: { String($0) }
 				)
 			]
 
@@ -163,7 +164,7 @@ extension UICalibrator.Property {
 																				snap		: true),
 										   getter		: { value.value.b },
 										   setter		: { value.valueAssignRGBA(b: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: prefix+"G", slider: .init(	initial		: value.value.g,
@@ -174,7 +175,7 @@ extension UICalibrator.Property {
 																				snap		: true),
 										   getter		: { value.value.g },
 										   setter		: { value.valueAssignRGBA(g: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: prefix+"R",
@@ -186,7 +187,7 @@ extension UICalibrator.Property {
 															 snap		: true),
 										   getter		: { value.value.r },
 										   setter		: { value.valueAssignRGBA(r: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				)
 
 			]
@@ -203,7 +204,7 @@ extension UICalibrator.Property {
 						snap		: true),
 											   getter	: { Float(value.value.hsba.brightness) },
 											   setter	: { value.valueAssignHSBA(b: $0) },
-											   listener: { String($0) }
+											   converter: { String($0) }
 				),
 
 					UICalibrator.Variable.init(title: prefix+"S", slider: .init(initial		: Float(value.value.toUIColor().HSBA.saturation),
@@ -214,7 +215,7 @@ extension UICalibrator.Property {
 						snap		: true),
 											   getter	: { Float(value.value.hsba.saturation) },
 											   setter	: { value.valueAssignHSBA(s: $0) },
-											   listener: { String($0) }
+											   converter: { String($0) }
 				),
 
 					UICalibrator.Variable.init(title: prefix+"H", slider: .init(initial		: Float(value.value.toUIColor().HSBA.hue),
@@ -225,7 +226,7 @@ extension UICalibrator.Property {
 						snap		: true),
 											   getter	: { Float(value.value.hsba.hue) },
 											   setter	: { value.valueAssignHSBA(h: $0) },
-											   listener: { String($0) }
+											   converter: { String($0) }
 				)
 
 			]
@@ -249,7 +250,7 @@ extension UICalibrator.Property {
 																		 snap		: true),
 											   getter		: { value.value.a },
 											   setter		: { value.valueAssignRGBA(a: $0) },
-											   listener	: { String($0) }
+											   converter	: { String($0) }
 			)
 
 			let abgr = [
@@ -263,7 +264,7 @@ extension UICalibrator.Property {
 																		 snap		: true),
 										   getter		: { value.value.b },
 										   setter		: { value.valueAssignRGBA(b: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: prefix+"G", slider: .init(	initial		: value.value.g,
@@ -274,7 +275,7 @@ extension UICalibrator.Property {
 																		 snap		: true),
 										   getter		: { value.value.g },
 										   setter		: { value.valueAssignRGBA(g: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				),
 
 				UICalibrator.Variable.init(title: prefix+"R",
@@ -286,7 +287,7 @@ extension UICalibrator.Property {
 															 snap		: true),
 										   getter		: { value.value.r },
 										   setter		: { value.valueAssignRGBA(r: $0) },
-										   listener	: { String($0) }
+										   converter	: { String($0) }
 				)
 
 			]
@@ -300,9 +301,9 @@ extension UICalibrator.Property {
 						max 		: 1, //value.max.b,
 						step	 	: step,
 						snap		: true),
-												 getter	: { value.value.wa.w },
-												 setter	: { value.valueAssignRGBA(r: $0, g: $0, b: $0) },
-												 listener	: { String($0) }
+												 getter		: { value.value.wa.w },
+												 setter		: { value.valueAssignRGBA(r: $0, g: $0, b: $0) },
+												 converter	: { String($0) }
 				)
 			]
 
@@ -321,7 +322,7 @@ extension UICalibrator.Property {
 							snap		: true),
 												   getter	: { Float(value.value.hsba.brightness) },
 												   setter	: { value.valueAssignHSBA(b: $0) },
-												   listener: { String($0) }
+												   converter: { String($0) }
 				),
 
 						UICalibrator.Variable.init(title: prefix+"S", slider: .init(	initial		: Float(value.value.toUIColor().HSBA.saturation),
@@ -332,7 +333,7 @@ extension UICalibrator.Property {
 							snap		: true),
 												   getter	: { Float(value.value.hsba.saturation) },
 												   setter	: { value.valueAssignHSBA(s: $0) },
-												   listener: { String($0) }
+												   converter: { String($0) }
 				),
 
 						UICalibrator.Variable.init(title: prefix+"H", slider: .init(	initial		: Float(value.value.toUIColor().HSBA.hue),
@@ -343,7 +344,7 @@ extension UICalibrator.Property {
 							snap		: true),
 												   getter	: { Float(value.value.hsba.hue) },
 												   setter	: { value.valueAssignHSBA(h: $0) },
-												   listener: { String($0) }
+												   converter: { String($0) }
 				)
 
 			]
@@ -445,7 +446,7 @@ extension UICalibrator.Property {
 												value?.valueAssign(name: name)
 
 			},
-											listener		: { [weak value] _ in value?.value.name ?? holder.name }
+											converter		: { [weak value] _ in value?.value.name ?? holder.name }
 		)
 
 		let n1 = UICalibrator.Variable.init(title	: prefix+"Name",
@@ -472,7 +473,7 @@ extension UICalibrator.Property {
 												n2?.value 		= Float(holder.names.index(of: value?.value.name ?? "") ?? 0)
 												n2?.redefine 	= true
 			},
-											listener		: { [weak value] _ in value?.value.name ?? holder.name }
+											converter		: { [weak value] _ in value?.value.name ?? holder.name }
 		)
 
 
@@ -505,7 +506,7 @@ extension UICalibrator.Property {
 											n2?.value 		= Float(holder.names.index(of: value?.value.name ?? "") ?? 0)
 											n2?.redefine 	= true
 			},
-										   listener			: { v in holder.family }
+										   converter			: { v in holder.family }
 		)
 
 
@@ -631,24 +632,6 @@ extension UICalibrator.Property {
 											  valuator			: { [weak value] in value?.value },
 											  configurations	: defaultConfigurationNames)
 			{ configuration in
-//
-//				let r = UICalibrator.Variable.init(title: "Value", slider: .init(	initial		: value.value,
-//																					 default	: value.default,
-//																					 min		: value.min,
-//																					 max 		: value.max,
-//																					 step	 	: abs(value.step),
-//																					 snap		: value.isSnappy))
-//				{ [weak storableVariable] v in
-//
-//					guard let storableVariable = storableVariable else { return "" }
-//
-//					storableVariable.variableForFloat.value = v
-//
-//					return String(v)
-//				}
-//
-//				return [r]
-
 				return r
 			}
 		}
@@ -664,26 +647,6 @@ extension UICalibrator.Property {
 				},
 											  configurations: defaultConfigurationNames)
 			{ configuration in
-
-//				let r = UICalibrator.Variable.init(title: "Value", slider: .init(	initial			: Float(value.allowable.index(of:value.value)!),
-//																					 default		: Float(value.allowable.index(of:value.default)!),
-//																					 min			: 0,
-//																					 max 			: Float(value.allowable.count-1),
-//																					 step	 		: 1,
-//																					 snap			: true))
-//				{ [weak storableVariable] v in
-//
-//					guard let storableVariable = storableVariable else { return "" }
-//
-//					let index = Int(round(v))
-//
-//					storableVariable.variableForString.value = value.allowable[index]
-//
-//					return storableVariable.variableForString.value
-//				}
-//
-//				return [r]
-
 				return r
 			}
 
@@ -703,7 +666,7 @@ extension UICalibrator.Property {
 
 extension UICalibrator.Property {
 
-	static public func from(key: String, storableVariables: [StorableVariable], truncateKeyPrefix prefix: String? = nil) -> UICalibrator.Property {
+	static public func from(key: String, storableVariables: [StorableVariable], truncatePrefix: String? = nil) -> UICalibrator.Property {
 
 		// if truncate==nil, don't truncate
 		// if found key prefix
@@ -711,17 +674,23 @@ extension UICalibrator.Property {
 		var variables = [UICalibrator.Variable]()
 
 		for variable in storableVariables {
+
+			var prefix1 = variable.key
+			if let truncatePrefix = truncatePrefix, prefix1.starts(with: prefix1) {
+				prefix1 = variable.key.substring(from: truncatePrefix.count).string
+			}
+
 			if let v = variable.variableForUIColor {
-				variables += configurationOfVariables(configurationNameForUIColorHSVA, fromVariableForUIColor: v, prefix: variable.key)
+				variables += configurationOfVariables(configurationNameForUIColorHSVA, fromVariableForUIColor: v, prefix: prefix1)
 			}
 			else if let v = variable.variableForUIFont {
-				variables += configurationOfVariables(configurationNameForUIFontFamilyNameSize, fromVariableForUIFont: v, prefix: variable.key)
+				variables += configurationOfVariables(configurationNameForUIFontFamilyNameSize, fromVariableForUIFont: v, prefix: prefix1)
 			}
 			else if let v = variable.variableForFloat {
-				variables += configurationOfVariables(configurationNameForFloat, fromVariableForFloat: v, title: variable.key)
+				variables += configurationOfVariables(configurationNameForFloat, fromVariableForFloat: v, title: prefix1)
 			}
 			else if let v = variable.variableForString {
-				variables += configurationOfVariables(configurationNameForString, fromVariableForString: v, title: variable.key)
+				variables += configurationOfVariables(configurationNameForString, fromVariableForString: v, title: prefix1)
 			}
 		}
 

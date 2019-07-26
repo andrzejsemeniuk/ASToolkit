@@ -399,16 +399,20 @@ open class StorableVariable : Codable {
 
 
 
-		public init(value: Float, default: Float, min: Float, max: Float, step: Float, listener: Listener? = nil) {
+		public init(value: Float, default: Float? = nil, min: Float, max: Float, step: Float, listener: Listener? = nil) {
 			self.value = value
-			self.default = `default`
+			self.default = `default` ?? value
 			self.min = min
 			self.max = max
 			self.step = step
 			self.listener = listener
 		}
 
-		public static func from(binding	: UnsafeMutablePointer<Float>,
+		static public func from(flag: Bool, default: Bool? = nil, listener: Listener? = nil) -> VariableForFloat {
+			return .init(value: flag ? 1 : 0, default: (`default` ?? flag) ? 1 : 0, min: 0, max: 1, step: 1, listener: listener)
+		}
+
+		static public func from(binding	: UnsafeMutablePointer<Float>,
 								default	: Float? = nil,
 								min		: Float,
 								max		: Float,
@@ -497,7 +501,20 @@ open class StorableVariable : Codable {
 	public var variableForUIColor		: VariableForUIColor! = nil
 	public var variableForUIFont		: VariableForUIFont! = nil
 
+	public var valueForFloat			: Float! 	{ return variableForFloat!.value }
+	public var valueForString			: String! 	{ return variableForString!.value }
+	public var valueForUIColor			: UIColor! 	{ return variableForUIColor!.value.toUIColor() }
+	public var valueForUIFont			: UIFont! 	{ return variableForUIFont!.value.toUIFont() }
 
+	public var f						: Float! 	{ return valueForFloat }
+	public var i						: Int! 		{ return valueForFloat?.asInt }
+	public var d						: Double! 	{ return valueForFloat?.asDouble }
+	public var s						: String! 	{ return valueForString }
+
+	public var asFloat					: Float! 	{ return valueForFloat }
+	public var asInt					: Int! 		{ return valueForFloat?.asInt }
+	public var asDouble					: Double! 	{ return valueForFloat?.asDouble }
+	public var asString					: String! 	{ return valueForString }
 
 
 

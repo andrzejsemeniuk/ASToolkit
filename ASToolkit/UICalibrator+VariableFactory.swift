@@ -282,6 +282,24 @@ extension UICalibrator {
 		}
 
 
+		open func variableForFloat(variable from: StorableVariable, truncatingPrefix: String? = nil, circular: Bool = true, listener: Variable.Listener? = nil) -> UICalibrator.Variable {
+			let title : String
+			if let truncatingPrefix = truncatingPrefix, from.key.starts(with: from.key) {
+				title = from.key.substring(from: truncatingPrefix.count).string
+			} else {
+				title = from.key
+			}
+			let FROM : StorableVariable? = from
+			return variableForCustom(title,
+									 getter: { FROM?.f },
+									 setter: { [weak from] v in from?.variableForFloat.value = v },
+									 min: from.variableForFloat.min,
+									 max: from.variableForFloat.max,
+									 step: from.variableForFloat.step,
+									 snap: from.variableForFloat.isSnappy,
+									 circular: circular,
+									 updater: { listener?() })
+		}
 
 		open func variables(from: [StorableVariable]) -> [UICalibrator.Variable] {
 

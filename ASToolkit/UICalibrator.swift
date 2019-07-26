@@ -38,8 +38,6 @@ open class UICalibrator : UIView {
 		}
 	}
 
-	public typealias ListenerOfValue = (Float)->String
-
 	var FONT : UIFont {
 		return font(0)
 	}
@@ -941,7 +939,7 @@ open class UICalibrator : UIView {
 		}
 
 		for manager in styleManager.values.sorted(by: { $0.key < $1.key }) {
-			add(manager: UICalibrator.PropertyGroup.init(title: manager.key, properties: manager.variables, store: { [weak manager] in
+			add(manager: UICalibrator.PropertyGroup.init(title: manager.key, variables: manager.variables, store: { [weak manager] in
 				manager?.store()
 			}), calibration: true)
 		}
@@ -1329,7 +1327,7 @@ open class UICalibrator : UIView {
 
 					self.styleManager[style] = manager1
 
-					self.add(manager: UICalibrator.PropertyGroup.init(title: manager1.key, properties: manager1.variables, store: { [weak manager1] in
+					self.add(manager: UICalibrator.PropertyGroup.init(title: manager1.key, variables: manager1.variables, store: { [weak manager1] in
 						manager1?.store()
 					}), calibration: true)
 
@@ -1720,7 +1718,7 @@ open class UICalibrator : UIView {
 			case .began, .changed, .ended:
 
 				if let manager = obtainPropertyGroupForTap?(recognizer) {
-					if !self.add(manager: manager) {
+					if self.add(manager: manager).isEmpty {
 						print("can't add manager! \(manager.title)")
 					}
 				}
@@ -1915,17 +1913,21 @@ open class UICalibrator : UIView {
 
 	public class Variable {
 
-		var title 		: String = ""
-		var slider 		: ConfigurationForSlider
-		var listener 	: ListenerOfValue
-		var value 		: Float {
+		public typealias Listener = ()->()
+		public typealias Converter = (Float)->String
+
+		public var title 		: String = ""
+		public var slider 		: ConfigurationForSlider
+		public var converter 	: Converter
+		public var listener		: Listener!
+		public var value 		: Float {
 			get {
 				return valueGetter?() ?? __value
 			}
 			set {
 				valueSetter?(newValue)
 				__value = newValue
-//				print("variable: title(\(title)) set value(\(value)) for newValue(\(newValue))")
+				listener?()
 			}
 		}
 		private var __value : Float = 0
@@ -1933,17 +1935,18 @@ open class UICalibrator : UIView {
 		public typealias Getter = ()->Float?
 		public typealias Setter = (Float)->()
 
-		var redefine		= false
-		var valueGetter		: Getter!
-		var valueSetter		: Setter!
+		public var redefine		= false
+		public var valueGetter	: Getter!
+		public var valueSetter	: Setter!
 
-		var valueInitial	: Float
-		var valueDefault	: Float
+		public var valueInitial	: Float
+		public var valueDefault	: Float
 
-		public init(title: String, slider: ConfigurationForSlider, getter: Getter? = nil, setter: Setter? = nil, listener: @escaping ListenerOfValue = { v in String(v) }) {
+		public init(title: String, slider: ConfigurationForSlider, getter: Getter? = nil, setter: Setter? = nil, listener: Listener! = nil, converter: @escaping Converter = { String($0) }) {
 			self.title 			= title
 			self.slider 		= slider
 			self.listener 		= listener
+			self.converter 		= converter
 			self.valueDefault 	= slider.`default`
 			self.valueInitial 	= slider.initial
 			self.valueGetter 	= getter
@@ -1996,7 +1999,7 @@ open class UICalibrator : UIView {
 
 
 	@discardableResult
-	public func add(manager: PropertyGroup, calibration: Bool = false) -> Bool {
+	public func add(manager: PropertyGroup, calibration: Bool = false) -> [Variable] {
 		let managers : ManagerOfPropertyGroups
 		if calibration {
 			managers = managersForCalibration
@@ -2005,7 +2008,7 @@ open class UICalibrator : UIView {
 		}
 
 		guard managers.array.index(where: { $0.title == manager.title }) == nil else {
-			return false
+			return []
 		}
 		managers.array.append(manager)
 		manager.store()
@@ -2013,20 +2016,19 @@ open class UICalibrator : UIView {
 		if isCalibrating == calibration {
 			definePropertyGroup()
 		}
-		return true
+		return variables
 	}
 
 	@discardableResult
-	public func add(title: String, properties: [Property]) -> Bool {
-		return add(manager: PropertyGroup.init(title: title, properties: properties))
+	public func add(title: String, properties: [Property], store:@escaping ()->() = { }) -> [Variable] {
+		return add(manager: PropertyGroup.init(title: title, properties: properties, store: store))
 	}
 
 	@discardableResult
-	public func add(title: String, variables: [StorableVariable]) -> Bool {
-//		return add(manager: PropertyGroup.init(title: title, properties: variables.map { Property.from(storableVariable: $0) }))
+	public func add(title: String, variables: [StorableVariable], truncatePrefix: String? = nil, store:@escaping ()->() = { }) -> [Variable] {
 		return add(manager: PropertyGroup.init(title: title, properties: [
-			Property.from(key: title, storableVariables: variables) // variables.map { Property.from(storableVariable: $0) }
-			]))
+			Property.from(key: title, storableVariables: variables, truncatePrefix: truncatePrefix)
+			], store: store))
 	}
 
 
@@ -2041,20 +2043,21 @@ open class UICalibrator : UIView {
 			self.store = store
 		}
 
-		public init(title: String, properties: [StorableVariable], store:@escaping ()->()) {
+		public init(title: String, variables: [StorableVariable], store:@escaping ()->() = { }) {
 			self.title = title
-			self.properties = properties.map { Property.from(storableVariable: $0) }
+			self.properties = variables.map { Property.from(storableVariable: $0) }
 			self.store = store
 		}
 
 		var store : ()->()
 	}
 
-	static private let defaultPropertyGroup			= PropertyGroup.init(title: "???", properties: [UICalibrator.defaultProperty] )
+	static private let defaultPropertyGroup			= PropertyGroup.init(title: "???", properties: [UICalibrator.defaultProperty], store: { } )
 
 	var isCalibrating : Bool {
 		return buttonCalibration.isSelected
 	}
+
 	private var currentManagerOfPropertyGroups : ManagerOfPropertyGroups {
 		get {
 			if isCalibrating {
@@ -2064,6 +2067,7 @@ open class UICalibrator : UIView {
 			}
 		}
 	}
+
 	private var currentPropertyGroupIndex		: Int {
 		get {
 			return currentManagerOfPropertyGroups.currentIndex
@@ -2142,7 +2146,7 @@ open class UICalibrator : UIView {
 	}
 
 	static private var defaultProperty = Property.init(kind: .float, title: "Default", valuator: { nil }, configurations: ["N/A"]) { configuration in
-		return [Variable.init(title: "n/a", slider: .init(initial: 0, default: 0, min: 0, max: 1, step: 1, snap: true), listener: { _ in "?" })]
+		return [Variable.init(title: "n/a", slider: .init(initial: 0, default: 0, min: 0, max: 1, step: 1, snap: true), converter: { _ in "?" })]
 	}
 
 
@@ -2280,7 +2284,7 @@ open class UICalibrator : UIView {
 
 							self.root?.presentAlertForInput(title		: variable.title,
 															message		: "Enter new value",
-															value		: variable.listener(variable.value))
+															value		: variable.converter(variable.value))
 							{ string in
 								if let v = Float(string.trimmed()) {
 									self.setValue(float: v, row: index)
@@ -2464,7 +2468,7 @@ open class UICalibrator : UIView {
 
 		row.slider.setValue(value, animated: animated)
 
-		let string = variable.listener(value)
+		let string = variable.converter(value)
 
 		row.labelValue.attributedText = string | colorForLabelText | fontForLabel
 		row.labelTitle.attributedText = variable.title | colorForLabelText | fontForLabel
@@ -2542,6 +2546,29 @@ extension UICalibrator {
 
 }
 
+
+
+extension UICalibrator {
+
+	open func value(variable vkey: String, property pkey: String, group gkey: String) -> Any? {
+		for group in managersForUser.array + managersForCalibration.array {
+			if group.title == gkey {
+				for property in group.properties {
+					if property.title == pkey {
+						for variable in property.variables {
+							if variable.title == vkey {
+								// TODO
+//								return variable.objectFromValue(variable.value)
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return nil
+	}
+}
 
 
 

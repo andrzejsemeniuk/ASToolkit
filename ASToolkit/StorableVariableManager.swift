@@ -50,11 +50,25 @@ open class StorableVariableManager : CustomStringConvertible {
 
 
 
-	open func group(prefix: String) -> [StorableVariable] {
+	open func filter(prefix: String) -> [StorableVariable] {
 		return variables.filter {
 			$0.key.starts(with: prefix)
 		}
 	}
+
+	open func filter(pattern: String) -> [StorableVariable] {
+		return variables.filter {
+			$0.key.matches(regex: pattern)
+		}
+	}
+
+
+	open subscript (key: String) -> StorableVariable! {
+		return variables.first {
+			$0.key == key
+		}
+	}
+
 
 
 
@@ -65,6 +79,7 @@ open class StorableVariableManager : CustomStringConvertible {
 	open func variable(_ key: String) -> StorableVariable! {
 		return variables.first(where: { $0.key == key } )
 	}
+
 
 
 
@@ -166,6 +181,8 @@ open class StorableVariableManager : CustomStringConvertible {
 		}
 
 	}
+
+
 
 
 }
