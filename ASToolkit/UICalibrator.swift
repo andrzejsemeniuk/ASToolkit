@@ -591,18 +591,83 @@ open class UICalibrator : UIView {
 		let f = bandForGroup
 		let r = radiusForButton
 
+//		let fl = -f-r
+//		let fr = +f+r
+
+		let band = bandForGroup
+
+		var radius = radiusForButton
+
+
 		for group in groups {
 
 			group.backgroundColor 			= bg
 
-			group.layoutMargins.left 		= -f-r
-			group.layoutMargins.right 		= +f+r
-			group.layoutMargins.bottom 		= +f+r
-			group.layoutMargins.top 		= -f-r
+			if false {
+				if #available(iOS 11.0, *) {
+					group.directionalLayoutMargins.leading 		= -f-r
+					group.directionalLayoutMargins.trailing		= +f+r
+					group.directionalLayoutMargins.bottom 		= +f+r
+					group.directionalLayoutMargins.top 			= -f-r
+				} else {
+					group.layoutMargins.left 		= -f-r
+					group.layoutMargins.right		= +f+r
+					group.layoutMargins.bottom 		= +f+r
+					group.layoutMargins.top 		= -f-r
+				}
+			} else if true {
 
-			group.updateConstraints()
+				let nudge = CGFloat(1)
+
+				group.removeAllConstraints()
+
+				let all = groupData[group]!
+
+				let (top,left,bottom,right) = (all[0],all[1],all[2],all[3])
+
+				radius = 0
+				group.frame.origin.x = left.frame.minX - radius - band - nudge/2
+				group.frame.origin.y = top.frame.minY - radius - band - nudge/2
+				group.frame.size.width = right.frame.maxX + radius + band - group.frame.minX + nudge/2
+				group.frame.size.height = bottom.frame.maxY + radius + band - group.frame.minY + nudge/2
+
+				group.translatesAutoresizingMaskIntoConstraints = true
+
+				group.cornerRadius = radiusForButton + band + 0.5
+
+			} else {
+
+
+				group.removeAllConstraints()
+
+				let all = groupData[group]!
+
+				let (top,left,bottom,right) = (all[0],all[1],all[2],all[3])
+
+
+				group.constrainLeftToLeft(of: left, withMargin: band + radius)
+				group.constrainRightToRight(of: right, withMargin: band + radius)
+				group.constrainTopToTop(of: top, withMargin: -band - radius)
+				group.constrainBottomToBottom(of: bottom, withMargin: band + radius)
+
+				group.cornerRadius = radius + band
+
+//
+//				for constraint in group.constraints {
+//					if constraint.constant < 0 {
+//						constraint.constant = fl
+//					} else {
+//						constraint.constant = fr
+//					}
+//				}
+			}
+
+			group.setNeedsUpdateConstraints()
+//			group.setNeedsLayout()
+
 		}
 
+		pane.setNeedsLayout()
 	}
 
 
@@ -614,7 +679,9 @@ open class UICalibrator : UIView {
 
 		restyleLabels()
 
-		restyleGroups()
+		DispatchQueue.main.async {
+			self.restyleGroups()
+		}
 
 	}
 
@@ -886,7 +953,7 @@ open class UICalibrator : UIView {
 				]
 		}
 
-		UserDefaults.clear()
+//		UserDefaults.clear()
 
 
 
@@ -1873,6 +1940,8 @@ open class UICalibrator : UIView {
 		table.contentInset = .init(tlbr: [16,16,8,-16])
 	}
 
+	private var groupData : [UIView: [UIView]] = [:]
+
 	fileprivate func add(group name: String, left: UIView, right: UIView, top: UIView, bottom: UIView) {
 		let group = UIView.init()
 		group.tag = 473
@@ -1880,16 +1949,7 @@ open class UICalibrator : UIView {
 
 		self.pane.insertSubview(group, at: 1)
 
-		let band = 0 //bandForGroup
-
-		let radius = 0 //radiusForButton
-
-		group.constrainLeftToLeft(of: left) //, withMargin: -band - radius)
-		group.constrainRightToRight(of: right) //, withMargin: band + radius)
-		group.constrainTopToTop(of: top) //, withMargin: -band - radius)
-		group.constrainBottomToBottom(of: bottom) //, withMargin: band + radius)
-
-		group.cornerRadius = radiusForButton // radius + band
+		groupData[group] = [top,left,bottom,right]
 	}
 
 
