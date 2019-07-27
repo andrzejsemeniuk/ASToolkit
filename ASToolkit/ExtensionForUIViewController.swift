@@ -19,7 +19,7 @@ extension UIViewController
 
 extension UIViewController {
     
-    open func presentAlertForInput               (animated:Bool = true, title:String, message:String, value:String = "", ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
+	open func presentAlertForInput(animated:Bool = true, title:String, message:String, value:String = "", select:Bool = true, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
         alert.addTextField { textfield in
             textfield.text = value
@@ -35,7 +35,11 @@ extension UIViewController {
             }
         }
         alert.addAction(cancel)
-        self.present(alert, animated: animated)
+		self.present(alert, animated: animated) {
+			if select {
+				alert.textFields?.first?.selectAll(self)
+			}
+		}
     }
     
     open func presentAlertForAnswer                (animated:Bool = true, title:String, message:String, ok:String = "Ok", handler:(()->())? = nil) {
@@ -65,7 +69,7 @@ extension UIViewController {
         self.present(alert, animated: animated)
     }
     
-    open func presentAlertForUITextField         (_ field:UITextField, animated:Bool = true, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
+	open func presentAlertForUITextField         (_ field:UITextField, animated:Bool = true, title:String, message:String, select:Bool = true, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
         alert.addTextField { textfield in
             textfield.text = field.text
@@ -81,7 +85,11 @@ extension UIViewController {
             }
         }
         alert.addAction(cancel)
-        self.present(alert, animated: animated)
+		self.present(alert, animated: animated) {
+			if select {
+				alert.textFields?.first?.selectAll(self)
+			}
+		}
     }
     
     open func presentAlertForChoice              (animated:Bool = true, title:String, message:String, choices:[String], cancel:String = "Cancel", handler:@escaping (String)->()) {

@@ -618,6 +618,7 @@ open class UICalibrator : UIView {
 			} else if true {
 
 				let nudge = CGFloat(1)
+				let nudge2 = nudge/CGFloat(2)
 
 				group.removeAllConstraints()
 
@@ -626,14 +627,14 @@ open class UICalibrator : UIView {
 				let (top,left,bottom,right) = (all[0],all[1],all[2],all[3])
 
 				radius = 0
-				group.frame.origin.x = left.frame.minX - radius - band - nudge/2
-				group.frame.origin.y = top.frame.minY - radius - band - nudge/2
-				group.frame.size.width = right.frame.maxX + radius + band - group.frame.minX + nudge/2
-				group.frame.size.height = bottom.frame.maxY + radius + band - group.frame.minY + nudge/2
+				group.frame.origin.x = left.frame.minX - radius - band - nudge2
+				group.frame.origin.y = top.frame.minY - radius - band - nudge2
+				group.frame.size.width = right.frame.maxX + radius + band - group.frame.minX + nudge2
+				group.frame.size.height = bottom.frame.maxY + radius + band - group.frame.minY + nudge2
 
 				group.translatesAutoresizingMaskIntoConstraints = true
 
-				group.cornerRadius = radiusForButton + band + 0.5
+				group.cornerRadius = radiusForButton + band + nudge2
 
 			} else {
 
