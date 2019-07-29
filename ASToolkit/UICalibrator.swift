@@ -553,6 +553,7 @@ open class UICalibrator : UIView {
 			label.insets.right 		= 8
 			label.insets.top 		= 4
 			label.insets.bottom 	= 4
+			label.isUserInteractionEnabled=true
 
 		}
 
@@ -571,7 +572,7 @@ open class UICalibrator : UIView {
 		}
 
 		for label in labelsForOperations {
-			styleLabelTitle(label)
+			styleLabelValue(label,0.5)
 		}
 		for label in [labelStyle,labelPropertyTitle,labelHeading] {
 			styleLabelValue(label!,0.5)
@@ -1542,6 +1543,8 @@ open class UICalibrator : UIView {
 
 			label.constrainLeftToRight(of: button!, withMargin: 16/2)
 			label.constrainCenterYToSuperview()
+			label.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnOperationLabel(_:))))
+			label.isUserInteractionEnabled=true
 		}
 
 
@@ -1688,8 +1691,8 @@ open class UICalibrator : UIView {
 
 
 
-		pane.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTap(_:))))
-		pane.addGestureRecognizer(UIPanGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForPan(_:))))
+		pane.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnPane(_:))))
+		pane.addGestureRecognizer(UIPanGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForPanOnPane(_:))))
 
 
 
@@ -1783,9 +1786,32 @@ open class UICalibrator : UIView {
 	}
 
 
+	
+
 	//	override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
 	//		return !pane.isHidden || self.buttonExit.frame.contains(point) // self.buttonExit.point(inside:point, with: event)
 	//	}
+
+
+	public func select(group name: String) {
+//		if let index = self..index(where: { $0.title == name }) {
+//			self.currentPropertyIndex = index
+//		}
+	}
+
+	public func select(property name: String) {
+		if let index = self.properties.index(where: { $0.title == name }) {
+			self.currentPropertyIndex = index
+		}
+	}
+
+	public func select(variable name: String) {
+		if let index = self.variables.index(where: { $0.title == name }) {
+			self.selectRow(index: index)
+		}
+	}
+
+
 
 
 	public var obtainPropertyGroupForTap : ((_ recognizer: UITapGestureRecognizer?)->PropertyGroup?)!
@@ -1829,7 +1855,7 @@ open class UICalibrator : UIView {
 		}
 	}
 
-	@objc func handleGestureRecognizerForTap(_ recognizer: UITapGestureRecognizer!) {
+	@objc func handleGestureRecognizerForTapOnPane(_ recognizer: UITapGestureRecognizer!) {
 
 		if adding {
 
@@ -1880,7 +1906,7 @@ open class UICalibrator : UIView {
 		}
 	}
 
-	@objc func handleGestureRecognizerForPan(_ recognizer: UIPanGestureRecognizer!) {
+	@objc func handleGestureRecognizerForPanOnPane(_ recognizer: UIPanGestureRecognizer!) {
 
 		if pane.isHidden {
 			return
@@ -1908,6 +1934,38 @@ open class UICalibrator : UIView {
 
 		//		recognizer.cancelsTouchesInView = true
 
+	}
+
+	@objc func handleGestureRecognizerForTapOnOperationLabel(_ recognizer: UITapGestureRecognizer!) {
+
+		if pane.isHidden {
+			return
+		}
+
+
+		if mode != .transparent {
+			//		print("tap: \(recognizer.debugDescription)")
+
+			switch recognizer.state {
+
+			case .began, .changed, .ended:
+
+				if let view = recognizer.view, let button = view.superview, button is UIButton {
+					if button == buttonOperation1 { self.operation1?.operation() }
+					if button == buttonOperation2 { self.operation2?.operation() }
+					if button == buttonOperation3 { self.operation3?.operation() }
+					if button == buttonOperation4 { self.operation4?.operation() }
+					if button == buttonOperation5 { self.operation5?.operation() }
+				}
+
+			default:
+				break
+			}
+		}
+
+		if !pane.isHidden {
+			//			recognizer.consu
+		}
 	}
 
 	fileprivate func presentPropertyList(properties: [String], selected: String, completion: @escaping (String?) -> ()) {
@@ -1968,7 +2026,7 @@ open class UICalibrator : UIView {
 			view.removeGestureRecognizer($0)
 		}
 		if let action = action {
-			view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerOnViews(_:))))
+			view.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnViews(_:))))
 			view.isUserInteractionEnabled=true
 
 			viewActions[view] = action
@@ -1977,7 +2035,7 @@ open class UICalibrator : UIView {
 		}
 	}
 
-	@objc func handleGestureRecognizerOnViews(_ recognizer: UIPanGestureRecognizer!) {
+	@objc func handleGestureRecognizerForTapOnViews(_ recognizer: UIPanGestureRecognizer!) {
 
 		if pane.isHidden {
 			return
@@ -2341,8 +2399,11 @@ open class UICalibrator : UIView {
 		let on = button != nil
 
 		button?.isVisible = on
-		if on, let label = button?.subview(withTag: TagForButtonOperationLabel) as? UILabelWithInsets, let title = title {
-			label.attributedText = title | fontForLabel | colorForLabelText
+		if let label = button?.subview(withTag: TagForButtonOperationLabel) as? UILabelWithInsets {
+			if let title = title {
+				label.attributedText = title | fontForLabel | colorForLabelText
+			}
+			label.isVisible = on
 		}
 
 	}
