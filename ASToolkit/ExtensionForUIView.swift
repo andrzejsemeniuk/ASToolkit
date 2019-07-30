@@ -813,6 +813,42 @@ extension UIView {
 
 extension UIView {
 
+	public class func schedule(_ block: @escaping ()->()) {
+		DispatchQueue.main.async {
+			block()
+		}
+	}
+
+	public func schedule(_ block: @escaping ()->()) {
+		UIView.schedule(block)
+	}
+
+	public func scheduleNeedsDisplay(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsDisplay()
+			block?()
+		}
+	}
+
+	public func scheduleNeedsLayout(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsLayout()
+			block?()
+		}
+	}
+
+	public func scheduleNeedsUpdateConstraints(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsUpdateConstraints()
+			block?()
+		}
+	}
+
+}
+
+
+extension UIView {
+
 	open func subview(withTag:Int) -> UIView? {
 		return subviews.first { $0.tag == withTag }
 	}

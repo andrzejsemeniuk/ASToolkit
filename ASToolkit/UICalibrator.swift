@@ -998,6 +998,40 @@ open class UICalibrator : UIView {
 			}), calibration: true)
 		}
 
+		if true {
+
+			var variables : [StorableVariable] = []
+
+			for path in ["admin/styles","admin/all","admin/rest","styles/user","styles/internal"].sorted() {
+
+				let V = StorableVariable.init(key: "clear/\(path)", value: StorableVariable.VariableForFloat.from(flag: false, default: false))
+
+				V.variableForFloat.listener = { v in
+					if v > 0 {
+						UIApplication.rootViewController?.presentAlertForQuestion(title: "Clear \(path)", message: "Clear \(path) stored values?", handler: {
+							UserDefaults.standard.removeSuite(named:path)
+						})
+
+						UIView.schedule { [weak self] in
+							self?.setValue(float: 0)
+						}
+					}
+				}
+
+				variables.append(V)
+			}
+
+			let admin = StorableVariableManager.init(key: "@/admin", variables: variables)
+
+//			add(manager: UICalibrator.PropertyGroup.init(title: admin.key, variables: admin.variables, store: {
+			add(manager: UICalibrator.PropertyGroup.init(title		: admin.key,
+														 property	: UICalibrator.Property.from(key: "clear",
+																								  storableVariables: variables,
+																								  truncatePrefix: "clear/"),
+														 store		: { admin.store() }),
+				calibration: true)
+		}
+
 	}
 
 
@@ -2205,6 +2239,12 @@ open class UICalibrator : UIView {
 			self.store = store
 		}
 
+		public init(title: String, property: Property, store:@escaping ()->() = { }) {
+			self.title = title
+			self.properties = [property]
+			self.store = store
+		}
+
 		public init(title: String, variables: [StorableVariable], store:@escaping ()->() = { }) {
 			self.title = title
 			self.properties = variables.map { Property.from(storableVariable: $0) }
@@ -2298,6 +2338,10 @@ open class UICalibrator : UIView {
 
 	private var selectedVariableIndex 	: Int {
 		return currentProperty.selectedIndex
+	}
+
+	public var selectedRowIndex : Int {
+		return selectedVariableIndex
 	}
 
 	private var selectedVariable 		: Variable {
@@ -2538,17 +2582,17 @@ open class UICalibrator : UIView {
 		self.labelHeading.sizeToFit()
 	}
 
-	private func setValue01(ratio: Float) {
+	public func setValue01(ratio: Float) {
 		let float = currentSliderRow.slider.minimumValue + (currentSliderRow.slider.maximumValue - currentSliderRow.slider.minimumValue) * ratio
 		//		print("ratio: \(ratio), float: \(float)")
 		setValue(float: float)
 	}
 
-	private func setValue(float: Float) {
+	public func setValue(float: Float) {
 		setValue(float: float, row: currentSliderRow, variable: selectedVariable)
 	}
 
-	private func setValue(float: Float, row index: Int) {
+	public func setValue(float: Float, row index: Int) {
 		setValue(float: float, row: sliderRows[index], variable: variables[index])
 	}
 
