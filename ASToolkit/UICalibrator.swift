@@ -97,6 +97,9 @@ open class UICalibrator : UIView {
 	var colorForGroup : UIColor {
 		return styleManager[style]?.variable("group/band:color")?.variableForUIColor?.toUIColor() ?? UIColor.init(white: 1, alpha: 0.3)
 	}
+	var margin : CGFloat {
+		return styleManager[style]?.variable("margin:float")?.valueForFloat?.asCGFloat ?? 16 // variableForFloat?.value ?? 0
+	}
 
 
 	var pane										: UIView!						= UIView.init()
@@ -540,6 +543,12 @@ open class UICalibrator : UIView {
 			self.style(button: button, title: title, insets: insets)
 		}
 
+
+		for row in sliderRows {
+			self.style(button: row.buttonValueDecrement, title: "\u{2212}", insets: UIEdgeInsets.init(top: +1.5, left: 1))
+			self.style(button: row.buttonValueIncrement, title: "+", insets: UIEdgeInsets.init(top: +1.5))
+		}
+
 		for button in self.viewForConfigurations.descendants().filtered(type: UIButton.self) {
 			updateUIPropertyConfigurationButton(button)
 		}
@@ -583,10 +592,6 @@ open class UICalibrator : UIView {
 		}
 
 		for row in sliderRows {
-
-			self.style(button: row.buttonValueDecrement, title: "\u{2212}", insets: UIEdgeInsets.init(top: +1.5, left: 1))
-			self.style(button: row.buttonValueIncrement, title: "+", insets: UIEdgeInsets.init(top: +1.5))
-
 			styleLabelTitle(row.labelTitle)
 			styleLabelValue(row.labelValue,0.3)
 		}
@@ -708,7 +713,6 @@ open class UICalibrator : UIView {
 
 
 		let Fdisabled		= fontForButton.italicSibling() ?? fontForButton
-
 
 		button?.setAttributedTitle(title | colorForButtonText | fontForButton, for: .normal)
 		button?.setAttributedTitle(title | colorForButtonFill | fontForButton, for: .selected)
@@ -858,14 +862,7 @@ open class UICalibrator : UIView {
 			}
 		}
 
-		let variableForBorderWidth = variableForBorderInsets
-
-//		let variableForDefaultCircleRadius = {
-//			return StorableVariable.VariableForFloat.init(value: 16, default: 16, min: 0, max: 48, step: 1) { [weak self] string in
-//				self?.restyle()
-//				print("float change for key: \(string)")
-//			}
-//		}
+//		let variableForBorderWidth = variableForBorderInsets
 
 		let variableForCircleRadius = { (radius: Float) in
 			return StorableVariable.VariableForFloat.init(value: radius, default: radius, min: 0, max: 48, step: 1) { [weak self] string in
@@ -874,13 +871,6 @@ open class UICalibrator : UIView {
 			}
 		}
 
-//		let variableForDefaultCircleStrokeWidth = {
-//			return StorableVariable.VariableForFloat.init(value: 0, default: 0, min: 0, max: 48, step: 1) { [weak self] string in
-//				self?.restyle()
-//				print("float change for key: \(string)")
-//			}
-//		}
-
 		let variableForCircleStrokeWidth = { (width: Float) in
 			return StorableVariable.VariableForFloat.init(value: width, default: width, min: 0, max: 48, step: 1) { [weak self] string in
 				self?.restyle()
@@ -888,35 +878,13 @@ open class UICalibrator : UIView {
 			}
 		}
 
-//		let propertiesForButton = {
-//			return [
-//				StorableVariable.init(key: "button/normal.text:font"					, value: variableForDefaultUIFont()),
-//				StorableVariable.init(key: "button/normal.text:color"					, value: variableForUIColor(.white)),
-//				//				StorableVariable.init(key: "button/normal.fill:color", value: variableForUIColor(.black)),
-//				StorableVariable.init(key: "button/normal.circle.radius:float"			, value: variableForDefaultCircleRadius()),
-//				StorableVariable.init(key: "button/normal.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableVariable.init(key: "button/normal.circle.stroke:color"			, value: variableForUIColor(.white)),
-//				StorableVariable.init(key: "button/normal.circle.fill:color"			, value: variableForUIColor(.black)),
-//
-//
-//				StorableVariable.init(key: "button/selected.text:font"					, value: variableForDefaultUIFont()),
-//				StorableVariable.init(key: "button/selected.text:color"					, value: variableForUIColor(.white)),
-//				//			StorableVariable.init(key: "button/selected.fill:color"					, value: variableForUIColor(.black)),
-//				StorableVariable.init(key: "button/selected.circle.radius:float"		, value: variableForDefaultCircleRadius()),
-//				StorableVariable.init(key: "button/selected.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableVariable.init(key: "button/selected.circle.stroke:color"		, value: variableForUIColor(.white)),
-//				StorableVariable.init(key: "button/selected.circle.fill:color"			, value: variableForUIColor(.black)),
-//
-//
-//				StorableVariable.init(key: "button/disabled.text:font"					, value: variableForDefaultUIFont()),
-//				StorableVariable.init(key: "button/disabled.text:color"					, value: variableForUIColor(.white)),
-//				//			StorableVariable.init(key: "button/disabled.fill:color"					, value: variableForUIColor(.black)),
-//				StorableVariable.init(key: "button/disabled.circle.radius:float"		, value: variableForDefaultCircleRadius()),
-//				StorableVariable.init(key: "button/disabled.circle.stroke.width:float"	, value: variableForDefaultCircleStrokeWidth()),
-//				StorableVariable.init(key: "button/disabled.circle.stroke:color"		, value: variableForUIColor(.white)),
-//				StorableVariable.init(key: "button/disabled.circle.fill:color"			, value: variableForUIColor(.black)),
-//				]
-//		}
+		let variableForMargin = { (m: Float) in
+			return StorableVariable.VariableForFloat.init(value: m, default: m, min: 0, max: 32, step: 1) { [weak self] string in
+//				self?.buildConstraints()
+				self?.restyle()
+				print("float change for key: \(string)")
+			}
+		}
 
 		let propertiesForLabel = { (key: String) in
 			return [
@@ -943,6 +911,7 @@ open class UICalibrator : UIView {
 			let bradius				: Float = 16
 			var gcolor				: UIColor = UIColor.init(white: 1, alpha: 0.3)
 			var gband				: Float = 2
+			var fmargin				: Float = 16
 
 			switch style {
 
@@ -962,6 +931,7 @@ open class UICalibrator : UIView {
 				bcolor1 = .gray
 				bfont = UIFont.defaultFontForLabel.fontName
 				gcolor = UIColor.init(white: 0, alpha: 0.3)
+				fmargin = 8
 			case "paper":
 //				[color : "button/normal.circle.fill:color" : HSVA=["(A=1.0)", "(V=0.7294118)", "(S=0.6039217)", "(H=0.10588239)"]]
 //				[color : "button/normal.circle.fill:color" : HSVA=["(A=1.0)", "(V=0.70980394)", "(S=0.6666667)", "(H=0.09019565)"]]
@@ -998,8 +968,8 @@ open class UICalibrator : UIView {
 			array += [
 				StorableVariable.init(key: "group/band:color"				, value: variableForUIColor(gcolor)),
 				StorableVariable.init(key: "group/band:float"				, value: variableForCircleStrokeWidth(gband)),
+				StorableVariable.init(key: "margin:float"					, value: variableForMargin(fmargin)),
 			]
-
 
 			styleManager[style] = StorableVariableManager.init(key: "@/style/\(style)", variables: array)
 
@@ -1050,74 +1020,9 @@ open class UICalibrator : UIView {
 
 
 
-	fileprivate func buildSliderRows() {
-		var row0 : SliderRow?
-
-		let margin = CGFloat(16)
-
-		for (index,row) in sliderRows.enumerated() {
-
-
-			pane.addSubview(row)
-
-			row.tag = index
-			row.slider.tag = index
-			row.slider.constrainWidth(to: pane).multiplied(0.33)
-			//			self.slider.constrainCenterYToSuperview()?.multiplied(1.5),
-			row.slider.constrainCenterXToSuperview()
-			row.slider.constrainCenterYToSuperview()
-			row.slider.constrainViewsRightToLeft(for: [row.buttonValueDecrement, row.labelTitle], offset: -margin)
-			row.slider.constrainViewsLeftToRight(for: [row.buttonValueIncrement, row.labelValue], offset: +margin)
-			row.slider.constrainViewsCenterYToCenterY(for: [row.labelTitle, row.buttonValueDecrement, row.buttonValueIncrement, row.labelValue])
-
-			row.cornerRadius = 4
-
-			row.constrainCenterXToSuperview()
-			row.constrainWidth(to: row.superview!).extended(-32 * 2)
-			row.constrainHeight(to: row.slider).extended(16)
-			if let row0 = row0 {
-				row.constrainCenterYToCenterY(of: row0, withMargin: -48)
-			} else {
-				row.constrainCenterYToCenterY(of: viewForConfigurations, withMargin: -48)
-			}
-
-
-
-			row.slider.addTarget(self, action: #selector(handleEventForSlider(_:event:)), for: .allEvents)
-
-			row.buttonValueDecrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
-				guard let `self` = self else { return }
-				self.selectRow(index: index)
-				self.selectedVariable.redosClear()
-				let v0 = self.currentSliderRow.slider.value
-				var v1 = self.snap(value: v0)
-				if v0 <= v1 {
-					v1 -= self.selectedVariable.slider.step
-				}
-				self.setValue(float: v1)
-			}
-
-			row.buttonValueIncrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
-				guard let `self` = self else { return }
-				self.selectRow(index: index)
-				self.selectedVariable.redosClear()
-				let v0 = self.currentSliderRow.slider.value
-				var v1 = self.snap(value: v0)
-				if v1 <= v0 {
-					v1 += self.selectedVariable.slider.step
-				}
-				self.setValue(float: v1)
-			}
-
-			row.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleTapGestureRecognizerOnRow(_:))))
-
-			row.isHidden = true
-
-			row0 = row
-		}
-	}
 
 	fileprivate func buildButtonExit() {
+
 		self.buttonExit.setAttributedTitle("??" | UIColor.white | FONT, for: .normal)
 		self.buttonExit.circle(for: .normal).radius = 16
 		self.buttonExit.circle(for: .normal).strokeColor = UIColor.white.cgColor
@@ -1149,12 +1054,11 @@ open class UICalibrator : UIView {
 			self?.updateUI()
 			self?.listener(.open)
 		}
+
 	}
 
 	fileprivate func buildPane() {
 		self.addSubview(pane)
-
-		self.pane.constrainToSuperview()
 
 		pane.addSubview(labelForDemo)
 		pane.addSubview(labelHeading)
@@ -1183,11 +1087,14 @@ open class UICalibrator : UIView {
 		pane.addSubview(buttonManagerNext)
 		pane.addSubview(buttonManagerAdd)
 
-		pane.addSubview(buttonOperation1)
-		pane.addSubview(buttonOperation2)
-		pane.addSubview(buttonOperation3)
-		pane.addSubview(buttonOperation4)
-		pane.addSubview(buttonOperation5)
+		for (index,row) in sliderRows.enumerated() {
+			pane.addSubview(row)
+		}
+
+		for (offset: index, element: (button: button,label: label,operation: _)) in buttonOperationData.enumerated() {
+			pane.addSubview(button)
+			pane.addSubview(label)
+		}
 
 		pane.addSubview(buttonCalibration)
 		pane.addSubview(buttonSave)
@@ -1195,6 +1102,7 @@ open class UICalibrator : UIView {
 		pane.addSubview(buttonStyleAdd)
 		pane.addSubview(buttonForDemo)
 		pane.addSubview(buttonMode)
+
 	}
 
 	fileprivate func buildActions() {
@@ -1486,12 +1394,7 @@ open class UICalibrator : UIView {
 
 		for (offset: index, element: (button: button,label: label,operation: _)) in buttonOperationData.enumerated() {
 
-			pane.addSubview(label)
-
 			label.tag = TagForButtonOperationLabel
-
-			label.constrainLeftToRight(of: button, withMargin: 16/2)
-			label.constrainCenterYToCenterY(of: button)
 
 			registerViewAction(on: label) { [weak self] in
 				self?.buttonOperationData[index].operation?.operation()
@@ -1502,6 +1405,41 @@ open class UICalibrator : UIView {
 			}
 		}
 
+
+
+		if true {
+
+			for (index,row) in sliderRows.enumerated() {
+
+				row.slider.addTarget(self, action: #selector(handleEventForSlider(_:event:)), for: .allEvents)
+
+				row.buttonValueDecrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
+					guard let `self` = self else { return }
+					self.selectRow(index: index)
+					self.selectedVariable.redosClear()
+					let v0 = self.currentSliderRow.slider.value
+					var v1 = self.snap(value: v0)
+					if v0 <= v1 {
+						v1 -= self.selectedVariable.slider.step
+					}
+					self.setValue(float: v1)
+				}
+
+				row.buttonValueIncrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
+					guard let `self` = self else { return }
+					self.selectRow(index: index)
+					self.selectedVariable.redosClear()
+					let v0 = self.currentSliderRow.slider.value
+					var v1 = self.snap(value: v0)
+					if v1 <= v0 {
+						v1 += self.selectedVariable.slider.step
+					}
+					self.setValue(float: v1)
+				}
+
+				row.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleTapGestureRecognizerOnRow(_:))))
+			}
+		}
 
 
 
@@ -1579,18 +1517,36 @@ open class UICalibrator : UIView {
 
 	fileprivate func buildConstraints() {
 
+		pane.removeAllConstraints()
+
+		pane.subviews.forEach {
+			if $0 != buttonExit {
+				$0.removeAllConstraints()
+			}
+		}
+
+		for row in sliderRows {
+			row.subviews.forEach {
+				$0.removeAllConstraints()
+			}
+		}
+
+
+		pane.constrainToSuperview()
+
 		let TR = buttonExit!
 		let TL = buttonManagerPrint!
 		let BL = buttonPropertyPrint!
 		let BR = buttonStyle!
 
+		let margin = self.margin
 
 
-		TR.constrainRightToSuperviewRight()?.extended(-8)
-		TR.constrainTopToSuperviewTop()?.extended(+8)
+		TR.constrainRightToSuperviewRight()?.extended(-margin)
+		TR.constrainTopToSuperviewTop()?.extended(+margin)
 
-		BL.constrainLeftToSuperviewLeft(withMargin: +8)
-		BL.constrainBottomToSuperviewBottom(withMargin: -32)
+		BL.constrainLeftToSuperviewLeft(withMargin: +margin)
+		BL.constrainBottomToSuperviewBottom(withMargin: -margin * 2)
 
 
 
@@ -1618,7 +1574,7 @@ open class UICalibrator : UIView {
 			buttonForDemo,
 			buttonCalibration,
 			buttonSave
-			], offset: 16)
+			], offset: margin)
 
 
 
@@ -1637,7 +1593,7 @@ open class UICalibrator : UIView {
 			buttonPropertyPaste,
 			buttonPropertyInitial,
 			buttonPropertyDefault
-			], offset: 16)
+			], offset: margin)
 		BL.constrainViewsCenterYToCenterY(for: [
 			buttonPropertyPrev,
 			buttonPropertyNext,
@@ -1654,24 +1610,24 @@ open class UICalibrator : UIView {
 			buttonManagerPrev,
 			buttonManagerNext,
 			buttonManagerAdd
-			], offset: 16)
+			], offset: margin)
 
 
 
 		viewForConfigurations.constrainCenterXToSuperview()
-		viewForConfigurations.constrainCenterYToCenterY(of: BL, withMargin: -48)
+		viewForConfigurations.constrainCenterYToCenterY(of: BL, withMargin: -margin * 3)
 
 
 
 		self.buttonValueHistoryClear.constrainCenterYToSuperview()
-		self.buttonValueHistoryClear.constrainViewsBottomToTop(for: [buttonValueUndo, buttonValueInitial], offset: -16)
-		self.buttonValueHistoryClear.constrainViewsTopToBottom(for: [buttonValueRedo, buttonValueDefault], offset: +16)
+		self.buttonValueHistoryClear.constrainViewsBottomToTop(for: [buttonValueUndo, buttonValueInitial], offset: -margin)
+		self.buttonValueHistoryClear.constrainViewsTopToBottom(for: [buttonValueRedo, buttonValueDefault], offset: +margin)
 
 
 
 		buttonOperation3.constrainCenterYToSuperview()
-		buttonOperation3.constrainViewsTopToBottom(for: [buttonOperation4, buttonOperation5], offset: +16)
-		buttonOperation3.constrainViewsBottomToTop(for: [buttonOperation2, buttonOperation1], offset: -16)
+		buttonOperation3.constrainViewsTopToBottom(for: [buttonOperation4, buttonOperation5], offset: +margin)
+		buttonOperation3.constrainViewsBottomToTop(for: [buttonOperation2, buttonOperation1], offset: -margin)
 
 
 		labelHeading.constrainCenterXToSuperview()
@@ -1682,19 +1638,67 @@ open class UICalibrator : UIView {
 		self.labelForDemo.lineBreakMode = .byWordWrapping
 		//		self.labelForDemo.constrainCenterXToSuperview()
 		//		self.labelForDemo.constrainCenterYToSuperview()
-		self.labelForDemo.constrainTopToBottom(of: labelHeading, withMargin: 16)
-		self.labelForDemo.constrainLeftToSuperviewLeft()?.extended(+16)
+		self.labelForDemo.constrainTopToBottom(of: labelHeading, withMargin: margin)
+		self.labelForDemo.constrainLeftToSuperviewLeft()?.extended(+margin)
 		self.labelForDemo.constrainRightToSuperviewRight()?.extended(-64+12)
 		//		self.labelForDemo.constrainWidthToSuperview()?.extended(-96)
 
 		buttonStyle.constrainViewsCenterYToCenterY(for: [labelStyle, buttonStyleAdd])
-		buttonStyle.constrainViewsRightToLeft(for: [buttonStyleAdd, labelStyle], offset: -16)
+		buttonStyle.constrainViewsRightToLeft(for: [buttonStyleAdd, labelStyle], offset: -margin)
+
+
+		for (button: button,label: label,operation: _) in buttonOperationData {
+			label.constrainLeftToRight(of: button, withMargin: margin/2)
+			label.constrainCenterYToCenterY(of: button)
+		}
+
+
+		if true {
+
+			var row0 : SliderRow?
+
+			for (index,row) in sliderRows.enumerated() {
+
+				//			pane.insertSubview(row, belowSubview: buttonOperation1)
+
+				row.tag = index
+				row.slider.tag = index
+				row.slider.constrainWidth(to: pane).multiplied(0.33)
+				//			self.slider.constrainCenterYToSuperview()?.multiplied(1.5),
+				row.slider.constrainCenterXToSuperview()
+				row.slider.constrainCenterYToSuperview()
+				row.slider.constrainViewsRightToLeft(for: [row.buttonValueDecrement, row.labelTitle], offset: -margin)
+				row.slider.constrainViewsLeftToRight(for: [row.buttonValueIncrement, row.labelValue], offset: +margin)
+				row.slider.constrainViewsCenterYToCenterY(for: [row.labelTitle, row.buttonValueDecrement, row.buttonValueIncrement, row.labelValue])
+
+				row.cornerRadius = margin/4
+
+				row.constrainCenterXToSuperview()
+				row.constrainWidth(to: row.superview!).extended(-margin * 2)
+				row.constrainHeight(to: row.slider).extended(margin)
+				if let row0 = row0 {
+					row.constrainCenterYToCenterY(of: row0, withMargin: -margin * 3)
+				} else {
+					row.constrainCenterYToCenterY(of: viewForConfigurations, withMargin: -margin * 3)
+				}
+
+				row.isHidden = true
+
+				row0 = row
+			}
+		}
+
+
+//		pane.descendants().forEach {
+//			$0.setNeedsUpdateConstraints()
+//		}
+
 	}
 
 	func buildGroups() {
 
 		add(grouping: "PROPERTY NAVIGATION", nesting: 1, left: buttonPropertyPrev, right: buttonPropertyNext)
-//		add(grouping: "property", nesting: 0, left: buttonPropertyPrint, right: buttonPropertyDefault, top: buttonPropertyNext, bottom: buttonPropertyNext)
+		add(grouping: "property", nesting: 0, left: buttonPropertyPrint, right: buttonPropertyDefault)
 
 		add(grouping: "3", nesting: 0, left: buttonManagerPrint, right: buttonManagerAdd)
 		add(grouping: "4", nesting: 1, left: buttonManagerPrev, right: buttonManagerNext)
@@ -1709,8 +1713,12 @@ open class UICalibrator : UIView {
 
 		add(grouping: "property i/d", nesting: 1, left: buttonPropertyInitial, right: buttonPropertyDefault)
 
-		add(grouping: "exit", nesting: 1, only: buttonExit)
+//		add(grouping: "exit", nesting: 1, only: buttonExit)
 
+
+		DispatchQueue.main.async {
+			self.setNeedsDisplay()
+		}
 	}
 
 	func build() {
@@ -1723,12 +1731,9 @@ open class UICalibrator : UIView {
 
 		buildButtonExit()
 
-		buildSliderRows()
-
 		buildActions()
 
 		buildConstraints()
-
 
 		buildGroups()
 
@@ -1750,10 +1755,6 @@ open class UICalibrator : UIView {
 
 
 		self.pane.isHidden = true
-
-		DispatchQueue.main.async {
-			self.setNeedsDisplay()
-		}
 	}
 
 
@@ -2178,12 +2179,12 @@ open class UICalibrator : UIView {
 	}
 
 	@discardableResult
-	public func add(title: String, properties: [Property], store:@escaping ()->() = { }) -> [Variable] {
+	public func add(title: String, properties: [Property], store:@escaping ()->()) -> [Variable] {
 		return add(manager: PropertyGroup.init(title: title, properties: properties, store: store))
 	}
 
 	@discardableResult
-	public func add(title: String, variables: [StorableVariable], truncatePrefix: String? = nil, store:@escaping ()->() = { }) -> [Variable] {
+	public func add(title: String, variables: [StorableVariable], truncatePrefix: String? = nil, store:@escaping ()->()) -> [Variable] {
 		return add(manager: PropertyGroup.init(title: title, properties: [
 			Property.from(key: title, storableVariables: variables, truncatePrefix: truncatePrefix)
 			], store: store))
@@ -2363,7 +2364,7 @@ open class UICalibrator : UIView {
 		viewForConfigurations.axis = .horizontal
 		viewForConfigurations.alignment = .center
 		viewForConfigurations.distribution = .equalSpacing
-		viewForConfigurations.spacing = 16
+		viewForConfigurations.spacing = margin
 
 		for (index,configuration) in currentProperty.configurations.enumerated() {
 
