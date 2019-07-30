@@ -128,11 +128,6 @@ open class UICalibrator : UIView {
 	public private(set) var buttonManagerNext		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 	public private(set) var buttonManagerPrev		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 
-	public private(set) var buttonOperation1		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonOperation2		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonOperation3		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonOperation4		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonOperation5		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 
 	public private(set) var labelHeading			: UILabelWithInsets!			= UILabelWithInsets.init(frame: .zero)
 	public private(set) var labelPropertyTitle		: UILabelWithInsets!			= UILabelWithInsets.init(frame: .zero)
@@ -143,38 +138,68 @@ open class UICalibrator : UIView {
 	public private(set) var buttonsForConfiguration	: [UIButton]					= []
 
 	public typealias Operation = (title: String, operation: ()->())
+
+	var buttonOperationData : [(button: UIButtonWithCenteredCircle, label: UILabelWithInsets, operation: Operation?)] = [
+		(UIButtonWithCenteredCircle.init(frame: .zero), UILabelWithInsets.init(frame: .zero), nil),
+		(UIButtonWithCenteredCircle.init(frame: .zero), UILabelWithInsets.init(frame: .zero), nil),
+		(UIButtonWithCenteredCircle.init(frame: .zero), UILabelWithInsets.init(frame: .zero), nil),
+		(UIButtonWithCenteredCircle.init(frame: .zero), UILabelWithInsets.init(frame: .zero), nil),
+		(UIButtonWithCenteredCircle.init(frame: .zero), UILabelWithInsets.init(frame: .zero), nil),
+	]
+
 	public var operation1 : Operation? {
-		didSet {
-			define(operation: 1)
+		get {
+			return buttonOperationData[0].operation
+		}
+		set {
+			define(0, operation: newValue)
 		}
 	}
 	public var operation2 : Operation? {
-		didSet {
-			define(operation: 2)
+		get {
+			return buttonOperationData[1].operation
+		}
+		set {
+			define(1, operation: newValue)
 		}
 	}
 	public var operation3 : Operation? {
-		didSet {
-			define(operation: 3)
+		get {
+			return buttonOperationData[2].operation
+		}
+		set {
+			define(2, operation: newValue)
 		}
 	}
 	public var operation4 : Operation? {
-		didSet {
-			define(operation: 4)
+		get {
+			return buttonOperationData[3].operation
+		}
+		set {
+			define(3, operation: newValue)
 		}
 	}
 	public var operation5 : Operation? {
-		didSet {
-			define(operation: 5)
+		get {
+			return buttonOperationData[4].operation
+		}
+		set {
+			define(4, operation: newValue)
 		}
 	}
 
-	public var informWillDefinePropertyGroup : (()->())?
-	public var informDidDefinePropertyGroup : (()->())?
-	public var informWillDefineProperty : (()->())?
-	public var informDidDefineProperty : (()->())?
+	var buttonOperation1		: UIButtonWithCenteredCircle!	{ return buttonOperationData[0].button }
+	var buttonOperation2		: UIButtonWithCenteredCircle!	{ return buttonOperationData[1].button }
+	var buttonOperation3		: UIButtonWithCenteredCircle!	{ return buttonOperationData[2].button }
+	var buttonOperation4		: UIButtonWithCenteredCircle!	{ return buttonOperationData[3].button }
+	var buttonOperation5		: UIButtonWithCenteredCircle!	{ return buttonOperationData[4].button }
 
-	private var clipboardForProperty : [WeakRef<Property>] = []
+	public var informWillDefinePropertyGroup 		: (()->())?
+	public var informDidDefinePropertyGroup 		: (()->())?
+	public var informWillDefineProperty 			: (()->())?
+	public var informDidDefineProperty 				: (()->())?
+
+	private var clipboardForProperty 				: [WeakRef<Property>] = []
 
 	private var labelForDemo						: UILabelWithInsets!			= UILabelWithInsets.init(frame: .zero)
 	private var buttonForDemo						: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
@@ -235,7 +260,7 @@ open class UICalibrator : UIView {
 		]
 
 
-	private var groups : [UIView] {
+	private var groupings : [UIView] {
 		return pane?.subviews(withTag:473) ?? []
 	}
 
@@ -566,12 +591,7 @@ open class UICalibrator : UIView {
 			styleLabelValue(row.labelValue,0.3)
 		}
 
-
-		let labelsForOperations = [buttonOperation1, buttonOperation2, buttonOperation3, buttonOperation4, buttonOperation5].compactMap {
-			$0?.subview(withTag: TagForButtonOperationLabel) as? UILabelWithInsets
-		}
-
-		for label in labelsForOperations {
+		for (_,label,_) in buttonOperationData {
 			styleLabelValue(label,0.5)
 		}
 		for label in [labelStyle,labelPropertyTitle,labelHeading] {
@@ -586,86 +606,40 @@ open class UICalibrator : UIView {
 
 	}
 
-	fileprivate func restyleGroups() {
+	fileprivate func restyleGroupings() {
 
 		let bg = colorForGroup
-		let f = bandForGroup
-		let r = radiusForButton
 
-//		let fl = -f-r
-//		let fr = +f+r
+		for grouping in groupings {
 
-		let band = bandForGroup
-
-		var radius = radiusForButton
+			grouping.backgroundColor = bg
 
 
-		for group in groups {
+			let nudge = CGFloat(1)
+			let nudge2 = nudge/CGFloat(2)
 
-			group.backgroundColor 			= bg
+			grouping.removeAllConstraints()
 
-			if false {
-				if #available(iOS 11.0, *) {
-					group.directionalLayoutMargins.leading 		= -f-r
-					group.directionalLayoutMargins.trailing		= +f+r
-					group.directionalLayoutMargins.bottom 		= +f+r
-					group.directionalLayoutMargins.top 			= -f-r
-				} else {
-					group.layoutMargins.left 		= -f-r
-					group.layoutMargins.right		= +f+r
-					group.layoutMargins.bottom 		= +f+r
-					group.layoutMargins.top 		= -f-r
-				}
-			} else if true {
+			let all = groupingData[grouping]!
 
-				let nudge = CGFloat(1)
-				let nudge2 = nudge/CGFloat(2)
+			let (nesting,top,left,bottom,right) = (all.nesting,all.views[0],all.views[1],all.views[2],all.views[3])
 
-				group.removeAllConstraints()
-
-				let all = groupData[group]!
-
-				let (top,left,bottom,right) = (all[0],all[1],all[2],all[3])
-
-				radius = 0
-				group.frame.origin.x = left.frame.minX - radius - band - nudge2
-				group.frame.origin.y = top.frame.minY - radius - band - nudge2
-				group.frame.size.width = right.frame.maxX + radius + band - group.frame.minX + nudge2
-				group.frame.size.height = bottom.frame.maxY + radius + band - group.frame.minY + nudge2
-
-				group.translatesAutoresizingMaskIntoConstraints = true
-
-				group.cornerRadius = radiusForButton + band + nudge2
-
-			} else {
+			//				let offset = (nesting.asCGFloat * (band / 2))
+			let offset = nesting.asCGFloat * 0
+			let band = bandForGroup + offset
 
 
-				group.removeAllConstraints()
+			grouping.frame.origin.x = left.frame.minX - band - nudge2
+			grouping.frame.origin.y = top.frame.minY - band - nudge2
+			grouping.frame.size.width = right.frame.maxX + band - grouping.frame.minX + nudge
+			grouping.frame.size.height = bottom.frame.maxY + band - grouping.frame.minY + nudge2
 
-				let all = groupData[group]!
+			grouping.translatesAutoresizingMaskIntoConstraints = true
 
-				let (top,left,bottom,right) = (all[0],all[1],all[2],all[3])
+			grouping.cornerRadius = radiusForButton + band + nudge
 
 
-				group.constrainLeftToLeft(of: left, withMargin: band + radius)
-				group.constrainRightToRight(of: right, withMargin: band + radius)
-				group.constrainTopToTop(of: top, withMargin: -band - radius)
-				group.constrainBottomToBottom(of: bottom, withMargin: band + radius)
-
-				group.cornerRadius = radius + band
-
-//
-//				for constraint in group.constraints {
-//					if constraint.constant < 0 {
-//						constraint.constant = fl
-//					} else {
-//						constraint.constant = fr
-//					}
-//				}
-			}
-
-			group.setNeedsUpdateConstraints()
-//			group.setNeedsLayout()
+			grouping.setNeedsUpdateConstraints()
 
 		}
 
@@ -682,7 +656,7 @@ open class UICalibrator : UIView {
 		restyleLabels()
 
 		DispatchQueue.main.async {
-			self.restyleGroups()
+			self.restyleGroupings()
 		}
 
 	}
@@ -1076,114 +1050,15 @@ open class UICalibrator : UIView {
 
 
 
-	func build() {
-
-
-
-		self.buildStyleManagers()
-
-
-
-		self.addSubview(pane)
-
-		self.pane.constrainToSuperview()
-
-
-
-
-
-
-
-		self.buttonExit.setAttributedTitle("??" | UIColor.white | FONT, for: .normal)
-		self.buttonExit.circle(for: .normal).radius = 16
-		self.buttonExit.circle(for: .normal).strokeColor = UIColor.white.cgColor
-		self.buttonExit.circle(for: .normal).lineWidth = 3
-		self.buttonExit.circle(for: .normal).fillColor = nil
-		self.buttonExit.setAttributedTitle("??" | UIColor.white | FONT, for: .selected)
-		self.buttonExit.circle(for: .selected).radius = 16
-		self.buttonExit.circle(for: .selected).fillColor = UIColor.red.cgColor
-		//		self.button.circle(for: .selected).lineWidth = 2
-		//		self.button.circle(for: .selected).lineDashPattern = [2,2]
-		self.buttonExit.sizeToFit()
-
-		//		editor.translatesAutoresizingMaskIntoConstraints=false
-
-		self.addSubview(buttonExit)
-
-		buttonExit.addTapIfSelected(deselect: 0.1) { [weak self] in
-			self?.pane.isHidden = true
-			self?.superview?.isUserInteractionEnabled = self?.superviewInteractionEnabled ?? true
-
-			self?.save(user: true, calibration: true)
-
-			self?.listener(.close)
-		}
-
-		buttonExit.addTapIfNotSelected { [weak self] in
-			self?.pane.isHidden = false
-			self?.superviewInteractionEnabled = self?.superview?.isUserInteractionEnabled ?? false
-			self?.updateUI()
-			self?.listener(.open)
-		}
-
-
-
-
-
-
-		pane.addSubview(labelForDemo)
-		pane.addSubview(labelHeading)
-		pane.addSubview(labelStyle)
-		pane.addSubview(labelPropertyTitle)
-
-		pane.addSubview(viewForConfigurations)
-
-		pane.addSubview(buttonValueInitial)
-		pane.addSubview(buttonValueDefault)
-		pane.addSubview(buttonValueUndo)
-		pane.addSubview(buttonValueRedo)
-		pane.addSubview(buttonValueHistoryClear)
-
-		pane.addSubview(buttonManagerPrint)
-		pane.addSubview(buttonPropertyPrint)
-
-		pane.addSubview(buttonPropertyPrev)
-		pane.addSubview(buttonPropertyNext)
-		pane.addSubview(buttonPropertyCopy)
-		pane.addSubview(buttonPropertyPaste)
-		pane.addSubview(buttonPropertyInitial)
-		pane.addSubview(buttonPropertyDefault)
-
-		pane.addSubview(buttonManagerPrev)
-		pane.addSubview(buttonManagerNext)
-		pane.addSubview(buttonManagerAdd)
-
-		pane.addSubview(buttonOperation1)
-		pane.addSubview(buttonOperation2)
-		pane.addSubview(buttonOperation3)
-		pane.addSubview(buttonOperation4)
-		pane.addSubview(buttonOperation5)
-
-		pane.addSubview(buttonCalibration)
-		pane.addSubview(buttonSave)
-		pane.addSubview(buttonStyle)
-		pane.addSubview(buttonStyleAdd)
-		pane.addSubview(buttonForDemo)
-		pane.addSubview(buttonMode)
-
-
-
-
-
+	fileprivate func buildSliderRows() {
 		var row0 : SliderRow?
 
-		
+		let margin = CGFloat(16)
+
 		for (index,row) in sliderRows.enumerated() {
 
 
 			pane.addSubview(row)
-
-			let margin = CGFloat(16)
 
 			row.tag = index
 			row.slider.tag = index
@@ -1240,14 +1115,89 @@ open class UICalibrator : UIView {
 
 			row0 = row
 		}
+	}
 
+	fileprivate func buildButtonExit() {
+		self.buttonExit.setAttributedTitle("??" | UIColor.white | FONT, for: .normal)
+		self.buttonExit.circle(for: .normal).radius = 16
+		self.buttonExit.circle(for: .normal).strokeColor = UIColor.white.cgColor
+		self.buttonExit.circle(for: .normal).lineWidth = 3
+		self.buttonExit.circle(for: .normal).fillColor = nil
+		self.buttonExit.setAttributedTitle("??" | UIColor.white | FONT, for: .selected)
+		self.buttonExit.circle(for: .selected).radius = 16
+		self.buttonExit.circle(for: .selected).fillColor = UIColor.red.cgColor
+		//		self.button.circle(for: .selected).lineWidth = 2
+		//		self.button.circle(for: .selected).lineDashPattern = [2,2]
+		self.buttonExit.sizeToFit()
 
+		//		editor.translatesAutoresizingMaskIntoConstraints=false
 
+		self.addSubview(buttonExit)
 
+		buttonExit.addTapIfSelected(deselect: 0.1) { [weak self] in
+			self?.pane.isHidden = true
+			self?.superview?.isUserInteractionEnabled = self?.superviewInteractionEnabled ?? true
 
+			self?.save(user: true, calibration: true)
 
+			self?.listener(.close)
+		}
 
+		buttonExit.addTapIfNotSelected { [weak self] in
+			self?.pane.isHidden = false
+			self?.superviewInteractionEnabled = self?.superview?.isUserInteractionEnabled ?? false
+			self?.updateUI()
+			self?.listener(.open)
+		}
+	}
 
+	fileprivate func buildPane() {
+		self.addSubview(pane)
+
+		self.pane.constrainToSuperview()
+
+		pane.addSubview(labelForDemo)
+		pane.addSubview(labelHeading)
+		pane.addSubview(labelStyle)
+		pane.addSubview(labelPropertyTitle)
+
+		pane.addSubview(viewForConfigurations)
+
+		pane.addSubview(buttonValueInitial)
+		pane.addSubview(buttonValueDefault)
+		pane.addSubview(buttonValueUndo)
+		pane.addSubview(buttonValueRedo)
+		pane.addSubview(buttonValueHistoryClear)
+
+		pane.addSubview(buttonManagerPrint)
+		pane.addSubview(buttonPropertyPrint)
+
+		pane.addSubview(buttonPropertyPrev)
+		pane.addSubview(buttonPropertyNext)
+		pane.addSubview(buttonPropertyCopy)
+		pane.addSubview(buttonPropertyPaste)
+		pane.addSubview(buttonPropertyInitial)
+		pane.addSubview(buttonPropertyDefault)
+
+		pane.addSubview(buttonManagerPrev)
+		pane.addSubview(buttonManagerNext)
+		pane.addSubview(buttonManagerAdd)
+
+		pane.addSubview(buttonOperation1)
+		pane.addSubview(buttonOperation2)
+		pane.addSubview(buttonOperation3)
+		pane.addSubview(buttonOperation4)
+		pane.addSubview(buttonOperation5)
+
+		pane.addSubview(buttonCalibration)
+		pane.addSubview(buttonSave)
+		pane.addSubview(buttonStyle)
+		pane.addSubview(buttonStyleAdd)
+		pane.addSubview(buttonForDemo)
+		pane.addSubview(buttonMode)
+	}
+
+	fileprivate func buildActions() {
 
 		self.buttonValueInitial.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
 			guard let `self` = self else { return }
@@ -1287,7 +1237,7 @@ open class UICalibrator : UIView {
 
 		self.buttonPropertyPrev.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
 			guard let `self` = self else { return }
-//			print(self.currentProperty.valueAsString)
+			//			print(self.currentProperty.valueAsString)
 			var index = self.currentPropertyIndex
 			index -= 1
 			if index < 0 {
@@ -1301,7 +1251,7 @@ open class UICalibrator : UIView {
 
 		self.buttonPropertyNext.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
 			guard let `self` = self else { return }
-//			print(self.currentProperty.valueAsString)
+			//			print(self.currentProperty.valueAsString)
 			var index = self.currentPropertyIndex
 			index += 1
 			index %= self.properties.count
@@ -1416,9 +1366,9 @@ open class UICalibrator : UIView {
 			let vc = UIApplication.shared.keyWindow?.rootViewController
 
 			vc?.presentAlertForInput(title		: "Style",
-																					message		: "Add a new custom style",
-																					value		: self.style,
-																					ok			: "Add")
+									 message		: "Add a new custom style",
+									 value		: self.style,
+									 ok			: "Add")
 			{ style in
 
 				let style = style.trimmed()
@@ -1534,41 +1484,100 @@ open class UICalibrator : UIView {
 
 
 
-		for button in [buttonOperation1, buttonOperation2, buttonOperation3, buttonOperation4, buttonOperation5] {
+		for (offset: index, element: (button: button,label: label,operation: _)) in buttonOperationData.enumerated() {
 
-			let label = UILabelWithInsets.init(frame: .zero)
-			button?.addSubview(label)
+			pane.addSubview(label)
 
 			label.tag = TagForButtonOperationLabel
 
-			label.constrainLeftToRight(of: button!, withMargin: 16/2)
-			label.constrainCenterYToSuperview()
-			label.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnOperationLabel(_:))))
-			label.isUserInteractionEnabled=true
-		}
+			label.constrainLeftToRight(of: button, withMargin: 16/2)
+			label.constrainCenterYToCenterY(of: button)
 
+			registerViewAction(on: label) { [weak self] in
+				self?.buttonOperationData[index].operation?.operation()
+			}
 
-
-		self.buttonOperation1.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
-			self?.operation1?.operation()
-		}
-		self.buttonOperation2.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
-			self?.operation2?.operation()
-		}
-		self.buttonOperation3.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
-			self?.operation3?.operation()
-		}
-		self.buttonOperation4.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
-			self?.operation4?.operation()
-		}
-		self.buttonOperation5.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
-			self?.operation5?.operation()
+			button.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
+				self?.buttonOperationData[index].operation?.operation()
+			}
 		}
 
 
 
 
 
+		pane.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnPane(_:))))
+		pane.addGestureRecognizer(UIPanGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForPanOnPane(_:))))
+
+
+
+
+
+		registerViewAction(on: labelPropertyTitle) { [weak self] in
+
+			guard let `self` = self else { return }
+
+			self.presentPropertyList(properties	: self.properties.map { $0.title },
+									 selected		: self.currentProperty.title)
+			{ [weak self] selected in
+
+				guard let `self` = self else { return }
+
+				if let selected = selected, selected != self.currentProperty.title {
+					if let (index,_) = self.properties.enumerated().first(where: { $0.1.title == selected }) {
+						self.currentPropertyIndex = index
+						self.defineProperty()
+					}
+				}
+
+			}
+
+		}
+
+
+		registerViewAction(on: labelHeading) { [weak self] in
+
+			guard let `self` = self else { return }
+
+			self.presentPropertyList(properties		: self.managers.map { $0.title },
+									 selected		: self.currentPropertyGroup.title)
+			{ [weak self] selected in
+
+				guard let `self` = self else { return }
+
+				if let selected = selected, selected != self.currentPropertyGroup.title {
+					if let (index,_) = self.managers.enumerated().first(where: { $0.1.title == selected }) {
+						self.currentPropertyGroupIndex = index
+					}
+				}
+
+			}
+
+		}
+
+
+		registerViewAction(on: labelStyle) { [weak self] in
+
+			guard let `self` = self else { return }
+
+			self.presentPropertyList(properties		: self.styles,
+									 selected		: self.style)
+			{ [weak self] selected in
+
+				guard let `self` = self else { return }
+
+				if let selected = selected, selected != self.style {
+					self.style = selected
+				}
+
+			}
+
+		}
+
+
+	}
+
+	fileprivate func buildConstraints() {
 
 		let TR = buttonExit!
 		let TL = buttonManagerPrint!
@@ -1671,97 +1680,57 @@ open class UICalibrator : UIView {
 		labelPropertyTitle.constrainCenterYToCenterY(of: BL)
 
 		self.labelForDemo.lineBreakMode = .byWordWrapping
-//		self.labelForDemo.constrainCenterXToSuperview()
-//		self.labelForDemo.constrainCenterYToSuperview()
+		//		self.labelForDemo.constrainCenterXToSuperview()
+		//		self.labelForDemo.constrainCenterYToSuperview()
 		self.labelForDemo.constrainTopToBottom(of: labelHeading, withMargin: 16)
 		self.labelForDemo.constrainLeftToSuperviewLeft()?.extended(+16)
 		self.labelForDemo.constrainRightToSuperviewRight()?.extended(-64+12)
-//		self.labelForDemo.constrainWidthToSuperview()?.extended(-96)
+		//		self.labelForDemo.constrainWidthToSuperview()?.extended(-96)
 
 		buttonStyle.constrainViewsCenterYToCenterY(for: [labelStyle, buttonStyleAdd])
 		buttonStyle.constrainViewsRightToLeft(for: [buttonStyleAdd, labelStyle], offset: -16)
+	}
+
+	func buildGroups() {
+
+		add(grouping: "PROPERTY NAVIGATION", nesting: 1, left: buttonPropertyPrev, right: buttonPropertyNext)
+//		add(grouping: "property", nesting: 0, left: buttonPropertyPrint, right: buttonPropertyDefault, top: buttonPropertyNext, bottom: buttonPropertyNext)
+
+		add(grouping: "3", nesting: 0, left: buttonManagerPrint, right: buttonManagerAdd)
+		add(grouping: "4", nesting: 1, left: buttonManagerPrev, right: buttonManagerNext)
+
+		add(grouping: "style", nesting: 1, left: buttonStyleAdd, right: buttonStyle)
+
+		add(grouping: "admin", nesting: 1, top: buttonMode, bottom: buttonSave)
+
+		add(grouping: "value/undo", nesting: 1, top: buttonValueUndo, bottom: buttonValueRedo)
+
+		add(grouping: "property c/p", nesting: 1, left: buttonPropertyCopy, right: buttonPropertyPaste)
+
+		add(grouping: "property i/d", nesting: 1, left: buttonPropertyInitial, right: buttonPropertyDefault)
+
+		add(grouping: "exit", nesting: 1, only: buttonExit)
+
+	}
+
+	func build() {
 
 
-		
-
-		add(group: "PROPERTY NAVIGATION", left: buttonPropertyPrev, right: buttonPropertyNext, top: buttonPropertyNext, bottom: buttonPropertyNext)
+		buildStyleManagers()
 
 
+		buildPane()
+
+		buildButtonExit()
+
+		buildSliderRows()
+
+		buildActions()
+
+		buildConstraints()
 
 
-
-
-		pane.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForTapOnPane(_:))))
-		pane.addGestureRecognizer(UIPanGestureRecognizer.init(target: self, action: #selector(handleGestureRecognizerForPanOnPane(_:))))
-
-
-
-
-
-		registerViewAction(on: labelPropertyTitle) { [weak self] in
-
-			guard let `self` = self else { return }
-
-			self.presentPropertyList(properties	: self.properties.map { $0.title },
-								selected		: self.currentProperty.title)
-			{ [weak self] selected in
-
-				guard let `self` = self else { return }
-
-				if let selected = selected, selected != self.currentProperty.title {
-					if let (index,_) = self.properties.enumerated().first(where: { $0.1.title == selected }) {
-						self.currentPropertyIndex = index
-						self.defineProperty()
-					}
-				}
-
-			}
-
-		}
-
-
-		registerViewAction(on: labelHeading) { [weak self] in
-
-			guard let `self` = self else { return }
-
-			self.presentPropertyList(properties		: self.managers.map { $0.title },
-									 selected		: self.currentPropertyGroup.title)
-			{ [weak self] selected in
-
-				guard let `self` = self else { return }
-
-				if let selected = selected, selected != self.currentPropertyGroup.title {
-					if let (index,_) = self.managers.enumerated().first(where: { $0.1.title == selected }) {
-						self.currentPropertyGroupIndex = index
-					}
-				}
-
-			}
-
-		}
-
-
-		registerViewAction(on: labelStyle) { [weak self] in
-
-			guard let `self` = self else { return }
-
-			self.presentPropertyList(properties		: self.styles,
-									 selected		: self.style)
-			{ [weak self] selected in
-
-				guard let `self` = self else { return }
-
-				if let selected = selected, selected != self.style {
-					self.style = selected
-				}
-
-			}
-
-		}
-
-
-
-		//		self.pane.addObserver(self, forKeyPath: ".isHidden", options: [.new], context: nil)
+		buildGroups()
 
 
 		let style = UserDefaults.standard.string(forKey: "style") ?? defaultStyles.first!
@@ -1773,7 +1742,6 @@ open class UICalibrator : UIView {
 		}
 
 
-
 		let mode = Mode.init(rawValue: UserDefaults.standard.string(forKey: "mode") ?? Mode.full.rawValue) ?? modes.next
 		repeat {
 			self.mode = modes.next
@@ -1783,6 +1751,9 @@ open class UICalibrator : UIView {
 
 		self.pane.isHidden = true
 
+		DispatchQueue.main.async {
+			self.setNeedsDisplay()
+		}
 	}
 
 
@@ -1794,6 +1765,7 @@ open class UICalibrator : UIView {
 
 
 	public func select(group name: String) {
+		// TODO
 //		if let index = self..index(where: { $0.title == name }) {
 //			self.currentPropertyIndex = index
 //		}
@@ -1936,38 +1908,6 @@ open class UICalibrator : UIView {
 
 	}
 
-	@objc func handleGestureRecognizerForTapOnOperationLabel(_ recognizer: UITapGestureRecognizer!) {
-
-		if pane.isHidden {
-			return
-		}
-
-
-		if mode != .transparent {
-			//		print("tap: \(recognizer.debugDescription)")
-
-			switch recognizer.state {
-
-			case .began, .changed, .ended:
-
-				if let view = recognizer.view, let button = view.superview, button is UIButton {
-					if button == buttonOperation1 { self.operation1?.operation() }
-					if button == buttonOperation2 { self.operation2?.operation() }
-					if button == buttonOperation3 { self.operation3?.operation() }
-					if button == buttonOperation4 { self.operation4?.operation() }
-					if button == buttonOperation5 { self.operation5?.operation() }
-				}
-
-			default:
-				break
-			}
-		}
-
-		if !pane.isHidden {
-			//			recognizer.consu
-		}
-	}
-
 	fileprivate func presentPropertyList(properties: [String], selected: String, completion: @escaping (String?) -> ()) {
 
 		let bg = UIView()
@@ -1999,19 +1939,40 @@ open class UICalibrator : UIView {
 		table.contentInset = .init(tlbr: [16,16,8,-16])
 	}
 
-	private var groupData : [UIView: [UIView]] = [:]
 
-	fileprivate func add(group name: String, left: UIView, right: UIView, top: UIView, bottom: UIView) {
+
+
+
+
+	typealias GroupingData = (nesting: Int, views:[UIView])
+
+	private var groupingData : [UIView: GroupingData] = [:]
+
+	fileprivate func add(grouping name: String, nesting: Int, left: UIView, right: UIView, top: UIView, bottom: UIView) {
 		let group = UIView.init()
 		group.tag = 473
 //		group.put("group.name", name)
 
 		self.pane.insertSubview(group, at: 1)
 
-		groupData[group] = [top,left,bottom,right]
+		groupingData[group] = (nesting,[top,left,bottom,right])
 	}
 
+	fileprivate func add(grouping name: String, nesting: Int, left: UIView, right: UIView) {
+		add(grouping: name, nesting: nesting, left: left, right: right, top: left, bottom: left)
+	}
 
+	fileprivate func add(grouping name: String, nesting: Int, top: UIView, bottom: UIView) {
+		add(grouping: name, nesting: nesting, left: top, right: top, top: top, bottom: bottom)
+	}
+
+	fileprivate func add(grouping name: String, nesting: Int, tl: UIView, br: UIView) {
+		add(grouping: name, nesting: nesting, left: tl, right: br, top: tl, bottom: br)
+	}
+
+	fileprivate func add(grouping name: String, nesting: Int, only: UIView) {
+		add(grouping: name, nesting: nesting, left: only, right: only, top: only, bottom: only)
+	}
 
 
 
@@ -2371,39 +2332,20 @@ open class UICalibrator : UIView {
 		self.properties = properties.isEmpty ? [UICalibrator.defaultProperty] : properties
 	}
 
-	open func define(operation: Int) {
+	open func define(_ index: Int, operation: Operation?) {
 
-		var button : UIButtonWithCenteredCircle!
-		var title : String!
+		buttonOperationData[index].operation = operation
 
-		switch operation {
-		case 1:
-			button = operation1 == nil ? nil : buttonOperation1
-			title = operation1?.title
-		case 2:
-			button = operation2 == nil ? nil : buttonOperation2
-			title = operation2?.title
-		case 3:
-			button = operation3 == nil ? nil : buttonOperation3
-			title = operation3?.title
-		case 4:
-			button = operation4 == nil ? nil : buttonOperation4
-			title = operation4?.title
-		case 5:
-			button = operation5 == nil ? nil : buttonOperation5
-			title = operation5?.title
-		default:
-			break
-		}
+		let button	= buttonOperationData[index].button
+		let label 	= buttonOperationData[index].label
+		let title 	= operation?.title
 
-		let on = button != nil
+		let on = operation != nil
 
-		button?.isVisible = on
-		if let label = button?.subview(withTag: TagForButtonOperationLabel) as? UILabelWithInsets {
-			if let title = title {
-				label.attributedText = title | fontForLabel | colorForLabelText
-			}
-			label.isVisible = on
+		button.isVisible = on
+		label.isVisible = on
+		if let title = title {
+			label.attributedText = title | fontForLabel | colorForLabelText
 		}
 
 	}
@@ -2709,11 +2651,10 @@ open class UICalibrator : UIView {
 
 			selectRow(index: selectedVariableIndex)
 
-			self.buttonOperation1.isHidden = self.operation1 == nil
-			self.buttonOperation2.isHidden = self.operation2 == nil
-			self.buttonOperation3.isHidden = self.operation3 == nil
-			self.buttonOperation4.isHidden = self.operation4 == nil
-			self.buttonOperation5.isHidden = self.operation5 == nil
+			for (button,label,operation) in buttonOperationData {
+				button.isHidden = operation == nil
+				label.isHidden = operation == nil
+			}
 		}
 
 	}
