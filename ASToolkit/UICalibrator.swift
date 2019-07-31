@@ -112,6 +112,7 @@ open class UICalibrator : UIView {
 	public private(set) var buttonPropertyPaste		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 	public private(set) var buttonPropertyInitial	: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 	public private(set) var buttonPropertyDefault	: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
+	public private(set) var buttonPropertyPrint		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 
 	public private(set) var buttonValueDefault		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 	public private(set) var buttonValueInitial		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
@@ -126,10 +127,11 @@ open class UICalibrator : UIView {
 	public private(set) var buttonSave				: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 
 	public private(set) var buttonManagerPrint		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonPropertyPrint		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonManagerAdd		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
-	public private(set) var buttonManagerNext		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 	public private(set) var buttonManagerPrev		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
+	public private(set) var buttonManagerNext		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
+	public private(set) var buttonManagerInitial	: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
+	public private(set) var buttonManagerDefault	: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
+	public private(set) var buttonManagerAdd		: UIButtonWithCenteredCircle!	= UIButtonWithCenteredCircle.init(frame: .zero)
 
 
 	public private(set) var labelHeading			: UILabelWithInsets!			= UILabelWithInsets.init(frame: .zero)
@@ -505,42 +507,48 @@ open class UICalibrator : UIView {
 
 		let none = UIEdgeInsets.init()
 
-		for (title, insets, button) in [
-			(demo.string	, none, buttonForDemo),
-			("p"			, none, buttonPropertyPrint),
-			("P"			, none, buttonManagerPrint),
-			("+"			, UIEdgeInsets.init(top: 1.5), buttonManagerAdd),
-			("i"			, none, buttonValueInitial),
-			("d"			, none, buttonValueDefault),
-			("\u{21BA}"		, UIEdgeInsets.init(top: 2.5), buttonValueUndo),
-			("\u{21BB}"		, UIEdgeInsets.init(top: 2.5), buttonValueRedo),
-			("\u{2395}"		, UIEdgeInsets.init(top: -1.5), buttonValueHistoryClear),
-			(mode.string	, none, buttonMode),
-			("@"			, UIEdgeInsets.init(top:-2, left: 0), buttonCalibration),
-			("!"			, UIEdgeInsets.init(top:-1.5, left: 0), buttonSave),
-			("<"			, UIEdgeInsets.init(top: 1.5, left: 0), buttonPropertyPrev),
-			(">"			, UIEdgeInsets.init(top: 1.5, left: 1), buttonPropertyNext),
-			("c"			, UIEdgeInsets.init(top: 1.5, left: 1), buttonPropertyCopy),
-			("p"			, UIEdgeInsets.init(top: 1.5, left: 1), buttonPropertyPaste),
-			("i"			, none, buttonPropertyInitial),
-			("d"			, none, buttonPropertyDefault),
-			("<"			, UIEdgeInsets.init(top: 1.5, left: 0), buttonManagerPrev),
-			(">"			, UIEdgeInsets.init(top: 1.5, left: 1), buttonManagerNext),
-			//			("\u{2780}"		, none, buttonOperation1),
-			//			("\u{278B}"		, none, buttonOperation2),
-			//			("\u{278C}"		, none, buttonOperation3),
-			//			("\u{278D}"		, none, buttonOperation4),
-			//			("\u{278E}"		, none, buttonOperation5),
-			("1"		, none, buttonOperation1),
-			("2"		, none, buttonOperation2),
-			("3"		, none, buttonOperation3),
-			("4"		, none, buttonOperation4),
-			("5"		, none, buttonOperation5),
-			("~"		, none, buttonStyle),
-			("+"		, UIEdgeInsets.init(top: 1.5), buttonStyleAdd),
-			]
+		let stylings : [(String,UIEdgeInsets,UIButtonWithCenteredCircle?,Bool)] = [
+
+		(demo.string	, none, 									buttonForDemo, 					false),
+		("p"			, none, 									buttonManagerPrint, 			false),
+		("+"			, UIEdgeInsets.init(top: 1.5), 				buttonManagerAdd, 				false),
+		("i"			, none, 									buttonManagerInitial, 			true),
+		("d"			, none, 									buttonManagerDefault, 			true),
+		("i"			, none, 									buttonValueInitial, 			true),
+		("d"			, none, 									buttonValueDefault, 			true),
+		("\u{21BA}"		, UIEdgeInsets.init(top: 2.5), 				buttonValueUndo, 				false),
+		("\u{21BB}"		, UIEdgeInsets.init(top: 2.5), 				buttonValueRedo, 				false),
+		("\u{2395}"		, UIEdgeInsets.init(top: -1.5), 			buttonValueHistoryClear, 		false),
+		(mode.string	, none, 									buttonMode, 					false),
+		("@"			, UIEdgeInsets.init(top:-2, left: 0), 		buttonCalibration, 				false),
+		("!"			, UIEdgeInsets.init(top:-1.5, left: 0), 	buttonSave, 					false),
+		("p"			, none, 									buttonPropertyPrint, 			false),
+		("<"			, UIEdgeInsets.init(top: 1.5, left: 0), 	buttonPropertyPrev, 			false),
+		(">"			, UIEdgeInsets.init(top: 1.5, left: 1), 	buttonPropertyNext, 			false),
+		("c"			, UIEdgeInsets.init(top: 1.5, left: 1), 	buttonPropertyCopy, 			false),
+		("p"			, UIEdgeInsets.init(top: 1.5, left: 1), 	buttonPropertyPaste, 			false),
+		("i"			, none, 									buttonPropertyInitial, 			true),
+		("d"			, none, 									buttonPropertyDefault, 			true),
+		("<"			, UIEdgeInsets.init(top: 1.5, left: 0), 	buttonManagerPrev, 				false),
+		(">"			, UIEdgeInsets.init(top: 1.5, left: 1), 	buttonManagerNext, 				false),
+		//			("\u{2780}"		, none, buttonOperation1),
+		//			("\u{278B}"		, none, buttonOperation2),
+		//			("\u{278C}"		, none, buttonOperation3),
+		//			("\u{278D}"		, none, buttonOperation4),
+		//			("\u{278E}"		, none, buttonOperation5),
+		("1"			, none, 									buttonOperation1, 				false),
+		("2"			, none, 									buttonOperation2, 				false),
+		("3"			, none, 									buttonOperation3, 				false),
+		("4"			, none, 									buttonOperation4, 				false),
+		("5"			, none, 									buttonOperation5, 				false),
+		("~"			, none, 									buttonStyle, 					false),
+		("+"			, UIEdgeInsets.init(top: 1.5), 				buttonStyleAdd, 				false),
+
+		]
+
+		for (title, insets, button, italic) in stylings
 		{
-			self.style(button: button, title: title, insets: insets)
+			self.style(button: button, title: title, insets: insets, italic: italic)
 		}
 
 
@@ -560,10 +568,9 @@ open class UICalibrator : UIView {
 //		let manager 	= styleManager[style]!
 
 		let backgroundColor 		= colorForLabelFill // manager.property("label/fill:color").variableForUIColor.toUIColor()
-		let ctext		= colorForLabelText // manager.property("label/text:color").variableForUIColor.toUIColor()
-		let font		= fontForLabel // manager.property("label/text:font")?.variableForUIFont.toUIFont()
+		let ctext					= colorForLabelText // manager.property("label/text:color").variableForUIColor.toUIColor()
+		let font					= fontForLabel // manager.property("label/text:font")?.variableForUIFont.toUIFont()
 //		let borderColor	= UIColor.init(white: 0.4, alpha: 0.2)
-
 
 		let styleLabelTitle : (UILabelWithInsets)->() = { label in
 			label.font 				= font
@@ -706,16 +713,18 @@ open class UICalibrator : UIView {
 
 
 
-	private func style(button: UIButtonWithCenteredCircle!, title: String, insets: UIEdgeInsets) {
+	private func style(button: UIButtonWithCenteredCircle!, title: String, insets: UIEdgeInsets, italic: Bool = false) {
 
 
 //		let manager = styleManager[style]!
 
 
-		let Fdisabled		= fontForButton.italicSibling() ?? fontForButton
+		let font0 			= fontForButton
+		let font1			= italic ? (font0.italicSibling() ?? font0) : font0
+		let Fdisabled		= font0.italicSibling() ?? font1
 
-		button?.setAttributedTitle(title | colorForButtonText | fontForButton, for: .normal)
-		button?.setAttributedTitle(title | colorForButtonFill | fontForButton, for: .selected)
+		button?.setAttributedTitle(title | colorForButtonText | font1, for: .normal)
+		button?.setAttributedTitle(title | colorForButtonFill | font1, for: .selected)
 		button?.setAttributedTitle(title | colorForButtonText.withAlphaComponent(0.8) | Fdisabled, for: .disabled)
 
 
@@ -739,6 +748,7 @@ open class UICalibrator : UIView {
 			circle.strokeColor 	= colorForButtonRim.cgColor
 			circle.fillColor 	= colorForButtonFill.withAlphaComponent(0.5).withSaturation(0).cgColor
 		}
+
 
 		button?.setNeedsDisplay()
 
@@ -1120,6 +1130,8 @@ open class UICalibrator : UIView {
 		pane.addSubview(buttonManagerPrev)
 		pane.addSubview(buttonManagerNext)
 		pane.addSubview(buttonManagerAdd)
+		pane.addSubview(buttonManagerInitial)
+		pane.addSubview(buttonManagerDefault)
 
 		for (index,row) in sliderRows.enumerated() {
 			pane.addSubview(row)
@@ -1422,6 +1434,37 @@ open class UICalibrator : UIView {
 			}
 		}
 
+		self.buttonManagerInitial.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
+			guard let `self` = self else { return }
+
+			for property in self.currentPropertyGroup.properties {
+				for variable in property.variables {
+					variable.register()
+					variable.value = variable.valueInitial
+				}
+			}
+
+//			self.restyle()
+			self.definePropertyGroup()
+			self.defineProperty()
+		}
+
+		self.buttonManagerDefault.addTapIfNotSelected(named: "action", deselect: 0.33) { [weak self] in
+			guard let `self` = self else { return }
+
+			for property in self.currentPropertyGroup.properties {
+				for variable in property.variables {
+					variable.register()
+					variable.value = variable.valueDefault
+				}
+			}
+
+//			self.restyle()
+			self.definePropertyGroup()
+			self.defineProperty()
+		}
+
+
 
 
 
@@ -1449,7 +1492,7 @@ open class UICalibrator : UIView {
 
 				row.buttonValueDecrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
 					guard let `self` = self else { return }
-					self.selectRow(index: index)
+					self.select(row: index)
 					self.selectedVariable.redosClear()
 					let v0 = self.currentSliderRow.slider.value
 					var v1 = self.snap(value: v0)
@@ -1461,7 +1504,7 @@ open class UICalibrator : UIView {
 
 				row.buttonValueIncrement.addTapIfNotSelected(named: "action", deselect: 0.15) { [weak self] in
 					guard let `self` = self else { return }
-					self.selectRow(index: index)
+					self.select(row: index)
 					self.selectedVariable.redosClear()
 					let v0 = self.currentSliderRow.slider.value
 					var v1 = self.snap(value: v0)
@@ -1600,6 +1643,8 @@ open class UICalibrator : UIView {
 			buttonManagerPrint,
 			buttonManagerPrev,
 			buttonManagerNext,
+			buttonManagerInitial,
+			buttonManagerDefault,
 			buttonManagerAdd,
 			labelHeading,
 			])
@@ -1643,7 +1688,9 @@ open class UICalibrator : UIView {
 		TL.constrainViewsLeftToRight(for: [
 			buttonManagerPrev,
 			buttonManagerNext,
-			buttonManagerAdd
+			buttonManagerInitial,
+			buttonManagerDefault,
+			buttonManagerAdd,
 			], offset: margin)
 
 
@@ -1653,9 +1700,17 @@ open class UICalibrator : UIView {
 
 
 
-		self.buttonValueHistoryClear.constrainCenterYToSuperview()
-		self.buttonValueHistoryClear.constrainViewsBottomToTop(for: [buttonValueUndo, buttonValueInitial], offset: -margin)
-		self.buttonValueHistoryClear.constrainViewsTopToBottom(for: [buttonValueRedo, buttonValueDefault], offset: +margin)
+		if false {
+			self.buttonValueHistoryClear.constrainCenterYToSuperview()
+			self.buttonValueHistoryClear.constrainViewsBottomToTop(for: [buttonValueUndo, buttonValueInitial], offset: -margin)
+			self.buttonValueHistoryClear.constrainViewsTopToBottom(for: [buttonValueRedo, buttonValueDefault], offset: +margin)
+		} else {
+			for (index,button) in [buttonValueDefault, buttonValueInitial, buttonValueRedo, buttonValueHistoryClear, buttonValueUndo].enumerated() {
+				button?.constrainCenterYToCenterY(of: sliderRows[index].buttonValueIncrement)
+			}
+//			self.buttonValueDefault.constrainCenterYToCenterY(of: sliderRows[0].buttonValueIncrement)
+//			self.buttonValueDefault.constrainViewsCenterYToCenterY(for: [buttonValueInitial, buttonValueRedo, buttonValueHistoryClear, buttonValueUndo], offset: -margin)
+		}
 
 
 
@@ -1705,10 +1760,10 @@ open class UICalibrator : UIView {
 				row.slider.constrainViewsLeftToRight(for: [row.buttonValueIncrement, row.labelValue], offset: +margin)
 				row.slider.constrainViewsCenterYToCenterY(for: [row.labelTitle, row.buttonValueDecrement, row.buttonValueIncrement, row.labelValue])
 
-				row.cornerRadius = margin/4
+				row.cornerRadius = margin+2 //margin/4
 
 				row.constrainCenterXToSuperview()
-				row.constrainWidth(to: row.superview!).extended(-margin * 2)
+				row.constrainWidth(to: row.superview!).extended(-margin * 8)
 				row.constrainHeight(to: row.slider).extended(margin)
 				if let row0 = row0 {
 					row.constrainCenterYToCenterY(of: row0, withMargin: -margin * 3)
@@ -1736,12 +1791,15 @@ open class UICalibrator : UIView {
 
 		add(grouping: "3", nesting: 0, left: buttonManagerPrint, right: buttonManagerAdd)
 		add(grouping: "4", nesting: 1, left: buttonManagerPrev, right: buttonManagerNext)
+		add(grouping: "4", nesting: 1, left: buttonManagerInitial, right: buttonManagerDefault)
 
 		add(grouping: "style", nesting: 1, left: buttonStyleAdd, right: buttonStyle)
 
 		add(grouping: "admin", nesting: 1, top: buttonMode, bottom: buttonSave)
 
 		add(grouping: "value/undo", nesting: 1, top: buttonValueUndo, bottom: buttonValueRedo)
+		add(grouping: "value/i+d", nesting: 1, top: buttonValueInitial, bottom: buttonValueDefault)
+		add(grouping: "value", nesting: 0, top: buttonValueUndo, bottom: buttonValueDefault)
 
 		add(grouping: "property c/p", nesting: 1, left: buttonPropertyCopy, right: buttonPropertyPaste)
 
@@ -1814,7 +1872,7 @@ open class UICalibrator : UIView {
 
 	public func select(variable name: String) {
 		if let index = self.variables.index(where: { $0.title == name }) {
-			self.selectRow(index: index)
+			self.select(row: index)
 		}
 	}
 
@@ -1828,7 +1886,7 @@ open class UICalibrator : UIView {
 		if let slider = source {
 //			print("slider value=\(String(describing: slider.value))")
 			let row = slider.tag
-			selectRow(index: row)
+			select(row: row)
 			self.setValue(float: slider.value)
 		}
 	}
@@ -1849,7 +1907,7 @@ open class UICalibrator : UIView {
 			case .began, .changed, .ended:
 
 				if let index = recognizer.view?.tag {
-					self.selectRow(index: index)
+					self.select(row: index)
 				}
 
 			default:
@@ -2481,7 +2539,7 @@ open class UICalibrator : UIView {
 //							guard let row = row else { return }
 							guard let variable = variable else { return }
 
-							self.selectRow(index: index)
+							self.select(row: index)
 
 							self.root?.presentAlertForInput(title		: variable.title,
 															message		: "Enter new value",
@@ -2529,7 +2587,7 @@ open class UICalibrator : UIView {
 			}
 		}
 
-		selectRow(index: selectedVariableIndex)
+		select(row: selectedVariableIndex)
 
 		self.animated = false
 		
@@ -2694,7 +2752,7 @@ open class UICalibrator : UIView {
 				updateUI(row: sliderRows[index], variable: variable)
 			}
 
-			selectRow(index: selectedVariableIndex)
+			select(row: selectedVariableIndex)
 
 			for (button,label,operation) in buttonOperationData {
 				button.isHidden = operation == nil
@@ -2705,7 +2763,7 @@ open class UICalibrator : UIView {
 	}
 
 
-	private func selectRow(index: Int) {
+	public func select(row index: Int) {
 
 		let index0 = currentProperty.selectedIndex
 
