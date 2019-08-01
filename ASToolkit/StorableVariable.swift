@@ -501,20 +501,22 @@ open class StorableVariable : Codable {
 	public var variableForUIColor		: VariableForUIColor! = nil
 	public var variableForUIFont		: VariableForUIFont! = nil
 
-	public var valueForFloat			: Float! 	{ return variableForFloat!.value }
-	public var valueForString			: String! 	{ return variableForString!.value }
-	public var valueForUIColor			: UIColor! 	{ return variableForUIColor!.value.toUIColor() }
-	public var valueForUIFont			: UIFont! 	{ return variableForUIFont!.value.toUIFont() }
+	public var valueForFloat			: Float! 	{ get { return variableForFloat!.value } set { variableForFloat.value = newValue } }
+	public var valueForString			: String! 	{ get { return variableForString!.value } set { variableForString.value = newValue } }
+	public var valueForUIColor			: UIColor! 	{ get { return variableForUIColor!.value.toUIColor() } set { variableForUIColor.value.fromUIColor(newValue) } }
+	public var valueForUIFont			: UIFont! 	{ get { return variableForUIFont!.value.toUIFont() } set { variableForUIFont.value.fromUIFont(newValue) } }
 
-	public var f						: Float! 	{ return valueForFloat }
-	public var i						: Int! 		{ return valueForFloat?.asInt }
-	public var d						: Double! 	{ return valueForFloat?.asDouble }
-	public var s						: String! 	{ return valueForString }
+	public var b						: Bool! 	{ get { return valueForFloat > 0 } set { variableForFloat.value = newValue ? 1 : 0 } }
+	public var f						: Float! 	{ get { return valueForFloat } set { variableForFloat.value = newValue } }
+	public var i						: Int! 		{ get { return valueForFloat?.asInt } set { variableForFloat.value = newValue.asFloat } }
+	public var d						: Double! 	{ get { return valueForFloat?.asDouble } set { variableForFloat.value = newValue.asFloat } }
+	public var s						: String! 	{ get { return valueForString } set { variableForString.value = newValue } }
 
-	public var asFloat					: Float! 	{ return valueForFloat }
-	public var asInt					: Int! 		{ return valueForFloat?.asInt }
-	public var asDouble					: Double! 	{ return valueForFloat?.asDouble }
-	public var asString					: String! 	{ return valueForString }
+	public var asBool					: Bool! 	{ get { return valueForFloat > 0 } set { variableForFloat.value = newValue ? 1 : 0 } }
+	public var asFloat					: Float! 	{ get { return valueForFloat } set { variableForFloat.value = newValue } }
+	public var asInt					: Int! 		{ get { return valueForFloat?.asInt } set { variableForFloat.value = newValue.asFloat } }
+	public var asDouble					: Double! 	{ get { return valueForFloat?.asDouble } set { variableForFloat.value = newValue.asFloat } }
+	public var asString					: String! 	{ get { return valueForString } set { variableForString.value = newValue } }
 
 
 

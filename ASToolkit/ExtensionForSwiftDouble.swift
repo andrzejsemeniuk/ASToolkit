@@ -59,7 +59,20 @@ extension Double {
 		self = Swift.min(self,v)
 		return self
 	}
-
-
     
+}
+
+extension Double {
+
+	public var asFloat : Float {
+		return Float(self)
+	}
+
+	public var asCGFloat : CGFloat {
+		return CGFloat(self)
+	}
+
+	public var asInt : Int {
+		return Int(self)
+	}
 }
