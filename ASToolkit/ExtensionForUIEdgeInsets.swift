@@ -14,7 +14,7 @@ extension UIEdgeInsets {
     ///
     /// - Parameter all: value for all edges
 	public init(all:CGFloat) {
-        self.init(top:all,left:all,bottom:all,right:all)
+        self.init(top:all,left:all,bottom:-all,right:-all)
     }
     
 	public init(framed v:CGFloat) {
@@ -22,7 +22,7 @@ extension UIEdgeInsets {
 	}
 
 	public init(tlbr:[CGFloat]) {
-		self.init(top:tlbr[0],left:tlbr[1],bottom:tlbr[2],right:tlbr[3])
+		self.init(top:tlbr[0], left:tlbr[1], bottom:tlbr[2], right:tlbr[3])
 	}
 
 	public init(tl:CGFloat, br:CGFloat) {
@@ -62,27 +62,27 @@ extension UIEdgeInsets {
     }
 
 	public init(h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:h)
+		self.init(top:0, left:h, bottom:0, right:-h)
 	}
 
 	public init(lr h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:h)
+		self.init(top:0, left:h, bottom:0, right:-h)
 	}
 
 	public init(v:CGFloat) {
-		self.init(top:v, left:0, bottom:v, right:0)
+		self.init(top:v, left:0, bottom:-v, right:0)
 	}
 
 	public init(tb v:CGFloat) {
-		self.init(top:v, left:0, bottom:v, right:0)
+		self.init(top:v, left:0, bottom:-v, right:0)
 	}
 
 	public init(h:CGFloat, v:CGFloat) {
-		self.init(top:v, left:h, bottom:v, right:h)
+		self.init(top:v, left:h, bottom:-v, right:-h)
 	}
 
 	public init(v:CGFloat, h:CGFloat) {
-		self.init(top:v, left:h, bottom:v, right:h)
+		self.init(top:v, left:h, bottom:-v, right:-h)
 	}
 }
 
@@ -95,6 +95,46 @@ extension UIEdgeInsets {
 		bottom = 0
 	}
 
+	public mutating func set(w: CGFloat, h: CGFloat? = nil) {
+		self.left = w
+		self.right = w
+		if let h = h {
+			self.top = h
+			self.bottom = h
+		}
+	}
+
+	public mutating func set(h: CGFloat, w: CGFloat? = nil) {
+		self.top = h
+		self.bottom = h
+		if let w = w {
+			self.left = w
+			self.right = w
+		}
+	}
+
+	public mutating func set(all: CGFloat) {
+		set(w: all, h: all)
+	}
+
+	public mutating func set(left	: CGFloat? = nil,
+							 right	: CGFloat? = nil,
+							 top	: CGFloat? = nil,
+							 bottom	: CGFloat? = nil)
+	{
+		if let left = left {
+			self.left = left
+		}
+		if let right = right {
+			self.right = right
+		}
+		if let top = top {
+			self.top = top
+		}
+		if let bottom = bottom {
+			self.bottom = bottom
+		}
+	}
 }
 
 

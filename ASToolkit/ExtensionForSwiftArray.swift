@@ -74,6 +74,16 @@ public extension Array
 	}
 }
 
+extension Array {
+
+	public init(creating: ()->Element, count: Int) {
+		self.init()
+		count.loop {
+			self.append(creating())
+		}
+	}
+}
+
 
 extension Array where Element == Character {
     
@@ -242,6 +252,17 @@ extension Array where Element: Equatable {
 		return false
 	}
 
+}
+
+extension Array {
+
+	public func compacted() -> [Element] {
+//		return self.filter({ $0 != nil }).map { $0! })
+		return self.compactMap({
+			return $0
+		})
+	}
+	
 }
 
 extension Array {

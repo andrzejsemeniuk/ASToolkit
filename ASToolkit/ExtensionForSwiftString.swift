@@ -202,3 +202,35 @@ extension String {
     }
 
 }
+
+
+extension String {
+
+	public func matches(regex: String) -> Bool {
+		return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+	}
+
+	public func substring(regex: String) -> Substring? {
+		if let range = self.range(of: regex, options: .regularExpression, range: nil, locale: nil) {
+			return self[range]
+			//			return self.substring(from: range.lowerBound.encodedOffset, to: range.upperBound.encodedOffset)
+		}
+		return nil
+	}
+
+	public func escaped() -> String {
+		var r = ""
+		for (_,char) in self.enumerated() {
+			r += "\\\(char)"
+		}
+		return r
+	}
+}
+
+extension String {
+
+	public func ends(with: String) -> Bool {
+		return matches(regex: ".*\(with.escaped())$")
+	}
+
+}

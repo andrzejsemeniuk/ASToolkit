@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Int
 {
@@ -15,7 +16,22 @@ extension Int
     }
     public var isOdd:Bool {
         return self % 2 == 1
-    }    
+    }
+
+	public func loop(_ block: ()->()) {
+		let limit = self
+		for _ in 1...limit {
+			block()
+		}
+	}
+
+	public func counter(_ block: (Int)->()) {
+		let limit = self
+		for index in 0..<limit {
+			block(index)
+		}
+	}
+
 }
 
 extension Int
@@ -58,4 +74,27 @@ extension Int {
 
 extension Int {
     public func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
+}
+
+extension Int {
+	@discardableResult
+	public mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
+		self = (self + increment) % modulo
+		return self
+	}
+}
+
+extension Int {
+
+	public var asFloat : Float {
+		return Float(self)
+	}
+
+	public var asCGFloat : CGFloat {
+		return CGFloat(self)
+	}
+
+	public var asDouble : Double {
+		return Double(self)
+	}
 }

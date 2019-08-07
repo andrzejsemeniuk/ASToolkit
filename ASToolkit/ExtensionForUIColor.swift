@@ -90,7 +90,25 @@ extension UIColor
     public func components_RGB_UInt8_equals(_ another:UIColor) -> Bool {
         return components_RGB_UInt8_equals(another.components_RGBA_UInt8())
     }
-    
+
+
+
+	public typealias WATuple = (white: CGFloat, alpha: CGFloat)
+
+	public var WA : WATuple {
+		let RGBA = self.RGBA
+		return (white: (RGBA.red + RGBA.green + RGBA.blue) / 3.0, alpha: RGBA.alpha)
+	}
+
+	public var arrayOfWA : [CGFloat] {
+		let WA = self.WA
+		return [WA.white, WA.alpha]
+	}
+
+//	public var white : CGFloat { return WA.white }
+//	public var alpha : CGFloat { return WA.alpha }
+
+
     
     public typealias RGBATuple = (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)
     

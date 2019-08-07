@@ -312,7 +312,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
+                    self?.presentAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
                         action?()
                     }
                 }
@@ -330,7 +330,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
+                    self?.presentAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
                         action(result)
                     }
                 }
@@ -348,7 +348,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
+                    self?.presentAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
                         action(result)
                     }
                 }
@@ -534,7 +534,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) { [weak self] in
-                    self?.createAlertForUITextField(field, title:title, message:message) { text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { text in
                         setting.value   = text
                         action?()
                         field.text      = setting.value
@@ -555,7 +555,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Double(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -584,7 +584,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = CGFloat(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -613,7 +613,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Float(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -642,7 +642,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Int(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)

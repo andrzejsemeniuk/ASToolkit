@@ -12,7 +12,12 @@ import UIKit
 extension UIView
 {
 	public var isVisible : Bool {
-		return !isHidden
+		get {
+			return !isHidden
+		}
+		set {
+			isHidden = !newValue
+		}
 	}
 	
     public class func create(withBackgroundColor color:UIColor = .clear, frame:CGRect = CGRect.zero) -> UIView
@@ -21,6 +26,16 @@ extension UIView
         result.backgroundColor = color
         return result
     }
+}
+
+extension UIView
+{
+	public var asUIImage : UIImage {
+		let renderer = UIGraphicsImageRenderer(bounds: bounds)
+		return renderer.image { rendererContext in
+			layer.render(in: rendererContext.cgContext)
+		}
+	}
 }
 
 extension UIView
@@ -74,7 +89,7 @@ extension UIView {
 		NSLayoutConstraint.deactivate(self.constraints)
     }
 
-	@discardableResult open func removeAllConstraints(withCondition condition:(NSLayoutConstraint)->Bool) {
+	open func removeAllConstraints(withCondition condition:(NSLayoutConstraint)->Bool) {
 		constraints.forEach {
 			if condition($0) {
 				$0.isActive = false
@@ -82,7 +97,7 @@ extension UIView {
 		}
 	}
     
-	@discardableResult open func removeAllConstraints(withIdentifier identifier:String) {
+	open func removeAllConstraints(withIdentifier identifier:String) {
 		removeAllConstraints(withCondition:{ constrain in
 			return constrain.identifier == identifier
 		})
@@ -152,211 +167,211 @@ extension UIView {
     }
     
 
-    @discardableResult open func constrainCenterX(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+	@discardableResult open func constrainCenterX(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
         let r = self.centerXAnchor.constraint(equalTo: to.centerXAnchor, constant:withMargin)
-		r.identified(withIdentifier).isActive = true
+		r.identified(withIdentifier).isActive = activate
 		return r
     }
     
-    @discardableResult open func constrainCenterY(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainCenterY(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
         let r = self.centerYAnchor.constraint(equalTo: to.centerYAnchor, constant:withMargin)
-		r.identified(withIdentifier).isActive = true
+		r.identified(withIdentifier).isActive = activate
 		return r
     }
     
-	@discardableResult open func constrainCenter(to:UIView, withIdentifier:String? = nil) -> (x:NSLayoutConstraint, y:NSLayoutConstraint) {
-		return (x:self.constrainCenterX(to: to, withIdentifier:withIdentifier),
-				y:self.constrainCenterY(to: to, withIdentifier:withIdentifier))
+	@discardableResult open func constrainCenter(to:UIView, withIdentifier:String? = nil, activate: Bool = true) -> (x:NSLayoutConstraint, y:NSLayoutConstraint) {
+		return (x:self.constrainCenterX(to: to, withIdentifier:withIdentifier, activate: activate),
+				y:self.constrainCenterY(to: to, withIdentifier:withIdentifier, activate: activate))
     }
     
-    @discardableResult open func constrainCenterToSuperview(withIdentifier:String? = nil) -> (x:NSLayoutConstraint, y:NSLayoutConstraint)? {
+    @discardableResult open func constrainCenterToSuperview(withIdentifier:String? = nil, activate: Bool = true) -> (x:NSLayoutConstraint, y:NSLayoutConstraint)? {
         if let superview = superview {
-            return constrainCenter(to:superview, withIdentifier:withIdentifier)
+            return constrainCenter(to:superview, withIdentifier:withIdentifier, activate: activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainCenterXToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterXToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         if let superview = superview {
-            return constrainCenterX(to:superview, withMargin:withMargin, withIdentifier:withIdentifier)
+            return constrainCenterX(to:superview, withMargin:withMargin, withIdentifier:withIdentifier, activate: activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainCenterYToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterYToSuperview(withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         if let superview = superview {
-            return constrainCenterY(to:superview, withMargin:withMargin, withIdentifier:withIdentifier)
+            return constrainCenterY(to:superview, withMargin:withMargin, withIdentifier:withIdentifier, activate: activate)
         }
 		return nil
     }
     
-	@discardableResult open func constrainTopLeftCornerToSuperview(withIdentifier:String? = nil) -> (top:NSLayoutConstraint,left:NSLayoutConstraint)? {
+	@discardableResult open func constrainTopLeftCornerToSuperview(withIdentifier:String? = nil, activate: Bool = true) -> (top:NSLayoutConstraint,left:NSLayoutConstraint)? {
         if let superview = superview {
             self.translatesAutoresizingMaskIntoConstraints=false
 			return (
-				top		: self.topAnchor.constraint(equalTo: superview.topAnchor).identified(withIdentifier).activated(),
-				left	: self.leftAnchor.constraint(equalTo: superview.leftAnchor).identified(withIdentifier).activated()
+				top		: self.topAnchor.constraint(equalTo: superview.topAnchor).identified(withIdentifier).activated(activate),
+				left	: self.leftAnchor.constraint(equalTo: superview.leftAnchor).identified(withIdentifier).activated(activate)
 			)
         }
 		return nil
     }
     
-	@discardableResult open func constrainWidthToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0) -> NSLayoutConstraint? {
+	@discardableResult open func constrainWidthToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0, activate: Bool = true) -> NSLayoutConstraint? {
         if let superview = superview {
             self.translatesAutoresizingMaskIntoConstraints=false
-			return self.widthAnchor.constraint(equalTo: superview.widthAnchor).extended(withMargin).identified(withIdentifier).activated()
+			return self.widthAnchor.constraint(equalTo: superview.widthAnchor).extended(withMargin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainHeightToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0) -> NSLayoutConstraint? {
+    @discardableResult open func constrainHeightToSuperview(withIdentifier:String? = nil, withMargin:CGFloat = 0, activate: Bool = true) -> NSLayoutConstraint? {
         if let superview = superview {
             self.translatesAutoresizingMaskIntoConstraints=false
-            return self.heightAnchor.constraint(equalTo: superview.heightAnchor).extended(withMargin).identified(withIdentifier).activated()
+            return self.heightAnchor.constraint(equalTo: superview.heightAnchor).extended(withMargin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-	@discardableResult open func constrainSizeToSuperview(withIdentifier:String? = nil) -> (width:NSLayoutConstraint?,height:NSLayoutConstraint?) {
+	@discardableResult open func constrainSizeToSuperview(withIdentifier:String? = nil, activate: Bool = true) -> (width:NSLayoutConstraint?,height:NSLayoutConstraint?) {
 		return (
-			width	: constrainWidthToSuperview(withIdentifier:withIdentifier),
-			height	: constrainHeightToSuperview(withIdentifier:withIdentifier)
+			width	: constrainWidthToSuperview(withIdentifier:withIdentifier, activate: activate),
+			height	: constrainHeightToSuperview(withIdentifier:withIdentifier, activate: activate)
 		)
     }
     
-    @discardableResult open func constrainSizeToFrameSize(withIdentifier:String? = nil) -> (width:NSLayoutConstraint?,height:NSLayoutConstraint?) {
+    @discardableResult open func constrainSizeToFrameSize(withIdentifier:String? = nil, activate: Bool = true) -> (width:NSLayoutConstraint?,height:NSLayoutConstraint?) {
         self.translatesAutoresizingMaskIntoConstraints=false
 		return (
-			width	: self.widthAnchor.constraint(equalToConstant: frame.width).identified(withIdentifier).activated(),
-			height	: self.heightAnchor.constraint(equalToConstant: frame.height).identified(withIdentifier).activated()
+			width	: self.widthAnchor.constraint(equalToConstant: frame.width).identified(withIdentifier).activated(activate),
+			height	: self.heightAnchor.constraint(equalToConstant: frame.height).identified(withIdentifier).activated(activate)
 		)
     }
 
     
     
-    @discardableResult open func constrainTopToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainTopToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.topAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.topAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
 
-    @discardableResult open func constrainBottomToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainBottomToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
 
-    @discardableResult open func constrainLeftToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainLeftToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainRightToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainRightToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated()
-        }
-		return nil
-    }
-
-    
-    
-    @discardableResult open func constrainTopToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        if let superview = superview {
-            return self.topAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated()
-        }
-		return nil
-    }
-    
-    @discardableResult open func constrainBottomToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        if let superview = superview {
-            return self.bottomAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
 
-    @discardableResult open func constrainLeftToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    
+    
+    @discardableResult open func constrainTopToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.leftAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.topAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainRightToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainBottomToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.rightAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.bottomAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
+        }
+		return nil
+    }
+
+    @discardableResult open func constrainLeftToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            return self.leftAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
+        }
+		return nil
+    }
+    
+    @discardableResult open func constrainRightToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        if let superview = superview {
+            return self.rightAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
     
     
-	@discardableResult open func constrainToSuperview(withInsets insets:UIEdgeInsets? = nil, withIdentifier:String? = nil) -> (top:NSLayoutConstraint?,left:NSLayoutConstraint?,bottom:NSLayoutConstraint?,right:NSLayoutConstraint?) {
+	@discardableResult open func constrainToSuperview(withInsets insets:UIEdgeInsets? = nil, withIdentifier:String? = nil, activate: Bool = true) -> (top:NSLayoutConstraint?,left:NSLayoutConstraint?,bottom:NSLayoutConstraint?,right:NSLayoutConstraint?) {
 		if let insets = insets {
 			return (
-				top		: constrainTopToSuperviewTop          (withMargin: insets.top, withIdentifier:withIdentifier),
-				left	: constrainLeftToSuperviewLeft        (withMargin: insets.left, withIdentifier:withIdentifier),
-				bottom	: constrainBottomToSuperviewBottom    (withMargin: insets.bottom, withIdentifier:withIdentifier),
-				right	: constrainRightToSuperviewRight      (withMargin: insets.right, withIdentifier:withIdentifier)
+				top		: constrainTopToSuperviewTop          (withMargin: insets.top, withIdentifier:withIdentifier, activate: activate),
+				left	: constrainLeftToSuperviewLeft        (withMargin: insets.left, withIdentifier:withIdentifier, activate: activate),
+				bottom	: constrainBottomToSuperviewBottom    (withMargin: insets.bottom, withIdentifier:withIdentifier, activate: activate),
+				right	: constrainRightToSuperviewRight      (withMargin: insets.right, withIdentifier:withIdentifier, activate: activate)
 			)
 		}
 		else {
 			return (
-				top		: constrainTopToSuperviewTop(withIdentifier:withIdentifier),
-				left	: constrainLeftToSuperviewLeft(withIdentifier:withIdentifier),
-				bottom	: constrainBottomToSuperviewBottom(withIdentifier:withIdentifier),
-				right	: constrainRightToSuperviewRight(withIdentifier:withIdentifier)
+				top		: constrainTopToSuperviewTop(withIdentifier:withIdentifier, activate: activate),
+				left	: constrainLeftToSuperviewLeft(withIdentifier:withIdentifier, activate: activate),
+				bottom	: constrainBottomToSuperviewBottom(withIdentifier:withIdentifier, activate: activate),
+				right	: constrainRightToSuperviewRight(withIdentifier:withIdentifier, activate: activate)
 			)
 		}
 	}
 
-    @discardableResult open func constrainToSuperview(withMargins insets:UIEdgeInsets, withIdentifier:String? = nil) -> (top:NSLayoutConstraint?,bottom:NSLayoutConstraint?,left:NSLayoutConstraint?,right:NSLayoutConstraint?) {
-        return constrainToSuperview(withInsets: insets, withIdentifier: withIdentifier)
+    @discardableResult open func constrainToSuperview(withMargins insets:UIEdgeInsets, withIdentifier:String? = nil, activate: Bool = true) -> (top:NSLayoutConstraint?,bottom:NSLayoutConstraint?,left:NSLayoutConstraint?,right:NSLayoutConstraint?) {
+		return constrainToSuperview(withInsets: insets, withIdentifier: withIdentifier, activate: activate)
     }
     
     
     
-    @discardableResult open func constrainCenterYToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterYToSuperviewTop(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.centerYAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.centerYAnchor.constraint(equalTo: superview.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainCenterYToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterYToSuperviewBottom(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.centerYAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.centerYAnchor.constraint(equalTo: superview.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainCenterXToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterXToSuperviewLeft(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.centerXAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.centerXAnchor.constraint(equalTo: superview.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
     
-    @discardableResult open func constrainCenterXToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint? {
+    @discardableResult open func constrainCenterXToSuperviewRight(withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint? {
         self.translatesAutoresizingMaskIntoConstraints=false
         if let superview = superview {
-            return self.centerXAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated()
+            return self.centerXAnchor.constraint(equalTo: superview.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
         }
 		return nil
     }
@@ -364,150 +379,241 @@ extension UIView {
     
     
     
-    @discardableResult open func constrainTopToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainTopToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.topAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.topAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainBottomToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainBottomToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.bottomAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.bottomAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainLeftToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainLeftToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.leftAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.leftAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainRightToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainRightToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.rightAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.rightAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
 
     
     
     
-    @discardableResult open func constrainTopToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainTopToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.topAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.topAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainBottomToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainBottomToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.bottomAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.bottomAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-	@discardableResult open func constrainLeftToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+	@discardableResult open func constrainLeftToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.leftAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.leftAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainRightToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainRightToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.rightAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.rightAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
 
     
     
     
-    @discardableResult open func constrainCenterYToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainCenterYToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.centerYAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.centerYAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-	@discardableResult open func constrainCenterYToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+	@discardableResult open func constrainCenterYToTop(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
 		self.translatesAutoresizingMaskIntoConstraints=false
-		return self.centerYAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated()
+		return self.centerYAnchor.constraint(equalTo: of.topAnchor, constant: margin).identified(withIdentifier).activated(activate)
 	}
 
-    @discardableResult open func constrainCenterYToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainCenterYToBottom(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.centerYAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.centerYAnchor.constraint(equalTo: of.bottomAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-	@discardableResult open func constrainCenterXToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+	@discardableResult open func constrainCenterXToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
 		self.translatesAutoresizingMaskIntoConstraints=false
-		return self.centerXAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated()
+		return self.centerXAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated(activate)
 	}
 
-    @discardableResult open func constrainCenterXToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainCenterXToLeft(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.centerXAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated()
+        return self.centerXAnchor.constraint(equalTo: of.leftAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
     
-    @discardableResult open func constrainCenterXToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
+    @discardableResult open func constrainCenterXToRight(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
         self.translatesAutoresizingMaskIntoConstraints=false
-        return self.centerXAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated()
-    }
-
-    
-    
-    
-    @discardableResult open func constrainTopToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.topAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrainBottomToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.bottomAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrainLeftToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.leftAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrainRightToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.rightAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated()
-    }
-    
-    
-    
-    
-
-    @discardableResult open func constrain(width:CGFloat, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.widthAnchor.constraint(equalToConstant: width).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrain(height:CGFloat, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.heightAnchor.constraint(equalToConstant: height).identified(withIdentifier).activated()
-    }
-    
-
-    @discardableResult open func constrainWidth(to:CGFloat, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.widthAnchor.constraint(equalToConstant: to).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrainHeight(to:CGFloat, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.heightAnchor.constraint(equalToConstant: to).identified(withIdentifier).activated()
-    }
-    
-    
-    @discardableResult open func constrainWidth(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.widthAnchor.constraint(equalTo:to.widthAnchor, constant:withMargin).identified(withIdentifier).activated()
-    }
-    
-    @discardableResult open func constrainHeight(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil) -> NSLayoutConstraint {
-        self.translatesAutoresizingMaskIntoConstraints=false
-        return self.heightAnchor.constraint(equalTo:to.heightAnchor, constant: withMargin).identified(withIdentifier).activated()
+        return self.centerXAnchor.constraint(equalTo: of.rightAnchor, constant: margin).identified(withIdentifier).activated(activate)
     }
 
-	@discardableResult open func constrain(size:CGSize, withIdentifier:String? = nil) -> (width:NSLayoutConstraint,height:NSLayoutConstraint) {
-		return (width:constrain(width:size.width,withIdentifier:withIdentifier),height:constrain(height:size.height,withIdentifier:withIdentifier))
+    
+    
+    
+    @discardableResult open func constrainTopToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.topAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrainBottomToCenterY(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.bottomAnchor.constraint(equalTo: of.centerYAnchor, constant: margin).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrainLeftToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.leftAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrainRightToCenterX(of:UIView, withMargin margin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.rightAnchor.constraint(equalTo: of.centerXAnchor, constant: margin).identified(withIdentifier).activated(activate)
+    }
+    
+    
+    
+    
+
+    @discardableResult open func constrain(width:CGFloat, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.widthAnchor.constraint(equalToConstant: width).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrain(height:CGFloat, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.heightAnchor.constraint(equalToConstant: height).identified(withIdentifier).activated(activate)
+    }
+    
+
+    @discardableResult open func constrainWidth(to:CGFloat, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.widthAnchor.constraint(equalToConstant: to).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrainHeight(to:CGFloat, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.heightAnchor.constraint(equalToConstant: to).identified(withIdentifier).activated(activate)
+    }
+    
+    
+    @discardableResult open func constrainWidth(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.widthAnchor.constraint(equalTo:to.widthAnchor, constant:withMargin).identified(withIdentifier).activated(activate)
+    }
+    
+    @discardableResult open func constrainHeight(to:UIView, withMargin:CGFloat = 0, withIdentifier:String? = nil, activate: Bool = true) -> NSLayoutConstraint {
+        self.translatesAutoresizingMaskIntoConstraints=false
+        return self.heightAnchor.constraint(equalTo:to.heightAnchor, constant: withMargin).identified(withIdentifier).activated(activate)
+    }
+
+	@discardableResult open func constrain(size:CGSize, withIdentifier:String? = nil, activate: Bool = true) -> (width:NSLayoutConstraint,height:NSLayoutConstraint) {
+		return (width:constrain(width:size.width,withIdentifier:withIdentifier, activate: activate),height:constrain(height:size.height,withIdentifier:withIdentifier, activate: activate))
 	}
 
 
 }
 
 
+extension UIView {
+
+
+
+	open func constrain(views: [UIView], producer: (_ previous: UIView, _ current: UIView)->NSLayoutConstraint) -> [NSLayoutConstraint] {
+		var previous = self
+		var r : [NSLayoutConstraint] = []
+		for current in views {
+//			current.translatesAutoresizingMaskIntoConstraints=false
+			r.append(producer(previous,current))
+			previous = current
+		}
+		return r
+	}
+
+
+
+	@discardableResult open func constrainViewsCenterXToCenterX(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterX(to: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+	@discardableResult open func constrainViewsCenterYToCenterY(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterY(to: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+
+
+	@discardableResult open func constrainViewsCenterXToRight(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterXToRight(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+	@discardableResult open func constrainViewsCenterXToLeft(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterXToLeft(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+
+
+	@discardableResult open func constrainViewsLeftToRight(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainLeftToRight(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+	@discardableResult open func constrainViewsRightToLeft(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainRightToLeft(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+
+
+
+	@discardableResult open func constrainViewsCenterYToTop(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterYToTop(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+	@discardableResult open func constrainViewsCenterYToBottom(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainCenterYToBottom(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+
+
+
+	@discardableResult open func constrainViewsBottomToTop(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainBottomToTop(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+	@discardableResult open func constrainViewsTopToBottom(for views: [UIView], offset: CGFloat = 0, activate: Bool = true) -> [NSLayoutConstraint] {
+		return constrain(views: views) { previous, current in
+			current.constrainTopToBottom(of: previous, withMargin: offset).activated(activate)
+		}
+	}
+
+
+
+
+}
 
 
 
@@ -707,14 +813,48 @@ extension UIView {
 
 extension UIView {
 
-	open func subview(withTag:Int) -> UIView? {
-		var result:UIView?
-		if let index = self.subviews.index(where: {
-			$0.tag == withTag
-		}) {
-			result = self.subviews[index]
+	public class func schedule(_ block: @escaping ()->()) {
+		DispatchQueue.main.async {
+			block()
 		}
-		return result
+	}
+
+	public func schedule(_ block: @escaping ()->()) {
+		UIView.schedule(block)
+	}
+
+	public func scheduleNeedsDisplay(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsDisplay()
+			block?()
+		}
+	}
+
+	public func scheduleNeedsLayout(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsLayout()
+			block?()
+		}
+	}
+
+	public func scheduleNeedsUpdateConstraints(_ block: (()->())? = nil) {
+		UIView.schedule { [weak self] in
+			self?.setNeedsUpdateConstraints()
+			block?()
+		}
+	}
+
+}
+
+
+extension UIView {
+
+	open func subview(withTag:Int) -> UIView? {
+		return subviews.first { $0.tag == withTag }
+	}
+
+	open func subviews(withTag:Int) -> [UIView] {
+		return subviews.filter { $0.tag == withTag }
 	}
 
     open func removeAllSubviews() {

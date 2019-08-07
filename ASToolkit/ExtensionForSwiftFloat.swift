@@ -41,15 +41,36 @@ extension Float
 
 extension Float {
     
-    public static var random:Float {
+    public static var random: Float {
         return Float(arc4random()) / 0xFFFFFFFF
     }
     public static func random(min: Float, max: Float) -> Float {
         return Float.random * (max - min) + min
     }
-    
+
+	public static var maximum : Float {
+		return .greatestFiniteMagnitude
+	}
+	public static var minimum : Float {
+		return -maximum
+	}
+
 }
 
+extension Float {
+
+	public var asInt : Int {
+		return Int(self)
+	}
+
+	public var asCGFloat : CGFloat {
+		return CGFloat(self)
+	}
+
+	public var asDouble : Double {
+		return Double(self)
+	}
+}
 
 
 

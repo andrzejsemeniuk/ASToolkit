@@ -141,6 +141,104 @@ extension UIFont {
 
 }
 
+extension UIFont {
+
+	public var fontFace : String {
+		return fontName.split(familyName).last ?? ""
+	}
+
+	static public func compactedFamilyName(from: String) -> String {
+		return from.replacingOccurrences(of: " ", with: "")
+	}
+
+	static public var compactedFamilyNames : [String] = {
+		var r : [String] = []
+
+		for family in UIFont.familyNames {
+			r.append(UIFont.compactedFamilyName(from:family))
+		}
+
+		return r.sorted()
+	}()
+
+	static public var faceNames : [String] = {
+		var faces : Set<String> = .init()
+
+		faces.insert("")
+
+		// "TimesNewRomanPS-Italic"
+		// "TimesNewRoman" = condensed family name
+		// "PS" = "Post Script" = TM qualifier
+		// "Italic" = face name
+		// FamilyName + [TM Qualifier] + ['-' + FaceName]
+
+		// given an extended font name, get family/face
+		for family in UIFont.familyNames {
+			for name in UIFont.fontNames(forFamilyName: family) {
+				let chunks = name.split("-")
+				if let suffix = chunks[safe:1] {
+//					print("name=\(name) suffix=\(suffix)")
+					faces.insert(suffix)
+				}
+//				let family = UIFont.compactedFamilyName(from: family)
+//				faces.insert(name.split(family).last ?? "")
+			}
+		}
+
+		return faces.asArray.sorted()
+	}()
+
+	static public var fontNames : [String] = {
+		var names : [String] = []
+
+		for family in UIFont.familyNames {
+			names += UIFont.fontNames(forFamilyName: family)
+		}
+
+		return names.sorted()
+	}()
+
+	public func siblings() -> [UIFont] {
+		var r = [UIFont]()
+		for phrase in UIFont.faceNames {
+			r += self.siblings(withPhrase: phrase)
+		}
+		return r
+	}
+
+	static public var familiesAndNames : [String : [String]] = {
+		var r : [String : [String]] = [:]
+		for family in UIFont.familyNames {
+			r[family] = UIFont.fontNames(forFamilyName: family)
+		}
+		return r
+	}()
+
+	static public func familiesAndNames(families: [String], names phrases:[String]) -> [String : [String]] {
+		var r : [String : [String]] = [:]
+		for (family,names) in UIFont.familiesAndNames {
+			var v : [String] = []
+
+			if families.isEmpty || families.contains(family) {
+				v = phrases.isEmpty ? names : names.filter({
+					for phrase in phrases {
+						if $0.contains(phrase) {
+							return true
+						}
+					}
+					return false
+				})
+			}
+
+			if v.isNotEmpty {
+				r[family, default: []].append(contentsOf: v)
+			}
+		}
+		return r
+	}
+}
+
+
 public func + (lhs:UIFont, rhs:CGFloat) -> UIFont {
     return lhs.withSize(lhs.pointSize + rhs)
 }
