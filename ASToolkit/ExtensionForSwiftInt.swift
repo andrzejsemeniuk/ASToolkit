@@ -28,8 +28,10 @@ extension Int
     }
     public static func random(min: Int, max: Int) -> Int {
         return Int.random(n:max - min + 1) + min
-        //Int(arc4random_uniform(UInt32(max - min + 1))) + min }
-    }    
+    }
+    public static func random(min: Int, upto: Int) -> Int {
+        return Int.random(n:upto - min) + min
+    }
 }
 
 extension Int {

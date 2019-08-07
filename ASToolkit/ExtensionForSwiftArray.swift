@@ -262,6 +262,12 @@ extension Array {
 
 extension Array {
 
+    public mutating func assign(_ value:Element) {
+        for i in 0..<count {
+            self[i] = value
+        }
+    }
+
 	public func forEachAssigned(_ block:(Element)->Element) -> [Element] {
 		var result = Array<Element>(self)
 		for i in 0..<count {
@@ -311,15 +317,16 @@ extension Array {
 }
 
 extension Array {
+    
+    public var random : Element {
+        return self[ Int.random(n: count) ]
+    }
 
-	public mutating func assign(_ value:Element) {
-		for i in 0..<count {
-			self[i] = value
-		}
-	}
+    public var pick : Element {
+        return random
+    }
 
 }
-
 extension Array {
 
 	public func indexes(_ indexes:Indexes, validate:Bool = true) -> [Int] {
