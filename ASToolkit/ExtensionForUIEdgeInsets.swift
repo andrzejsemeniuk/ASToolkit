@@ -62,27 +62,27 @@ extension UIEdgeInsets {
     }
 
 	public init(h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:-h)
+		self.init(top:0, left:h, bottom:0, right:h)
 	}
 
 	public init(lr h:CGFloat) {
-		self.init(top:0, left:h, bottom:0, right:-h)
+		self.init(top:0, left:h, bottom:0, right:h)
 	}
 
 	public init(v:CGFloat) {
-		self.init(top:v, left:0, bottom:-v, right:0)
+		self.init(top:v, left:0, bottom:v, right:0)
 	}
 
 	public init(tb v:CGFloat) {
-		self.init(top:v, left:0, bottom:-v, right:0)
+		self.init(top:v, left:0, bottom:v, right:0)
 	}
 
 	public init(h:CGFloat, v:CGFloat) {
-		self.init(top:v, left:h, bottom:-v, right:-h)
+		self.init(top:v, left:h, bottom:v, right:h)
 	}
 
 	public init(v:CGFloat, h:CGFloat) {
-		self.init(top:v, left:h, bottom:-v, right:-h)
+		self.init(top:v, left:h, bottom:v, right:h)
 	}
 }
 
