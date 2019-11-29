@@ -255,6 +255,7 @@
 		57DBB0231F4293E400AF2BEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
+		57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUI.swift; sourceTree = "<group>"; };
 		57F0A0C81F564EE30015169D /* ASTookitShowcase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASTookitShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0A0CA1F564EE30015169D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57F0A0CC1F564EE30015169D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -391,6 +392,7 @@
 				570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */,
 				778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */,
 				570FC28A1F1124A300FEAC03 /* ExtensionForSwiftUInt.swift */,
+				57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */,
 				57F91CB51F38A8DC0021230B /* ExtensionForSwiftUInt64.swift */,
 				77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */,
 				5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */,
@@ -635,6 +637,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
