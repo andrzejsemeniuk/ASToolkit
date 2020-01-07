@@ -144,6 +144,10 @@ extension String {
     }
  
     public func countOf(substring:String) -> Int {
+        return split(substring).count-1
+    }
+    
+    public func countOf0(substring:String) -> Int {
         var r = 0
         var i = 0
         let limit = self.length - substring.length + 1
