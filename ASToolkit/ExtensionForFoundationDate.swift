@@ -66,6 +66,7 @@ extension Date {
     public func year   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.year, from: self) }
     public func month  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.month, from: self) }
     public func day    (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.day, from: self) }
+    public func dayOfYear    (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return Int(Date.dateFormatterForDayOfYear.string(from: self))! }
     public func hour   (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.hour, from: self) }
     public func minute (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.minute, from: self) }
     public func second (withCalendar calendar:Calendar = Calendar(identifier: .iso8601)) -> Int { return calendar.component(.second, from: self) }
@@ -73,9 +74,11 @@ extension Date {
         return Int(Int64(timeIntervalSinceReferenceDate * 1000) % 1000)
     }
 
+    public static let dateFormatterForDayOfYear : DateFormatter = .init(withFormat: "DDD")
 }
 
 extension Date {
+    
     public static let iso8601Formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
