@@ -21,6 +21,10 @@ extension String
     public var empty: Bool {
         return length < 1
     }
+    
+    public var isNotEmpty : Bool {
+        return !isEmpty
+    }
 }
 
 extension String
