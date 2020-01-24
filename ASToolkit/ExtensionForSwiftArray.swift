@@ -445,3 +445,48 @@ public func -= <T:Equatable>(lhs: inout Array<T>, rhs: T) {
 	lhs = lhs - rhs
 }
 
+
+public extension Array {
+    
+    func all(where q: (Element)->Bool) -> Bool {
+        for e in self {
+            if !q(e) {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func some(where q: (Element)->Bool) -> Bool {
+        for e in self {
+            if q(e) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func most(where q: (Element)->Bool) -> Bool {
+        var count = 0
+        let half = self.count/2
+        for e in self {
+            if q(e) {
+                count += 1
+                if count > half {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func none(where q: (Element)->Bool) -> Bool {
+        for e in self {
+            if q(e) {
+                return false
+            }
+        }
+        return true
+    }
+
+}
