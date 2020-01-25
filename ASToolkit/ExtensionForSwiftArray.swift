@@ -84,6 +84,28 @@ extension Array {
 	}
 }
 
+extension Array {
+    
+    mutating public func rotate(_ amount: Int) {
+        
+        if isEmpty || amount == 0 {
+            return
+        }
+        var amount1 = abs(amount)
+        amount1 = amount1 % count
+        if amount > 0 {
+            amount1 = count-amount1
+        }
+        self = Array(self[amount1..<count] + self[0..<amount1])
+    }
+    
+    public func rotated(_ amount: Int) -> Self {
+        var r = self
+        r.rotate(amount)
+        return r
+    }
+}
+
 
 extension Array where Element == Character {
     

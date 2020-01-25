@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import ASToolkit
 
 //func ==<Element : Equatable> (lhs: [[Element]], rhs: [[Element]]) -> Bool {
 //	return lhs.count == rhs.count && !zip(lhs, rhs).contains {$0 != $1 }
@@ -114,4 +115,30 @@ class TestExtensionForSwiftArray: XCTestCase {
         }
     }
     
+    func testRotate() {
+//        XCTAssertTrue([].rotated(-2) == [])
+
+        XCTAssertTrue([1,2,3].rotated(0) == [1,2,3])
+
+        XCTAssertTrue([1,2,3].rotated(1) == [3,1,2])
+        XCTAssertTrue([1,2,3].rotated(-1) == [2,3,1])
+
+        XCTAssertTrue([1,2,3].rotated(2) == [2,3,1])
+        XCTAssertTrue([1,2,3].rotated(-2) == [3,1,2])
+
+        XCTAssertTrue([1].rotated(-2) == [1])
+        XCTAssertTrue([1].rotated(2) == [1])
+
+        XCTAssertTrue([1,2].rotated(6) == [1,2])
+        XCTAssertTrue([1,2].rotated(7) == [2,1])
+        XCTAssertTrue([1,2].rotated(-6) == [1,2])
+        XCTAssertTrue([1,2].rotated(-7) == [2,1])
+
+        XCTAssertTrue([1,2,3].rotated(-3) == [1,2,3])
+        XCTAssertTrue([1,2,3].rotated(3) == [1,2,3])
+
+        XCTAssertTrue([1,2,3].rotated(4) == [3,1,2])
+        XCTAssertTrue([1,2,3].rotated(-4) == [2,3,1])
+
+    }
 }
