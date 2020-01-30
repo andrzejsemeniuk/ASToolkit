@@ -11,29 +11,42 @@ import Foundation
 public extension Array
 {
     
-    public var isNotEmpty : Bool {
+    var isNotEmpty : Bool {
         return !isEmpty
     }
 
-	public mutating func clear() {
+    mutating func clear() {
 		self = []
 	}
 
-	public mutating func dump() -> Array {
+    mutating func dump() -> Array {
 		let result = self
 		clear()
 		return result
 	}
 
-    public mutating func trim(to:Int) -> Array {
-        let to = Swift.min(to,count)
-        let result = subarray(from:to, length:count-to)
-        let range = startIndex.advanced(by: to)..<endIndex
+    @discardableResult
+    mutating func trim(to:Int) -> Array {
+        let to = Swift.min(Swift.max(0,to),count)
+        let result = subarray(from:0, length:to)
+        let range = startIndex..<startIndex.advanced(by: to)
         self.removeSubrange(range)
         return result
     }
     
-    public func subarray(from:Int, to:Int) -> Array {
+    @discardableResult
+    mutating func trim(from:Int) -> Array {
+        if count <= from {
+            return []
+        }
+        let from = Swift.min(Swift.max(0,from),count)
+        let result = subarray(from:from, length:count-from)
+        let range = startIndex.advanced(by: from)..<endIndex
+        self.removeSubrange(range)
+        return result
+    }
+    
+    func subarray(from:Int, to:Int) -> Array {
         var result = [Element]()
         for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
             result.append(self[i])
@@ -41,42 +54,42 @@ public extension Array
         return result
     }
     
-    public func subarray(from:Int, length:Int) -> Array {
+    func subarray(from:Int, length:Int) -> Array {
         return subarray(from:from, to:from+length)
     }
     
-    public subscript (safe i:Int) -> Array.Element? {
+    subscript (safe i:Int) -> Array.Element? {
         return 0 <= i && i < self.count ? self[i] : nil
     }
 
-	public func filtered<T>(type:T.Type) -> [T] {
+	func filtered<T>(type:T.Type) -> [T] {
 		return self.filter { $0 is T }.map { $0 as! T }
 	}
 
-	public var indexForPossibleLastElement : Int? {
+	var indexForPossibleLastElement : Int? {
 		return 0 < count ? count-1 : nil
 	}
 
-	public var indexForPossiblePreLastElement : Int? {
+	var indexForPossiblePreLastElement : Int? {
 		return 1 < count ? count-2 : nil
 	}
 
-	public var indexForSafeLastElement : Int {
+	var indexForSafeLastElement : Int {
 		return 0 < count ? count-1 : 0
 	}
 
-	public var indexForSafePreLastElement : Int {
+	var indexForSafePreLastElement : Int {
 		return 1 < count ? count-2 : 0
 	}
 
-	public var preLast : Element? {
+	var preLast : Element? {
 		return self[safe:count-2]
 	}
 }
 
-extension Array {
+public extension Array {
 
-	public init(creating: ()->Element, count: Int) {
+	init(creating: ()->Element, count: Int) {
 		self.init()
 		count.loop {
 			self.append(creating())

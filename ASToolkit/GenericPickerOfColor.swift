@@ -1412,7 +1412,7 @@ open class GenericPickerOfColor : UIView {
             var colors  = colors
             
             while colors.count > capacity {
-                _ = colors.trim(to: capacity)
+                _ = colors.trim(from: capacity)
             }
             while colors.count < capacity {
                 colors.append(.white)
