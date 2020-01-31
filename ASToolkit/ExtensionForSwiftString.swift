@@ -10,7 +10,7 @@
 
 extension String
 {
-    public var substring : Substring {
+    public var asSubstring : Substring {
         return Substring(self)
     }
     
@@ -35,7 +35,7 @@ extension String
     
     public var base64Encoded: String {
         let step1:NSString      = self as NSString
-        let step2:Data        = step1.data(using: String.Encoding.utf8.rawValue)!
+        let step2:Data          = step1.data(using: String.Encoding.utf8.rawValue)!
         let options             = Data.Base64EncodingOptions(rawValue: 0)
         let result:String       = step2.base64EncodedString(options: options)
         
@@ -85,6 +85,35 @@ extension String
     }
     
 }
+
+
+public extension String {
+    
+    func substring(_ i: Int) -> Substring {
+      let idx1 = index(startIndex, offsetBy: i)
+      let idx2 = index(idx1, offsetBy: 1)
+      return self[idx1..<idx2]
+    }
+
+    func substring(_ r: Range<Int>) -> Substring {
+      let start = index(startIndex, offsetBy: r.lowerBound)
+      let end = index(startIndex, offsetBy: r.upperBound)
+      return self[start ..< end]
+    }
+
+    func substring(_ r: CountableClosedRange<Int>) -> Substring {
+      let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+      let endIndex = self.index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+      return self[startIndex...endIndex]
+    }
+    
+    func substring(_ r: PartialRangeFrom<Int>) -> Substring {
+        let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+        return self[startIndex..<self.endIndex]
+    }
+
+}
+
 
 extension String
 {
