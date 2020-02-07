@@ -46,6 +46,20 @@ public extension Array
         return result
     }
     
+    func trimmed(to:Int) -> Array {
+        if count <= to {
+            return []
+        }
+        return subarray(from: to, to: count)
+    }
+    
+    func trimmed(from:Int) -> Array {
+        if from < 1 {
+            return []
+        }
+        return subarray(from: 0, to:from)
+    }
+    
     func subarray(from:Int, to:Int) -> Array {
         var result = [Element]()
         for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
