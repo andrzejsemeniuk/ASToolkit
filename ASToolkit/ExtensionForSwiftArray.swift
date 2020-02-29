@@ -147,6 +147,8 @@ extension Array where Element == Int {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
 
+    public var sum                  : Int           { self.reduce(0, { $0 + $1 }) }
+    
 }
 
 
@@ -155,6 +157,8 @@ extension Array where Element == Float {
     public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+    public var sum                  : Float         { self.reduce(0, { $0 + $1 }) }
     
 }
 
@@ -165,6 +169,8 @@ extension Array where Element == CGFloat {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    public var sum                  : CGFloat       { self.reduce(0, { $0 + $1 }) }
+    
 }
 
 
@@ -173,6 +179,8 @@ extension Array where Element == Double {
     public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+    public var sum                  : Double        { self.reduce(0, { $0 + $1 }) }
     
 }
 
