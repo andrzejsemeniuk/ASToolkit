@@ -60,6 +60,24 @@ public extension Array
         return subarray(from: 0, to:from)
     }
     
+    @discardableResult
+    mutating func keep(to:Int) -> Array {
+        trimmed(from: to)
+    }
+    
+    @discardableResult
+    mutating func keep(from:Int) -> Array {
+        trimmed(to: from)
+    }
+    
+    func kept(to:Int) -> Array {
+        trimmed(from: to)
+    }
+    
+    func kept(from:Int) -> Array {
+        trimmed(to: from)
+    }
+    
     func subarray(from:Int, to:Int) -> Array {
         var result = [Element]()
         for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
