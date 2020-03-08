@@ -133,11 +133,10 @@ extension Array {
     
     mutating public func rotate(_ amount: Int) {
         
-        if isEmpty || amount == 0 {
+        if isEmpty || amount % count == 0 {
             return
         }
-        var amount1 = abs(amount)
-        amount1 = amount1 % count
+        var amount1 = abs(amount) % count
         if amount > 0 {
             amount1 = count-amount1
         }
