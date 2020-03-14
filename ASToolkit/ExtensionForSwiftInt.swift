@@ -97,4 +97,13 @@ extension Int {
 	public var asDouble : Double {
 		return Double(self)
 	}
+    
+    public var pick : Int {
+        return Int.random(n: self)
+    }
+    
+    public var random : Int {
+        return Int.random(n: self)
+    }
+
 }
