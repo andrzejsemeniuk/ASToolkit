@@ -58,6 +58,7 @@
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
 		573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
+		57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */; };
 		5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */; };
 		5762D31C2096639B00B7695B /* ExtensionForUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */; };
 		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
@@ -221,6 +222,7 @@
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
 		573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIViewController.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
+		57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftArraySlice.swift; sourceTree = "<group>"; };
 		5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIApplication.swift; sourceTree = "<group>"; };
 		5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIWindow.swift; sourceTree = "<group>"; };
 		5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolRemovable.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 				570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */,
 				57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */,
 				570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */,
+				57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */,
 				570FC2811F1124A300FEAC03 /* ExtensionForSwiftBool.swift */,
 				570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */,
 				570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */,
@@ -714,6 +717,7 @@
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
 				772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */,
+				57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,

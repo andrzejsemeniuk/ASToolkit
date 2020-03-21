@@ -522,6 +522,10 @@ public func -= <T:Equatable>(lhs: inout Array<T>, rhs: T) {
 
 public extension Array {
     
+    func count(where q: (Element)->Bool) -> Int {
+        self.reduce(0, { $0 + (q($1) ? 1 : 0) } )
+    }
+    
     func all(where q: (Element)->Bool) -> Bool {
         for e in self {
             if !q(e) {
@@ -531,13 +535,21 @@ public extension Array {
         return true
     }
     
-    func some(where q: (Element)->Bool) -> Bool {
+    func some(where q: (Element)->Bool, count: Int = 1) -> Bool {
+        var c = count
         for e in self {
             if q(e) {
-                return true
+                c -= 1
+                if c < 1 {
+                    return true
+                }
             }
         }
         return false
+    }
+    
+    func any(where q: (Element)->Bool) -> Bool {
+        return some(where: q, count: 1)
     }
     
     func most(where q: (Element)->Bool) -> Bool {
