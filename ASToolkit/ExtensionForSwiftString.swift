@@ -271,3 +271,23 @@ extension String {
 	}
 
 }
+
+extension String {
+    
+    public func partitioned(by: (Int,Character)->Bool) -> [Substring] {
+        var r : [Substring] = []
+        var i = 0
+        for (j,c) in self.enumerated() {
+            if by(j,c) {
+                if i < j {
+                    r.append(self[i..<j])
+                    i = j
+                }
+            }
+        }
+        if i < count {
+            r.append(self[i..<count])
+        }
+        return r
+    }
+}
