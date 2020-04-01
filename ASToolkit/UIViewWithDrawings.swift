@@ -105,6 +105,7 @@ extension UIViewWithDrawings {
 	{
 		guard _before || _after else {
 			assert(false)
+            return
 		}
 
 		switch type {
