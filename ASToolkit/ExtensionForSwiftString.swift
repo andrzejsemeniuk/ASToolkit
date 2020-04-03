@@ -264,13 +264,33 @@ extension String {
 	}
 }
 
+//extension String {
+//
+//	public func ends(with: String) -> Bool {
+//		return matches(regex: ".*\(with.escaped())$")
+//	}
+//
+//}
+
 extension String {
-
-	public func ends(with: String) -> Bool {
-		return matches(regex: ".*\(with.escaped())$")
-	}
-
+    
+    public func mismatches(with: String, upto: Int = 0) -> [Int] {
+        
+        let limit = upto > 0 ? max(0,min(upto,min(length,with.length))) : max(0,min(length,with.length))
+        
+        var r : [Int] = []
+        
+        for i in 0..<limit {
+            if self[i] != with[i] {
+                r.append(i)
+            }
+        }
+        
+        return r
+    }
+    
 }
+
 
 extension String {
     

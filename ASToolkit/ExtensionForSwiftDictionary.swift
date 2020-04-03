@@ -38,3 +38,11 @@ extension Dictionary where Key == String, Value == String {
     
 
 }
+
+extension Dictionary {
+    
+    public var isNotEmpty : Bool {
+        !isEmpty
+    }
+    
+}
