@@ -311,3 +311,11 @@ extension String {
         return r
     }
 }
+
+extension String {
+    
+    public func uniqued() -> String {
+        String(Set<Character>(self))
+    }
+    
+}
