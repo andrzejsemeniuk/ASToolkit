@@ -204,6 +204,10 @@ extension String {
         }
         return r
     }
+    
+    public func countOf(character: Character) -> Int {
+        self.reduce(0, { $0 + ($1 == character ? 1 : 0) })
+    }
 }
 
 extension String {

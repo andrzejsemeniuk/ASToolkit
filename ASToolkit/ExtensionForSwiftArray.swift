@@ -520,6 +520,14 @@ public func -= <T:Equatable>(lhs: inout Array<T>, rhs: T) {
 }
 
 
+public extension Array where Element : Equatable {
+    
+    func count(element: Element) -> Int {
+        count(where: { $0 == element })
+    }
+
+}
+
 public extension Array {
     
     func count(where q: (Element)->Bool) -> Int {
