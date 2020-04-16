@@ -9,23 +9,23 @@
 import Foundation
 import CoreGraphics
 
-extension Int
+public extension Int
 {
-    public var isEven:Bool {
+    var isEven:Bool {
         return self % 2 == 0
     }
-    public var isOdd:Bool {
+    var isOdd:Bool {
         return self % 2 == 1
     }
 
-	public func loop(_ block: ()->()) {
+	func loop(_ block: ()->()) {
 		let limit = self
 		for _ in 1...limit {
 			block()
 		}
 	}
 
-	public func counter(_ block: (Int)->()) {
+	func counter(_ block: (Int)->()) {
 		let limit = self
 		for index in 0..<limit {
 			block(index)
@@ -34,76 +34,95 @@ extension Int
 
 }
 
-extension Int
+public extension Int
 {
-    public static var random:Int {
+    static var random:Int {
         return Int.random(n:Int.max)
     }
-    public static func random(n: Int) -> Int {
+    static func random(n: Int) -> Int {
         return Int(arc4random_uniform(UInt32(n)))
     }
-    public static func random(min: Int, max: Int) -> Int {
+    static func random(min: Int, max: Int) -> Int {
         return Int.random(n:max - min + 1) + min
     }
-    public static func random(min: Int, upto: Int) -> Int {
+    static func random(min: Int, upto: Int) -> Int {
         return Int.random(n:upto - min) + min
     }
 }
 
-extension Int {
-    public mutating func advance(by n:Int) {
+public extension Int {
+    mutating func advance(by n:Int) {
         self = self + n
     }
 
-	@discardableResult public mutating func assign(max v:Int) -> Int {
+	@discardableResult mutating func assign(max v:Int) -> Int {
 		self = Swift.max(self,v)
 		return self
 	}
 
-	@discardableResult public mutating func assign(min v:Int) -> Int {
+	@discardableResult mutating func assign(min v:Int) -> Int {
 		self = Swift.min(self,v)
 		return self
 	}
 
 }
 
-extension Int {
-    public var degreesToRadians: Double { return Double(self) * .pi / 180 }
-    public var radiansToDegrees: Double { return Double(self) * 180 / .pi }
+public extension Int {
+    var degreesToRadians: Double { return Double(self) * .pi / 180 }
+    var radiansToDegrees: Double { return Double(self) * 180 / .pi }
 }
 
-extension Int {
-    public func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
+public extension Int {
+
+    func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
+    
+    @discardableResult
+    mutating func clamp(from: Int, to: Int) -> Int {
+        if self < from {
+            self = from
+        } else if self > to {
+            self = to
+        }
+        return self
+    }
+
+    @discardableResult
+    func clamped(from: Int, to: Int) -> Int {
+        Swift.min(to,Swift.max(from,self))
+    }
+
 }
 
-extension Int {
+public extension Int {
 	@discardableResult
-	public mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
+	mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
 		self = (self + increment) % modulo
 		return self
 	}
 }
 
-extension Int {
+public extension Int {
 
-	public var asFloat : Float {
+	var asFloat : Float {
 		return Float(self)
 	}
 
-	public var asCGFloat : CGFloat {
+	var asCGFloat : CGFloat {
 		return CGFloat(self)
 	}
 
-	public var asDouble : Double {
+	var asDouble : Double {
 		return Double(self)
 	}
     
-    public var pick : Int {
+    var pick : Int {
         return Int.random(n: self)
     }
     
-    public var random : Int {
+    var random : Int {
         return Int.random(n: self)
     }
 
 }
+
+

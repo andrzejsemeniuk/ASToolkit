@@ -86,6 +86,7 @@
 		579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */ = {isa = PBXBuildFile; fileRef = 579D100C21D7BC9400FDDA96 /* ObjectiveC.m */; };
 		57A6AC6F1F45EF3E0055341F /* UIViewPile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */; };
 		57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */; };
+		57A847D624488B05001D5E42 /* ExtensionForSwiftEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */; };
 		57AA4C5D1F475DDD005384AD /* ExtensionForUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */; };
 		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
 		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
@@ -250,6 +251,7 @@
 		579D100C21D7BC9400FDDA96 /* ObjectiveC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveC.m; sourceTree = "<group>"; };
 		57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewPile.swift; sourceTree = "<group>"; };
 		57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForUIKitUIColor.swift; sourceTree = "<group>"; };
+		57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftEnum.swift; sourceTree = "<group>"; };
 		57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUISlider.swift; sourceTree = "<group>"; };
 		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForString.swift; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */,
 				77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */,
 				570FC2851F1124A300FEAC03 /* ExtensionForSwiftDouble.swift */,
+				57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */,
 				570FC2861F1124A300FEAC03 /* ExtensionForSwiftFloat.swift */,
 				570FC2871F1124A300FEAC03 /* ExtensionForSwiftInt.swift */,
 				570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */,
@@ -783,6 +786,7 @@
 				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
 				57851D491F4B9C8900AEFA4B /* ExtensionForUIImage.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
+				57A847D624488B05001D5E42 /* ExtensionForSwiftEnum.swift in Sources */,
 				570FC2C21F1124A300FEAC03 /* ExtensionForSwiftUInt.swift in Sources */,
 				570FC2C91F1124A300FEAC03 /* Math.swift in Sources */,
 				77CD2A2222E883890020CAB5 /* StorableVariableManager.swift in Sources */,
