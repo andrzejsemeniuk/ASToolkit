@@ -70,14 +70,14 @@ extension String
     
     public func substring(from: Int) -> Substring {
         if from < 0 {
-            return self[Range(max(0, length + from - 1) ..< length)]
+            return self[Range(max(0, length + from) ..< length)]
         }
         return self[Range(min(from, length) ..< length)]
     }
     
     public func substring(to: Int) -> Substring {
         if to < 0 {
-            return self[Range(0 ..< max(0, length + to - 1))]
+            return self[Range(0 ..< max(0, length + to))]
         }
         return self[Range(0 ..< max(0, min(to, length)))]
     }
@@ -88,7 +88,7 @@ extension String
 
     public func substring(from:Int = 0, length:Int) -> Substring {
         if from < 0 {
-            let f = max(0, length + from - 1)
+            let f = max(0, length + from)
             let t = max(f,min(f + length, self.length))
             return self[f..<t]
         }

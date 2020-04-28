@@ -56,4 +56,30 @@ class TestExtensionForString: XCTestCase {
 		XCTAssertTrue("abcd".matches(regex: "^...."))
 		XCTAssertTrue("abcd".matches(regex: "[^cd]b..$"))
 	}
+    
+    func testSubstringTo() {
+        
+        XCTAssertEqual("abcd".substring(to: 1), "a")
+        XCTAssertEqual("abcd".substring(to: 3), "abc")
+        XCTAssertEqual("abcd".substring(to: 4), "abcd")
+        XCTAssertEqual("abcd".substring(to: 0), "")
+
+        XCTAssertEqual("abcd".substring(to: -1), "abc")
+        XCTAssertEqual("abcd".substring(to: -3), "a")
+        XCTAssertEqual("abcd".substring(to: 6), "abcd")
+
+    }
+    
+    func testSubstringFrom() {
+        
+        XCTAssertEqual("abcd".substring(from: 1), "bcd")
+        XCTAssertEqual("abcd".substring(from: 3), "d")
+        XCTAssertEqual("abcd".substring(from: 4), "")
+        XCTAssertEqual("abcd".substring(from: 0), "abcd")
+        
+        XCTAssertEqual("abcd".substring(from: -1), "d")
+        XCTAssertEqual("abcd".substring(from: -3), "bcd")
+        XCTAssertEqual("abcd".substring(from: 6), "")
+    }
+
 }
