@@ -69,18 +69,29 @@ extension String
     }
     
     public func substring(from: Int) -> Substring {
+        if from < 0 {
+            return self[Range(max(0, length + from - 1) ..< length)]
+        }
         return self[Range(min(from, length) ..< length)]
     }
     
     public func substring(to: Int) -> Substring {
-        return self[Range(0 ..< min(to, length))]
+        if to < 0 {
+            return self[Range(0 ..< max(0, length + to - 1))]
+        }
+        return self[Range(0 ..< max(0, min(to, length)))]
     }
     
-    public func substring(from: Int, to: Int) -> Substring {
-        return self[Range(min(from, length) ..< min(to, length))]
+    public func substring(from: UInt, to: UInt) -> Substring {
+        return self[Range(min(Int(from), length) ..< min(Int(to), length))]
     }
 
     public func substring(from:Int = 0, length:Int) -> Substring {
+        if from < 0 {
+            let f = max(0, length + from - 1)
+            let t = max(f,min(f + length, self.length))
+            return self[f..<t]
+        }
         return self[from..<max(from,from+length)]
     }
     

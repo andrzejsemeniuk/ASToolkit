@@ -83,7 +83,7 @@ public class UIGlyph {
                 let range = CTRunGetStringRange(run)
                 let from = range.location
                 let to = from+range.length
-                print("calculateBBox(of:(\(of.string))): run:(\(of.string.substring(from: from, to: to))) -> glyphRect:(\(glyphRect))")
+                print("calculateBBox(of:(\(of.string))): run:(\(of.string.substring(from: UInt(from), to: UInt(to)))) -> glyphRect:(\(glyphRect))")
             }
             glyphRect.origin.x += result.maxX
             result = result.union(glyphRect)
