@@ -17,6 +17,24 @@ extension Double
         return clamped(minimum:0, maximum:255)
     }
     
+    public func crunched(into: Double) -> Double {
+        var s = self
+        while into < s {
+            s -= into
+        }
+        while s < 0.0 {
+            s += into
+        }
+        return s
+    }
+    
+    @discardableResult
+    mutating public func addAround01(_ add: Double) -> Double {
+        self += add
+        self = self.crunched(into: 1.0)
+        return self
+    }
+    
     
     public func lerp                (from:Double, to:Double) -> Double {
 //        return (1.0-self)*from + self*to
