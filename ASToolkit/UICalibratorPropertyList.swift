@@ -52,7 +52,7 @@ class UICalibratorPropertyList : UITableView {
 		self.backgroundColor = colorBackground
 
 		self.delegate 		= self
-		self.dataSource 	= self
+		self.appSource 	= self
 
 		self.cornerRadius 	= 8
 		self.rowHeight 		= fontText.lineHeight + 6
