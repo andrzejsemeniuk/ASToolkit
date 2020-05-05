@@ -1261,7 +1261,7 @@ open class GenericPickerOfColor : UIView {
                 
                 self.addArrangedSubview(data.button)
                 
-                self.app[operation] = data
+                self.data[operation] = data
                 
                 data.button.tag = index
             }
@@ -1321,7 +1321,7 @@ open class GenericPickerOfColor : UIView {
         public func set(for:Operation, function:@escaping ()->()) {
             if var data = data[`for`] {
                 data.function = function
-                self.app[`for`] = data
+                self.data[`for`] = data
             }
         }
         

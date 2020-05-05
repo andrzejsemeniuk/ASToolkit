@@ -276,7 +276,7 @@ class LazyXMLParser: NSObject, SimpleXmlParser, XMLParserDelegate {
     let options: SWXMLHashOptions
 
     func parse(_ data: Data) -> XMLIndexer {
-        self.app = data
+        self.data = data
         return XMLIndexer(self)
     }
 
