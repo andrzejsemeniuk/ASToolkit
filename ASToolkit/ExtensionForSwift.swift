@@ -33,3 +33,8 @@ public func ?= <T>(lhs: inout T, rhs: T?) -> T {
 	}
 	return lhs
 }
+
+public func ifTrueElseNil       <V>(_ flag: Bool, _ value: V) -> V?             { flag ? value : nil }
+public func ifFalseElseNil      <V>(_ flag: Bool, _ value: V) -> V?             { flag ? nil : value }
+public func nilOr               <V>(_ flag: Bool, _ value: V) -> V?             { flag ? value : nil }
+
