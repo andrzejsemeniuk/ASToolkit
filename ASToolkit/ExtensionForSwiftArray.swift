@@ -255,12 +255,14 @@ extension Array {
 
 extension Array where Element : Equatable {
     
-    public func next(after:Element) -> Element? {
+    public func next(after:Element, wrap: Bool = true) -> Element? {
         if let index = self.index(where: { $0 == after }) {
             if index < (count-1) {
                 return self[index+1]
             }
-            return self[0]
+            if wrap {
+                return self[0]
+            }
         }
         return nil
     }
