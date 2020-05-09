@@ -10,7 +10,7 @@ import Foundation
 
 public extension Comparable {
 
-    public func clamped             (minimum:Self, maximum:Self) -> Self {
+    func clamped             (minimum:Self, maximum:Self) -> Self {
         return self < minimum ? minimum : maximum < self ? maximum : self
     }
 
@@ -38,3 +38,8 @@ public func ifTrueElseNil       <V>(_ flag: Bool, _ value: V) -> V?             
 public func ifFalseElseNil      <V>(_ flag: Bool, _ value: V) -> V?             { flag ? nil : value }
 public func nilOr               <V>(_ flag: Bool, _ value: V) -> V?             { flag ? value : nil }
 
+public func printMirrorAttributesOf(_ any: Any) {
+    for child in Mirror(reflecting: any).children {
+        print(" \(String(describing: child.label))               = \(child.value)")
+    }
+}
