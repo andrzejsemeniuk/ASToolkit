@@ -334,3 +334,40 @@ extension String {
     }
     
 }
+
+extension Array where Element == String {
+    
+    public func split(span chars: Int) -> ([String],[String]) {
+        var length = 0
+        for (index,word) in self.enumerated() {
+            if word.length + length <= chars {
+                length += word.length
+            } else if index == 0 {
+                return ([word], (index+1) < self.count ? Array(self[index+1..<self.count]) : [])
+            } else {
+                return (Array(self[0..<index]), index < self.count ? Array(self[index..<self.count]) : [])
+            }
+        }
+        return (self,[])
+    }
+
+    public func lines(span chars: Int) -> [[String]] {
+        var words = self
+        var r : [[String]] = []
+        while true {
+            let (a,b) = words.split(span: chars)
+            if a.isEmpty {
+                break
+            }
+            r.append(a)
+            if b.isEmpty {
+                break
+            }
+            words = b
+        }
+        return r
+    }
+    
+}
+
+

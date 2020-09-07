@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import ASToolkit
 
 class TestExtensionForString: XCTestCase {
     
@@ -80,6 +81,28 @@ class TestExtensionForString: XCTestCase {
         XCTAssertEqual("abcd".substring(from: -1), "d")
         XCTAssertEqual("abcd".substring(from: -3), "bcd")
         XCTAssertEqual("abcd".substring(from: 6), "")
+        
+    }
+    
+    func test_split() {
+        
+        XCTAssertEqual([""].split(span: 4).0, [""])
+        XCTAssertEqual([""].split(span: 4).1, [String]())
+        XCTAssertEqual(["a","b","c","d"].split(span: 3).0, ["a","b","c"])
+        XCTAssertEqual(["a","b","c","d"].split(span: 3).1, ["d"])
+        XCTAssertEqual(["abcd","b","c","d"].split(span: 4).0, ["abcd"])
+        XCTAssertEqual(["abcd","b","c","d"].split(span: 4).1, ["b","c","d"])
+        XCTAssertEqual(["abcd","b","c","d"].split(span: 5).0, ["abcd","b"])
+        XCTAssertEqual(["abcd","b","c","d"].split(span: 5).1, ["c","d"])
+        XCTAssertEqual(["abcdef"].split(span: 4).0, ["abcdef"])
+        XCTAssertEqual(["abcdef"].split(span: 4).1, [String]())
+
+    }
+    
+    func test_lines() {
+        
+        XCTAssertEqual(["a","b","c","d"].lines(span: 3), [["a","b","c"],["d"]])
+        
     }
 
 }
