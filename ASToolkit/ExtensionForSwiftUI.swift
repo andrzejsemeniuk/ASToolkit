@@ -75,4 +75,18 @@ public extension Color {
     }
 }
 
+@available(iOS 13, *)
+extension HorizontalAlignment {
+    
+    private enum HCenterAlignment: AlignmentID {
+        
+        static func defaultValue(in dimensions: ViewDimensions) -> CGFloat {
+            return dimensions[HorizontalAlignment.center]
+        }
+        
+    }
+    
+    static public let hCentered = HorizontalAlignment(HCenterAlignment.self)
+}
+
 
