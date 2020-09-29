@@ -20,7 +20,7 @@ import SwiftUI
 
 
 @available(iOS 13, *)
-extension View {
+public extension View {
     
     var asAnyView : AnyView {
         AnyView.init(self)
@@ -65,7 +65,7 @@ extension View {
 }
 
 @available(iOS 13, *)
-extension Text {
+public extension Text {
     //    public func fontSize(_ size: CGFloat?) -> Text {
     //        if let size = size {
     //            self.font()
@@ -247,7 +247,7 @@ public extension Color {
 }
 
 @available(iOS 13, *)
-extension ViewDimensions {
+public extension ViewDimensions {
     
     func ratio(w: CGFloat) -> CGFloat {
         w * width
@@ -260,7 +260,7 @@ extension ViewDimensions {
 }
 
 @available(iOS 13, *)
-extension ForEach where Content : View {
+public extension ForEach where Content : View {
     
     //    public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content)
     
@@ -315,7 +315,30 @@ extension ForEach where Content : View {
 
 
 @available(iOS 13, *)
-struct Lines : View {
+public struct Lines : View {
+    
+    public init(horizontal  : Bool,
+                offsets     : [CGFloat]     = [],
+                ratios      : [CGFloat]     = [],
+                color       : Color         = .gray,
+                lineWidth   : CGFloat       = 1,
+                lineCap     : CGLineCap     = .butt,
+                lineJoin    : CGLineJoin    = .miter,
+                miterLimit  : CGFloat       = 10,
+                dash        : [CGFloat]     = [],
+                dashPhase   : CGFloat       = 0
+    ) {
+        self._horizontal    = State.init(initialValue: horizontal)
+        self._offsets       = State.init(initialValue: offsets)
+        self._ratios        = State.init(initialValue: ratios)
+        self._color         = State.init(initialValue: color)
+        self._lineWidth     = State.init(initialValue: lineWidth)
+        self._lineCap       = State.init(initialValue: lineCap)
+        self._lineJoin      = State.init(initialValue: lineJoin)
+        self._miterLimit    = State.init(initialValue: miterLimit)
+        self._dash          = State.init(initialValue: dash)
+        self._dashPhase     = State.init(initialValue: dashPhase)
+    }
     
     @State var horizontal   : Bool
     
@@ -338,7 +361,7 @@ struct Lines : View {
               dashPhase     : dashPhase)
     }
     
-    static func create(horizontal: Bool, offsets: [CGFloat] = [0], ratios: [CGFloat] = [], color: Color, style: StrokeStyle) -> Lines {
+    public static func create(horizontal: Bool, offsets: [CGFloat] = [0], ratios: [CGFloat] = [], color: Color, style: StrokeStyle) -> Lines {
         .init(horizontal    : horizontal,
               offsets       : offsets,
               ratios        : ratios,
@@ -351,7 +374,7 @@ struct Lines : View {
               dashPhase     : style.dashPhase)
     }
     
-    static func horizontal(color: Color, style: StrokeStyle) -> Lines {
+    public static func horizontal(color: Color, style: StrokeStyle) -> Lines {
         .init(horizontal    : true,
               offsets       : [0],
               ratios        : [],
@@ -364,7 +387,7 @@ struct Lines : View {
               dashPhase     : style.dashPhase)
     }
     
-    static func vertical(color: Color, style: StrokeStyle) -> Lines {
+    public static func vertical(color: Color, style: StrokeStyle) -> Lines {
         .init(horizontal    : false,
               offsets       : [0],
               ratios        : [],
@@ -377,7 +400,7 @@ struct Lines : View {
               dashPhase     : style.dashPhase)
     }
     
-    var body : some View {
+    public var body : some View {
         GeometryReader { proxy in
             Path() { path in
                 for ratio in self.ratios {
@@ -409,7 +432,7 @@ struct Lines : View {
 
 
 @available(iOS 13, *)
-extension EdgeInsets {
+public extension EdgeInsets {
     
     init(_ all: CGFloat) { self.init(top: all, leading: all, bottom: all, trailing: all) }
     
@@ -428,21 +451,30 @@ extension EdgeInsets {
 
 
 @available(iOS 13, *)
-struct LayeredSystemImage : View {
+public struct LayeredSystemImage : View {
+    
+    public init(foregroundSystemName: String, foregroundColor: Color = Color.blue, foregroundScale: CGFloat = 1, backgroundSystemName: String, backgroundColor: Color = Color.white) {
+        self.foregroundSystemName = foregroundSystemName
+        self.foregroundColor = foregroundColor
+        self.foregroundScale = foregroundScale
+        self.backgroundSystemName = backgroundSystemName
+        self.backgroundColor = backgroundColor
+    }
     
     
-    var foregroundSystemName    : String
     
-    var foregroundColor         : Color = Color.blue
+    public var foregroundSystemName    : String
     
-    var foregroundScale         : CGFloat = 1
+    public var foregroundColor         : Color = Color.blue
     
-    var backgroundSystemName    : String
+    public var foregroundScale         : CGFloat = 1
     
-    var backgroundColor         : Color = Color.white
+    public var backgroundSystemName    : String
+    
+    public var backgroundColor         : Color = Color.white
     
     
-    var body : some View {
+    public var body : some View {
         
         Image(systemName: foregroundSystemName)
             .scaleEffect(CGSize.init(width: foregroundScale, height: foregroundScale))
@@ -456,30 +488,30 @@ struct LayeredSystemImage : View {
 }
 
 @available(iOS 13, *)
-class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Identifiable {
+public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Identifiable {
     
-    static func == (lhs: EnumeratedHashableIdentifiableElement, rhs: EnumeratedHashableIdentifiableElement) -> Bool {
+    public static func == (lhs: EnumeratedHashableIdentifiableElement, rhs: EnumeratedHashableIdentifiableElement) -> Bool {
         lhs.index == rhs.index && lhs.element == rhs.element
     }
     
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         //        hasher.combine(element)
         hasher.combine("\(index)\(element)")
     }
     
-    var index : Int
-    var element : T
+    public var index : Int
+    public var element : T
     
-    var id:Int {
+    public var id:Int {
         index
     }
     
-    init(index: Int, element: T) {
+    public init(index: Int, element: T) {
         self.index = index
         self.element = element
     }
     
-    static func from(array collection: [T]) -> [EnumeratedHashableIdentifiableElement<T>] {
+    public static func from(array collection: [T]) -> [EnumeratedHashableIdentifiableElement<T>] {
         collection.enumerated().map { .init(index: $0, element: $1) }
     }
 }
@@ -585,7 +617,7 @@ public extension View {
 }
 
 @available(iOS 13, *)
-extension Circle {
+public extension Circle {
     
     func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
         Circle.init()
@@ -598,7 +630,7 @@ extension Circle {
 }
 
 @available(iOS 13, *)
-extension View {
+public extension View {
     
     func neomorphicHint() -> some View {
         self
@@ -649,7 +681,7 @@ extension View {
 
 
 @available(iOS 13, *)
-extension HorizontalAlignment {
+public extension HorizontalAlignment {
 
     private enum HCenterAlignment: AlignmentID {
 
@@ -659,7 +691,7 @@ extension HorizontalAlignment {
 
     }
 
-    static let hCentered = HorizontalAlignment(HCenterAlignment.self)
+    public static let hCentered = HorizontalAlignment(HCenterAlignment.self)
 }
 
 
@@ -667,7 +699,7 @@ extension HorizontalAlignment {
 
 
 @available(iOS 13, *)
-struct CorrectedScrollView<Content> : View where Content : View {
+public struct CorrectedScrollView<Content> : View where Content : View {
     
     
     @State private var offset : CGPoint = .zero
@@ -679,7 +711,7 @@ struct CorrectedScrollView<Content> : View where Content : View {
     @State var content : ()->Content
     
     
-    var body : some View {
+    public var body : some View {
         
         ScrollView(axes, showsIndicators: showsIndicators) {
             
@@ -717,7 +749,7 @@ struct CorrectedScrollView<Content> : View where Content : View {
 
 
 @available(iOS 13, *)
-struct AsyncBlockView : View {
+public struct AsyncBlockView : View {
     
     @State var view     : ()->AnyView = {
         AnyView(Rectangle().fill(Color.clear))
@@ -725,7 +757,7 @@ struct AsyncBlockView : View {
     
     var block           : ()->()
     
-    var body            : some View {
+    public var body            : some View {
         
         DispatchQueue.main.async {
             self.block()
@@ -739,19 +771,19 @@ struct AsyncBlockView : View {
 
 
 @available(iOS 13, *)
-struct HalfCapsule : Shape {
+public struct HalfCapsule : Shape {
     
-    var offset      : CGFloat
-    var padding     : CGFloat
-    var mirrored    : Bool
+    public var offset      : CGFloat
+    public var padding     : CGFloat
+    public var mirrored    : Bool
     
-    init(offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
+    public init(offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
         self.offset     = offset
         self.padding    = padding
         self.mirrored   = mirrored
     }
     
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         var path = Path()
         
         let d = (rect.height + padding + padding)/2
@@ -782,22 +814,18 @@ struct HalfCapsule : Shape {
 
 
 @available(iOS 13, *)
-struct Pie : Shape {
+public struct Pie : Shape {
     
-    
-    var start           : Angle
-    
-    var value           : Binding<Double>
-    
+    public var start           : Angle
+    public var value           : Binding<Double>
     //        var bg              : (_ value: Double)->Color = { value in .gray }
     //        var fg              : (_ value: Double)->Color = { value in .gray9 }
+    public var offset      : CGFloat
+    public var padding     : CGFloat
+    public var mirrored    : Bool
     
-    var offset      : CGFloat
-    var padding     : CGFloat
-    var mirrored    : Bool
     
-    
-    init(value: Binding<Double>, start: Angle = Angle.init(degrees: -90), offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
+    public init(value: Binding<Double>, start: Angle = Angle.init(degrees: -90), offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
         self.value      = value
         self.start      = start
         self.offset     = offset
@@ -806,7 +834,7 @@ struct Pie : Shape {
     }
     
     
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         var path = Path()
         
         let r = min(rect.height,rect.width)/2
@@ -841,24 +869,30 @@ struct Pie : Shape {
 }
 
 @available(iOS 13, *)
-struct ActivityIndicator: UIViewRepresentable {
+public struct ActivityIndicator: UIViewRepresentable {
+    
+    public init(isAnimating: Binding<Bool>, style: UIActivityIndicatorView.Style) {
+        self.isAnimating = isAnimating
+        self.style = style
+    }
+    
 
-    @Binding var isAnimating: Bool
+    var isAnimating: Binding<Bool>
     
     let style: UIActivityIndicatorView.Style
 
-    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+    public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
         return UIActivityIndicatorView(style: style)
     }
 
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
-        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+    public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+        isAnimating.wrappedValue ? uiView.startAnimating() : uiView.stopAnimating()
     }
 }
 
 
 @available(iOS 13, *)
-extension View {
+public extension View {
     
     func disabledWithColor(_ flag: Bool) -> some View {
         self
@@ -869,7 +903,7 @@ extension View {
 }
 
 @available(iOS 13, *)
-extension String {
+public extension String {
     
     func color(_ default: Color = .red) -> Color {
 //        counter += 1
@@ -928,18 +962,42 @@ extension String {
         
 }
 
+@available(iOS 13, *)
+public struct TestStruct : View {
+    public init(lines: [String], v: String = "v") {
+        self._lines = State.init(initialValue: lines)
+        self.v = v
+    }
+    
+    
+    @State private var lines: [String]
+    
+    private var v: String = "v"
+    
+    public var body: some View {
+        Text("lines: \(lines.count), v:\(v)")
+    }
+}
 
 @available(iOS 13, *)
-struct LinesOfStringsStack<Content> : View where Content : View {
+public struct LinesOfStringsStack<Content> : View where Content : View {
+    
+    public init(lines: [[String]], vspacing: CGFloat = 8, hspacing: CGFloat = 8, builder: @escaping (String) -> Content) {
+        self._lines = State.init(initialValue: lines)
+        self._vspacing = State.init(initialValue: vspacing)
+        self._hspacing = State.init(initialValue: hspacing)
+        self.builder = builder
+    }
+    
 
-    @State var lines : [[String]]
+    @State public var lines : [[String]]
 
-    var vspacing : CGFloat = 8
-    var hspacing : CGFloat = 8
+    @State var vspacing : CGFloat
+    @State var hspacing : CGFloat
 
     let builder : (String) -> Content
 
-    var body : some View {
+    public var body : some View {
         HStack {
             Spacer()
             VStack(spacing: vspacing) {
@@ -956,7 +1014,7 @@ struct LinesOfStringsStack<Content> : View where Content : View {
     }
 }
 
-extension View {
+public extension View {
     func width(_ v: CGFloat) -> some View {
         self.frame(minWidth: v, idealWidth: v, maxWidth: v)
     }
@@ -965,7 +1023,7 @@ extension View {
     }
 }
 
-extension View {
+public extension View {
     func circleBorder(color: Color, bg: Color = .clear, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
         self
             .background(Circle().fill(bg))
