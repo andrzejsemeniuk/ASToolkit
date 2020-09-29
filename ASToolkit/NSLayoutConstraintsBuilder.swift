@@ -11,13 +11,13 @@ import Foundation
 public class NSLayoutConstraintsBuilder {
     
     public var views            : [String:Any]          = [:]
-    public var options          : NSLayoutFormatOptions = []
+    public var options          : NSLayoutConstraint.FormatOptions = []
     public var metrics          : [String:Any]?         = nil
     
     fileprivate(set) var constraints : [NSLayoutConstraint] = []
     
     public init(views           : [String:Any]          = [:],
-                options         : NSLayoutFormatOptions = [],
+                options         : NSLayoutConstraint.FormatOptions = [],
                 metrics         : [String:Any]?         = nil) {
         self.views      = views
         self.options    = options
@@ -49,7 +49,7 @@ public class NSLayoutConstraintsBuilder {
     
     public func add(_ constraint    : String,
                     views           : [String:Any]?             = nil,
-                    options         : NSLayoutFormatOptions?    = nil,
+                    options         : NSLayoutConstraint.FormatOptions?    = nil,
                     metrics         : [String:Any]?             = nil) {
         
         self.constraints.append(contentsOf:self.create(constraint,
@@ -60,7 +60,7 @@ public class NSLayoutConstraintsBuilder {
     
     public func     create(_ constraint    : String,
                            views           : [String:Any]?          = nil,
-                           options         : NSLayoutFormatOptions? = nil,
+                           options         : NSLayoutConstraint.FormatOptions? = nil,
                            metrics         : [String:Any]?          = nil) -> [NSLayoutConstraint] {
 
         return NSLayoutConstraint.constraints(withVisualFormat : constraint,

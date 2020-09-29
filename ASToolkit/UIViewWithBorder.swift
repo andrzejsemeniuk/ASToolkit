@@ -131,16 +131,16 @@ open class UIViewWithBorder : UIView {
 		border.lineDashPhase 	= self.lineDashPhase
 
 		switch self.lineCap {
-		case .butt				: border.lineCap = kCALineCapButt
-		case .round				: border.lineCap = kCALineCapRound
-		case .square			: border.lineCap = kCALineCapSquare
+            case .butt				: border.lineCap = CAShapeLayerLineCap.butt
+            case .round				: border.lineCap = CAShapeLayerLineCap.round
+            case .square			: border.lineCap = CAShapeLayerLineCap.square
 		}
 
 		switch self.lineJoin {
-		case .bevel				: border.lineJoin = kCALineJoinBevel
-		case .round				: border.lineJoin = kCALineJoinRound
+            case .bevel				: border.lineJoin = CAShapeLayerLineJoin.bevel
+            case .round				: border.lineJoin = CAShapeLayerLineJoin.round
 		case .miter				:
-			border.lineJoin 	= kCALineJoinMiter
+            border.lineJoin 	= CAShapeLayerLineJoin.miter
 			border.miterLimit 	= miterLimit
 		}
 	}

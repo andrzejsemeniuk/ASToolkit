@@ -24,7 +24,7 @@ open class UILabelWithInsets: UILabel {
     }
     
     override open func drawText(in rect: CGRect) {
-        return super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
+        return super.drawText(in: rect.inset(by: insets))
     }
     
 }
@@ -45,7 +45,7 @@ open class UITextFieldWithInsets: UITextField {
     }
     
     override open func drawText(in rect: CGRect) {
-        return super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
+        return super.drawText(in: rect.inset(by: insets))
     }
     
 }

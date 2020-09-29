@@ -241,7 +241,7 @@ open class GenericPickerOfColor : UIView {
             
             for titleLabel in [titleLabel]+self.titleLabels {
                 self.addSubview(titleLabel)
-                self.sendSubview(toBack: titleLabel)
+                self.sendSubviewToBack(titleLabel)
             }
             
             titleLabel.translatesAutoresizingMaskIntoConstraints=false
@@ -1639,7 +1639,7 @@ open class GenericPickerOfColor : UIView {
         //            label?.layer.backgroundColor = GRAY.cgColor
         
         to.addSubview(label)
-        to.sendSubview(toBack: label)
+        to.sendSubviewToBack(label)
         
         label.constrainCenterXToSuperview()
         label.constrainTopToSuperviewTop(withMargin:marginAbove)

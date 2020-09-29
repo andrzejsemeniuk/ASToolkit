@@ -16,7 +16,7 @@ extension UIWindow {
         
         window.screen               = UIScreen.main
         window.bounds               = window.screen.bounds
-        window.windowLevel          = UIWindowLevelNormal
+        window.windowLevel          = UIWindow.Level.normal
         
         return window
     }

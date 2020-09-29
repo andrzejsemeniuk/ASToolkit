@@ -24,13 +24,13 @@ extension UIViewController {
         alert.addTextField { textfield in
             textfield.text = value
         }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+        let ok = UIAlertAction.init(title: ok, style: UIAlertAction.Style.default) { action in
             setter(alert.textFields?[safe:0]?.text ?? "")
             alert.dismiss(animated: animated) {
             }
         }
         alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertAction.Style.cancel) { action in
             alert.dismiss(animated: animated) {
             }
         }
@@ -44,7 +44,7 @@ extension UIViewController {
     
     open func presentAlertForAnswer                (animated:Bool = true, title:String, message:String, ok:String = "Ok", handler:(()->())? = nil) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+        let ok = UIAlertAction.init(title: ok, style: UIAlertAction.Style.default) { action in
             handler?()
             alert.dismiss(animated: animated) {
             }
@@ -55,13 +55,13 @@ extension UIViewController {
     
     open func presentAlertForQuestion            (animated:Bool = true, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", handler:@escaping ()->() ) {
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+        let ok = UIAlertAction.init(title: ok, style: UIAlertAction.Style.default) { action in
             handler()
             alert.dismiss(animated: animated) {
             }
         }
         alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertAction.Style.cancel) { action in
             alert.dismiss(animated: animated) {
             }
         }
@@ -74,13 +74,13 @@ extension UIViewController {
         alert.addTextField { textfield in
             textfield.text = field.text
         }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
+        let ok = UIAlertAction.init(title: ok, style: UIAlertAction.Style.default) { action in
             setter(alert.textFields?[safe:0]?.text ?? "")
             alert.dismiss(animated: animated) {
             }
         }
         alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
+        let cancel = UIAlertAction.init(title: cancel, style: UIAlertAction.Style.cancel) { action in
             alert.dismiss(animated: animated) {
             }
         }

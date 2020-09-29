@@ -993,9 +993,9 @@ extension UIView {
 
 	// NOTE: VERY IMPORTANT!!! SUBVIEWS OF SELF MUST ALREADY BE PLACED!  OTHERWISE THEY'LL BE OBSCURED
 	@discardableResult
-	open func blur(style:UIBlurEffectStyle) -> UIVisualEffectView? {
+    open func blur(style:UIBlurEffect.Style) -> UIVisualEffectView? {
 
-		if !UIAccessibilityIsReduceTransparencyEnabled() {
+        if !UIAccessibility.isReduceTransparencyEnabled {
 
 			let blurEffect = UIBlurEffect(style: style)
 
@@ -1019,7 +1019,7 @@ extension UIView {
 	@discardableResult
 	open func blur(value:CGFloat) -> UIVisualEffectView? {
 
-		if !UIAccessibilityIsReduceTransparencyEnabled() {
+        if !UIAccessibility.isReduceTransparencyEnabled {
 
 			let blurEffect = (NSClassFromString("_UICustomBlurEffect") as! UIBlurEffect.Type).init()
 

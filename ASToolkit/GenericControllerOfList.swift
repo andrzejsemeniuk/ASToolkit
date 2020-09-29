@@ -29,7 +29,7 @@ open class GenericControllerOfList : UITableViewController
     }
     
     
-    public var style                               = UITableViewStyle.plain
+    public var style                               = UITableView.Style.plain
 
     public var sections:[Section]                  = []
     
@@ -39,7 +39,7 @@ open class GenericControllerOfList : UITableViewController
     
     public var handlerForDidSelectRowAtIndexPath   : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> Void)! = nil
     
-    public var handlerForCommitEditingStyle        : ((_ controller:GenericControllerOfList,_ commitEditingStyle:UITableViewCellEditingStyle,_ indexPath:IndexPath) -> Bool)! = nil
+    public var handlerForCommitEditingStyle        : ((_ controller:GenericControllerOfList,_ commitEditingStyle:UITableViewCell.EditingStyle,_ indexPath:IndexPath) -> Bool)! = nil
     
     public var handlerForIsEditableAtIndexPath     : ((_ controller:GenericControllerOfList,_ indexPath:IndexPath) -> Bool)! = nil
 
@@ -178,7 +178,7 @@ open class GenericControllerOfList : UITableViewController
         return self.handlerForIsEditableAtIndexPath?(self,indexPath) ?? true
     }
     
-    override open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+    override open func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
     {
         if handlerForCommitEditingStyle != nil {
             if handlerForCommitEditingStyle(self,editingStyle,indexPath) {

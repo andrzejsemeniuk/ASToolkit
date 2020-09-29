@@ -281,7 +281,7 @@ extension UIColor {
 
 extension UIColor {
     
-    static open func generateListOfDefaultColors() -> [UIColor]
+    static public func generateListOfDefaultColors() -> [UIColor]
     {
 
         var colors = [
@@ -315,7 +315,7 @@ extension UIColor {
     
     
     
-    static open func generateMatrixOfColors(columns    : Int = 7,
+    static public func generateMatrixOfColors(columns    : Int = 7,
                                             rowsOfGray : Int = 2,
                                             rowsOfHues : Int = 20) -> [[UIColor]]
     {

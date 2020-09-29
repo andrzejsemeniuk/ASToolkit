@@ -35,8 +35,8 @@ open class UIViewWithAdditions : UIViewWithDrawings {
 									 color			: UIColor? = nil,
 									 insets			: UIEdgeInsets = UIEdgeInsets(),
 									 thickness		: CGFloat = 0,
-									 cap			: CGLineCap = .butt,
-									 join			: CGLineJoin = .bevel,
+									 cap			: CAShapeLayerLineCap = .butt,
+									 join			: CAShapeLayerLineJoin = .bevel,
 									 miterLimit		: CGFloat? = nil,
 									 pattern		: [CGFloat] = [],
 									 phase			: CGFloat = 0) -> CAShapeLayer
@@ -52,8 +52,8 @@ open class UIViewWithAdditions : UIViewWithDrawings {
 		border.fillColor 			= fill?.cgColor
 		border.strokeColor			= color?.cgColor
 		if border.strokeColor != nil {
-			border.lineCap			= cap.string
-			border.lineJoin			= join.string
+            border.lineCap			= cap
+			border.lineJoin			= join
 			if let limit = miterLimit {
 				border.miterLimit 	= limit
 			}

@@ -50,7 +50,7 @@ extension String
     }
 
     public subscript (i: Int) -> Substring {
-        return self[Range(i ..< i + 1)]
+        return self[i ..< i + 1]
     }
     
     public subscript (r: Range<Int>) -> Substring {
@@ -70,20 +70,20 @@ extension String
     
     public func substring(from: Int) -> Substring {
         if from < 0 {
-            return self[Range(max(0, length + from) ..< length)]
+            return self[max(0, length + from) ..< length]
         }
-        return self[Range(min(from, length) ..< length)]
+        return self[min(from, length) ..< length]
     }
     
     public func substring(to: Int) -> Substring {
         if to < 0 {
-            return self[Range(0 ..< max(0, length + to))]
+            return self[0 ..< max(0, length + to)]
         }
-        return self[Range(0 ..< max(0, min(to, length)))]
+        return self[0 ..< max(0, min(to, length))]
     }
     
     public func substring(from: UInt, to: UInt) -> Substring {
-        return self[Range(min(Int(from), length) ..< min(Int(to), length))]
+        return self[min(Int(from), length) ..< min(Int(to), length)]
     }
 
     public func substring(from:Int = 0, length:Int) -> Substring {
@@ -136,7 +136,7 @@ extension String
         var count = count
         let digits:Set<Character> = ["0","1","2","3","4","5","6","7","8","9"]
         var i = 0
-        for c in characters {
+        for c in self {
             i = i+1
             if digits.contains(c) {
                 count = count-1

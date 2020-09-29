@@ -19,7 +19,7 @@ public class UIGlyph {
         
         var ctGlyph = CTFontGetGlyphWithName(ctFont, of as CFString)
         
-        let count = of.characters.count
+        let count = of.count
 
         let boundingBox = withUnsafePointer(to: &ctGlyph) { pointer -> CGRect in
             /*!

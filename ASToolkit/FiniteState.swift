@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class State : NSObject {
+open class FiniteState : NSObject {
 	public typealias Value = Int
 
 	public typealias Block = (_ from:Value,_ to:Value)->()

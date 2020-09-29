@@ -72,7 +72,7 @@ open class GenericControllerOfSettings : UITableViewController
     open var fontForFieldText               : UIFont?
 
     
-    static open var lastOffsetY             : [String:CGPoint]                      = [:]
+    static public var lastOffsetY             : [String:CGPoint]                      = [:]
     
     
     

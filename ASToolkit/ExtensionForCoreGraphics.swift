@@ -182,9 +182,9 @@ extension CGLineCap {
 
 	public var string : String {
 		switch self {
-		case .round				: return kCALineCapRound
-		case .butt				: return kCALineCapButt
-		case .square			: return kCALineCapSquare
+            case .round				: return CAShapeLayerLineCap.round.rawValue
+            case .butt				: return CAShapeLayerLineCap.butt.rawValue
+            case .square			: return CAShapeLayerLineCap.square.rawValue
 		}
 	}
 }
@@ -193,9 +193,9 @@ extension CGLineJoin {
 
 	public var string : String {
 		switch self {
-		case .round				: return kCALineJoinRound
-		case .bevel				: return kCALineJoinBevel
-		case .miter				: return kCALineJoinMiter
+            case .round				: return CAShapeLayerLineJoin.round.rawValue
+            case .bevel				: return CAShapeLayerLineJoin.bevel.rawValue
+            case .miter				: return CAShapeLayerLineJoin.miter.rawValue
 		}
 	}
 }
