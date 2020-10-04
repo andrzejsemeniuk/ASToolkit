@@ -1031,3 +1031,23 @@ public extension View {
     }
 }
 
+@available(iOS 13, *)
+public struct OrEmptyView<VIEW> : View where VIEW : View {
+    
+    public init(condition: Bool, view: VIEW) {
+        self._condition = State.init(initialValue: condition)
+        self._view = State.init(initialValue: view)
+    }
+
+    @State var condition    : Bool
+    @State var view         : VIEW
+    
+    public var body: some View {
+        if condition {
+            view
+        } else {
+            EmptyView()
+        }
+    }
+}
+
