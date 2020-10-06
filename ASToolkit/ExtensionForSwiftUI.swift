@@ -1029,21 +1029,28 @@ public extension View {
             .background(Circle().fill(bg))
             .overlay(Circle().strokeBorder(color, style: .init(lineWidth: thickness, lineCap: .butt, lineJoin: .miter, miterLimit: 1, dash: dash, dashPhase: 0)))
     }
+    
+    func hCentered() -> some View {
+        self.alignmentGuide(HorizontalAlignment.hCentered, computeValue: { $0.width / 2 })
+    }
 }
 
 @available(iOS 13, *)
 public struct OrEmptyView<VIEW> : View where VIEW : View {
     
-    public init(condition: Bool, view: VIEW) {
-        self._condition = State.init(initialValue: condition)
+//    condition: Binding<SharkeeApp.Model.LoadState>.init(get: { self.model.loadState(for: name) }, set: { _ in }),
+
+    public init(condition: Binding<Bool>, view: VIEW) {
+        self.condition = condition
         self._view = State.init(initialValue: view)
     }
 
-    @State var condition    : Bool
+    var condition  : Binding<Bool>
+    
     @State var view         : VIEW
     
     public var body: some View {
-        if condition {
+        if condition.wrappedValue {
             view
         } else {
             EmptyView()
