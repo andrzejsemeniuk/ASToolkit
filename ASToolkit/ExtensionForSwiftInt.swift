@@ -37,16 +37,16 @@ public extension Int
 public extension Int
 {
     static var random:Int {
-        return Int.random(n:Int.max)
+        return Int.random(n:UInt32.max)
     }
-    static func random(n: Int) -> Int {
-        return Int(arc4random_uniform(UInt32(n)))
+    static func random(n: UInt32) -> Int {
+        return Int(arc4random_uniform(n))
     }
     static func random(min: Int, max: Int) -> Int {
-        return Int.random(n:max - min + 1) + min
+        return Int.random(n:UInt32(max - min + 1)) + min
     }
     static func random(min: Int, upto: Int) -> Int {
-        return Int.random(n:upto - min) + min
+        return Int.random(n:UInt32(upto - min)) + min
     }
 }
 
@@ -116,11 +116,11 @@ public extension Int {
 	}
     
     var pick : Int {
-        return Int.random(n: self)
+        return Int.random(n: UInt32(self))
     }
     
     var random : Int {
-        return Int.random(n: self)
+        return Int.random(n: UInt32(self))
     }
 
 }

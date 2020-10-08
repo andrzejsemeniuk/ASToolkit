@@ -416,7 +416,7 @@ extension Array {
 extension Array {
     
     public var random : Element {
-        return self[ Int.random(n: count) ]
+        return self[ Int.random(n: UInt32(count)) ]
     }
 
     public var pick : Element {
