@@ -256,6 +256,7 @@
 		57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUISlider.swift; sourceTree = "<group>"; };
 		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForString.swift; sourceTree = "<group>"; };
+		57C4880625300DE800333255 /* SharkeeIPHONEFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharkeeIPHONEFilter.swift; path = ../AppSharkee/SharkeeIPHONEFilter.swift; sourceTree = "<group>"; };
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
@@ -337,6 +338,7 @@
 		570FC1F31F111E0E00FEAC03 = {
 			isa = PBXGroup;
 			children = (
+				57C4880625300DE800333255 /* SharkeeIPHONEFilter.swift */,
 				570FC1FF1F111E0E00FEAC03 /* ASToolkit */,
 				570FC20A1F111E0E00FEAC03 /* ASToolkitTests */,
 				57DBB0201F4293E400AF2BEB /* ASToolkitUITests */,
