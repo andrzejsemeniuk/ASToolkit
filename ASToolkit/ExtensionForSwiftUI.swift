@@ -982,10 +982,11 @@ public struct TestStruct : View {
 @available(iOS 13, *)
 public struct LinesOfStringsStack<Content> : View where Content : View {
     
-    public init(lines: [[String]], vspacing: CGFloat = 8, hspacing: CGFloat = 8, builder: @escaping (String) -> Content) {
+    public init(lines: [[String]], vspacing: CGFloat = 8, hspacing: CGFloat = 8, alignment: HorizontalAlignment = .center, builder: @escaping (String) -> Content) {
         self._lines = State.init(initialValue: lines)
         self._vspacing = State.init(initialValue: vspacing)
         self._hspacing = State.init(initialValue: hspacing)
+        self._alignment = State.init(initialValue: alignment)
         self.builder = builder
     }
     
@@ -994,13 +995,14 @@ public struct LinesOfStringsStack<Content> : View where Content : View {
 
     @State var vspacing : CGFloat
     @State var hspacing : CGFloat
+    @State var alignment : HorizontalAlignment
 
     let builder : (String) -> Content
 
     public var body : some View {
-        HStack {
-            Spacer()
-            VStack(spacing: vspacing) {
+//        HStack {
+//            Spacer()
+        VStack(alignment: self.alignment, spacing: vspacing) {
                 ForEach(lines, id: \.self) { line in
                     HStack(spacing: hspacing) {
                         ForEach(line, id: \.self) { word in
@@ -1009,8 +1011,8 @@ public struct LinesOfStringsStack<Content> : View where Content : View {
                     }
                 }
             }
-            Spacer()
-        }
+//            Spacer()
+//        }
     }
 }
 
