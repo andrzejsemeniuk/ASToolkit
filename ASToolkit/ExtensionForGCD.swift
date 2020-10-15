@@ -29,3 +29,12 @@ public extension DispatchQueue {
 }
 
 public typealias Q = DispatchQueue
+
+public extension DispatchQueue {
+    
+    func asyncAfter(_ seconds: TimeInterval, block: @escaping ()->Void) {
+        self.asyncAfter(deadline: .now() + seconds, execute: block)
+    }
+    
+}
+
