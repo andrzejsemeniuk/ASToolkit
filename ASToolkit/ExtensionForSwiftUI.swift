@@ -8,17 +8,6 @@
 
 import SwiftUI
 
-//@available(iOS 13, *)
-//extension Text {
-//    public func fontSize(_ size: CGFloat?) -> Text {
-//        if let size = size {
-//            self.font()
-//        }
-//        return self
-//    }
-//}
-
-
 @available(iOS 13, *)
 public extension View {
     
@@ -144,7 +133,7 @@ public extension View {
     func frameExpandToFillScreen() -> some View {
         //        return self.edgesIgnoringSafeArea(.all)
         //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-        return self.frame(maxWidth: .infinity, maxHeight: .infinity)
+        frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
 }
@@ -691,7 +680,7 @@ public extension HorizontalAlignment {
 
     }
 
-    public static let hCentered = HorizontalAlignment(HCenterAlignment.self)
+    static let hCentered = HorizontalAlignment(HCenterAlignment.self)
 }
 
 
@@ -962,22 +951,22 @@ public extension String {
         
 }
 
-@available(iOS 13, *)
-public struct TestStruct : View {
-    public init(lines: [String], v: String = "v") {
-        self._lines = State.init(initialValue: lines)
-        self.v = v
-    }
-    
-    
-    @State private var lines: [String]
-    
-    private var v: String = "v"
-    
-    public var body: some View {
-        Text("lines: \(lines.count), v:\(v)")
-    }
-}
+//@available(iOS 13, *)
+//public struct TestStruct : View {
+//    public init(lines: [String], v: String = "v") {
+//        self._lines = State.init(initialValue: lines)
+//        self.v = v
+//    }
+//
+//
+//    @State private var lines: [String]
+//
+//    private var v: String = "v"
+//
+//    public var body: some View {
+//        Text("lines: \(lines.count), v:\(v)")
+//    }
+//}
 
 @available(iOS 13, *)
 public struct LinesOfStringsStack<Content> : View where Content : View {
