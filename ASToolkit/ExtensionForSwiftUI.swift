@@ -1049,3 +1049,13 @@ public struct OrEmptyView<VIEW> : View where VIEW : View {
     }
 }
 
+public extension Binding {
+
+    init(get: @escaping () -> Value) {
+        self.init(get: get, set: { _ in })
+    }
+
+    static func get(_ get: @escaping () -> Value) -> Binding<Value> {
+        Binding<Value>.init(get: get, set: { _ in })
+    }
+}
