@@ -8,6 +8,16 @@
 
 import Foundation
 
+public extension Comparable {
+
+    func clamped             (minimum:Self, maximum:Self) -> Self {
+        return self < minimum ? minimum : maximum < self ? maximum : self
+    }
+
+    mutating func clamp      (minimum:Self, maximum:Self) {
+        self = clamped(minimum: minimum, maximum: maximum)
+    }
+}
 
 public extension Comparable {
     
@@ -15,6 +25,10 @@ public extension Comparable {
         if a < b { return .orderedAscending }
         if b > a { return .orderedDescending }
         return .orderedSame
+    }
+    
+    func compared(to: Self) -> ComparisonResult {
+        Self.compare(self,to)
     }
     
 }
