@@ -1059,3 +1059,15 @@ public extension Binding {
         Binding<Value>.init(get: get, set: { _ in })
     }
 }
+
+public extension View {
+    
+    func visible(_ flag: Bool) -> some View {
+        if flag {
+            return self.asAnyView
+        } else {
+            return EmptyView().asAnyView
+        }
+    }
+}
+
