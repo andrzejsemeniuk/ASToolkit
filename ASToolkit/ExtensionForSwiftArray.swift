@@ -586,3 +586,15 @@ public extension Array {
     }
 
 }
+
+public extension Array where Element == Int {
+    
+    func inverted() -> Self {
+        var r = self
+        for i in 0..<count {
+            r[self[i]] = i
+        }
+        return r
+    }
+    
+}
