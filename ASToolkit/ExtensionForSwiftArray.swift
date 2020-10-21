@@ -589,7 +589,7 @@ public extension Array {
 
 public extension Array where Element == Int {
     
-    func inverted() -> Self {
+    func invertedIndex() -> Self {
         var r = self
         for i in 0..<count {
             r[self[i]] = i
@@ -597,4 +597,13 @@ public extension Array where Element == Int {
         return r
     }
     
+
+}
+
+public extension Array {
+    
+    func orderedIndex(with sorting: (Element,Element)->Bool) -> [Int] {
+        self.enumerated().sorted(by: { sorting($0.1,$1.1) }).map { $0.0 }
+    }
+
 }
