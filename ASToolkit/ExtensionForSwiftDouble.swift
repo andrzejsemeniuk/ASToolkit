@@ -94,3 +94,4 @@ extension Double {
 		return Int(self)
 	}
 }
+

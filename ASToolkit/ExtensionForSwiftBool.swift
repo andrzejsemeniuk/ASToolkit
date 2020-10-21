@@ -26,3 +26,13 @@ extension Bool
         return !self
     }
 }
+
+public extension Bool {
+    
+    static func compare(_ a: Bool, _ b: Bool) -> ComparisonResult {
+        if !a && b { return .orderedAscending }
+        if a && !b { return .orderedDescending }
+        return .orderedSame
+    }
+    
+}

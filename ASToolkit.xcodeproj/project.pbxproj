@@ -82,6 +82,7 @@
 		5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */; };
 		5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */; };
 		5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */; };
+		579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579346572540649E004D0344 /* ExtensionForSwiftComparable.swift */; };
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		579D100D21D7BC9400FDDA96 /* ObjectiveC.h in Headers */ = {isa = PBXBuildFile; fileRef = 579D100B21D7BC9400FDDA96 /* ObjectiveC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */ = {isa = PBXBuildFile; fileRef = 579D100C21D7BC9400FDDA96 /* ObjectiveC.m */; };
@@ -247,6 +248,7 @@
 		5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfList.swift; sourceTree = "<group>"; };
 		5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfPickerOfFont.swift; sourceTree = "<group>"; };
 		5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericControllerOfPickerOfColor.swift; sourceTree = "<group>"; };
+		579346572540649E004D0344 /* ExtensionForSwiftComparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftComparable.swift; sourceTree = "<group>"; };
 		579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientRadialLayer.swift; sourceTree = "<group>"; };
 		579D100B21D7BC9400FDDA96 /* ObjectiveC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveC.h; sourceTree = "<group>"; };
 		579D100C21D7BC9400FDDA96 /* ObjectiveC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveC.m; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */,
 				570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */,
 				570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */,
+				579346572540649E004D0344 /* ExtensionForSwiftComparable.swift */,
 				77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */,
 				570FC2851F1124A300FEAC03 /* ExtensionForSwiftDouble.swift */,
 				57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */,
@@ -720,6 +723,7 @@
 				570FC2BF1F1124A300FEAC03 /* ExtensionForSwiftInt.swift in Sources */,
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
+				579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */,
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
 				772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */,
