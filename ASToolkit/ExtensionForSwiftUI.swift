@@ -235,6 +235,28 @@ public extension Color {
 
 }
 
+public extension Array where Element == Double {
+    var asColorHSBA     : Color     { .init(hsba: self) }
+    var asColorHSB      : Color     { .init(hsb: self) }
+    var asColorRGBA     : Color     { .init(rgba: self) }
+    var asColorRGB      : Color     { .init(rgb: self) }
+    var asUIColorHSBA   : UIColor   { UIColor.init(hsba: self.asArrayOfCGFloat) }
+    var asUIColorHSB    : UIColor   { UIColor.init(hsb: self.asArrayOfCGFloat) }
+    var asUIColorRGBA   : UIColor   { UIColor.init(rgba: self.asArrayOfCGFloat) }
+    var asUIColorRGB    : UIColor   { UIColor.init(rgb: self.asArrayOfCGFloat) }
+}
+
+public extension Array where Element == CGFloat {
+    var asColorHSBA     : Color     { .init(hsba: self.asArrayOfDouble) }
+    var asColorHSB      : Color     { .init(hsb: self.asArrayOfDouble) }
+    var asColorRGBA     : Color     { .init(rgba: self.asArrayOfDouble) }
+    var asColorRGB      : Color     { .init(rgb: self.asArrayOfDouble) }
+    var asUIColorHSBA   : UIColor   { UIColor.init(hsba: self) }
+    var asUIColorHSB    : UIColor   { UIColor.init(hsb: self) }
+    var asUIColorRGBA   : UIColor   { UIColor.init(rgba: self) }
+    var asUIColorRGB    : UIColor   { UIColor.init(rgb: self) }
+}
+
 @available(iOS 13, *)
 public extension ViewDimensions {
     
