@@ -76,3 +76,9 @@ extension CGFloat {
     
 }
 
+public extension CGFloat {
+    
+    var asDouble : Double { Double(self) }
+    
+}
+

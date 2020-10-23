@@ -370,4 +370,22 @@ extension Array where Element == String {
     
 }
 
+public extension String {
+
+    func splitAndKeep(on: (Character)->Bool) -> [Substring] {
+        var splits : [Substring] = []
+        var i0 = 0
+        for (index,c) in self.enumerated() {
+            if on(c) && i0 < index {
+                splits.append(self.substring(i0..<index))
+                i0 = index
+            }
+        }
+        if i0 < self.count-1 {
+            splits.append(substring(i0..<count))
+        }
+        return splits
+    }
+    
+}
 
