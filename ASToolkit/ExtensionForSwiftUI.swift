@@ -1093,3 +1093,37 @@ public extension View {
     }
 }
 
+public extension Color {
+    
+    struct HSBASpans : Codable {
+        public struct Span : Codable {
+            public var v0 : CGFloat
+            public var v1 : CGFloat?
+            
+            public var isRange : Bool {
+                v1 != nil
+            }
+            
+            public init(v0: CGFloat = 1, v1: CGFloat? = nil) {
+                self.v0 = v0
+                self.v1 = v1
+            }
+        }
+        public var h   : Span
+        public var s   : Span
+        public var b   : Span
+        public var a   : Span
+        
+        public init(h: Span = .init(),
+                    s: Span = .init(),
+                    b: Span = .init(),
+                    a: Span = .init()) {
+            self.h = h
+            self.s = s
+            self.b = b
+            self.a = a
+        }
+    }
+    
+}
+
