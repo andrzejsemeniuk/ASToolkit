@@ -8,22 +8,43 @@
 
 import Foundation
 
-extension BinaryInteger {
-    public mutating func increment(increment:Self) -> Self {
+public extension BinaryInteger {
+    mutating func increment(increment:Self) -> Self {
+        self = self + increment
+        return self
+    }
+    
+    @discardableResult
+    mutating func add(_ value: Self, min: Self, max: Self) -> Self {
+        self = Swift.max(min, Swift.min(max, self + value))
+        return self
+    }
+    
+    func added(_ value: Self, min: Self, max: Self) -> Self {
+        Swift.max(min, Swift.min(max, self + value))
+    }
+}
+
+public extension FloatingPoint {
+    mutating func increment(_ increment:Self) -> Self {
         self = self + increment
         return self
     }
 }
 
-extension FloatingPoint {
-    public mutating func increment(_ increment:Self) -> Self {
-        self = self + increment
+public extension FloatingPoint {
+    var twoPi: Self { return .pi * 2 }
+    var degreesToRadians: Self { return self * .pi / 180 }
+    var radiansToDegrees: Self { return self * 180 / .pi }
+    
+    @discardableResult
+    mutating func add(_ value: Self, min: Self, max: Self) -> Self {
+        self = Swift.max(min, Swift.min(max, self + value))
         return self
     }
-}
+    
+    func added(_ value: Self, min: Self, max: Self) -> Self {
+        Swift.max(min, Swift.min(max, self + value))
+    }
 
-extension FloatingPoint {
-    public var twoPi: Self { return .pi * 2 }
-    public var degreesToRadians: Self { return self * .pi / 180 }
-    public var radiansToDegrees: Self { return self * 180 / .pi }
 }
