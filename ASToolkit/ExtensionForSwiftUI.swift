@@ -230,7 +230,7 @@ public extension Color {
     }
     
     var hsva : [Double] {
-        self.uiColor(.black).arrayOfHSBA.map { Double($0) }
+        self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
 
 }
