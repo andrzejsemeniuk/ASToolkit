@@ -98,15 +98,19 @@ extension CGPoint {
     }
 
 	public var length : CGFloat {
-		return sqrt(x * x + y * y)
+        sqrt(x * x + y * y)
 	}
 
+    public var clampedTo01      : CGPoint {
+        .init(x: x.clampedTo01, y: y.clampedTo01)
+    }
+
     public var asCGSize:CGSize {
-        return CGSize(width:x,height:y)
+        CGSize(width:x,height:y)
     }
     
     static public var almostZero:CGPoint = {
-        return CGPoint(x: CGFloat.leastNormalMagnitude, y: CGFloat.leastNormalMagnitude)
+        CGPoint(x: CGFloat.leastNormalMagnitude, y: CGFloat.leastNormalMagnitude)
     }()
 }
 
@@ -118,16 +122,22 @@ extension CGSize {
         self.init(width:side, height:side)
     }
     
-    public var asCGPoint:CGPoint {
-        return CGPoint(x:width,y:height)
+    public var asCGPoint        : CGPoint {
+        CGPoint(x:width,y:height)
     }
-    public var diagonal:CGFloat {
-        return sqrt(width*width + height*height)
+    public var diagonal         : CGFloat {
+        sqrt(width*width + height*height)
+    }
+    
+    public var clampedTo01      : CGSize {
+        .init(width: width.clampedTo01, height: height.clampedTo01)
     }
     
     static public var almostZero:CGSize = {
-        return CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
+        CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
     }()
+    
+    
 }
 
 extension CGRect {
@@ -142,23 +152,23 @@ extension CGRect {
         self.init(x: x, y: y, width: 0, height: 0)
     }
     
-    public init(_ size:CGSize) {
+    public init(_ size: CGSize) {
         self.init(x: 0, y: 0, width: size.width, height: size.height)
     }
 
-    public init(width:CGFloat, height:CGFloat) {
+    public init(width: CGFloat, height:CGFloat) {
         self.init(x: 0, y: 0, width: width, height: height)
     }
     
-    public init(side:CGFloat) {
+    public init(side: CGFloat) {
         self.init(x: 0, y: 0, width: side, height: side)
     }
     
-	public init(size:CGSize) {
+	public init(size: CGSize) {
 		self.init(x: 0, y: 0, width: size.width, height: size.height)
 	}
 
-    public var diagonal:CGFloat {
+    public var diagonal: CGFloat {
         return sqrt(width*width + height*height)
     }
     
@@ -305,6 +315,8 @@ extension CGSize
 	public var left            :CGFloat        { return 0 }
 	public var bottom          :CGFloat        { return 0 }
 	public var right           :CGFloat        { return width }
+    public var w               :CGFloat        { return width }
+    public var h               :CGFloat        { return height }
 
 	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: width * x, y: height * y) }
 	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x, y:ratio.y) }

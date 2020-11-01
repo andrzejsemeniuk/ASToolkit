@@ -12,6 +12,7 @@ extension Date {
     
     public func componentDelta(to other:Date, units:[Calendar.Component] = [
         Calendar.Component.year,
+        Calendar.Component.month,
         Calendar.Component.weekOfYear,
         Calendar.Component.day,
         Calendar.Component.hour,
@@ -31,6 +32,7 @@ extension Date {
     
     public func componentDeltas(to other:Date, units:[Calendar.Component] = [
         Calendar.Component.year,
+        Calendar.Component.month,
         Calendar.Component.weekOfYear,
         Calendar.Component.day,
         Calendar.Component.hour,

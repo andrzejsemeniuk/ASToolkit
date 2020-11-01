@@ -281,6 +281,8 @@ extension SKShapeNode
         }
         if let lineJoin = lineJoin {
             self.lineJoin = lineJoin
+            // self.lineJoin = lineJoin ?? self.lineJoin
+            // self.lineJoin ?= lineJoin
         }
     }
 
