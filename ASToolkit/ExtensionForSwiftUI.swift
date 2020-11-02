@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import UIKit
+import SpriteKit
 
 @available(iOS 13, *)
 public extension View {
@@ -228,9 +230,95 @@ public extension Color {
             return c
         }
     }
+
+    func asUIColor(_ c: UIColor = .white) -> UIKit.UIColor {
+        uiColor(c)
+    }
     
     var hsva : [Double] {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
+    }
+
+    struct HSBA : Codable {
+        
+        public enum Component : CaseIterable {
+            case hue, saturation, brightness, alpha
+        }
+        
+        public var h       : CGFloat
+        public var s       : CGFloat
+        public var b       : CGFloat
+        public var a       : CGFloat
+        
+        public var asSKColor           : SKColor       { SKColor.init(hsba: [h,s,b,a]) }
+        public var asUIColor           : UIColor       { UIColor.init(hsba: [h,s,b,a]) }
+        public var asColor             : Color         { Color.init(hsba: [h.asDouble,s.asDouble,b.asDouble,a.asDouble]) }
+        
+        public init() {
+            h = 0
+            s = 0
+            b = 0
+            a = 1
+        }
+        
+        public init(white: CGFloat, alpha: CGFloat = 1) {
+            h = 0
+            s = 0
+            b = white
+            a = alpha
+        }
+        
+        public init(from: SKColor) {
+            let hsba = from.arrayOfHSBA
+            h = hsba[0].clampedTo01
+            s = hsba[1].clampedTo01
+            b = hsba[2].clampedTo01
+            a = hsba[3].clampedTo01
+        }
+        
+        public init(from: Color) {
+            self.init(hsba: from.hsva)
+        }
+        
+        public init(hsba: [Double]) {
+            h = hsba[0].asCGFloat.clampedTo01
+            s = hsba[1].asCGFloat.clampedTo01
+            b = hsba[2].asCGFloat.clampedTo01
+            a = hsba[3].asCGFloat.clampedTo01
+        }
+
+        public init(hsb: [Double], alpha: CGFloat = 1) {
+            h = hsb[0].asCGFloat.clampedTo01
+            s = hsb[1].asCGFloat.clampedTo01
+            b = hsb[2].asCGFloat.clampedTo01
+            a = alpha
+        }
+
+        public static let clear     : HSBA = .init(white: 1, alpha: 0)
+        
+        public var isClear          : Bool { a <= 0 }
+        public var isTransparent    : Bool { a <= 0 }
+        public var isOpaque         : Bool { a > 0 }
+        
+        public func get(component: Component) -> CGFloat {
+            switch component {
+                case .hue           : return h
+                case .saturation    : return s
+                case .brightness    : return b
+                case .alpha         : return a
+            }
+        }
+        
+        mutating public func set(component: Component, _ v: CGFloat) {
+            let v = v.clampedTo01
+            switch component {
+                case .hue           : h = v
+                case .saturation    : s = v
+                case .brightness    : b = v
+                case .alpha         : a = v
+            }
+        }
+
     }
 
 }
@@ -1096,6 +1184,7 @@ public extension View {
 public extension Color {
     
     struct HSBASpans : Codable {
+        
         public struct Span : Codable {
             public var v0 : CGFloat
             public var v1 : CGFloat?
@@ -1109,6 +1198,7 @@ public extension Color {
                 self.v1 = v1
             }
         }
+        
         public var h   : Span
         public var s   : Span
         public var b   : Span
@@ -1117,7 +1207,8 @@ public extension Color {
         public init(h: Span = .init(),
                     s: Span = .init(),
                     b: Span = .init(),
-                    a: Span = .init()) {
+                    a: Span = .init())
+        {
             self.h = h
             self.s = s
             self.b = b
