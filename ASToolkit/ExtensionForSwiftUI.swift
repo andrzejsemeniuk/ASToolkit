@@ -254,11 +254,11 @@ public extension Color {
         public var asUIColor           : UIColor       { UIColor.init(hsba: [h,s,b,a]) }
         public var asColor             : Color         { Color.init(hsba: [h.asDouble,s.asDouble,b.asDouble,a.asDouble]) }
         
-        public init() {
-            h = 0
-            s = 0
-            b = 0
-            a = 1
+        public init(h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1) {
+            self.h = h
+            self.s = s
+            self.b = b
+            self.a = a
         }
         
         public init(white: CGFloat, alpha: CGFloat = 1) {
