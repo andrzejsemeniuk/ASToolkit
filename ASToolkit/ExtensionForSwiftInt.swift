@@ -96,7 +96,8 @@ public extension Int {
 public extension Int {
 	@discardableResult
 	mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
-		self = (self + increment) % modulo
+        let r = (self + increment) % modulo
+        self = r < 0 ? r + modulo : r
 		return self
 	}
 }
