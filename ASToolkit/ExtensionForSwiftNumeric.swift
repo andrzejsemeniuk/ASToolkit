@@ -325,17 +325,24 @@ public extension Int {
 
 public extension UInt {
 
-    var asFloat         : Float         { return Float(self) }
-    var asCGFloat       : CGFloat       { return CGFloat(self) }
-    var asDouble        : Double        { return Double(self) }
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
 
     func isInInterval(_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
 }
 
 public extension UInt64 {
 
-    var asDouble        : Double        { return Double(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt64         : Int64         { Int64(self) }
 
     func isInInterval(_ l:UInt64, _ u:UInt64) -> Bool { return l <= self && self < u }
 
+}
+
+public extension Int64 {
+    
+    var asUInt64        : UInt64        { UInt64(self) }
+    
 }
