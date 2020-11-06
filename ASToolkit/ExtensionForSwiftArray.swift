@@ -615,3 +615,27 @@ public extension Array {
     }
 
 }
+
+public extension Array {
+    
+    func removedEqualAdjacent(_ equal: (Element,Element)->Bool) -> Self {
+        var r : Self = []
+        r.reserveCapacity(count)
+        if count > 0 {
+            r.append(self[0])
+        }
+        for i in 1..<count {
+            if equal(self[i-1],self[i]) {
+                continue
+            }
+            r.append(self[i])
+        }
+        return r
+    }
+    
+    func sortedAndUniqued(_ less: (Element,Element)->Bool) -> Self {
+        self.sorted(by: less).removedEqualAdjacent { a,b in
+            !less(a,b) && !less(b,a)
+        }
+    }
+}
