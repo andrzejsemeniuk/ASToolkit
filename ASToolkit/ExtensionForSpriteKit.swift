@@ -258,139 +258,191 @@ extension SKLightNode
 
 
 
-extension SKShapeNode
+public extension SKShapeNode
 {
-    public convenience init(lines:[CGPoint], strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil, lineCap:CGLineCap? = nil, lineJoin:CGLineJoin? = nil) {
+    convenience init(lines:[CGPoint],
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) {
         let path = CGMutablePath()
         path.move(to:lines[0])
         for i in stride(from:1,to:lines.count,by:1) {
             path.addLine(to:lines[i])
         }
         self.init(path:path)
-        if let strokeColor = strokeColor {
-            self.strokeColor = strokeColor
-        }
-        else {
-            self.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
-        if let lineCap = lineCap {
-            self.lineCap = lineCap
-        }
-        if let lineJoin = lineJoin {
-            self.lineJoin = lineJoin
-            // self.lineJoin = lineJoin ?? self.lineJoin
-            // self.lineJoin ?= lineJoin
-        }
+        self.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
     }
 
-    public convenience init(rectangle:CGRect, fillColor:UIColor? = nil, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil, lineCap:CGLineCap? = nil, lineJoin:CGLineJoin? = nil) {
+    convenience init(rectangle          : CGRect,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) {
         self.init(rect:rectangle)
-        if let fillColor = fillColor {
-            self.fillColor = fillColor
-        }
-        if let strokeColor = strokeColor {
-            self.strokeColor = strokeColor
-        }
-        else {
-            self.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
-        if let lineCap = lineCap {
-            self.lineCap = lineCap
-        }
-        if let lineJoin = lineJoin {
-            self.lineJoin = lineJoin
-        }
+        self.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
     }
 
-    public convenience init(circleOfRadius:CGFloat, position:CGPoint, fillColor:UIColor? = nil, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil) {
-        self.init(circleOfRadius:circleOfRadius)
-        self.position = position
-        if let fillColor = fillColor {
-            self.fillColor = fillColor
-        }
-        if let strokeColor = strokeColor {
-            self.strokeColor = strokeColor
-        }
-        else {
-            self.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
+    convenience init(circleOfRadius     : CGFloat,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) {
+        self.init(circleOfRadius        : circleOfRadius)
+        self.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
     }
 
-    public convenience init(circleOfRadius:CGFloat, fillColor:UIColor, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil) {
-        self.init(circleOfRadius:circleOfRadius)
-        self.fillColor = fillColor
-        if let strokeColor = strokeColor {
-            self.strokeColor = strokeColor
-        }
-        else {
-            self.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
+    convenience init(line: (from: CGPoint, to: CGPoint),
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) {
+        self.init(lines:[line.from,line.to])
+        self.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
     }
-    
-    public convenience init(circleOfRadius:CGFloat, strokeColor:UIColor, fillColor:UIColor? = nil, lineWidth:CGFloat? = nil) {
-        self.init(circleOfRadius:circleOfRadius)
-        self.strokeColor = strokeColor
-        if let fillColor = fillColor {
-            self.fillColor = fillColor
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
-    }
-    
-    static public func circle(withRadius:CGFloat, position:CGPoint? = nil, fillColor:UIColor? = nil, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil) -> SKShapeNode {
-        let r = SKShapeNode(circleOfRadius: withRadius)
-        if let position = position {
-            r.position = position
-        }
-        if let fillColor = fillColor {
-            r.fillColor = fillColor
-        }
-        if let strokeColor = strokeColor {
-            r.strokeColor = strokeColor
-        }
-        else {
-            r.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            r.lineWidth = lineWidth
-        }
-        return r
-    }
-    
-    static public func line(from:CGPoint, to:CGPoint, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil, lineCap:CGLineCap? = nil, lineJoin:CGLineJoin? = nil) -> SKShapeNode {
+
+
+    static func line(from: CGPoint, to: CGPoint,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode(lines:[from,to])
-        if let strokeColor = strokeColor {
-            r.strokeColor = strokeColor
-        }
-        else {
-            r.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            r.lineWidth = lineWidth
-        }
-        if let lineCap = lineCap {
-            r.lineCap = lineCap
-        }
-        if let lineJoin = lineJoin {
-            r.lineJoin = lineJoin
-        }
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
         return r
     }
 
-    public func configure(position:CGPoint? = nil, fillColor:UIColor? = nil, strokeColor:UIColor? = nil, lineWidth:CGFloat? = nil, lineCap:CGLineCap? = nil, lineJoin:CGLineJoin? = nil) {
+    static func lineH(y: CGFloat, x0: CGFloat, x1: CGFloat,
+                      position           : CGPoint? = nil,
+                      fillColor          : UIColor? = nil,
+                      strokeColor        : UIColor? = nil,
+                      glowWidth          : CGFloat? = nil,
+                      lineWidth          : CGFloat? = nil,
+                      lineCap            : CGLineCap? = nil,
+                      lineJoin           : CGLineJoin? = nil,
+                      lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode.line(from: .init(x0,y), to: .init(x1,y))
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
+        return r
+    }
+    static func lineV(x: CGFloat, y0: CGFloat, y1: CGFloat,
+                      position           : CGPoint? = nil,
+                      fillColor          : UIColor? = nil,
+                      strokeColor        : UIColor? = nil,
+                      glowWidth          : CGFloat? = nil,
+                      lineWidth          : CGFloat? = nil,
+                      lineCap            : CGLineCap? = nil,
+                      lineJoin           : CGLineJoin? = nil,
+                      lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode.line(from: .init(x,y0), to: .init(x,y1))
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
+        return r
+    }
+
+    static func circle(withRadius       : CGFloat,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode(circleOfRadius: withRadius)
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
+        return r
+    }
+
+
+}
+
+extension SKShapeNode {
+    
+    @discardableResult
+    open func configured (position          : CGPoint? = nil,
+                          fillColor         : UIColor? = nil,
+                          strokeColor       : UIColor? = nil,
+                          glowWidth         : CGFloat? = nil,
+                          lineWidth         : CGFloat? = nil,
+                          lineCap           : CGLineCap? = nil,
+                          lineJoin          : CGLineJoin? = nil,
+                          lineDash          : [CGFloat]? = nil) -> Self {
         if let position = position {
             self.position = position
         }
@@ -412,21 +464,40 @@ extension SKShapeNode
         if let lineJoin = lineJoin {
             self.lineJoin = lineJoin
         }
+        return self
     }
     
-    open func with(strokeColor    : UIColor? = nil,
-                     lineWidth      : CGFloat? = nil,
-                     glowWidth      : CGFloat? = nil) -> Self
-    {
-        self.strokeColor = strokeColor ?? self.strokeColor
-        self.lineWidth = lineWidth ?? self.lineWidth
-        self.glowWidth = glowWidth ?? self.glowWidth
+    @discardableResult
+    open func with(fillColor        : UIColor? = nil,
+                   strokeColor      : UIColor? = nil,
+                   glowWidth        : CGFloat? = nil,
+                   lineWidth        : CGFloat? = nil,
+                   lineCap          : CGLineCap? = nil,
+                   lineJoin         : CGLineJoin? = nil,
+                   lineDash         : [CGFloat]? = nil) -> Self {
+    
+        self.fillColor      = fillColor ?? self.fillColor
+        self.strokeColor    = strokeColor ?? self.strokeColor
+        self.glowWidth      = glowWidth ?? self.glowWidth
+        self.lineWidth      = lineWidth ?? self.lineWidth
+        self.lineCap        = lineCap ?? self.lineCap
+        self.lineJoin       = lineJoin ?? self.lineJoin
+        if let lengths = lineDash {
+            addDashes(lengths: lengths)
+        }
         return self
     }
     
     open func addDashes(phase: CGFloat = 0, lengths: [CGFloat]) {
         path = path?.copy(dashingWithPhase: phase, lengths: lengths)
     }
+    
+    @discardableResult
+    open func with(dash lengths: [CGFloat], phase: CGFloat = 0) -> Self {
+        path = path?.copy(dashingWithPhase: phase, lengths: lengths)
+        return self
+    }
+
 
 }
 
