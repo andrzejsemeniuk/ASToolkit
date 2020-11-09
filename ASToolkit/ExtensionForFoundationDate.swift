@@ -222,3 +222,8 @@ extension Date {
     }
 }
 
+public extension TimeInterval {
+    
+    var asDate : Date { Date.init(timeIntervalSince1970: self) }
+    
+}

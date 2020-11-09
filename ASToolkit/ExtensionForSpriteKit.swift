@@ -220,13 +220,41 @@ extension SKNode
         return self
     }
     
-    public func onNodePositionToParentCenter ()                                              -> SKNode
+    public func onNodePositionToParentCenter ()                                           -> SKNode
     {
         return onNodePositionToParentRatio(to:(x:0.5,y:0.5))
     }
     
     
     
+    
+    public func named(_ title: String) -> Self {
+        self.name = title
+        return self
+    }
+    
+    public func positioned(at: CGPoint) -> Self {
+        self.position = at
+        return self
+    }
+
+    
+    
+    public func userDataGet(_ key: String) -> Any? {
+        userData?[key]
+    }
+    
+    public func userDataSet(_ key: String, _ new: Any?) {
+        if userData == nil {
+            if let new = new {
+                userData = [key : new]
+            }
+        } else {
+            userData![key] = new
+        }
+    }
+
+
 }
 
 
@@ -235,8 +263,8 @@ extension SKNode
 
 extension SKScene
 {
-    override var  width   :CGFloat                                                                    { return self.size.width }
-    override var  height  :CGFloat                                                                    { return self.size.height }
+    override var  width   : CGFloat                                                        { return self.size.width }
+    override var  height  : CGFloat                                                        { return self.size.height }
     
     // NOTE: NEED TO OVERRIDE position TO FIX BUG IN SpriteKit
     override open var  position:CGPoint {

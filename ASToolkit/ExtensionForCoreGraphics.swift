@@ -353,6 +353,30 @@ public struct CGScreen
 	public static func ratioFrom               (point:CGPoint)                 -> CGPoint  { return bounds.ratioFrom(point:point) }
 }
 
+public struct CGSlope {
+    public var point0  : CGPoint
+    public var point1  : CGPoint
+    public var dy      : CGFloat   { point1.y - point0.y }
+    public var dx      : CGFloat   { point1.x - point0.x }
+    public var slope   : CGFloat?  { dx == 0 ? nil : dy/dx }
+    
+    public init(point0: CGPoint, point1: CGPoint) {
+        self.point0 = point0
+        self.point1 = point1
+    }
+    
+    public func y(x: CGFloat) -> CGFloat? {
+        // y = mx + b
+        guard let slope = slope else { return nil }
+        return slope * (x - point0.x) + point0.y
+    }
+}
+
+public extension Int32 {
+    var asCGLineCap     : CGLineCap?    { CGLineCap.init(rawValue: self) }
+    var asCGLineJoin    : CGLineJoin?   { CGLineJoin.init(rawValue: self) }
+}
+
 // From GitHub: ldesroziers/CGRect+OperatorsAdditions
 
 /**
