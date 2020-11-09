@@ -390,7 +390,38 @@ public extension String {
 }
 
 public extension String {
+    
     var asInt : Int? { Int(self) }
+    
+    var asPhrase : String {
+//        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
+        var r : String = ""
+        var spaces = 0
+        for c in self {
+            if c.isUppercase {
+                if r.isNotEmpty {
+                    r.append(" ")
+                }
+                r.append(c)
+                continue
+            } else if c.isWhitespace {
+                spaces += 1
+                continue
+            } else if spaces > 0 {
+                spaces = 0
+                r.append(" ")
+            }
+            r.append(c)
+        }
+        return r
+    }
+    
+    var asCapitalizedWords : String {
+        asPhrase.splitAndKeep(on: { $0 == " "}).map {
+            $0.capitalized
+        }.joined(separator: " ")
+    }
+        
 }
 
 
