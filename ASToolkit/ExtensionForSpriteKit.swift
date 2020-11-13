@@ -492,6 +492,9 @@ extension SKShapeNode {
         if let lineJoin = lineJoin {
             self.lineJoin = lineJoin
         }
+        if let lineDash = lineDash {
+            addDashes(lengths: lineDash)
+        }
         return self
     }
     
