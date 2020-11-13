@@ -375,6 +375,14 @@ public struct CGSlope {
 public extension Int32 {
     var asCGLineCap     : CGLineCap?    { CGLineCap.init(rawValue: self) }
     var asCGLineJoin    : CGLineJoin?   { CGLineJoin.init(rawValue: self) }
+    
+    var CGLineJoinBevel : Int32         { CGLineJoin.bevel.rawValue }
+    var CGLineJoinMiter : Int32         { CGLineJoin.miter.rawValue }
+    var CGLineJoinRound : Int32         { CGLineJoin.round.rawValue }
+    
+    var CGLineCapButt   : Int32         { CGLineCap.butt.rawValue }
+    var CGLineCapRound  : Int32         { CGLineCap.round.rawValue }
+    var CGLineCapSquare : Int32         { CGLineCap.square.rawValue }
 }
 
 // From GitHub: ldesroziers/CGRect+OperatorsAdditions
