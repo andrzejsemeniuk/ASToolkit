@@ -1218,3 +1218,21 @@ public extension Color {
     
 }
 
+public struct Blur: UIViewRepresentable {
+    public var style: UIBlurEffect.Style = .systemMaterial
+
+    public init(style: UIBlurEffect.Style = .systemMaterial) {
+        self.style = style
+    }
+    
+    // create UIView
+    public func makeUIView(context: Context) -> UIVisualEffectView {
+        return UIVisualEffectView(effect: UIBlurEffect(style: style))
+    }
+
+    // update UIView
+    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = UIBlurEffect(style: style)
+    }
+}
+
