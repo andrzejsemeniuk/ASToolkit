@@ -639,3 +639,11 @@ public extension Array {
         }
     }
 }
+
+public extension Array {
+    
+    var range : Range<Int> {
+        0..<count
+    }
+    
+}
