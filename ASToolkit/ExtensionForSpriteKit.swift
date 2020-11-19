@@ -255,6 +255,21 @@ extension SKNode
     }
 
 
+    @discardableResult
+    public func offset(x: CGFloat? = nil, y: CGFloat? = nil) -> Self {
+        self.position.x += x ?? 0
+        self.position.y += y ?? 0
+        return self
+    }
+    
+    @discardableResult
+    public func offset(size: CGSize) -> Self {
+        self.position.x += size.width
+        self.position.y += size.height
+        return self
+    }
+
+
 }
 
 
