@@ -547,6 +547,53 @@ extension SKShapeNode {
 
 }
 
+public extension SKShapeNode {
+    
+    func gradient(size          : CGSize,
+                  colorFill     : SKColor = .white,
+                  color0        : SKColor,
+                  color1        : SKColor,
+                  point0        : CGPoint,
+                  point1        : CGPoint) {
+        
+        self.fillColor       = colorFill
+        let rgba0 = color0.RGBA
+        let rgba1 = color1.RGBA
+        self.fillTexture     = SKTexture.init(size   : size,
+                                              color0 : CIColor.init(red: rgba0.red, green: rgba0.green, blue: rgba0.blue, alpha: rgba0.alpha),
+                                              color1 : CIColor.init(red: rgba1.red, green: rgba1.green, blue: rgba1.blue, alpha: rgba1.alpha),
+                                              start  : point0,
+                                              stop   : point1)
+        
+    }
+    
+}
+
+public extension SKTexture {
+
+    convenience init(size       : CGSize,
+                     color0     : CIColor,
+                     color1     : CIColor,
+                     start      : CGPoint,
+                     stop       : CGPoint)
+    {
+        let coreImageContext    = CIContext(options: nil)
+        let gradientFilter      = CIFilter(name: "CILinearGradient")!
+        let startVector         : CIVector = .init(x: start.x * size.width, y: start.y * size.height)
+        let endVector           : CIVector = .init(x: stop.x * size.width, y: stop.y * size.height)
+        
+        gradientFilter.setDefaults()
+        gradientFilter.setValue(startVector, forKey: "inputPoint0")
+        gradientFilter.setValue(endVector, forKey: "inputPoint1")
+        gradientFilter.setValue(color0, forKey: "inputColor0")
+        gradientFilter.setValue(color1, forKey: "inputColor1")
+        
+        let coreImage = coreImageContext.createCGImage(gradientFilter.outputImage!, from: .init(size)) //CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        
+        self.init(cgImage: coreImage!)
+    }
+    
+}
 
 
 extension SKSpriteNode
