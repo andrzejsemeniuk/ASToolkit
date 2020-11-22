@@ -472,6 +472,27 @@ public extension SKShapeNode
         return r
     }
 
+    static func path(_ path             : CGPath,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode.init(path: path)
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        lineDash        : lineDash)
+        return r
+    }
+
 
 }
 
