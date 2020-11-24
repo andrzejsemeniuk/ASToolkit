@@ -52,6 +52,7 @@
 		571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */; };
 		571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */; };
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
+		573C94CB256D7B340027AD39 /* Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C94CA256D7B340027AD39 /* Attributes.swift */; };
 		573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
 		57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */; };
@@ -214,6 +215,7 @@
 		571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
 		571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationFormatter.swift; sourceTree = "<group>"; };
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
+		573C94CA256D7B340027AD39 /* Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attributes.swift; sourceTree = "<group>"; };
 		573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIViewController.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
 		57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftArraySlice.swift; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
 				576B29AB1F868F960001DC97 /* BindingValue.swift */,
+				573C94CA256D7B340027AD39 /* Attributes.swift */,
 				572A8E031F71DC28008CC1C6 /* Bit.swift */,
 				570FC2A51F1124A300FEAC03 /* Block.swift */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
@@ -781,6 +784,7 @@
 				570FC2C71F1124A300FEAC03 /* ExtensionForUIView.swift in Sources */,
 				570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */,
 				570FC2B51F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift in Sources */,
+				573C94CB256D7B340027AD39 /* Attributes.swift in Sources */,
 				578F25F61F61EC24008C7C8C /* Weak.swift in Sources */,
 				570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */,
 				5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */,

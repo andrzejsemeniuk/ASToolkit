@@ -308,6 +308,10 @@ public extension SKLabelNode {
         self.position = CGPoint(x: r.midX, y: r.midY - self.frame.height * factor)
     }
 
+    func adjustFontSizeToFit(w: CGFloat, h: CGFloat, height factor: CGFloat = 0.45) {
+        adjustFontSizeToFit(rectangle: CGRect(size: CGSize(width: w, height: h)), height: factor)
+    }
+    
 }
 
 
