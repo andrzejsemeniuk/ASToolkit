@@ -77,6 +77,13 @@ extension Date {
     }
 
     public static let dateFormatterForDayOfYear : DateFormatter = .init(withFormat: "DDD")
+    
+    public var monthLetter : String {
+        month3Letters[0].string
+    }
+    public var month3Letters : String {
+        ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][month()-1]
+    }
 }
 
 extension Date {

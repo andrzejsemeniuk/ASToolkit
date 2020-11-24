@@ -294,10 +294,31 @@ extension SKScene
 
 
 
-extension SKLightNode
+
+public extension SKLabelNode {
+
+    // code snippet from: https://stackoverflow.com/questions/32144666/resize-a-sklabelnode-font-size-to-fit
+    func adjustFontSizeToFit(rectangle r: CGRect, height factor: CGFloat = 0.45) {
+        guard frame.width > 0, frame.height > 0 else { return }
+        // Determine the font scaling factor that should let the label text fit in the given rectangle.
+        let scalingFactor = min(r.width / self.frame.width, r.height / self.frame.height)
+        // Change the fontSize.
+        self.fontSize *= scalingFactor
+        // Optionally move the SKLabelNode to the center of the rectangle.
+        self.position = CGPoint(x: r.midX, y: r.midY - self.frame.height * factor)
+    }
+
+}
+
+
+
+
+public extension SKLightNode
 {
     
 }
+
+
 
 
 
