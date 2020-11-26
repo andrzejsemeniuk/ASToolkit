@@ -138,6 +138,10 @@ public extension View {
         frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
+    func frame(_ w: CGFloat, _ h: CGFloat) -> some View {
+        frame(width: w, height: h)
+    }
+
 }
 
 @available(iOS 13, *)
@@ -239,6 +243,18 @@ public extension Color {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
 
+    var hsba : [Double] {
+        self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
+    }
+
+    var isBlack : Bool {
+        name == "black"
+    }
+    
+    var isWhite : Bool {
+        name == "white"
+    }
+    
     struct HSBA : Codable {
         
         public enum Component : CaseIterable {
