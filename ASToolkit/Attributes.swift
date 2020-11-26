@@ -39,6 +39,18 @@ public struct Attributes : Codable {
 //            return fallback
 //        }
     
+    public func asColor(_ name: String) -> Color? {
+        if let value = dictionary[name] {
+            let hsba : [Double] = value.split(",").map { Double($0) ?? 0 }
+            return Color.init(hsba: [hsba[safe: 0] ?? 0, hsba[safe: 1] ?? 1, hsba[safe: 2] ?? 1, hsba[safe: 3] ?? 1])
+        }
+        return nil
+    }
+    
+    public func asColor(_ name: String, _ fallback: Color) -> Color {
+        asColor(name) ?? fallback
+    }
+    
     public func asSKColor(_ name: String) -> SKColor? {
         if let value = dictionary[name] {
             let hsba : [CGFloat] = value.split(",").map { CGFloat($0) ?? 0 }
@@ -51,7 +63,7 @@ public struct Attributes : Codable {
         asSKColor(name) ?? fallback
     }
     
-    
+
     public func asString(_ key: String, _ fallback: String) -> String {
         return dictionary[key] ?? fallback
     }
