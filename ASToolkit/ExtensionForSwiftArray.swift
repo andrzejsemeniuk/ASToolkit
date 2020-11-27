@@ -647,3 +647,15 @@ public extension Array {
     }
     
 }
+
+public extension Array {
+    
+    func padded(with: Element, upto limit: Int) -> Self {
+        var r = self
+        while r.count < limit {
+            r.append(with)
+        }
+        return r
+    }
+    
+}

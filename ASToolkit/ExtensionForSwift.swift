@@ -36,3 +36,30 @@ public func printMirrorAttributesOf(_ any: Any) {
     }
 }
 
+//public protocol JSONCodable : Codable {
+//    
+//    var encoded : Data! { get }
+//    
+//    mutating func decode(from: Data!) -> Bool
+//    
+//}
+//
+//public extension JSONCodable {
+//    
+//    var encoded : Data! {
+//        try? JSONEncoder.init().encode(self)
+//    }
+//    
+//    mutating func decode(from: Data!) -> Bool {
+//        guard let from = from else {
+//            return false
+//        }
+//        guard let new = try? JSONDecoder.init().decode(Self.self, from: from) else {
+//            return false
+//        }
+//        self = new
+//        return true
+//    }
+//    
+//}
+//

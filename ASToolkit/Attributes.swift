@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 import SwiftUI
 
-public struct Attributes : Codable {
+public struct Attributes {
     
     
     public var title : String?
@@ -64,9 +64,15 @@ public struct Attributes : Codable {
     }
     
 
-    public func asString(_ key: String, _ fallback: String) -> String {
-        return dictionary[key] ?? fallback
+    public func asString(_ key: String) -> String? {
+        return dictionary[key]
     }
+
+    public func asString(_ key: String, _ fallback: String) -> String {
+        return asString(key) ?? fallback
+    }
+
+    
     public func asDouble(_ key: String, _ fallback: Double) -> Double {
         if let value = dictionary[key] {
             return Double(value) ?? fallback
@@ -98,9 +104,57 @@ public struct Attributes : Codable {
 //        if fallback is Int { return asInt(name, fallback as! Int) as! T }
 //        return fallback
 //    }
+
     
+    public mutating func set(_ key: String, _ color: SKColor) {
+        dictionary[key] = Self.string(from: color)
+    }
+
+    public mutating func set(_ key: String, _ color: Color) {
+        dictionary[key] = Self.string(from: color)
+    }
+
+    public mutating func set(_ key: String, _ string: String) {
+        dictionary[key] = string
+    }
+
+
     static public func string(from color: SKColor) -> String {
         let hsba = color.HSBA
         return "\(hsba.hue),\(hsba.saturation),\(hsba.brightness),\(hsba.alpha)"
     }
+    
+    static public func string(from color: Color) -> String {
+        let hsba = color.hsba
+        return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
+    }
+    
+    static public func toColor(hsba: String) -> Color {
+        Color.hsba(hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1, upto: 4))
+    }
+
+    static public func toSKColor(hsba: String) -> SKColor {
+        SKColor.init(hsba: hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1, upto: 4))
+    }
+
+}
+
+extension Attributes : Codable {
+    
+    public var encoded : Data! {
+        try? JSONEncoder.init().encode(self)
+    }
+    
+    @discardableResult
+    public mutating func decode(from: Data!) -> Bool {
+        guard let from = from else {
+            return false
+        }
+        guard let new = try? JSONDecoder.init().decode(Self.self, from: from) else {
+            return false
+        }
+        self = new
+        return true
+    }
+
 }
