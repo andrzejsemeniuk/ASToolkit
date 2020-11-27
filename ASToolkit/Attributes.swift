@@ -41,8 +41,7 @@ public struct Attributes {
     
     public func asColor(_ name: String) -> Color? {
         if let value = dictionary[name] {
-            let hsba : [Double] = value.split(",").map { Double($0) ?? 0 }
-            return Color.init(hsba: [hsba[safe: 0] ?? 0, hsba[safe: 1] ?? 1, hsba[safe: 2] ?? 1, hsba[safe: 3] ?? 1])
+            return Self.toColor(hsba: value)
         }
         return nil
     }
@@ -53,8 +52,7 @@ public struct Attributes {
     
     public func asSKColor(_ name: String) -> SKColor? {
         if let value = dictionary[name] {
-            let hsba : [CGFloat] = value.split(",").map { CGFloat($0) ?? 0 }
-            return SKColor.init(hsba: [hsba[safe: 0] ?? 0, hsba[safe: 1] ?? 1, hsba[safe: 2] ?? 1, hsba[safe: 3] ?? 1])
+            return Self.toSKColor(hsba: value)
         }
         return nil
     }
@@ -79,18 +77,21 @@ public struct Attributes {
         }
         return fallback
     }
+    
     public func asCGFloat(_ key: String, _ fallback: CGFloat) -> CGFloat {
         if let value = dictionary[key] {
             return CGFloat(value) ?? fallback
         }
         return fallback
     }
+    
     public func asInt(_ key: String, _ fallback: Int) -> Int {
         if let value = dictionary[key] {
             return Int(value) ?? fallback
         }
         return fallback
     }
+    
     public func asBool(_ key: String, _ fallback: Bool) -> Bool {
         if let value = dictionary[key] {
             return Bool(value) ?? fallback
@@ -130,11 +131,12 @@ public struct Attributes {
     }
     
     static public func toColor(hsba: String) -> Color {
-        Color.hsba(hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1, upto: 4))
+        let v = hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+        return Color.hsba(v)
     }
 
     static public func toSKColor(hsba: String) -> SKColor {
-        SKColor.init(hsba: hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1, upto: 4))
+        SKColor.init(hsba: hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1.0, upto: 4))
     }
 
 }

@@ -46,3 +46,12 @@ extension Dictionary {
     }
     
 }
+
+public extension Dictionary {
+    
+    mutating func forEachValue(_ block: (_ value: inout Value)->()) {
+        self.keys.forEach { k in
+            block(&self[k]!)
+        }
+    }
+}
