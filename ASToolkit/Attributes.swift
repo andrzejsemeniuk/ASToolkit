@@ -96,6 +96,29 @@ public struct Attributes {
     }
 
     
+    
+    public func asDouble(_ key: String) -> Double? {
+        if let value = dictionary[key] {
+            return Double(value)
+        }
+        return nil
+    }
+    
+    public func asCGFloat(_ key: String) -> CGFloat? {
+        if let value = dictionary[key] {
+            return CGFloat(value)
+        }
+        return nil
+    }
+    
+    public func asInt(_ key: String) -> Int? {
+        if let value = dictionary[key] {
+            return Int(value)
+        }
+        return nil
+    }
+    
+
     public func asDouble(_ key: String, _ fallback: Double) -> Double {
         if let value = dictionary[key] {
             return Double(value) ?? fallback
@@ -123,7 +146,34 @@ public struct Attributes {
         }
         return fallback
     }
+
     
+    public func asArrayOfDouble(_ key: String) -> [Double]? {
+        dictionary[key]?.split(",").map { Double($0)! }
+    }
+    
+    public func asArrayOfCGFloat(_ key: String) -> [CGFloat]? {
+        dictionary[key]?.split(",").map { CGFloat($0)! }
+    }
+    
+    public func asArrayOfInt(_ key: String) -> [Int]? {
+        dictionary[key]?.split(",").map { Int($0)! }
+    }
+    
+
+    public func asArrayOfDouble(_ key: String, _ fallback: [Double]) -> [Double] {
+        asArrayOfDouble(key) ?? fallback
+    }
+    
+    public func asArrayOfCGFloat(_ key: String, _ fallback: [CGFloat]) -> [CGFloat] {
+        asArrayOfCGFloat(key) ?? fallback
+    }
+    
+    public func asArrayOfInt(_ key: String, _ fallback: [Int]) -> [Int] {
+        asArrayOfInt(key) ?? fallback
+    }
+    
+
 //    func value<T>(_ name: String, _ fallback: T) -> T {
 //        if fallback is SKColor { return asSKColor(name, fallback as! SKColor) as! T }
 ////        if fallback is Color { return asColor(name, fallback as! Color) as! T }
