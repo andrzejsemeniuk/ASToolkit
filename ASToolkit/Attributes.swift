@@ -46,6 +46,31 @@ public struct Attributes {
         return nil
     }
     
+    
+    public func asHSBA(_ name: String) -> [Double]? {
+        if let hsba = dictionary[name] {
+            return Self.toArrayOfDouble(hsba: hsba)
+        }
+        return nil
+    }
+    
+    public func asHSBA(_ name: String, _ fallback: [Double]) -> [Double] {
+        asHSBA(name) ?? fallback.padded(with: 1, upto: 4)
+    }
+
+    
+    public func asColorHSBA(_ name: String) -> Color.HSBA? {
+        if let hsba = asHSBA(name) {
+            return .init(hsba: hsba)
+        }
+        return nil
+    }
+
+    public func asColorHSBA(_ name: String, _ fallback: Color.HSBA) -> Color.HSBA {
+        asColorHSBA(name) ?? fallback
+    }
+
+
     public func asColor(_ name: String, _ fallback: Color) -> Color {
         asColor(name) ?? fallback
     }
@@ -130,13 +155,22 @@ public struct Attributes {
         return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
     }
     
+
+    static public func toArrayOfDouble(hsba: String) -> [Double] {
+        hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+    }
+    
+    static public func toArrayOfCGFloat(hsba: String) -> [CGFloat] {
+        hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+    }
+    
+
     static public func toColor(hsba: String) -> Color {
-        let v = hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
-        return Color.hsba(v)
+        return Color.hsba(toArrayOfDouble(hsba: hsba))
     }
 
     static public func toSKColor(hsba: String) -> SKColor {
-        SKColor.init(hsba: hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1.0, upto: 4))
+        SKColor.init(hsba: toArrayOfCGFloat(hsba: hsba))
     }
 
 }
