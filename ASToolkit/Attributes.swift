@@ -13,32 +13,35 @@ import SwiftUI
 public struct Attributes {
     
     
-    public var title : String?
+    public var title        : String?
     
-    public var dictionary : [String : String] = [:]
+    public var dictionary   : [String : String]                     = [:]
     
     
     public init(title: String? = nil, dictionary: [String : String] = [:]) {
         self.title = title
         self.dictionary = dictionary 
     }
+
     
-    public func with(_ dictionary: [String : String]) -> Attributes {
-        Attributes.init(dictionary: self.dictionary.merging(dictionary, uniquingKeysWith: { s0, s1 in s1 }))
+    public func merged(from dictionary: [String : String]?) -> Attributes {
+        dictionary == nil ? self : Attributes.init(dictionary: self.dictionary.merging(dictionary!, uniquingKeysWith: { s0, s1 in s1 }))
     }
     
-    // attributes: Attributes
-    //  mycolor = Attribute.color.asColor(attributes[Attribute.color.with("fg")], .white)
-    //  mycolor = attributes.asColor(Attribute.color.with("fg"), .white)
-    //  mycolor = attributes.asColor(.color, "fg", .white)
-//        func asColor(_ name: String, _ fallback: Color) -> Color {
-//            if let value = dictionary[name] {
-//                let hsba : [Double] = value.split(",").map { Double($0) ?? 0 }
-//                return Color.init(hsba: [hsba[safe: 0] ?? 0, hsba[safe: 1] ?? 1, hsba[safe: 2] ?? 1, hsba[safe: 3] ?? 1])
-//            }
-//            return fallback
-//        }
+    public func merged(into dictionary: [String : String]?) -> Attributes {
+        dictionary == nil ? self : Attributes.init(dictionary: self.dictionary.merging(dictionary!, uniquingKeysWith: { s0, s1 in s0 }))
+    }
     
+
+    public func merged(from attributes: Attributes?) -> Attributes {
+        attributes == nil ? self : merged(from: attributes!)
+    }
+    
+    public func merged(into attributes: Attributes?) -> Attributes {
+        attributes == nil ? self : merged(into: attributes!)
+    }
+    
+
     public func asColor(_ name: String) -> Color? {
         if let value = dictionary[name] {
             return Self.toColor(hsba: value)
@@ -47,25 +50,24 @@ public struct Attributes {
     }
     
     
-    public func asHSBA(_ name: String) -> [Double]? {
+    public func asHSBAArrayOfDouble(_ name: String) -> [Double]? {
         if let hsba = dictionary[name] {
             return Self.toArrayOfDouble(hsba: hsba)
         }
         return nil
     }
     
-    public func asHSBA(_ name: String, _ fallback: [Double]) -> [Double] {
-        asHSBA(name) ?? fallback.padded(with: 1, upto: 4)
+    public func asHSBAArrayOfDouble(_ name: String, _ fallback: [Double]) -> [Double] {
+        asHSBAArrayOfDouble(name) ?? fallback.padded(with: 1, upto: 4)
     }
 
     
     public func asColorHSBA(_ name: String) -> Color.HSBA? {
-        if let hsba = asHSBA(name) {
+        if let hsba = asHSBAArrayOfDouble(name) {
             return .init(hsba: hsba)
         }
         return nil
     }
-
     public func asColorHSBA(_ name: String, _ fallback: Color.HSBA) -> Color.HSBA {
         asColorHSBA(name) ?? fallback
     }
@@ -81,16 +83,37 @@ public struct Attributes {
         }
         return nil
     }
-    
     public func asSKColor(_ name: String, _ fallback: SKColor) -> SKColor {
         asSKColor(name) ?? fallback
     }
+    
+    
+    public func asCGLineCap(_ name: String) -> CGLineCap? {
+        if let value = asInt32(name) {
+            return CGLineCap.init(rawValue: value)
+        }
+        return nil
+    }
+    public func asCGLineCap(_ name: String, _ fallback: CGLineCap) -> CGLineCap {
+        asCGLineCap(name) ?? fallback
+    }
+
+    public func asCGLineJoin(_ name: String) -> CGLineJoin? {
+        if let value = asInt32(name) {
+            return CGLineJoin.init(rawValue: value)
+        }
+        return nil
+    }
+    public func asCGLineJoin(_ name: String, _ fallback: CGLineJoin) -> CGLineJoin {
+        asCGLineJoin(name) ?? fallback
+    }
+
+    
     
 
     public func asString(_ key: String) -> String? {
         return dictionary[key]
     }
-
     public func asString(_ key: String, _ fallback: String) -> String {
         return asString(key) ?? fallback
     }
@@ -103,12 +126,18 @@ public struct Attributes {
         }
         return nil
     }
-    
+    public func asDouble(_ key: String, _ fallback: Double) -> Double {
+        asDouble(key) ?? fallback
+    }
+
     public func asCGFloat(_ key: String) -> CGFloat? {
         if let value = dictionary[key] {
             return CGFloat(value)
         }
         return nil
+    }
+    public func asCGFloat(_ key: String, _ fallback: CGFloat) -> CGFloat {
+        asCGFloat(key) ?? fallback
     }
     
     public func asInt(_ key: String) -> Int? {
@@ -117,28 +146,22 @@ public struct Attributes {
         }
         return nil
     }
+    public func asInt(_ key: String, _ fallback: Int) -> Int {
+        asInt(key) ?? fallback
+    }
+    
+    public func asInt32(_ key: String) -> Int32? {
+        if let value = dictionary[key] {
+            return Int32(value)
+        }
+        return nil
+    }
+    public func asInt32(_ key: String, _ fallback: Int32) -> Int32 {
+        asInt32(key) ?? fallback
+    }
     
 
-    public func asDouble(_ key: String, _ fallback: Double) -> Double {
-        if let value = dictionary[key] {
-            return Double(value) ?? fallback
-        }
-        return fallback
-    }
     
-    public func asCGFloat(_ key: String, _ fallback: CGFloat) -> CGFloat {
-        if let value = dictionary[key] {
-            return CGFloat(value) ?? fallback
-        }
-        return fallback
-    }
-    
-    public func asInt(_ key: String, _ fallback: Int) -> Int {
-        if let value = dictionary[key] {
-            return Int(value) ?? fallback
-        }
-        return fallback
-    }
     
     public func asBool(_ key: String, _ fallback: Bool) -> Bool {
         if let value = dictionary[key] {
@@ -146,32 +169,31 @@ public struct Attributes {
         }
         return fallback
     }
-
     
     public func asArrayOfDouble(_ key: String) -> [Double]? {
         dictionary[key]?.split(",").map { Double($0)! }
     }
-    
-    public func asArrayOfCGFloat(_ key: String) -> [CGFloat]? {
-        dictionary[key]?.split(",").map { CGFloat($0)! }
-    }
-    
-    public func asArrayOfInt(_ key: String) -> [Int]? {
-        dictionary[key]?.split(",").map { Int($0)! }
-    }
-    
-
     public func asArrayOfDouble(_ key: String, _ fallback: [Double]) -> [Double] {
         asArrayOfDouble(key) ?? fallback
     }
-    
+
+    public func asArrayOfCGFloat(_ key: String) -> [CGFloat]? {
+        dictionary[key]?.split(",").map { CGFloat($0)! }
+    }
     public func asArrayOfCGFloat(_ key: String, _ fallback: [CGFloat]) -> [CGFloat] {
         asArrayOfCGFloat(key) ?? fallback
     }
-    
+
+    public func asArrayOfInt(_ key: String) -> [Int]? {
+        dictionary[key]?.split(",").map { Int($0)! }
+    }
     public func asArrayOfInt(_ key: String, _ fallback: [Int]) -> [Int] {
         asArrayOfInt(key) ?? fallback
     }
+
+
+    
+    
     
 
 //    func value<T>(_ name: String, _ fallback: T) -> T {
@@ -183,11 +205,11 @@ public struct Attributes {
 
     
     public mutating func set(_ key: String, _ color: SKColor) {
-        dictionary[key] = Self.string(from: color)
+        dictionary[key] = Self.stringForColor(from: color)
     }
 
     public mutating func set(_ key: String, _ color: Color) {
-        dictionary[key] = Self.string(from: color)
+        dictionary[key] = Self.stringForColor(from: color)
     }
 
     public mutating func set(_ key: String, _ string: String) {
@@ -195,16 +217,20 @@ public struct Attributes {
     }
 
 
-    static public func string(from color: SKColor) -> String {
+    static public func stringForColor(from color: SKColor) -> String {
         let hsba = color.HSBA
         return "\(hsba.hue),\(hsba.saturation),\(hsba.brightness),\(hsba.alpha)"
     }
     
-    static public func string(from color: Color) -> String {
+    static public func stringForColor(from color: Color) -> String {
         let hsba = color.hsba
         return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
     }
     
+    static public func stringForColor(from hsba: [Double]) -> String {
+        return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
+    }
+        
 
     static public func toArrayOfDouble(hsba: String) -> [Double] {
         hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
