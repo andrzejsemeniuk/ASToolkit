@@ -425,4 +425,10 @@ public extension String {
 }
 
 
-
+public extension String {
+    
+    func acronym(delimiter: String = " ", join: String = "") -> String {
+        split(delimiter).map { String($0).trimmed()[safe: 0] }.compactMap { $0 }.joined(separator: join)
+    }
+    
+}
