@@ -299,12 +299,18 @@ public extension Int {
 }
 
 public extension Int {
+
     @discardableResult
     mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
-        let r = (self + increment) % modulo
-        self = r < 0 ? r + modulo : r
+        self = incremented(by: increment, modulo: modulo)
         return self
     }
+
+    func incremented(by increment: Int = 1, modulo: Int) -> Int {
+        let r = (self + increment) % modulo
+        return r < 0 ? r + modulo : r
+    }
+
 }
 
 public extension Int {

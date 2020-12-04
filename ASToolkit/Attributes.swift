@@ -232,12 +232,12 @@ public struct Attributes {
     }
         
 
-    static public func toArrayOfDouble(hsba: String) -> [Double] {
-        hsba.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+    static public func toArrayOfDouble(hsba: String, v: Double = 1.0) -> [Double] {
+        hsba.split(",").map { Double($0) ?? v }.padded(with: 1.0, upto: 4)
     }
     
-    static public func toArrayOfCGFloat(hsba: String) -> [CGFloat] {
-        hsba.split(",").map { CGFloat($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+    static public func toArrayOfCGFloat(hsba: String, v: CGFloat = 1.0) -> [CGFloat] {
+        hsba.split(",").map { CGFloat($0) ?? v }.padded(with: 1.0, upto: 4)
     }
     
 

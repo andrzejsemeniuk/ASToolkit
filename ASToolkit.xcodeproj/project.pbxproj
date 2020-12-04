@@ -334,13 +334,13 @@
 		570FC1F31F111E0E00FEAC03 = {
 			isa = PBXGroup;
 			children = (
-				57C4880625300DE800333255 /* SharkeeIPHONEFilter.swift */,
+				57F0A0C91F564EE30015169D /* ASTookitShowcase */,
 				570FC1FF1F111E0E00FEAC03 /* ASToolkit */,
 				570FC20A1F111E0E00FEAC03 /* ASToolkitTests */,
 				57DBB0201F4293E400AF2BEB /* ASToolkitUITests */,
-				57F0A0C91F564EE30015169D /* ASTookitShowcase */,
-				570FC1FE1F111E0E00FEAC03 /* Products */,
 				777B9EED2087ADB300D3FBBD /* Frameworks */,
+				570FC1FE1F111E0E00FEAC03 /* Products */,
+				57C4880625300DE800333255 /* SharkeeIPHONEFilter.swift */,
 			);
 			sourceTree = "<group>";
 		};

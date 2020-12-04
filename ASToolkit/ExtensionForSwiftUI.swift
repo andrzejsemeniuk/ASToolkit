@@ -266,10 +266,13 @@ public extension Color {
         public var b       : CGFloat
         public var a       : CGFloat
         
-        public var asSKColor           : SKColor       { SKColor.init(hsba: [h,s,b,a]) }
-        public var asUIColor           : UIColor       { UIColor.init(hsba: [h,s,b,a]) }
-        public var asColor             : Color         { Color.init(hsba: [h.asDouble,s.asDouble,b.asDouble,a.asDouble]) }
-        
+        public var asSKColor            : SKColor       { SKColor.init(hsba: [h,s,b,a]) }
+        public var asUIColor            : UIColor       { UIColor.init(hsba: [h,s,b,a]) }
+        public var asColor              : Color         { Color.init(hsba: [h.asDouble,s.asDouble,b.asDouble,a.asDouble]) }
+        public var asArrayOfDouble      : [Double]      { [h,s,b,a].asArrayOfDouble }
+        public var asArrayOfCGFloat     : [CGFloat]     { [h,s,b,a] }
+        public var asString             : String        { "\(h),\(s),\(b),\(a)" }
+
         public init(h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1) {
             self.h = h
             self.s = s
@@ -303,11 +306,11 @@ public extension Color {
             a = hsba[3].asCGFloat.clampedTo01
         }
 
-        public init(hsb: [Double], alpha: CGFloat = 1) {
+        public init(hsb: [Double], a alpha: CGFloat = 1) {
             h = hsb[0].asCGFloat.clampedTo01
             s = hsb[1].asCGFloat.clampedTo01
             b = hsb[2].asCGFloat.clampedTo01
-            a = alpha
+            a = alpha.clampedTo01
         }
 
         public static let clear     : HSBA = .init(white: 1, alpha: 0)
