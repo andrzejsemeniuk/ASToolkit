@@ -216,6 +216,34 @@ public struct Attributes {
         dictionary[key] = string
     }
 
+    public mutating func set(_ key: String, _ v: Double) {
+        dictionary[key] = "\(v)"
+    }
+
+    public mutating func set(_ key: String, _ v: CGFloat) {
+        dictionary[key] = "\(v)"
+    }
+
+    public mutating func set(_ key: String, _ v: Int) {
+        dictionary[key] = "\(v)"
+    }
+    
+    public mutating func set(_ key: String, _ v: [Double]) {
+        dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
+    }
+
+    public mutating func set(_ key: String, _ v: [CGFloat]) {
+        dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
+    }
+
+    public mutating func set(_ key: String, _ v: [Int]) {
+        dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
+    }
+
+
+
+
+
 
     static public func stringForColor(from color: SKColor) -> String {
         let hsba = color.HSBA
