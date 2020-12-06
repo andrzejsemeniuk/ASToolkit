@@ -47,6 +47,9 @@ public extension FloatingPoint {
         Swift.max(min, Swift.min(max, self + value))
     }
 
+    func isEqual(to: Self, withPrecision precision: Self) -> Bool {
+        abs(self - to) < precision
+    }
 }
 
 
