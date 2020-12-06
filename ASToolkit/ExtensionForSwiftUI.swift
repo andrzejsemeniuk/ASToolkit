@@ -255,7 +255,7 @@ public extension Color {
         name == "white"
     }
     
-    struct HSBA : Codable {
+    struct HSBA : Codable, Equatable {
         
         public enum Component : CaseIterable {
             case hue, saturation, brightness, alpha
@@ -300,17 +300,21 @@ public extension Color {
         }
         
         public init(hsba: [Double]) {
+//            print("0 Color.HSBA.init(hsba: \(hsba))")
             h = hsba[0].asCGFloat.clampedTo01
             s = hsba[1].asCGFloat.clampedTo01
             b = hsba[2].asCGFloat.clampedTo01
             a = hsba[3].asCGFloat.clampedTo01
+//            print("1 Color.HSBA.init(hsba: \(hsba)), hsba=\(h),\(s),\(b),\(a)")
         }
 
         public init(hsb: [Double], a alpha: CGFloat = 1) {
+            print("0 Color.HSBA.init(hsb: \(hsb))")
             h = hsb[0].asCGFloat.clampedTo01
             s = hsb[1].asCGFloat.clampedTo01
             b = hsb[2].asCGFloat.clampedTo01
             a = alpha.clampedTo01
+            print("1 Color.HSBA.init(hsb: \(hsb)), hsba=\(h),\(s),\(b),\(a)")
         }
 
         public static let clear     : HSBA = .init(white: 1, alpha: 0)
