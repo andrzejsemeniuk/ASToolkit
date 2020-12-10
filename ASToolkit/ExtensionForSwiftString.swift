@@ -432,3 +432,12 @@ public extension String {
     }
     
 }
+
+public extension String {
+    
+    func repeating(_ count: Int) -> Self {
+        Array<String>.init(repeating: self, count: count).joined()
+    }
+    
+}
+
