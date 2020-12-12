@@ -1259,3 +1259,66 @@ public struct Blur: UIViewRepresentable {
     }
 }
 
+public extension View {
+    
+    var isPhone : Bool {
+        UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
+    var isPad : Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    var isMac : Bool {
+        UIDevice.current.userInterfaceIdiom == .mac
+    }
+    
+    var idiom : UIUserInterfaceIdiom {
+        UIDevice.current.userInterfaceIdiom
+    }
+    
+    var isLandscape : Bool {
+        UIDevice.current.orientation.isLandscape
+    }
+    
+    var isPortrait : Bool {
+        UIDevice.current.orientation.isPortrait
+    }
+}
+
+public struct TapGestureWithLocation : UIViewRepresentable {
+    
+    public typealias Callback = (CGPoint) -> Void
+    
+    var tappedCallback: Callback
+
+    public init(_ callback: @escaping Callback) {
+        self.tappedCallback = callback
+    }
+    
+    public func makeUIView(context: UIViewRepresentableContext<TapGestureWithLocation>) -> UIView {
+        let v = UIView(frame: .zero)
+        let gesture = UITapGestureRecognizer(target: context.coordinator,
+                                             action: #selector(Coordinator.tapped))
+        v.addGestureRecognizer(gesture)
+        return v
+    }
+
+    public class Coordinator: NSObject {
+        var tappedCallback: ((CGPoint) -> Void)
+        init(tappedCallback: @escaping ((CGPoint) -> Void)) {
+            self.tappedCallback = tappedCallback
+        }
+        @objc func tapped(gesture:UITapGestureRecognizer) {
+            let point = gesture.location(in: gesture.view)
+            self.tappedCallback(point)
+        }
+    }
+
+    public func makeCoordinator() -> TapGestureWithLocation.Coordinator {
+        Coordinator(tappedCallback:self.tappedCallback)
+    }
+
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
+    }
+}
