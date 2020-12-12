@@ -10,13 +10,13 @@ import Foundation
 
 public class CGFloat01 {
     
-    public var value:CGFloat {
+    public var value: CGFloat {
         didSet {
             correct(value)
         }
     }
 
-    private func correct(_ value:CGFloat) {
+    private func correct(_ value: CGFloat) {
         if value < 0 {
             self.value = 0
         }
@@ -25,7 +25,7 @@ public class CGFloat01 {
         }
     }
     
-    public init(_ value:CGFloat = 0) {
+    public init(_ value: CGFloat = 0) {
         self.value = value
         correct(value)
     }

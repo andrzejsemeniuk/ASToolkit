@@ -62,6 +62,7 @@
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */; };
 		5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */; };
+		5763B2452585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5763B2442585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift */; };
 		576B29AC1F868F960001DC97 /* BindingValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B29AB1F868F960001DC97 /* BindingValue.swift */; };
 		576B29AE1F868FCE0001DC97 /* TestForBindingValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */; };
 		576B8472257173D2006BC7C0 /* TestExtensionForDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B8471257173D2006BC7C0 /* TestExtensionForDictionary.swift */; };
@@ -226,6 +227,7 @@
 		5762F6721F2F8DB400621781 /* ProtocolResettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolResettable.swift; sourceTree = "<group>"; };
 		5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableFromDictionary.swift; sourceTree = "<group>"; };
 		5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolAssignableToDictionary.swift; sourceTree = "<group>"; };
+		5763B2442585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUIPreferenceKey.swift; sourceTree = "<group>"; };
 		576B29AB1F868F960001DC97 /* BindingValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingValue.swift; sourceTree = "<group>"; };
 		576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForBindingValue.swift; sourceTree = "<group>"; };
 		576B8471257173D2006BC7C0 /* TestExtensionForDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestExtensionForDictionary.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
+				5763B2442585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				570E367A2094D8FF006FF787 /* CGLip.swift in Sources */,
 				57F804102198B31C009B4DE2 /* Sigma.swift in Sources */,
 				777B9F082087F47100D3FBBD /* UIViewWithBorder.swift in Sources */,
+				5763B2452585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
 				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
