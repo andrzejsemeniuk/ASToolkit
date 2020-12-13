@@ -137,6 +137,12 @@ extension CGSize {
         CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
     }()
     
+    public func insetBy(w: CGFloat = 0, h: CGFloat = 0) -> CGSize {
+        var r = self
+        r.width -= w
+        r.height -= h
+        return r
+    }
     
 }
 
