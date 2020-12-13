@@ -253,7 +253,7 @@ extension Array {
             row.append(element)
         }
         
-        if !row.empty {
+        if row.isNotEmpty {
             result.append(row)
         }
         
