@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -91,6 +91,7 @@
 		57AA4C5D1F475DDD005384AD /* ExtensionForUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */; };
 		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
 		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
+		57CDF0932589B1C400F4F527 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDF0922589B1C400F4F527 /* SwiftyJSON */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
@@ -304,6 +305,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57CDF0932589B1C400F4F527 /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +551,9 @@
 			dependencies = (
 			);
 			name = ASToolkit;
+			packageProductDependencies = (
+				57CDF0922589B1C400F4F527 /* SwiftyJSON */,
+			);
 			productName = ASToolkit;
 			productReference = 570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -651,6 +656,9 @@
 				Base,
 			);
 			mainGroup = 570FC1F31F111E0E00FEAC03;
+			packageReferences = (
+				57CDF0912589B1C400F4F527 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 570FC1FE1F111E0E00FEAC03 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -1001,8 +1009,9 @@
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1026,7 +1035,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1052,7 +1065,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1068,7 +1085,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XALZ38S52J;
 				INFOPLIST_FILE = ASToolkitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1081,7 +1102,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XALZ38S52J;
 				INFOPLIST_FILE = ASToolkitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1094,7 +1119,11 @@
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASToolkitUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkitUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -1107,7 +1136,11 @@
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASToolkitUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkitUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -1122,7 +1155,10 @@
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASTookitShowcase/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASTookitShowcase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -1137,7 +1173,10 @@
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASTookitShowcase/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASTookitShowcase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -1193,6 +1232,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		57CDF0912589B1C400F4F527 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57CDF0922589B1C400F4F527 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57CDF0912589B1C400F4F527 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 570FC1F41F111E0E00FEAC03 /* Project object */;
 }
