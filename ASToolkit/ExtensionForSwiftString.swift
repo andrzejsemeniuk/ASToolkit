@@ -391,7 +391,11 @@ public extension String {
 
 public extension String {
     
+    var asDouble : Double? { Double(self) }
+    
     var asInt : Int? { Int(self) }
+    
+    var asUInt64 : UInt64? { UInt64(self.replacingOccurrences(of: ",", with: "")) }
     
     var asPhrase : String {
 //        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
