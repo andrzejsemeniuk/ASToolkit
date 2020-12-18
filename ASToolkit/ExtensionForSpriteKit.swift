@@ -336,6 +336,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) {
         let path = CGMutablePath()
         path.move(to:lines[0])
@@ -350,6 +351,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
     }
 
@@ -361,6 +363,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) {
         self.init(rect:rectangle)
         self.configured(position        : position,
@@ -370,6 +373,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
     }
 
@@ -381,6 +385,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) {
         self.init(circleOfRadius        : circleOfRadius)
         self.configured(position        : position,
@@ -390,6 +395,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
     }
 
@@ -401,6 +407,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) {
         self.init(lines:[line.from,line.to])
         self.configured(position        : position,
@@ -410,6 +417,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
     }
 
@@ -422,6 +430,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode(lines:[from,to])
         r.configured(position        : position,
@@ -431,6 +440,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
         return r
     }
@@ -443,6 +453,7 @@ public extension SKShapeNode
                       lineWidth          : CGFloat? = nil,
                       lineCap            : CGLineCap? = nil,
                       lineJoin           : CGLineJoin? = nil,
+                      miterLimit        : CGFloat? = nil,
                       lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode.line(from: .init(x0,y), to: .init(x1,y))
         r.configured(position        : position,
@@ -452,6 +463,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
         return r
     }
@@ -463,6 +475,7 @@ public extension SKShapeNode
                       lineWidth          : CGFloat? = nil,
                       lineCap            : CGLineCap? = nil,
                       lineJoin           : CGLineJoin? = nil,
+                      miterLimit        : CGFloat? = nil,
                       lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode.line(from: .init(x,y0), to: .init(x,y1))
         r.configured(position        : position,
@@ -472,6 +485,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
         return r
     }
@@ -484,6 +498,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode(circleOfRadius: withRadius)
         r.configured(position        : position,
@@ -493,6 +508,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
         return r
     }
@@ -505,6 +521,7 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) -> SKShapeNode {
         let r = SKShapeNode.init(path: path)
         r.configured(position        : position,
@@ -514,6 +531,7 @@ public extension SKShapeNode
                         lineWidth       : lineWidth,
                         lineCap         : lineCap,
                         lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
                         lineDash        : lineDash)
         return r
     }
@@ -531,6 +549,7 @@ extension SKShapeNode {
                           lineWidth         : CGFloat? = nil,
                           lineCap           : CGLineCap? = nil,
                           lineJoin          : CGLineJoin? = nil,
+                          miterLimit        : CGFloat? = nil,
                           lineDash          : [CGFloat]? = nil) -> Self {
         if let position = position {
             self.position = position
@@ -553,6 +572,9 @@ extension SKShapeNode {
         if let lineJoin = lineJoin {
             self.lineJoin = lineJoin
         }
+        if let miterLimit = miterLimit {
+            self.miterLimit = miterLimit
+        }
         if let lineDash = lineDash {
             addDashes(lengths: lineDash)
         }
@@ -566,6 +588,7 @@ extension SKShapeNode {
                    lineWidth        : CGFloat? = nil,
                    lineCap          : CGLineCap? = nil,
                    lineJoin         : CGLineJoin? = nil,
+                   miterLimit        : CGFloat? = nil,
                    lineDash         : [CGFloat]? = nil) -> Self {
     
         self.fillColor      = fillColor ?? self.fillColor
@@ -574,6 +597,7 @@ extension SKShapeNode {
         self.lineWidth      = lineWidth ?? self.lineWidth
         self.lineCap        = lineCap ?? self.lineCap
         self.lineJoin       = lineJoin ?? self.lineJoin
+        self.miterLimit     = miterLimit ?? self.miterLimit
         if let lengths = lineDash {
             addDashes(lengths: lengths)
         }
