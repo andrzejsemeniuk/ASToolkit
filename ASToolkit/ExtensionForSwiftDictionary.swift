@@ -54,4 +54,10 @@ public extension Dictionary {
             block(&self[k]!)
         }
     }
+    
 }
+
+public func += <K,V>(lhs: inout Dictionary<K,V>, rhs: Dictionary<K,V>) {
+    lhs = lhs.merging(rhs, uniquingKeysWith: { $1 })
+}
+
