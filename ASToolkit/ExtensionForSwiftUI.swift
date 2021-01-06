@@ -1242,6 +1242,7 @@ public extension Color {
 }
 
 public struct Blur: UIViewRepresentable {
+    
     public var style: UIBlurEffect.Style = .systemMaterial
 
     public init(style: UIBlurEffect.Style = .systemMaterial) {
