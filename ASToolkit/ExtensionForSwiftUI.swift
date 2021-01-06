@@ -1250,7 +1250,9 @@ public struct Blur: UIViewRepresentable {
     
     // create UIView
     public func makeUIView(context: Context) -> UIVisualEffectView {
-        return UIVisualEffectView(effect: UIBlurEffect(style: style))
+        var r = UIVisualEffectView(effect: UIBlurEffect(style: style))
+//        r.alpha = 0.5 // does not blur when alpha/opacity is < 1
+        return r
     }
 
     // update UIView
@@ -1285,6 +1287,7 @@ public extension View {
         UIDevice.current.orientation.isPortrait
     }
 }
+
 
 public struct TapGestureWithLocation : UIViewRepresentable {
     
