@@ -107,6 +107,19 @@ public struct Attributes {
     public func asCGLineJoin(_ name: String, _ fallback: CGLineJoin) -> CGLineJoin {
         asCGLineJoin(name) ?? fallback
     }
+    
+    public func asCGPoint(_ name: String) -> CGPoint? {
+        if let values = dictionary[name] {
+            let xy = values.split(",")
+            if xy.count > 1, let x = CGFloat(xy[0]), let y = CGFloat(xy[1]) {
+                return CGPoint(x,y)
+            }
+        }
+        return nil
+    }
+    public func asCGPoint(_ name: String, _ fallback: CGPoint) -> CGPoint {
+        asCGPoint(name) ?? fallback
+    }
 
     
     
@@ -222,6 +235,10 @@ public struct Attributes {
 
     public mutating func set(_ key: String, _ v: CGFloat) {
         dictionary[key] = "\(v)"
+    }
+
+    public mutating func set(_ key: String, _ v: CGPoint) {
+        dictionary[key] = "\(v.x),\(v.y)"
     }
 
     public mutating func set(_ key: String, _ v: Int) {
