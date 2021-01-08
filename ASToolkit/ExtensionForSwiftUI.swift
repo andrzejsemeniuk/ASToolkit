@@ -1326,3 +1326,33 @@ public struct TapGestureWithLocation : UIViewRepresentable {
     public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
     }
 }
+
+
+
+
+extension UIView {
+    var screenshot : UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        if (image != nil) {
+            UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil);
+        }
+
+        return image
+    }
+}
+
+struct SaveScreenshotView: UIViewRepresentable {
+    
+    func makeUIView(context: Context) -> UIView {
+        let someView = UIView(frame: UIScreen.main.bounds)
+        _ = someView.screenshot
+        return someView
+    }
+
+    func updateUIView(_ view: UIView, context: Context) {
+    }
+}
