@@ -225,8 +225,10 @@ public struct Attributes {
         dictionary[key] = Self.stringForColor(from: color)
     }
 
-    public mutating func set(_ key: String, _ string: String) {
-        dictionary[key] = string
+    public mutating func set(_ key: String, _ string: String?) {
+        if let string = string {
+            dictionary[key] = string
+        }
     }
 
     public mutating func set(_ key: String, _ v: Double) {
@@ -242,6 +244,10 @@ public struct Attributes {
     }
 
     public mutating func set(_ key: String, _ v: Int) {
+        dictionary[key] = "\(v)"
+    }
+    
+    public mutating func set(_ key: String, _ v: Bool) {
         dictionary[key] = "\(v)"
     }
     
