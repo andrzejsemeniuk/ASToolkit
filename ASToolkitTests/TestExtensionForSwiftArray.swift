@@ -57,16 +57,23 @@ class TestExtensionForSwiftArray: XCTestCase {
         var a = [1,2,3]
         var r = a
         
+        // a=[1,2,3]
         XCTAssertEqual(a.count,3)
         
+        // a=[1,2,3]
         r = a.trim(from:2)
+        // a=[1,2]
+        // r=[3]
         XCTAssertEqual(a.count,2)
         XCTAssertEqual(a,[1,2])
         XCTAssertEqual(r.count,1)
         XCTAssertEqual(r,[3])
         
 
+        // a=[1,2]
         r = a.trim(from:0)
+        // a=[]
+        // r=[1,2]
         XCTAssertEqual(a.count,0)
         XCTAssertEqual(a,[])
         XCTAssertEqual(r.count,2)
@@ -83,6 +90,15 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertEqual(a.trim(from:5).count,0)
         a = []
         XCTAssertEqual(a.trim(from:5).count,0)
+
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:-2),[2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:-4),[1,2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:5),[])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:0),[1,2,3])
     }
     
     func testTrimTo() {
@@ -114,6 +130,16 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertEqual(a.trim(to:5),[1,2,3])
         a = []
         XCTAssertEqual(a.trim(to:5).count,0)
+        
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:-1),[1,2])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:-4),[])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:4),[1,2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:0),[])
+
     }
     
     func testisNotEmpty() {

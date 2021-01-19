@@ -30,6 +30,7 @@ public extension FloatingPoint {
         self = self + increment
         return self
     }
+    
 }
 
 public extension FloatingPoint {
@@ -59,6 +60,10 @@ public extension FloatingPoint {
 
 extension Double
 {
+    var sign : Double {
+        self < 0 ? -1 : self > 0 ? 1 : 0
+    }
+
     public var clampedTo01         : Double {
         return clamped(minimum:0, maximum:1)
     }
@@ -151,6 +156,10 @@ extension Double {
 
 extension Float
 {
+    var sign : Float {
+        self < 0 ? -1 : self > 0 ? 1 : 0
+    }
+    
     public var clampedTo01         : Float {
         return clamped(minimum:0, maximum:1)
     }
@@ -219,6 +228,10 @@ extension Float {
 
 public extension Int
 {
+    var sign : Int {
+        self < 0 ? -1 : self > 0 ? 1 : 0
+    }
+    
     var isEven:Bool {
         return self % 2 == 0
     }
@@ -354,6 +367,10 @@ public extension UInt64 {
 }
 
 public extension Int64 {
+    
+    var sign : Int64 {
+        self < 0 ? -1 : self > 0 ? 1 : 0
+    }
     
     var asDouble        : Double        { Double(self) }
     var asUInt64        : UInt64        { UInt64(self) }

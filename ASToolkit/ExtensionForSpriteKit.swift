@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 import UIKit
+import SwiftUI
 
 
 
@@ -1199,4 +1200,8 @@ public func aPhysicsFalloff     (by v:Float,point:CGPoint,duration:TimeInterval)
 
 
 
-
+public extension SKColor {
+    var asColor : Color {
+        Color.init(self)
+    }
+}

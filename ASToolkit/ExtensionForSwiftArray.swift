@@ -26,8 +26,20 @@ public extension Array
 	}
 
     @discardableResult
-    mutating func trim(to:Int) -> Array {
-        let to = Swift.min(Swift.max(0,to),count)
+    mutating func trim(to: Int) -> Array {
+        if to >= count {
+            defer {
+                self = []
+            }
+            return self
+        }
+        if to <= -count || to == 0 {
+            return []
+        }
+        var to = to
+        if to < 0 {
+            to = count + to
+        }
         let result = subarray(from:0, length:to)
         let range = startIndex..<startIndex.advanced(by: to)
         self.removeSubrange(range)
@@ -35,11 +47,20 @@ public extension Array
     }
     
     @discardableResult
-    mutating func trim(from:Int) -> Array {
-        if count <= from {
+    mutating func trim(from: Int) -> Array {
+        if from >= count {
             return []
         }
-        let from = Swift.min(Swift.max(0,from),count)
+        if from <= -count || from == 0 {
+            defer {
+                self = []
+            }
+            return self
+        }
+        var from = from
+        if from < 0 {
+            from = count + from
+        }
         let result = subarray(from:from, length:count-from)
         let range = startIndex.advanced(by: from)..<endIndex
         self.removeSubrange(range)
