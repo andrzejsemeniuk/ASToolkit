@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 import SwiftUI
+import UIKit
 
 public struct Attributes {
     
@@ -204,6 +205,13 @@ public struct Attributes {
         asArrayOfInt(key) ?? fallback
     }
 
+    public func asBlurEffectStyle(_ key: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
+        if let value = dictionary[key], let int = Int(value) {
+            return UIBlurEffect.Style.init(rawValue: int) ?? fallback
+        }
+        return fallback
+    }
+    
 
     
     
@@ -264,6 +272,10 @@ public struct Attributes {
     }
 
 
+    public mutating func set(_ key: String, _ v: UIBlurEffect.Style) {
+        dictionary[key] = String(v.rawValue)
+    }
+    
 
 
 
