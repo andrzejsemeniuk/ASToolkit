@@ -93,6 +93,7 @@
 		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
 		57CDF0932589B1C400F4F527 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDF0922589B1C400F4F527 /* SwiftyJSON */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
+		57D5746625C1C133007557FB /* ExtensionForUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
@@ -257,6 +258,7 @@
 		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForString.swift; sourceTree = "<group>"; };
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
+		57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIDevice.swift; sourceTree = "<group>"; };
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
 		57DBB0231F4293E400AF2BEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				570FC28B1F1124A300FEAC03 /* ExtensionForUIButton.swift */,
 				570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */,
 				777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */,
+				57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */,
 				578872AF1F6D59C1009E1927 /* ExtensionForUIControlState.swift */,
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIFont.swift */,
@@ -721,6 +724,7 @@
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
 				572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */,
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
+				57D5746625C1C133007557FB /* ExtensionForUIDevice.swift in Sources */,
 				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
 				579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */,
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,

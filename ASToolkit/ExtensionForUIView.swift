@@ -1050,3 +1050,14 @@ extension UIView {
 
 
 
+extension UIBlurEffect.Style : CaseIterable {
+    public static var allCases: AllCases = {
+        Array(0...20).compactMap {
+            UIBlurEffect.Style.init(rawValue: $0)
+        }
+    }()
+    
+    public typealias AllCases = [UIBlurEffect.Style]
+    
+}
+
