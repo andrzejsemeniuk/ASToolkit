@@ -97,6 +97,7 @@
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
+		57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */; };
 		57F0A0CB1F564EE30015169D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CA1F564EE30015169D /* AppDelegate.swift */; };
 		57F0A0CD1F564EE30015169D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CC1F564EE30015169D /* ViewController.swift */; };
 		57F0A0D01F564EE30015169D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F0A0CE1F564EE30015169D /* Main.storyboard */; };
@@ -265,6 +266,7 @@
 		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 		57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUI.swift; sourceTree = "<group>"; };
+		57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShaderKitExtensions.swift; path = ../ShaderKit/ShaderKitExtensions.swift; sourceTree = "<group>"; };
 		57F0A0C81F564EE30015169D /* ASTookitShowcase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASTookitShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0A0CA1F564EE30015169D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57F0A0CC1F564EE30015169D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 		570FC1F31F111E0E00FEAC03 = {
 			isa = PBXGroup;
 			children = (
+				57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */,
 				57F0A0C91F564EE30015169D /* ASTookitShowcase */,
 				570FC1FF1F111E0E00FEAC03 /* ASToolkit */,
 				570FC20A1F111E0E00FEAC03 /* ASToolkitTests */,
@@ -756,6 +759,7 @@
 				571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
 				570FC2C31F1124A300FEAC03 /* ExtensionForUIButton.swift in Sources */,
+				57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */,
 				77612A7420B11EA3007C18D7 /* UIViewWithAdditions.swift in Sources */,
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
 				5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */,
