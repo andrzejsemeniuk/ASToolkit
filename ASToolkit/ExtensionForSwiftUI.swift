@@ -1308,6 +1308,9 @@ public struct TapGestureWithLocation : UIViewRepresentable {
         return v
     }
 
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
+    }
+
     public class Coordinator: NSObject {
         var tappedCallback: ((CGPoint) -> Void)
         init(tappedCallback: @escaping ((CGPoint) -> Void)) {
@@ -1321,9 +1324,6 @@ public struct TapGestureWithLocation : UIViewRepresentable {
 
     public func makeCoordinator() -> TapGestureWithLocation.Coordinator {
         Coordinator(tappedCallback:self.tappedCallback)
-    }
-
-    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
     }
 }
 
