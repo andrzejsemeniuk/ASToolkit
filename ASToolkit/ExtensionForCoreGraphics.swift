@@ -122,6 +122,10 @@ extension CGSize {
         self.init(width:side, height:side)
     }
     
+    public init(_ w: CGFloat, _ h: CGFloat) {
+        self.init(width: w, height: h)
+    }
+    
     public var asCGPoint        : CGPoint {
         CGPoint(x:width,y:height)
     }
