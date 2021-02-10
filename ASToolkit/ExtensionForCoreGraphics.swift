@@ -278,6 +278,9 @@ public struct CGAngle
 
 	public func asCGDegrees ()  -> CGDegrees        { return CGDegrees(toDegrees()) }
 	public func asCGRadians ()  -> CGRadians        { return CGRadians(value) }
+    
+    public var radians      : CGFloat               { value }
+    public var degrees      : CGFloat               { CGAsDegrees(radians: value) }
 }
 
 extension CGPoint
