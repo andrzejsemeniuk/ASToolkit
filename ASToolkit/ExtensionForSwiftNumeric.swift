@@ -115,13 +115,6 @@ extension Double
 
 extension Double {
     
-    public static var random:Double {
-        return Double(arc4random()) / 0xFFFFFFFF
-    }
-    public static func random(min: Double, max: Double) -> Double {
-        return Double.random * (max - min) + min
-    }
-
     @discardableResult public mutating func assign(max v:Double) -> Double {
         self = Swift.max(self,v)
         return self
@@ -132,6 +125,21 @@ extension Double {
         return self
     }
     
+}
+
+extension Double {
+    
+    public static var   resolution      : UInt32     = 100000
+    
+    public static var   random01        : Double { Double(arc4random() % resolution) / resolution.asDouble }
+    public static var   random          : Double { random01 }
+    
+    public static func  random          (min: Double, max: Double) -> Double { Double.random * (max - min) + min }
+    public static func  random          (min: Double, max: Double, resolution: UInt32) -> Double {
+        (Double(arc4random_uniform(resolution)) / resolution.asDouble) * (max - min) + min
+    }
+    public static func  random01        (resolution: UInt32) -> Double { random(min: 0, max: 1, resolution: resolution) }
+
 }
 
 extension Double {
@@ -191,19 +199,12 @@ extension Float
 
 extension Float {
     
-    public static var random: Float {
-        return Float(arc4random()) / 0xFFFFFFFF
-    }
-    public static func random(min: Float, max: Float) -> Float {
-        return Float.random * (max - min) + min
-    }
+    public static var   random01        : Float { Double.random01.asFloat }
+    public static var   random          : Float { random01 }
+    public static func  random          (min: Float, max: Float) -> Float { Float.random * (max - min) + min }
 
-    public static var maximum : Float {
-        return .greatestFiniteMagnitude
-    }
-    public static var minimum : Float {
-        return -maximum
-    }
+    public static var   maximum         : Float { .greatestFiniteMagnitude }
+    public static var   minimum         : Float { -maximum }
 
 }
 
@@ -352,7 +353,17 @@ public extension UInt {
     var asDouble        : Double        { Double(self) }
     var asInt           : Int           { Int(self) }
 
-    func isInInterval(_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+}
+
+public extension UInt32 {
+
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt           : Int           { Int(self) }
+
+    func isInInterval   (_ l: UInt32, _ u:UInt32) -> Bool { return l <= self && self < u }
 }
 
 public extension UInt64 {

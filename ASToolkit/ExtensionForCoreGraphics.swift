@@ -281,12 +281,21 @@ public struct CGAngle
     
     public var radians      : CGFloat               { value }
     public var degrees      : CGFloat               { CGAsDegrees(radians: value) }
+    
+    public var  point                       : CGPoint      { CGPoint.from(angle: self) }
+    public func point(radius: CGFloat)      -> CGPoint     { CGPoint.from(angle: self, radius: radius) }
 }
 
-extension CGPoint
+public extension CGPoint
 {
 	// NOTE: USE __conversion TO CONVERT TO TYPES
 	func __conversion() -> (CGFloat, CGFloat)           { return (x, y) }
+
+    var asTuple                 : (CGFloat, CGFloat)           { return (x, y) }
+
+    static func from            (angle: CGAngle) -> CGPoint                  { CGPoint(cos(angle.radians), sin(angle.radians)) }
+    static func from            (angle: CGAngle, radius: CGFloat) -> CGPoint { from(angle: angle) * radius }
+
 }
 
 extension CGRect

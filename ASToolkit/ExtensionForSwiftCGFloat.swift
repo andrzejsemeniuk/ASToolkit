@@ -51,15 +51,12 @@ extension CGFloat
 
 extension CGFloat {
     
-    public static var randomSign:CGFloat {
-        return (arc4random_uniform(2) == 0) ? 1.0 : -1.0
-    }
-    public static var random:CGFloat {
-        return CGFloat(Float.random)
-    }
-    public static func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return CGFloat.random * (max - min) + min
-    }
+    public static var   randomSign      : CGFloat                                       { (arc4random_uniform(2) == 0) ? 1.0 : -1.0 }
+    public static var   random          : CGFloat                                       { CGFloat(Float.random) }
+    public static var   random01        : CGFloat                                       { random }
+    public static var   random11        : CGFloat                                       { random(min: -1, max: +1) }
+
+    public static func  random          (min: CGFloat, max: CGFloat) -> CGFloat         { CGFloat.random * (max - min) + min }
     
 }
 

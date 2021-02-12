@@ -96,6 +96,14 @@ extension SKNode
     }
     
 
+    public func scaled(point: CGPoint) -> CGPoint {
+        CGPoint(point.x * xScale, point.y * yScale)
+    }
+    
+    public func unscaled(point: CGPoint) -> CGPoint {
+        CGPoint(point.x / xScale, point.y / yScale)
+    }
+    
 
     public var z: CGFloat {
         get {
