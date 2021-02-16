@@ -1027,12 +1027,29 @@ extension SKAction {
         return self
     }
 
+    open func with(timingFunction: @escaping SKActionTimingFunction) -> Self {
+        self.timingFunction = timingFunction
+        return self
+    }
+    
+    open func configured(timingMode: SKActionTimingMode? = nil, timingFunction: SKActionTimingFunction? = nil) -> Self {
+        self.timingMode ?= timingMode
+        self.timingFunction ?= timingFunction
+        return self
+    }
+
     public static func wait(_ duration: TimeInterval) -> SKAction {
         return SKAction.wait(forDuration: duration)
     }
     
     public static func block(_ block: @escaping ()->Void) -> SKAction {
         return SKAction.run(block)
+    }
+    
+    public static func customAction(withDuration duration: TimeInterval, _ block: @escaping (SKNode, CGFloat, Double)->Void) -> SKAction {
+        return SKAction.customAction(withDuration: duration) { n,t in
+            block(n,t,t.asDouble/duration)
+        }
     }
     
 }

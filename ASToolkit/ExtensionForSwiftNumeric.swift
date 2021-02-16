@@ -247,12 +247,26 @@ public extension Int
         }
     }
 
+    func loop(_ block: (Int)->()) {
+        let limit = self
+        for index in 1...limit {
+            block(index)
+        }
+    }
+
     func counter(_ block: (Int)->()) {
         let limit = self
         for index in 0..<limit {
             block(index)
         }
     }
+    
+    @inlinable func map<T>(_ transform: (Int) throws -> T) rethrows -> [T] {
+        try Array(0..<self).map { i in
+            try transform(i)
+        }
+    }
+
 
 }
 
