@@ -680,3 +680,17 @@ public extension Array {
     }
     
 }
+
+public extension Array {
+    
+    func asDictionary<K,V>(_ f: (Element)->(K,V)) -> [K:V] {
+        self.map {
+            f($0)
+        }.reduce([:], {
+            var d = $0
+            let (k,v) = $1
+            d[k] = v
+            return d
+        })
+    }
+}
