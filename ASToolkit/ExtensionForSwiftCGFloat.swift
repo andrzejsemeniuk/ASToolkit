@@ -76,8 +76,16 @@ extension CGFloat {
 public extension CGFloat {
     
     var asDouble : Double { Double(self) }
-    
     var asInt : Int { Int(self) }
     
+}
+
+public extension CGFloat {
+    
+    static let degreesToRadians     : CGFloat       = CGFloat.pi / 180.asCGFloat
+    static let radiansToDegrees     : CGFloat       = 180.asCGFloat / CGFloat.pi
+    static let d2r                  : CGFloat       = CGFloat.pi / 180.asCGFloat
+    static let r2d                  : CGFloat       = 180.asCGFloat / CGFloat.pi
+
 }
 

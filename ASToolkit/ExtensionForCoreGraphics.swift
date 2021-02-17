@@ -284,6 +284,10 @@ public struct CGAngle
     
     public var  point                       : CGPoint      { CGPoint.from(angle: self) }
     public func point(radius: CGFloat)      -> CGPoint     { CGPoint.from(angle: self, radius: radius) }
+    
+    static let zero : CGAngle = .init(radians: 0)
+    static let ninety : CGAngle = .init(degrees: 90)
+    static let fortyfive : CGAngle = .init(degrees: 45)
 }
 
 public extension CGPoint
