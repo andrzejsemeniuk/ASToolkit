@@ -77,6 +77,7 @@ public extension CGFloat {
     
     var asDouble : Double { Double(self) }
     var asInt : Int { Int(self) }
+    var asFloat : Float { Float(self) }
     
 }
 
