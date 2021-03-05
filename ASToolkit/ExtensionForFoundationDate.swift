@@ -202,7 +202,7 @@ extension Date {
 	}
 }
 
-extension Date {
+public extension Date {
 
 	public var midnight : Date {
 		let calendar = Calendar.current
@@ -224,8 +224,12 @@ extension Date {
 
 	}
     
-    static public var midnight : Date {
+    static var midnight : Date {
         Date().midnight
+    }
+    
+    static var timestamp : TimeInterval {
+        Date().timeIntervalSince1970
     }
 }
 
@@ -233,4 +237,12 @@ public extension TimeInterval {
     
     var asDate : Date { Date.init(timeIntervalSince1970: self) }
     
+    static var timestamp : TimeInterval {
+        Date().timeIntervalSince1970
+    }
+
+    static var now : TimeInterval {
+        Date().timeIntervalSince1970
+    }
+
 }

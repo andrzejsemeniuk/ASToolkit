@@ -51,6 +51,7 @@ public extension FloatingPoint {
     func isEqual(to: Self, withPrecision precision: Self) -> Bool {
         abs(self - to) < precision
     }
+    
 }
 
 
@@ -127,18 +128,18 @@ extension Double {
     
 }
 
-extension Double {
+public extension Double {
     
-    public static var   resolution      : UInt32     = 100000
+    static var   resolution      : UInt32     = 100000
     
-    public static var   random01        : Double { Double(arc4random() % resolution) / resolution.asDouble }
-    public static var   random          : Double { random01 }
+    static var   random01        : Double { Double(arc4random() % resolution) / resolution.asDouble }
+    static var   random          : Double { random01 }
     
-    public static func  random          (min: Double, max: Double) -> Double { Double.random * (max - min) + min }
-    public static func  random          (min: Double, max: Double, resolution: UInt32) -> Double {
+    static func  random          (min: Double, max: Double) -> Double { Double.random * (max - min) + min }
+    static func  random          (min: Double, max: Double, resolution: UInt32) -> Double {
         (Double(arc4random_uniform(resolution)) / resolution.asDouble) * (max - min) + min
     }
-    public static func  random01        (resolution: UInt32) -> Double { random(min: 0, max: 1, resolution: resolution) }
+    static func  random01        (resolution: UInt32) -> Double { random(min: 0, max: 1, resolution: resolution) }
 
 }
 
