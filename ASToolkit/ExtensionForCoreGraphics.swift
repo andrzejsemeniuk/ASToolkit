@@ -319,10 +319,14 @@ extension CGRect
 	public var bottom          :CGFloat        { return origin.y + height }
 	public var right           :CGFloat        { return origin.x + width }
 
-	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: origin.x + width * x, y: origin.y + height * y) }
+    public var minSide          : CGFloat       { size.minSide }
+    public var maxSide          : CGFloat       { size.maxSide }
+
+    public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: origin.x + width * x, y: origin.y + height * y) }
 	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x,y:ratio.y) }
 
 	public func ratioFrom              (point:CGPoint)             -> CGPoint { return CGPoint(x: width != 0.0 ? ((point.x - origin.x) / width) : 0.0, y: height != 0.0 ? ((point.y - origin.y) / height) : 0.0 ) }
+    
 }
 
 extension CGSize
@@ -343,6 +347,9 @@ extension CGSize
 	public var right           :CGFloat        { return width }
     public var w               :CGFloat        { return width }
     public var h               :CGFloat        { return height }
+
+    public var minSide          : CGFloat       { min(width,height) }
+    public var maxSide          : CGFloat       { max(width,height) }
 
 	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: width * x, y: height * y) }
 	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x, y:ratio.y) }

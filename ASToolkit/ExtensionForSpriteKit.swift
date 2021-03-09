@@ -94,7 +94,17 @@ extension SKNode
             yScale = newValue
         }
     }
-    
+
+    public var scale: CGFloat {
+        get {
+            return (xScale + yScale) / 2
+        }
+        set {
+            xScale = newValue
+            yScale = newValue
+        }
+    }
+
 
     public func scaled(point: CGPoint) -> CGPoint {
         CGPoint(point.x * xScale, point.y * yScale)
