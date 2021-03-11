@@ -57,7 +57,8 @@ extension CGFloat {
     public static var   random11        : CGFloat                                       { random(min: -1, max: +1) }
 
     public static func  random          (min: CGFloat, max: CGFloat) -> CGFloat         { CGFloat.random * (max - min) + min }
-    
+    public static func  random          (_ min: CGFloat, _ max: CGFloat) -> CGFloat     { CGFloat.random * (max - min) + min }
+
 }
 
 extension CGFloat {

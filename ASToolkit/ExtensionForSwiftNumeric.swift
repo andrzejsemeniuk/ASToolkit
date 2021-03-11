@@ -128,6 +128,10 @@ extension Double {
     
 }
 
+public func pick<T>(_ from: [T]) -> T {
+    from[.random(min: 0, upto: from.count)]
+}
+
 public extension Double {
     
     static var   resolution      : UInt32     = 100000
@@ -136,6 +140,7 @@ public extension Double {
     static var   random          : Double { random01 }
     
     static func  random          (min: Double, max: Double) -> Double { Double.random * (max - min) + min }
+    static func  random          (_ min: Double, _ max: Double) -> Double { Double.random * (max - min) + min }
     static func  random          (min: Double, max: Double, resolution: UInt32) -> Double {
         (Double(arc4random_uniform(resolution)) / resolution.asDouble) * (max - min) + min
     }
@@ -282,6 +287,9 @@ public extension Int
     static func random(min: Int, max: Int) -> Int {
         return Int.random(n:UInt32(max - min + 1)) + min
     }
+    static func random(_ min: Int, _ max: Int) -> Int {
+        return Int.random(n:UInt32(max - min + 1)) + min
+    }
     static func random(min: Int, upto: Int) -> Int {
         return Int.random(n:UInt32(upto - min)) + min
     }
@@ -369,6 +377,7 @@ public extension UInt {
     var asInt           : Int           { Int(self) }
 
     func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    
 }
 
 public extension UInt32 {
