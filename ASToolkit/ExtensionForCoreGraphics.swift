@@ -272,7 +272,15 @@ public struct CGAngle
 
 	public      init(degrees value:CGFloat)         { self.value = CGAsRadians(degrees:value) }
 	public      init(radians value:CGFloat)         { self.value = value }
-
+    public      init(y: CGFloat, x: CGFloat) {
+        if y == 0 {
+            self.init(degrees: 90)
+        } else {
+            self.init(radians: atan2(y,x))
+        }
+    }
+    public      init(point: CGPoint)                { self.init(y: point.y, x: point.x)}
+    
 	public func toDegrees   ()  -> CGFloat          { return CGAsDegrees(radians:value) }
 	public func toRadians   ()  -> CGFloat          { return value }
 
@@ -300,6 +308,13 @@ public extension CGPoint
     static func from            (angle: CGAngle) -> CGPoint                  { CGPoint(cos(angle.radians), sin(angle.radians)) }
     static func from            (angle: CGAngle, radius: CGFloat) -> CGPoint { from(angle: angle) * radius }
 
+    var angle                   : CGAngle { .init(point: self) }
+    
+    var unit                    : CGPoint   {
+        let d = length
+        return d == 0 ? .zero : .init(x / d, y / d)
+    }
+    
 }
 
 extension CGRect
