@@ -272,6 +272,10 @@ extension SKNode
             userData![key] = new
         }
     }
+    
+    public func userDataClear(_ key: String) {
+        userData?.removeObject(forKey: key)
+    }
 
 
     @discardableResult
