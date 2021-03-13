@@ -55,6 +55,8 @@
 		573C94CB256D7B340027AD39 /* Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C94CA256D7B340027AD39 /* Attributes.swift */; };
 		573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
+		5756CA2B25FD2C70007719C5 /* UIBezierPath+Superpowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756CA2A25FD2C70007719C5 /* UIBezierPath+Superpowers.swift */; };
+		5756CA3325FD2FDE007719C5 /* ASToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756CA3225FD2FDE007719C5 /* ASToolkit.swift */; };
 		57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */; };
 		5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */; };
 		5762D31C2096639B00B7695B /* ExtensionForUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */; };
@@ -223,6 +225,8 @@
 		573C94CA256D7B340027AD39 /* Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attributes.swift; sourceTree = "<group>"; };
 		573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIViewController.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
+		5756CA2A25FD2C70007719C5 /* UIBezierPath+Superpowers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Superpowers.swift"; sourceTree = "<group>"; };
+		5756CA3225FD2FDE007719C5 /* ASToolkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkit.swift; sourceTree = "<group>"; };
 		57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftArraySlice.swift; sourceTree = "<group>"; };
 		5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIApplication.swift; sourceTree = "<group>"; };
 		5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForUIWindow.swift; sourceTree = "<group>"; };
@@ -366,8 +370,11 @@
 			isa = PBXGroup;
 			children = (
 				570FC2001F111E0E00FEAC03 /* ASToolkit.h */,
-				576B29AB1F868F960001DC97 /* BindingValue.swift */,
+				579D100B21D7BC9400FDDA96 /* ObjectiveC.h */,
+				579D100C21D7BC9400FDDA96 /* ObjectiveC.m */,
+				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				573C94CA256D7B340027AD39 /* Attributes.swift */,
+				576B29AB1F868F960001DC97 /* BindingValue.swift */,
 				572A8E031F71DC28008CC1C6 /* Bit.swift */,
 				570FC2A51F1124A300FEAC03 /* Block.swift */,
 				579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */,
@@ -406,13 +413,14 @@
 				570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */,
 				778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */,
 				57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */,
+				5763B2442585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift */,
 				77A3E68C2110AAE400B4FD9D /* ExtensionForSWXML.swift */,
 				5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */,
 				570FC28B1F1124A300FEAC03 /* ExtensionForUIButton.swift */,
 				570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */,
 				777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */,
-				57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */,
 				578872AF1F6D59C1009E1927 /* ExtensionForUIControlState.swift */,
+				57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */,
 				570FC28D1F1124A300FEAC03 /* ExtensionForUIEdgeInsets.swift */,
 				570FC28E1F1124A300FEAC03 /* ExtensionForUIFont.swift */,
 				57851D481F4B9C8800AEFA4B /* ExtensionForUIImage.swift */,
@@ -420,6 +428,7 @@
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIView.swift */,
 				573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */,
 				5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */,
+				777B9F3E2088E56800D3FBBD /* FiniteState.swift */,
 				5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */,
 				5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */,
 				5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */,
@@ -428,30 +437,27 @@
 				57FBB10B1F44B3C1008FA2D9 /* GenericPickerOfColor.swift */,
 				5791F48B1F3100CD002739A6 /* GenericSetting.swift */,
 				77FB80AD20DE824400C50726 /* Indexes.swift */,
-				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				5778C80C1F5A0FD100C5F6E6 /* Logic.swift */,
 				570FC2A61F1124A300FEAC03 /* Loop.swift */,
 				570FC2911F1124A300FEAC03 /* Math.swift */,
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
-				579D100B21D7BC9400FDDA96 /* ObjectiveC.h */,
-				579D100C21D7BC9400FDDA96 /* ObjectiveC.m */,
 				5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */,
 				5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */,
 				5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */,
 				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
 				57F804092198B31C009B4DE2 /* Sigma.swift */,
-				777B9F3E2088E56800D3FBBD /* FiniteState.swift */,
 				772D915D22E2068E00DEBC6A /* StorableVariable.swift */,
 				77CD2A2122E883890020CAB5 /* StorableVariableManager.swift */,
 				571C6DB421E91F7800E326CC /* SWXMLHash.swift */,
 				571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */,
 				77FB445420C05715002CE0BB /* TokenizedCollection.swift */,
+				5756CA2A25FD2C70007719C5 /* UIBezierPath+Superpowers.swift */,
 				570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */,
 				772D915F22E2068E00DEBC6A /* UICalibrator.swift */,
 				772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */,
-				772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */,
 				776C3B2022E22EEF0080211E /* UICalibrator+VariableFactory.swift */,
+				772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */,
 				772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */,
 				570FC2991F1124A300FEAC03 /* UIGlyph.swift */,
 				570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */,
@@ -465,7 +471,7 @@
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
 				57DD96C61F1802F10001C481 /* Variable.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
-				5763B2442585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift */,
+				5756CA3225FD2FDE007719C5 /* ASToolkit.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -771,7 +777,9 @@
 				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
 				571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */,
+				5756CA2B25FD2C70007719C5 /* UIBezierPath+Superpowers.swift in Sources */,
 				578872B01F6D59C1009E1927 /* ExtensionForUIControlState.swift in Sources */,
+				5756CA3325FD2FDE007719C5 /* ASToolkit.swift in Sources */,
 				579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */,
 				777B9F3F2088E56800D3FBBD /* FiniteState.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,

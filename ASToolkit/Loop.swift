@@ -13,7 +13,7 @@ public func loop(_ count:Int, block:()->()) {
     let count = 0 < count ? count : 0
     while i < count {
         block()
-        i = i+1
+        i += 1
     }
 }
 
@@ -22,7 +22,7 @@ public func loopWithIndex(_ count:Int, block:(Int)->()) {
     let count = 0 < count ? count : 0
     while i < count {
         block(i)
-        i = i+1
+        i += 1
     }
 }
 
@@ -31,7 +31,7 @@ public func loop(upTo count:Int, block:()->(Bool)) {
     let count = 0 < count ? count : 0
     while i < count {
         if block() {
-            i = i+1
+            i += 1
         }
         else {
             break
@@ -44,7 +44,7 @@ public func loopWithIndex(upTo count:Int, block:(Int)->(Bool)) {
     let count = 0 < count ? count : 0
     while i < count {
         if block(i) {
-            i = i+1
+            i += 1
         }
         else {
             break
