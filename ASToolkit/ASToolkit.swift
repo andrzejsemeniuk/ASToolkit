@@ -12,7 +12,8 @@ final public class ASToolkit {
     
     static public private(set) var initialized = false
     
-    static public func initalize() {
+    // NOTE: CALL 'initialize()' UPON LAUNCH ONCE IN YOUR APP
+    static public func initialize() {
         guard !initialized else { return }
         initialized = true
         UIBezierPath.mx_prepare()
