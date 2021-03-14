@@ -1060,9 +1060,9 @@ extension SKAction {
         return SKAction.run(block)
     }
     
-    public static func customAction(withDuration duration: TimeInterval, _ block: @escaping (SKNode, CGFloat, Double)->Void) -> SKAction {
+    public static func customAction(withDuration duration: TimeInterval, _ block: @escaping (SKNode, _ elapsedTime: CGFloat, _ elapsedTimeRatio: CGFloat)->Void) -> SKAction {
         return SKAction.customAction(withDuration: duration) { n,t in
-            block(n,t,t.asDouble/duration)
+            block(n,t,CGFloat(t.asDouble/duration))
         }
     }
     
@@ -1245,5 +1245,40 @@ public extension SKColor {
     }
     var asCIColor : CIColor {
         CIColor.init(cgColor: self.cgColor)
+    }
+}
+
+
+open class SKTouchNode : SKNode {
+    
+    public enum TouchesCondition {
+        case began, moved, ended, cancelled
+    }
+    
+    public typealias Handler = (_ condition: TouchesCondition, _ touches: Set<UITouch>, _ event: UIEvent?)->Void
+    
+    public init(handler: Handler? = nil) {
+        super.init()
+        isUserInteractionEnabled = true
+        self.handler = handler
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public var handler : Handler?
+    
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        handler?(.began,touches,event)
+    }
+    open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        handler?(.moved,touches,event)
+    }
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        handler?(.ended,touches,event)
+    }
+    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        handler?(.cancelled,touches,event)
     }
 }
