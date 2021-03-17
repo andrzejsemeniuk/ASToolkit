@@ -614,3 +614,64 @@ public func / (left: CGPoint, right: CGPoint) -> CGPoint {
 	return CGPoint(x: left.x / right.x, y: left.y / right.y)
 }
 
+public extension CGPath {
+    
+    static func line(p0: CGPoint, p1: CGPoint) -> CGPath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addLine(to: p1)
+        r.closeSubpath()
+        return r
+    }
+    
+    static func quadratic(p0: CGPoint, c0: CGPoint, p1: CGPoint) -> CGPath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addQuadCurve(to: p1, control: c0)
+        r.closeSubpath()
+        return r
+    }
+    
+    static func cubic(p0: CGPoint, c0: CGPoint, c1: CGPoint, p1: CGPoint) -> CGPath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addCurve(to: p1, control1: c0, control2: c1)
+        r.closeSubpath()
+        return r
+    }
+    
+}
+
+public extension CGMutablePath {
+    
+    static func line(p0: CGPoint, p1: CGPoint, closed: Bool) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addLine(to: p1)
+        if closed {
+            r.closeSubpath()
+        }
+        return r
+    }
+    
+    static func quadratic(p0: CGPoint, c0: CGPoint, p1: CGPoint, closed: Bool) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addQuadCurve(to: p1, control: c0)
+        if closed {
+            r.closeSubpath()
+        }
+        return r
+    }
+    
+    static func cubic(p0: CGPoint, c0: CGPoint, c1: CGPoint, p1: CGPoint, closed: Bool) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addCurve(to: p1, control1: c0, control2: c1)
+        if closed {
+            r.closeSubpath()
+        }
+        return r
+    }
+    
+}

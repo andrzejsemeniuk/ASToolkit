@@ -298,6 +298,44 @@ extension SKNode
 
 
 
+public extension SKNode {
+    
+    struct Snapshot {
+        public init(position: CGPoint = .zero, xScale: CGFloat = 1, yScale: CGFloat = 1, zRotation: CGFloat = 0, zPosition: CGFloat = 0) {
+            self.position = position
+            self.xScale = xScale
+            self.yScale = yScale
+            self.zRotation = zRotation
+            self.zPosition = zPosition
+        }
+        
+        public var position     : CGPoint = .zero
+        public var xScale       : CGFloat = 1
+        public var yScale       : CGFloat = 1
+        public var zRotation    : CGFloat = 0
+        public var zPosition    : CGFloat = 0
+    }
+    
+    var snapshot : Snapshot {
+        .init(position  : self.position,
+              xScale    : self.xScale,
+              yScale    : self.yScale,
+              zRotation : self.zRotation,
+              zPosition : self.zPosition)
+    }
+    
+    func set(snapshot: Snapshot) {
+        self.position   = snapshot.position
+        self.xScale     = snapshot.xScale
+        self.yScale     = snapshot.yScale
+        self.zRotation  = snapshot.zRotation
+        self.zPosition  = snapshot.zPosition
+    }
+    
+}
+
+
+
 
 extension SKScene
 {
@@ -1251,11 +1289,11 @@ public extension SKColor {
 
 open class SKTouchNode : SKNode {
     
-    public enum TouchesCondition {
+    public enum Condition {
         case began, moved, ended, cancelled
     }
     
-    public typealias Handler = (_ condition: TouchesCondition, _ touches: Set<UITouch>, _ event: UIEvent?)->Void
+    public typealias Handler = (_ condition: Condition, _ touches: Set<UITouch>, _ event: UIEvent?)->Void
     
     public init(handler: Handler? = nil) {
         super.init()

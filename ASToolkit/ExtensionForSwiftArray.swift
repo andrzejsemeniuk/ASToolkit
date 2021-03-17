@@ -694,3 +694,24 @@ public extension Array {
         })
     }
 }
+
+public extension Array {
+    
+    func indexGroups(where f: (Element)->Bool) -> [[Int]] {
+        var groups : [[Int]] = []
+        var group : [Int] = []
+        for i in 0..<count {
+            if f(self[i]) {
+                group.append(i)
+            } else if group.isNotEmpty {
+                groups.append(group)
+                group = []
+            }
+        }
+        if group.isNotEmpty {
+            groups.append(group)
+            group = []
+        }
+        return groups
+    }
+}
