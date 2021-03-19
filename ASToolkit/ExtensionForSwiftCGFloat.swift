@@ -21,10 +21,17 @@ extension CGFloat
         //        return (1.0-self)*from + self*to
         return from + (to - from) * self
     }
+    public func lerp                (_ from:CGFloat, _ to:CGFloat) -> CGFloat {
+        //        return (1.0-self)*from + self*to
+        return from + (to - from) * self
+    }
     public static func lerp         (from:CGFloat, to:CGFloat, with:CGFloat) -> CGFloat {
         return with.lerp(from:from,to:to)
     }
     public func lerp01              (from:CGFloat, to:CGFloat) -> CGFloat {
+        return Swift.min(1,Swift.max(0,self.lerp(from:from,to:to)))
+    }
+    public func lerp01              (_ from:CGFloat, _ to:CGFloat) -> CGFloat {
         return Swift.min(1,Swift.max(0,self.lerp(from:from,to:to)))
     }
     public static func lerp01       (from:CGFloat, to:CGFloat, with:CGFloat) -> CGFloat {
