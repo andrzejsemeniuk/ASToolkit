@@ -56,16 +56,32 @@ extension CGFloat
 	}
 }
 
-extension CGFloat {
+public extension CGFloat {
     
-    public static var   randomSign      : CGFloat                                       { (arc4random_uniform(2) == 0) ? 1.0 : -1.0 }
-    public static var   random          : CGFloat                                       { CGFloat(Float.random) }
-    public static var   random01        : CGFloat                                       { random }
-    public static var   random11        : CGFloat                                       { random(min: -1, max: +1) }
+    static var   randomSign      : CGFloat                                      { (arc4random_uniform(2) == 0) ? 1.0 : -1.0 }
+    static var   random          : CGFloat                                      { CGFloat(Float.random) }
+    static var   random01        : CGFloat                                      { random }
+    static var   random11        : CGFloat                                      { random(min: -1, max: +1) }
 
-    public static func  random          (min: CGFloat, max: CGFloat) -> CGFloat         { CGFloat.random * (max - min) + min }
-    public static func  random          (_ min: CGFloat, _ max: CGFloat) -> CGFloat     { CGFloat.random * (max - min) + min }
+    static func  random          (min: CGFloat, max: CGFloat) -> CGFloat        { CGFloat.random * (max - min) + min }
+    static func  random          (_ min: CGFloat, _ max: CGFloat) -> CGFloat    { CGFloat.random * (max - min) + min }
 
+    func         random          (factor: CGFloat) -> CGFloat                   {
+        let f = self * factor
+        return CGFloat.random(min: self-f, max: self+f)
+    }
+    func         random01        (factor: CGFloat) -> CGFloat                   {
+        let f = self * factor
+        return CGFloat.random(min: self-f, max: self+f).clamped01
+    }
+    func         random          (_ ball: CGFloat) -> CGFloat                   { CGFloat.random(min: self-ball, max: self+ball) }
+    func         random01        (_ ball: CGFloat) -> CGFloat                   { CGFloat.random(min: self-ball, max: self+ball).clamped01 }
+    
+    var          clamped01       : CGFloat                                      { Swift.max(.zero,Swift.min(.one,self)) }
+    func         clamped         (_ min: Self, _ max: CGFloat) -> CGFloat       { Swift.max(min,Swift.min(max,self)) }
+
+    static let   zero            : CGFloat   = 0
+    static let   one             : CGFloat   = 1
 }
 
 extension CGFloat {
