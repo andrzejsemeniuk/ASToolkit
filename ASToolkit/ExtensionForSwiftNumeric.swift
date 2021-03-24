@@ -34,7 +34,7 @@ public extension FloatingPoint {
 }
 
 public extension FloatingPoint {
-    var twoPi: Self { return .pi * 2 }
+    static var twoPi: Self { return .pi * 2 }
     var degreesToRadians: Self { return self * .pi / 180 }
     var radiansToDegrees: Self { return self * 180 / .pi }
     
@@ -52,6 +52,28 @@ public extension FloatingPoint {
         abs(self - to) < precision
     }
     
+    static func generate(from: Self, to: Self, step: Self) -> [Self] {
+        var r : [Self] = []
+//        r.reserveCapacity(1+Int((upto-from)/step))
+        var from = from
+        while from <= to {
+            r.append(from)
+            from += step
+        }
+        return r
+    }
+
+    static func generate(from: Self, upto: Self, step: Self) -> [Self] {
+        var r : [Self] = []
+//        r.reserveCapacity(1+Int((upto-from)/step))
+        var from = from
+        while from < upto {
+            r.append(from)
+            from += step
+        }
+        return r
+    }
+
 }
 
 
