@@ -315,6 +315,7 @@ public extension CGPoint
         return d == 0 ? .zero : .init(x / d, y / d)
     }
     
+    func distance               (to: CGPoint) -> CGFloat { (to-self).length }
 }
 
 extension CGRect
