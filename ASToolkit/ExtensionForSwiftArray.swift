@@ -24,6 +24,10 @@ public extension Array
 		clear()
 		return result
 	}
+    
+    mutating func prepend(_ element: Element) {
+        self.insert(element, at: 0)
+    }
 
     @discardableResult
     mutating func trim(to: Int) -> Array {
@@ -442,17 +446,22 @@ extension Array {
 
 }
 
-extension Array {
+public extension Array {
     
-    public var random : Element {
+    var random : Element {
         return self[ Int.random(n: UInt32(count)) ]
     }
 
-    public var pick : Element {
+    var pick : Element {
         return random
     }
 
+    func picked(_ count: Int) -> Self {
+        // EXPENSIVE O(n)
+        self.shuffled().enumerated().filter { $0.0 < count }.map { $0.1 }
+    }
 }
+
 extension Array {
 
 	public func indexes(_ indexes:Indexes, validate:Bool = true) -> [Int] {
