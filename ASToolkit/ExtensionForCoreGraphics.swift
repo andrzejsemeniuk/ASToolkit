@@ -367,6 +367,10 @@ extension CGSize
     public var minSide          : CGFloat       { min(width,height) }
     public var maxSide          : CGFloat       { max(width,height) }
 
+    public var asMaxSquare      : CGSize        { .init(maxSide, maxSide) }
+    public var asMinSquare      : CGSize        { .init(minSide, minSide) }
+    public var asSquareFromDiagonal      : CGSize        { .init(diagonal, diagonal) }
+
 	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: width * x, y: height * y) }
 	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x, y:ratio.y) }
 
@@ -613,6 +617,10 @@ public func * (left: CGPoint, right: CGPoint) -> CGPoint {
 }
 public func / (left: CGPoint, right: CGPoint) -> CGPoint {
 	return CGPoint(x: left.x / right.x, y: left.y / right.y)
+}
+
+public prefix func - (point: CGPoint) -> CGPoint {
+    CGPoint(-point.x, -point.y)
 }
 
 public extension CGPath {
