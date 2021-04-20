@@ -36,3 +36,9 @@ public extension Bool {
     }
     
 }
+
+public extension Bool {
+    
+    static var random : Bool { Double.random01 > 0.5 }
+    
+}

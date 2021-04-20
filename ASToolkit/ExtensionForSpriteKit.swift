@@ -733,8 +733,8 @@ public extension SKTexture {
         let coreImageContext    = CIContext(options: nil)
         let gradientFilter      = CIFilter(name: "CIRadialGradient")!
         let inputCenter         = CIVector.init(x: size.width/2, y: size.height/2)
-        let inputRadius0        = radius0 * size.diagonal/2
-        let inputRadius1        = radius1 * size.diagonal/2
+        let inputRadius0        = radius0 * size.minSide/2
+        let inputRadius1        = radius1 * size.minSide/2
         
         gradientFilter.setDefaults()
         gradientFilter.setValue(inputCenter, forKey: "inputCenter")

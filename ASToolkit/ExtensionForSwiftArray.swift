@@ -363,15 +363,23 @@ extension Array where Element: Equatable {
 
 }
 
-extension Array {
+public extension Array {
 
-	public func compacted() -> [Element] {
+	func compacted() -> [Element] {
 //		return self.filter({ $0 != nil }).map { $0! })
 		return self.compactMap({
 			return $0
 		})
 	}
-	
+    
+    var odd : [Element] {
+        enumerated().filter { $0.0.isOdd }.map { $0.1 }
+    }
+    
+    var even : [Element] {
+        enumerated().filter { $0.0.isEven }.map { $0.1 }
+    }
+
 }
 
 extension Array {
