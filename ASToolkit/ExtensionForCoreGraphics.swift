@@ -170,8 +170,8 @@ extension CGRect {
         self.init(x: 0, y: 0, width: width, height: height)
     }
     
-    public init(side: CGFloat) {
-        self.init(x: 0, y: 0, width: side, height: side)
+    public init(origin: CGPoint = .zero, side: CGFloat) {
+        self.init(x: origin.x, y: origin.y, width: side, height: side)
     }
     
 	public init(size: CGSize) {
