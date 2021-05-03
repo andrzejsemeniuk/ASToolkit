@@ -20,7 +20,7 @@ extension UIView
 		}
 	}
 	
-    public class func create(withBackgroundColor color:UIColor = .clear, frame:CGRect = CGRect.zero) -> UIView
+    @objc public class func create(withBackgroundColor color:UIColor = .clear, frame:CGRect = CGRect.zero) -> UIView
     {
         let result = UIView(frame:frame)
         result.backgroundColor = color
