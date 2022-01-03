@@ -35,9 +35,13 @@ public extension FloatingPoint {
 
 public extension FloatingPoint {
     static var twoPi: Self { return .pi * 2 }
+    
     var degreesToRadians: Self { return self * .pi / 180 }
     var radiansToDegrees: Self { return self * 180 / .pi }
-    
+
+    var radians: Self { return self * .pi / 180 }
+    var degrees: Self { return self * 180 / .pi }
+
     @discardableResult
     mutating func add(_ value: Self, min: Self, max: Self) -> Self {
         self = Swift.max(min, Swift.min(max, self + value))
@@ -335,8 +339,14 @@ public extension Int {
 }
 
 public extension Int {
+    
+    
     var degreesToRadians: Double { return Double(self) * .pi / 180 }
     var radiansToDegrees: Double { return Double(self) * 180 / .pi }
+    
+    var radians: Double { return Double(self) * .pi / 180 }
+    var degrees: Double { return Double(self) * 180 / .pi }
+
 }
 
 public extension Int {
