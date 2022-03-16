@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias Block                      = ()->Void
+
 public typealias Block_B_V                  = ((Bool)->Void)
 public typealias BlockBoolToVoid            = Block_B_V
 public typealias BlockAcceptingBool         = Block_B_V

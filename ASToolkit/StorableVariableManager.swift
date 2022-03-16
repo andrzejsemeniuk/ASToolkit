@@ -57,7 +57,7 @@ open class StorableVariableManager : CustomStringConvertible {
 	}
 
 	open func filter(pattern: String) -> [StorableVariable] {
-		return variables.filter {
+		variables.filter {
 			$0.key.matches(regex: pattern)
 		}
 	}
@@ -73,7 +73,7 @@ open class StorableVariableManager : CustomStringConvertible {
 
 
 	open func filtered(forKeyRegexPattern pattern: String) -> [StorableVariable] {
-		return variables.filter({ $0.key.matches(regex: pattern) }).map { $0 }
+		variables.filter({ $0.key.matches(regex: pattern) }).map { $0 }
 	}
 
 	open func variable(_ key: String) -> StorableVariable! {

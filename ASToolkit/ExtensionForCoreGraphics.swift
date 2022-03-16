@@ -11,6 +11,9 @@ import CoreGraphics
 import UIKit
 
 
+public typealias CGFloat01      = CGFloat
+public typealias CGFloat11      = CGFloat
+
 
 
 public enum CGDirection {

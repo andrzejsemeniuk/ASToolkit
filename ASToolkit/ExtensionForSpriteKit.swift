@@ -293,6 +293,84 @@ extension SKNode
     }
 
 
+    
+    public func scaleNormalizedFromParent() {
+        guard let parent = parent else { return }
+        xScale /= parent.xScale
+        yScale /= parent.yScale
+    }
+    
+    public var descendants : [SKNode] {
+        var r = children
+        r.forEach {
+            r += $0.descendants
+        }
+        return r
+    }
+
+}
+
+public extension SKSpriteNode {
+    
+    func point01(ax: CGFloat, ay: CGFloat) -> CGPoint {
+        CGPoint(point01(ax: ax), point01(ay: ay))
+    }
+    func point01(ax: CGFloat01) -> CGFloat {
+        size.width * (ax - 0.5) / xScale
+    }
+    func point01(ay: CGFloat01) -> CGFloat {
+        size.height * (ay - 0.5) / yScale
+    }
+    func point11(ax: CGFloat11, ay: CGFloat11) -> CGPoint {
+        CGPoint(point11(ax: ax), point11(ay: ay))
+    }
+    func point11(ax: CGFloat11) -> CGFloat {
+        size.width/2 * (ax) / xScale
+    }
+    func point11(ay: CGFloat11) -> CGFloat {
+        size.height/2 * (ay) / yScale
+    }
+
+    @discardableResult
+    func ax(_ v: CGFloat?) -> Self {
+        guard let p = parent as? SKSpriteNode else { return self }
+        guard let v = v else { return self }
+        position.x = p.point11(ax: v)
+        return self
+    }
+    
+    @discardableResult
+    func ay(_ v: CGFloat?) -> Self {
+        guard let p = parent as? SKSpriteNode else { return self }
+        guard let v = v else { return self }
+        position.y = p.point11(ay: v)
+        return self
+    }
+    @discardableResult
+    func sx(_ v: CGFloat?) -> Self {
+        guard let v = v else { return self }
+        xScale = v
+        return self
+    }
+    @discardableResult
+    func sy(_ v: CGFloat?) -> Self {
+        guard let v = v else { return self }
+        yScale = v
+        return self
+    }
+    @discardableResult
+    func r(_ v: CGFloat?) -> Self {
+        guard let v = v else { return self }
+        zRotation = v
+        return self
+    }
+    @discardableResult
+    func h(_ v: Bool?) -> Self {
+        guard let v = v else { return self }
+        isHidden = v
+        return self
+    }
+
 }
 
 
@@ -1118,17 +1196,408 @@ extension SKAction {
         return SKAction.wait(forDuration: duration)
     }
     
-    public static func block(_ block: @escaping ()->Void) -> SKAction {
+    public static func block(_ block: @escaping Block) -> SKAction {
         return SKAction.run(block)
     }
     
     public static func customAction(withDuration duration: TimeInterval, _ block: @escaping (SKNode, _ elapsedTime: CGFloat, _ elapsedTimeRatio: CGFloat)->Void) -> SKAction {
         return SKAction.customAction(withDuration: duration) { n,t in
-            block(n,t,CGFloat(t.asDouble/duration))
+            block(n,t,CGFloat(t/duration))
         }
     }
     
+    
+    public static func instant(_ block: @escaping Block) -> SKAction {
+        .run(block)
+    }
+
+    public static func block(_ duration: TimeInterval, _ block: @escaping Block) -> SKAction {
+        .customAction(withDuration: duration, actionBlock: { _,_ in block() })
+    }
+
+    public static func block(_ duration: TimeInterval, _ block: @escaping (CGFloat)->Void) -> SKAction {
+        .customAction(withDuration: duration, { _,_,f in block(f) })
+    }
+
+    public static func block(duration: TimeInterval, _ block: @escaping Block) -> SKAction {
+        .customAction(withDuration: duration, actionBlock: { _,_ in block() })
+    }
+
+    public static func block(duration: TimeInterval, _ block: @escaping (CGFloat)->Void) -> SKAction {
+        .customAction(withDuration: duration, { _,_,f in block(f) })
+    }
+
 }
+
+public extension SKAction {
+    
+    static func test(duration: TimeInterval, timing: SKActionTimingFunction) -> SKAction {
+        .customAction(withDuration: duration) { node,t,T in
+            print("t=\(t), T=\(T), node: \(node)")
+        }
+        //                n.run(.test(duration: 0, timing: { v in v}))
+        //                t=0.0, T=nan, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -79.718399047851562} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:0.70
+        //                n.run(.test(duration: 1, timing: { v in v}))
+        //                t=0.0, T=0.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
+        //                t=0.06002183258533478, T=0.06002183258533478, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
+        //                    ...
+        //                t=0.9854282140731812, T=0.9854282140731812, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
+        //                t=1.0, T=1.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
+        //                n.run(.test(duration: 0.01, timing: { v in v}))
+        //                t=0.0, T=0.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -478.01278686523438} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.11
+        //                t=0.009999999776482582, T=0.9999999776482582, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -478.01278686523438} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.11
+    }
+
+    static func transform(_ path: WritableKeyPath<SKNode, CGFloat>, to: CGFloat, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
+        return .customAction(withDuration: duration) { n,d,l in
+            var n = n
+            if l.isNaN || l == 1 {
+                n[keyPath: path] = to
+                n.userDataClear(key)
+            } else if l == 0 {
+                n.userDataSet(key, n[keyPath: path])
+            } else {
+                let from = n.userDataGet(key) as! CGFloat
+                let p = timing(Float(l)).asCGFloat
+                n[keyPath: path] = p.lerp(from: from, to: to)
+            }
+        }
+    }
+
+    static func transform(_ path: WritableKeyPath<SKNode, CGPoint>, to: CGPoint, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
+        return .customAction(withDuration: duration) { n,d,l in
+            var n = n
+            if l.isNaN || l == 1 {
+                n[keyPath: path] = to
+                n.userDataClear(key)
+            } else if l == 0 {
+                n.userDataSet(key, n[keyPath: path])
+            } else {
+                let from = n.userDataGet(key) as! CGPoint
+                let p = timing(Float(l)).asCGFloat
+                n[keyPath: path] = CGPoint.init(p.lerp(from: from.x, to: to.x),p.lerp(from: from.y, to: to.y))
+            }
+        }
+    }
+
+    static func transform(_ path: WritableKeyPath<SKNode, CGFloat>, by: CGFloat, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
+        return .customAction(withDuration: duration) { n,d,l in
+            var n = n
+            if l.isNaN || l == 1 {
+                let from = n.userDataGet(key) as! CGFloat
+                n[keyPath: path] = from + by
+                n.userDataClear(key)
+            } else if l == 0 {
+                n.userDataSet(key, n[keyPath: path])
+            } else {
+                let from = n.userDataGet(key) as! CGFloat
+                let p = timing(Float(l)).asCGFloat
+                n[keyPath: path] = from + p.lerp(0, by)
+            }
+        }
+    }
+
+    static func transform(_ path: WritableKeyPath<SKNode, CGPoint>, by: CGPoint, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
+        return .customAction(withDuration: duration) { n,d,l in
+            var n = n
+            if l.isNaN || l == 1 {
+                let from = n.userDataGet(key) as! CGPoint
+                n[keyPath: path] = from + by
+                n.userDataClear(key)
+            } else if l == 0 {
+                n.userDataSet(key, n[keyPath: path])
+            } else {
+                let from = n.userDataGet(key) as! CGPoint
+                let p = timing(Float(l)).asCGFloat
+                n[keyPath: path] = from + .init(p.lerp(0, by.x), p.lerp(0, by.y))
+            }
+        }
+    }
+
+    static func move(to: CGPoint, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .move(to: to, duration: duration)
+        }
+        return transform(\SKNode.position, to: to, with: "mt", duration: duration, timing: timing)
+    }
+
+    static func scaleX(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .scaleX(to: to, duration: duration)
+        }
+        return transform(\SKNode.xScale, to: to, with: "sxt", duration: duration, timing: timing)
+    }
+
+    static func scaleY(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .scaleY(to: to, duration: duration)
+        }
+        return transform(\SKNode.yScale, to: to, with: "syt", duration: duration, timing: timing)
+    }
+
+    static func scale(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .scale(to: to, duration: duration)
+        }
+        return .group([
+            transform(\SKNode.xScale, to: to, with: "sxt", duration: duration, timing: timing),
+            transform(\SKNode.yScale, to: to, with: "syt", duration: duration, timing: timing)
+        ])
+    }
+
+    static func rotate(toAngle to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .rotate(toAngle: to, duration: duration)
+        }
+        return transform(\SKNode.zRotation, to: to, with: "zrt", duration: duration, timing: timing)
+    }
+
+
+}
+
+public extension SKAction {
+    
+    // no easing, no acceleration
+    static let timingFunctionForEaseLinear: SKActionTimingFunction = {
+        var t: Float = $0
+        return t
+    }
+    
+    // accelerating from zero velocity
+    static let timingFunctionForEaseInQuad: SKActionTimingFunction = {
+        var t: Float = $0
+        return t*t
+    }
+    
+    // decelerating to zero velocity
+    static let timingFunctionForEaseOutQuad: SKActionTimingFunction = {
+        var t: Float = $0
+        return t*(2-t)
+    }
+    
+    // acceleration until halfway, then deceleration
+    static let timingFunctionForEaseInOutQuad: SKActionTimingFunction = {
+        var t: Float = $0
+        return t<0.5 ? 2*t*t : -1+(4-2*t)*t
+    }
+    
+    // accelerating from zero velocity
+    static let timingFunctionForEaseInCubic: SKActionTimingFunction = {
+        var t: Float = $0
+        return t*t*t
+    }
+    
+    // decelerating to zero velocity
+    static let timingFunctionForEaseOutCubic: SKActionTimingFunction = {
+        var t: Float = $0
+        return (t - 1)*t*t+1
+    }
+    
+    // acceleration until halfway, then deceleration
+    static let timingFunctionForEaseInOutCubic: SKActionTimingFunction = {
+        var t: Float = $0
+        return t<0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
+    }
+    
+    // accelerating from zero velocity
+    static let timingFunctionForEaseInQuart: SKActionTimingFunction = {
+        var t: Float = $0
+        return t*t*t*t
+    }
+    
+    // decelerating to zero velocity
+    static let timingFunctionForEaseOutQuart: SKActionTimingFunction = {
+        var t: Float = $0
+        return 1-(t-1)*t*t*t
+    }
+    
+    // acceleration until halfway, then deceleration
+    static let timingFunctionForEaseInOutQuart: SKActionTimingFunction = {
+        var t: Float = $0
+        return t<0.5 ? 8*t*t*t*t : 1-8*(t-1)*t*t*t
+    }
+    
+    // accelerating from zero velocity
+    static let timingFunctionForEaseInQuint: SKActionTimingFunction = {
+        var t: Float = $0
+        return t*t*t*t*t
+    }
+    
+    // decelerating to zero velocity
+    static let timingFunctionForEaseOutQuint: SKActionTimingFunction = {
+        var t: Float = $0
+        return 1+(t-1)*t*t*t*t
+    }
+    
+    // acceleration until halfway, then deceleration
+    static let timingFunctionForEaseInOutQuint: SKActionTimingFunction = {
+        var t: Float = $0
+        return t<0.5 ? 16*t*t*t*t*t : 1+16*(t-1)*t*t*t*t
+    }
+    
+    static let timingFunctionForEaseInSin: SKActionTimingFunction = {
+        var t: Float = $0
+        return 1 + sin(Float.pi / 2 * t - Float.pi / 2)
+    }
+    
+    static let timingFunctionForEaseOutSin : SKActionTimingFunction = {
+        var t: Float = $0
+        return sin(Float.pi / 2 * t)
+    }
+    
+    static let timingFunctionForEaseInOutSin: SKActionTimingFunction = {
+        var t: Float = $0
+        return (1 + sin(Float.pi * t - Float.pi / 2)) / 2
+    }
+    
+    // elastic bounce effect at the beginning
+    static let timingFunctionForEaseInElastic: SKActionTimingFunction = {
+        var t: Float = $0
+        return (0.04 - 0.04 / t) * sin(25 * t) + 1
+    }
+    
+    // elastic bounce effect at the end
+    static let timingFunctionForEaseOutElastic: SKActionTimingFunction = {
+        var t: Float = $0
+        return 0.04 * t / (t - 1) * sin(25 * t)
+    }
+    
+    // elastic bounce effect at the beginning and end
+    static let timingFunctionForEaseInOutElastic: SKActionTimingFunction = {
+        var t: Float = $0
+        return (t < 0.5) ? (0.01 + 0.01 / t) * sin(50 * t) : (0.02 - 0.01 / t) * sin(50 * t) + 1
+    }
+}
+
+
+
+public extension SKWarpGeometryGrid {
+    
+    typealias WarpGeometryMatrix = [[(Float,Float)]]
+
+    
+    var sourcePositions : [SIMD2<Float>] {
+        vertexCount.map { i in
+            self.sourcePosition(at: i)
+        }
+    }
+    
+    var destinationPositions : [SIMD2<Float>] {
+        vertexCount.map { i in
+            self.destPosition(at: i)
+        }
+    }
+    
+    var sourcePoints : [[CGPoint]] {
+        var r : [[CGPoint]] = []
+        
+        return r
+    }
+    
+    static func array(columns: Int, rows: Int) -> [SIMD2<Float>] {
+        let c = 1 + columns
+        let r = 1 + rows
+        var m = [SIMD2<Float>].init(repeating: SIMD2<Float>.init(), count: c * r)
+        let dc = Float(1)/Float(c)
+//        var x : [Float] = (0..<c).map { i in i.asFloat * dc }
+        let dr = Float(1)/Float(r)
+//        var y : [Float] = (0..<r).map { i in i.asFloat * dr }
+        for ic in 0..<c {
+            for ir in 0..<r {
+                let index = ic * r + ir
+                m[index].x = ic.asFloat * dc
+                m[index].y = ir.asFloat * dr
+            }
+        }
+        print("array: w=\(m)")
+        return m
+    }
+    
+    static func array(_ w: WarpGeometryMatrix) -> [SIMD2<Float>] {
+//        let columns = w.count
+//        let rows = w[0].count
+//        let c = 1 + columns
+//        let r = 1 + rows
+//        var m = [SIMD2<Float>].init(repeating: SIMD2<Float>.init(), count: c * r)
+//        for ic in 0..<c {
+//            for ir in 0..<r {
+//                let index = ic * r + ir
+//                m[index].x = w[ic][ir].x.asFloat
+//                m[index].y = w[ic][ir].y.asFloat
+//            }
+//        }
+//        return m
+        
+        let r : [SIMD2<Float>] = w.flatMap {
+            $0.compactMap { e in
+                .init(x: e.0, y: e.1)
+            }
+        }
+        print("array: w=\(w)")
+        print("array, r=\(r)")
+        return r
+    }
+    
+    static func from(_ w: WarpGeometryMatrix?) -> SKWarpGeometryGrid? {
+        guard let w = w else { return nil }
+        guard w.count > 0 else { return nil }
+        
+        let columns     = w[0].count-1
+        let rows        = w.count-1
+        let source      = Self.array(columns: columns, rows: rows)
+        let destination = Self.array(w)
+        
+        return SKWarpGeometryGrid.init(columns              : columns,
+                                       rows                 : rows,
+                                       sourcePositions      : source,
+                                       destinationPositions : destination)
+    }
+    
+//    func pointAt(row: Int, column: Int) -> SIMD2<Float> {
+//
+//    }
+    
+    /*
+    func stretchedLinear(tl: CGPoint, tr: CGPoint, bl: CGPoint, br: CGPoint) -> SKWarpGeometryGrid {
+        // interpolate linearly between corners
+        
+        var positions : [SIMD2<Float>] = sourcePositions
+        
+        let dxtop    = (tr.x - tl.x) / numberOfColumns.asCGFloat
+        let dxbottom = (br.x - bl.x) / numberOfColumns.asCGFloat
+        let dyleft   = (tl.y - bl.y) / numberOfRows.asCGFloat
+        let dyright  = (tr.y - br.y) / numberOfRows.asCGFloat
+        
+        dxtop.lerp01(from: T##CGFloat, to: <#T##CGFloat#>)
+        
+        var matrix : [[CGPoint]] = sourcePoints
+        
+        matrix[0][0] = bl
+        matrix[numberOfRows][0] = tl
+        matrix[0][numberOfColumns] = br
+        matrix[numberOfRows][numberOfColumns] = tr
+        
+        for r in 0...numberOfRows {
+            for c in 0...numberOfColumns {
+                matrix[r][c].x = matrix[r][c].x.progress(from: )
+            }
+        }
+        
+        return replacingByDestinationPositions(positions: positions)
+    }
+ */
+    
+    func stretchedQuadratic(tl: CGPoint, tm: CGPoint, tr: CGPoint, bl: CGPoint, bm: CGPoint, br: CGPoint) -> SKWarpGeometryGrid {
+        // interpolate linearly between corners
+        
+        var r = self
+        
+        return r
+    }
+    
+}
+
+
 
 
 public func aRun            (on node:SKNode,action:SKAction,delay sec:TimeInterval = 0) -> SKNode       { node.run(aDelayed(delay:sec,action:action)); return node }

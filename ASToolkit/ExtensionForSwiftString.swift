@@ -43,50 +43,64 @@ extension String
     }
 }
 
-extension String
+public extension String
 {
-    public subscript (safe i:Int) -> Substring? {
-        return 0 <= i && i < self.count ? self[i] : nil
+    subscript (safe i:Int) -> Substring? {
+        0 <= i && i < self.count ? self[i] : nil
     }
 
-    public subscript (i: Int) -> Substring {
-        return self[i ..< i + 1]
+    subscript (i: Int) -> Substring {
+        self[i ..< i + 1]
     }
     
-    public subscript (r: Range<Int>) -> Substring {
+    subscript (r: Range<Int>) -> Substring {
         let start = self.index(startIndex, offsetBy: r.lowerBound)
         let end = self.index(start, offsetBy: r.upperBound - r.lowerBound)
         return self[start..<end]
     }
+    
+        //    subscript(_ range: CountableRange<Int>) -> String {
+        //        let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+        //        let end = index(start, offsetBy: min(self.count - range.lowerBound,
+        //                                             range.upperBound - range.lowerBound))
+        //        return String(self[start..<end])
+        //    }
 
-    public func at(_ i: Int) -> String {
+            subscript(_ range: CountablePartialRangeFrom<Int>) -> Substring {
+                let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+        //         return String(self[start...])
+                return self[start...]
+            }
+
+
+    func at(_ i: Int) -> String {
         let c = self[self.index(self.startIndex, offsetBy: i)]
         return String(c as Character)
     }
 
-    public func character(at i: Int) -> Character {
+    func character(at i: Int) -> Character {
         return self[self.index(self.startIndex, offsetBy: i)] as Character
     }
     
-    public func substring(from: Int) -> Substring {
+    func substring(from: Int) -> Substring {
         if from < 0 {
             return self[max(0, length + from) ..< length]
         }
         return self[min(from, length) ..< length]
     }
     
-    public func substring(to: Int) -> Substring {
+    func substring(to: Int) -> Substring {
         if to < 0 {
             return self[0 ..< max(0, length + to)]
         }
         return self[0 ..< max(0, min(to, length))]
     }
     
-    public func substring(from: UInt, to: UInt) -> Substring {
+    func substring(from: UInt, to: UInt) -> Substring {
         return self[min(Int(from), length) ..< min(Int(to), length)]
     }
 
-    public func substring(from:Int = 0, length:Int) -> Substring {
+    func substring(from:Int = 0, length:Int) -> Substring {
         if from < 0 {
             let f = max(0, length + from)
             let t = max(f,min(f + length, self.length))
@@ -97,6 +111,118 @@ extension String
     
 }
 
+public extension StringProtocol {
+    var asBits : [Bool] {
+        self.map { $0 == "0" ? false : true }
+    }
+    var asString : String {
+        String(self)
+    }
+}
+
+
+
+public protocol Stringable {
+    static func from(string: String) -> Self?
+}
+
+
+public extension String {
+    
+    func parse<Type0: Stringable>(_ pattern: String) -> Type0? {
+        guard let regex = try? NSRegularExpression.init(pattern: pattern, options: []) else {
+            return nil
+        }
+        let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+        guard let a = result[safe:0] else { return nil }
+        let b = self[a.range.lowerBound..<a.range.upperBound]
+        return Type0.from(string: String(b))
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable>(_ pattern: String) -> (Type0?,Type1?) {
+        var r : (Type0?,Type1?) = (nil,nil)
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+            if let a = result[safe:0] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.0 = Type0.from(string: String(b))
+            }
+            if let a = result[safe:1] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.1 = Type1.from(string: String(b))
+            }
+        }
+        return r
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable, Type2: Stringable>(_ pattern: String) -> (Type0?,Type1?,Type2?) {
+        var r : (Type0?,Type1?,Type2?) = (nil,nil,nil)
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+            if let a = result[safe:0] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.0 = Type0.from(string: String(b))
+            }
+            if let a = result[safe:1] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.1 = Type1.from(string: String(b))
+            }
+            if let a = result[safe:2] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.2 = Type2.from(string: String(b))
+            }
+        }
+        return r
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable, Type2: Stringable>(_ pattern: String, _ out0: inout  Type0?, _ out1: inout Type1?, _ out2: inout Type2?) -> Bool {
+        var r = false
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            guard let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count)).first else { return r }
+            var got = 0
+            let found : [String] = Array(0...result.numberOfRanges-1).map {
+                let range = result.range(at: $0)
+                return self[range.lowerBound..<range.upperBound].asString
+            }
+            print("\(self) -> |\(result.numberOfRanges)| \(found)")
+            if result.numberOfRanges > 1 {
+                let a = result.range(at: 1)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out0 = Type0.from(string: String(b))
+                got += out0 != nil ? 1 : 0
+            }
+            if result.numberOfRanges > 2 {
+                let a = result.range(at: 2)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out1 = Type1.from(string: String(b))
+                got += out1 != nil ? 1 : 0
+            }
+            if result.numberOfRanges > 3 {
+                let a = result.range(at: 3)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out2 = Type2.from(string: String(b))
+                got += out2 != nil ? 1 : 0
+            }
+            r = got == 3
+        }
+        return r
+    }
+
+}
+
+extension String {
+    func appendLineToURL(fileURL: URL) throws {
+        try (self + "\n").appendToURL(fileURL: fileURL)
+     }
+
+     func appendToURL(fileURL: URL) throws {
+         let data = self.data(using: String.Encoding.utf8)!
+         try data.append(fileURL: fileURL)
+     }
+ }
 
 public extension String {
     
@@ -256,13 +382,13 @@ extension String {
 }
 
 
-extension String {
+public extension String {
 
-	public func matches(regex: String) -> Bool {
+	func matches(regex: String) -> Bool {
 		return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
 	}
 
-	public func substring(regex: String) -> Substring? {
+	func substring(regex: String) -> Substring? {
 		if let range = self.range(of: regex, options: .regularExpression, range: nil, locale: nil) {
 			return self[range]
 			//			return self.substring(from: range.lowerBound.encodedOffset, to: range.upperBound.encodedOffset)
@@ -270,7 +396,7 @@ extension String {
 		return nil
 	}
 
-	public func escaped() -> String {
+	func escaped() -> String {
 		var r = ""
 		for (_,char) in self.enumerated() {
 			r += "\\\(char)"

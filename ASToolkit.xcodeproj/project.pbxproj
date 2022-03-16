@@ -27,7 +27,6 @@
 		570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */; };
 		570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */; };
 		570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2811F1124A300FEAC03 /* ExtensionForSwiftBool.swift */; };
-		570FC2BA1F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */; };
 		570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */; };
 		570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */; };
 		570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */; };
@@ -70,6 +69,7 @@
 		576B8472257173D2006BC7C0 /* TestExtensionForDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576B8471257173D2006BC7C0 /* TestExtensionForDictionary.swift */; };
 		57723068251FEAFB0054D12B /* ExtensionForSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */; };
 		57743A8D20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57743A8C20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift */; };
+		57760E0927E275E600114F3D /* ExtensionForSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57760E0827E275E600114F3D /* ExtensionForSwiftData.swift */; };
 		5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */; };
 		5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5778C80C1F5A0FD100C5F6E6 /* Logic.swift */; };
 		577E07AB1F840A5C003808B6 /* TestForCGFloat01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */; };
@@ -197,7 +197,6 @@
 		570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSpriteKit.swift; sourceTree = "<group>"; };
 		570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftArray.swift; sourceTree = "<group>"; };
 		570FC2811F1124A300FEAC03 /* ExtensionForSwiftBool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftBool.swift; sourceTree = "<group>"; };
-		570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftCGFloat.swift; sourceTree = "<group>"; };
 		570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftCharacter.swift; sourceTree = "<group>"; };
 		570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftCollection.swift; sourceTree = "<group>"; };
 		570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftNumeric.swift; sourceTree = "<group>"; };
@@ -239,6 +238,7 @@
 		576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForBindingValue.swift; sourceTree = "<group>"; };
 		576B8471257173D2006BC7C0 /* TestExtensionForDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestExtensionForDictionary.swift; sourceTree = "<group>"; };
 		57743A8C20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForNSLayoutConstraint.swift; sourceTree = "<group>"; };
+		57760E0827E275E600114F3D /* ExtensionForSwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftData.swift; sourceTree = "<group>"; };
 		5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolKeyable.swift; sourceTree = "<group>"; };
 		5778C80C1F5A0FD100C5F6E6 /* Logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
 		577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestForCGFloat01.swift; sourceTree = "<group>"; };
@@ -402,10 +402,10 @@
 				570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */,
 				57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */,
 				570FC2811F1124A300FEAC03 /* ExtensionForSwiftBool.swift */,
-				570FC2821F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift */,
 				570FC2831F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift */,
 				570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */,
 				579346572540649E004D0344 /* ExtensionForSwiftComparable.swift */,
+				57760E0827E275E600114F3D /* ExtensionForSwiftData.swift */,
 				77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */,
 				57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */,
 				570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */,
@@ -739,6 +739,7 @@
 				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
 				772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */,
+				57760E0927E275E600114F3D /* ExtensionForSwiftData.swift in Sources */,
 				57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
@@ -747,7 +748,6 @@
 				777B9EFE2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift in Sources */,
 				77A3E68D2110AAE400B4FD9D /* ExtensionForSWXML.swift in Sources */,
 				5762D31C2096639B00B7695B /* ExtensionForUIWindow.swift in Sources */,
-				570FC2BA1F1124A300FEAC03 /* ExtensionForSwiftCGFloat.swift in Sources */,
 				579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */,
 				570FC2B21F1124A300FEAC03 /* ExtensionForFoundationNSLayoutAnchor.swift in Sources */,
 				570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */,
