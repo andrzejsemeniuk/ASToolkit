@@ -85,9 +85,19 @@ extension SKNode
     
 
 
+    public var r: CGFloat {
+        get {
+            self.zRotation
+        }
+        set {
+            self.zRotation = newValue
+        }
+    }
+
+
     public var s: CGFloat {
         get {
-            return (xScale + yScale) / 2
+            (xScale + yScale) / 2
         }
         set {
             xScale = newValue
@@ -97,10 +107,28 @@ extension SKNode
 
     public var scale: CGFloat {
         get {
-            return (xScale + yScale) / 2
+            (xScale + yScale) / 2
         }
         set {
             xScale = newValue
+            yScale = newValue
+        }
+    }
+
+    public var sx: CGFloat {
+        get {
+            xScale
+        }
+        set {
+            xScale = newValue
+        }
+    }
+
+    public var sy: CGFloat {
+        get {
+            yScale
+        }
+        set {
             yScale = newValue
         }
     }
@@ -117,7 +145,7 @@ extension SKNode
 
     public var z: CGFloat {
         get {
-            return zPosition
+            zPosition
         }
         set {
             zPosition = newValue
@@ -1359,112 +1387,112 @@ public extension SKAction {
     
     // no easing, no acceleration
     static let timingFunctionForEaseLinear: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t
     }
     
     // accelerating from zero velocity
     static let timingFunctionForEaseInQuad: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t*t
     }
     
     // decelerating to zero velocity
     static let timingFunctionForEaseOutQuad: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t*(2-t)
     }
     
     // acceleration until halfway, then deceleration
     static let timingFunctionForEaseInOutQuad: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t<0.5 ? 2*t*t : -1+(4-2*t)*t
     }
     
     // accelerating from zero velocity
     static let timingFunctionForEaseInCubic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t*t*t
     }
     
     // decelerating to zero velocity
     static let timingFunctionForEaseOutCubic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return (t - 1)*t*t+1
     }
     
     // acceleration until halfway, then deceleration
     static let timingFunctionForEaseInOutCubic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t<0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
     }
     
     // accelerating from zero velocity
     static let timingFunctionForEaseInQuart: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t*t*t*t
     }
     
     // decelerating to zero velocity
     static let timingFunctionForEaseOutQuart: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return 1-(t-1)*t*t*t
     }
     
     // acceleration until halfway, then deceleration
     static let timingFunctionForEaseInOutQuart: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t<0.5 ? 8*t*t*t*t : 1-8*(t-1)*t*t*t
     }
     
     // accelerating from zero velocity
     static let timingFunctionForEaseInQuint: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t*t*t*t*t
     }
     
     // decelerating to zero velocity
     static let timingFunctionForEaseOutQuint: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return 1+(t-1)*t*t*t*t
     }
     
     // acceleration until halfway, then deceleration
     static let timingFunctionForEaseInOutQuint: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return t<0.5 ? 16*t*t*t*t*t : 1+16*(t-1)*t*t*t*t
     }
     
     static let timingFunctionForEaseInSin: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return 1 + sin(Float.pi / 2 * t - Float.pi / 2)
     }
     
     static let timingFunctionForEaseOutSin : SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return sin(Float.pi / 2 * t)
     }
     
     static let timingFunctionForEaseInOutSin: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return (1 + sin(Float.pi * t - Float.pi / 2)) / 2
     }
     
     // elastic bounce effect at the beginning
     static let timingFunctionForEaseInElastic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return (0.04 - 0.04 / t) * sin(25 * t) + 1
     }
     
     // elastic bounce effect at the end
     static let timingFunctionForEaseOutElastic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return 0.04 * t / (t - 1) * sin(25 * t)
     }
     
     // elastic bounce effect at the beginning and end
     static let timingFunctionForEaseInOutElastic: SKActionTimingFunction = {
-        var t: Float = $0
+        let t: Float = $0
         return (t < 0.5) ? (0.01 + 0.01 / t) * sin(50 * t) : (0.02 - 0.01 / t) * sin(50 * t) + 1
     }
 }

@@ -80,6 +80,14 @@ public extension FloatingPoint {
 
 }
 
+public extension FloatingPoint {
+    
+//    var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
+//    var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
+//    var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
+//    var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
+
+}
 
 
 
@@ -91,8 +99,9 @@ public extension Double
     
     var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
     var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
+    var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
     var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
-    
+
     func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
     func lerp01              (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
     func lerp                (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
@@ -189,7 +198,11 @@ public extension Double {
     var degreesFrom01           : Self { self * 360.0 }
     var radiansTo01             : Self { self / .twopi }
     var degreesTo01             : Self { self / 360.0 }
-    
+    var radiansFrom11           : Self { self * .pi }
+    var degreesFrom11           : Self { self * 180.0 }
+    var radiansTo11             : Self { self / .pi }
+    var degreesTo11             : Self { self / 180.0 }
+
     var normalizedTo2Pi         : Self { (self.degrees.asInt % 360).asDouble.radians }
 //    mutating func normalizeTo2Pi() { self = self.normalizedTo2Pi }
     var normalizedToPiPi        : Self { ((self.degrees.asInt % 360) - 180).asDouble.radians }
@@ -317,6 +330,10 @@ public extension CGFloat {
     var degreesFrom01       : Self { self * 360.0 }
     var radiansTo01         : Self { self / .twopi }
     var degreesTo01         : Self { self / 360.0 }
+    var radiansFrom11       : Self { self * .pi }
+    var degreesFrom11       : Self { self * 180.0 }
+    var radiansTo11         : Self { self / .pi }
+    var degreesTo11         : Self { self / 180.0 }
 
     var normalizedTo2Pi     : Self { (self.degrees.asInt % 360).asCGFloat.radians }
 //    mutating func normalizeTo2Pi() { self = self.normalizedTo2Pi }
@@ -391,7 +408,11 @@ public extension Float {
     var degreesFrom01       : Self { self * 360.0 }
     var radiansTo01         : Self { self / .twopi }
     var degreesTo01         : Self { self / 360.0 }
-    
+    var radiansFrom11       : Self { self * .pi }
+    var degreesFrom11       : Self { self * 180.0 }
+    var radiansTo11         : Self { self / .pi }
+    var degreesTo11         : Self { self / 180.0 }
+
     var normalizedTo2Pi     : Self { (self.degrees.asInt % 360).asFloat.radians }
 //    mutating func normalizeTo2Pi() { self = self.normalizedTo2Pi }
     var normalizedToPiPi    : Self { ((self.degrees.asInt % 360) - 180).asFloat.radians }

@@ -11,7 +11,7 @@ import Foundation
 public extension Comparable {
 
     func clamped             (minimum:Self, maximum:Self) -> Self {
-        return self < minimum ? minimum : maximum < self ? maximum : self
+        self < minimum ? minimum : maximum < self ? maximum : self
     }
 
     mutating func clamp      (minimum:Self, maximum:Self) {
