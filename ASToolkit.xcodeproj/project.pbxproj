@@ -97,7 +97,7 @@
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
 		57D5746625C1C133007557FB /* ExtensionForUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
-		57DD96C71F1802F10001C481 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* Variable.swift */; };
+		57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
 		57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */; };
 		57F0A0CB1F564EE30015169D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CA1F564EE30015169D /* AppDelegate.swift */; };
@@ -267,7 +267,7 @@
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
 		57DBB0231F4293E400AF2BEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		57DD96C61F1802F10001C481 /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
+		57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolForVariable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 		57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUI.swift; sourceTree = "<group>"; };
 		57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShaderKitExtensions.swift; path = ../ShaderKit/ShaderKitExtensions.swift; sourceTree = "<group>"; };
@@ -469,7 +469,7 @@
 				775E433820A67C6200911E85 /* UIViewWithDrawings.swift */,
 				7724E76A20B080D3006F54A0 /* UIViewWithoutInteraction.swift */,
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
-				57DD96C61F1802F10001C481 /* Variable.swift */,
+				57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
 				5756CA3225FD2FDE007719C5 /* ASToolkit.swift */,
 			);
@@ -658,10 +658,9 @@
 			};
 			buildConfigurationList = 570FC1F71F111E0E00FEAC03 /* Build configuration list for PBXProject "ASToolkit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -817,7 +816,7 @@
 				578F25F61F61EC24008C7C8C /* Weak.swift in Sources */,
 				570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */,
 				5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */,
-				57DD96C71F1802F10001C481 /* Variable.swift in Sources */,
+				57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */,
 				570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */,
 				570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */,
 				777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */,

@@ -10,20 +10,20 @@ import Foundation
 
 // TODO MAKE GENERIC
 
-public protocol ValueListener {
+public protocol ProtocolForValueListener {
     func didSet     (value:Double)
 }
 
-public protocol Variable {
+public protocol ProtocolForVariable {
     var value       : Double { get set }
-    var listener    : ValueListener? { get set }
+    var listener    : ProtocolForValueListener? { get set }
 }
 
-public protocol VariableWithDefaultValue : Variable {
+public protocol ProtocolForVariableWithDefaultValue : ProtocolForVariable {
     var value0      : Double { get }
 }
 
-public protocol VariableWithRange : Variable {
+public protocol ProtocolForVariableWithImmutableRange : ProtocolForVariable {
     var lowerbound  : Double { get }
     var upperbound  : Double { get }
     var range       : Double { get }
@@ -34,7 +34,7 @@ public struct VariableWithEnablement <V> {
     public var enabled  : Bool
 }
 
-public class VariableWithImmutableRange : VariableWithRange
+public class VariableWithImmutableRange : ProtocolForVariableWithImmutableRange
 {
     // enabled?
     // fixed?
@@ -43,7 +43,7 @@ public class VariableWithImmutableRange : VariableWithRange
     public let lowerbound   : Double
     public let upperbound   : Double
     public let range        : Double
-    public var listener     : ValueListener?
+    public var listener     : ProtocolForValueListener?
     
     public var value        : Double {
         didSet {
@@ -169,9 +169,9 @@ public class VariableNN : VariableWithImmutableRange
 
 
 
-public class VariableWithMutableRange : VariableWithRange
+public class VariableWithMutableRange : ProtocolForVariableWithImmutableRange
 {
-    public var listener: ValueListener?
+    public var listener: ProtocolForValueListener?
     
     public var lowerbound   : Double {
         didSet {
@@ -243,7 +243,7 @@ public class VariableWithMutableRange : VariableWithRange
 
 }
 
-public class VariableWithImmutableRangeAndDefaultValue : VariableWithImmutableRange, VariableWithDefaultValue {
+public class VariableWithImmutableRangeAndDefaultValue : VariableWithImmutableRange, ProtocolForVariableWithDefaultValue {
     
     public let value0 : Double
     
@@ -273,7 +273,7 @@ public class VariableWithImmutableRangeAndDefaultValue : VariableWithImmutableRa
     
 }
 
-public class VariableWithMutableRangeAndDefaultValue : VariableWithMutableRange, VariableWithDefaultValue {
+public class VariableWithMutableRangeAndDefaultValue : VariableWithMutableRange, ProtocolForVariableWithDefaultValue {
     
     public let value0 : Double
     
