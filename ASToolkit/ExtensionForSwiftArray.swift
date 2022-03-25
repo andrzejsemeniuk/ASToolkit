@@ -8,6 +8,17 @@
 
 import Foundation
 
+public extension RangeReplaceableCollection {
+    var combinations: [Self] { generate(2) }
+    func generate(_ n: Int) -> [Self] {
+        repeatElement(self, count: n).reduce([.init()]) { result, element in
+            result.flatMap { elements in
+                element.map { elements + CollectionOfOne($0) }
+            }
+        }
+    }
+}
+
 public extension Array
 {
     
@@ -190,6 +201,16 @@ extension Array where Element == Character {
     
 }
 
+public extension Array where Element : Numeric {
+    
+    var sum                         : Element      { self.reduce(0, { $0 + $1 }) }
+    
+    func sum(if condition: (Element)->Bool) -> Element {
+//        reduce(0, { $0 + (condition($1) ? $1 : 0)})
+        reduce(0, { condition($1) ? $0 + $1 : $0 })
+    }
+
+}
 
 extension Array where Element == Int {
     
@@ -197,7 +218,6 @@ extension Array where Element == Int {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
 
-    public var sum                  : Int           { self.reduce(0, { $0 + $1 }) }
     
 }
 
@@ -208,8 +228,6 @@ extension Array where Element == Float {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
-    public var sum                  : Float         { self.reduce(0, { $0 + $1 }) }
-    
 }
 
 
@@ -219,8 +237,6 @@ extension Array where Element == CGFloat {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
-    public var sum                  : CGFloat       { self.reduce(0, { $0 + $1 }) }
-    
 }
 
 
@@ -229,8 +245,6 @@ extension Array where Element == Double {
     public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
-    
-    public var sum                  : Double        { self.reduce(0, { $0 + $1 }) }
     
 }
 
@@ -730,5 +744,176 @@ public extension Array {
             group = []
         }
         return groups
+    }
+}
+
+
+
+
+
+public extension Array where Element : Equatable {
+    
+    func count(first: Int = -1, of: Element) -> Int {
+        var r = 0
+        let first = first > -1 ? Swift.min(first,count) : count
+        for i in 0..<first {
+            if self[i] == of { r += 1 }
+        }
+        return r
+    }
+    
+    func runCounts(of: Element) -> [Int : Int] {
+        guard count > 0 else { return [:] }
+        var r : [Int : Int] = [:]
+        var counter = 0
+        for i in 0..<count {
+            if self[i] != of {
+                if counter > 0 {
+                    r[counter, default: 0] += 1
+                    counter = 0
+                }
+            } else {
+                counter += 1
+            }
+        }
+        if counter > 0 {
+            r[counter, default: 0] += 1
+        }
+        return r
+    }
+    
+    func runCountsAsArray(of: Element) -> [Int] {
+        let c = runCounts(of: of)
+        let max = c.keys.max() ?? 0
+        guard max > 0 else { return [] }
+        var r : [Int] = .init(repeating: 0, count: max)
+        for (k,v) in c {
+            r[k-1] = v
+        }
+        return r
+    }
+    
+    func runsSum(of: Element) -> Int {
+        runCountsAsArray(of: of).enumerated().map { index,run in (index + 1) * run }.sum
+    }
+    
+}
+
+public extension Array where Element : Hashable {
+    func uniqued() -> Self {
+        Set<Element>.init(self).map { $0 }
+    }
+}
+
+public extension Array where Element == Int {
+    var sumOfPositives : Int {
+        self.reduce(0, {
+            $0 + ($1 > 0 ? $1 : 0)
+        })
+    }
+    var sumOfNegatives : Int {
+        self.reduce(0, {
+            $0 + ($1 < 0 ? $1 : 0)
+        })
+    }
+    var ratios : [Double] {
+        guard count > 1 else { return [] }
+        var r : [Double] = []
+        for i in 1..<count {
+            if self[i] != 0 {
+                r.append(Double(self[i-1])/Double(self[i]))
+            } else {
+                r.append(Double.nan)
+            }
+        }
+        return r
+    }
+
+}
+
+public extension Array where Element == Bool {
+    
+    var sequence : [Int] {
+        guard count > 0 else { return [] }
+        var r : [Int] = []
+        var counter = 1
+        var last : Bool = self[0]
+        for i in 1..<count {
+            if self[i] != last {
+                r.append(last ? counter : -counter)
+                counter = 1;
+                last = self[i]
+            } else {
+                counter += 1
+            }
+        }
+        if counter > 0 {
+            r.append(last ? counter : -counter)
+        }
+        return r
+    }
+
+    var sequenceNormzalizedTo11 : [Double] {
+        let values = sequence
+        let min = values.min() ?? 0
+        let max = values.max() ?? 0
+        let m = Double(Swift.max(abs(max),abs(min)))
+        return values.map { v in
+            Double(v)/m
+        }
+    }
+    
+    func sequenceWeighted(_ weight: Double = 1.0) -> [Double] {
+        sequence.enumerated().map { i,v in Double(1+i) * Double(v) * weight }
+    }
+    
+    var runCountsOf0Summary : String {
+        let r = runCountsAsArray(of: false)
+        return r.description.replacingOccurrences(of: ", ", with: " ") + " |\(r.count)|"
+    }
+    var runCountsOf1Summary : String {
+        let r = runCountsAsArray(of: true)
+        return r.description.replacingOccurrences(of: ", ", with: " ") + " |\(r.count)|"
+    }
+
+    func runIndexes(of: Bool) -> [Int : [Int]] {
+        var r : [Int : [Int]] = [:]
+        var index = 0
+        for run in sequence {
+            r[run, default: []].append(index)
+            index += abs(run)
+        }
+        return r
+    }
+    func runIndexesAsArray(of: Bool) -> [Int] {
+        let i = runIndexes(of: of)
+        return i.keys.sorted().map { k in i[k]! }.flatMap { $0 }
+    }
+    
+    var asStringOf01 : String {
+        map { $0 ? "1" : "0" }.joined(separator: "")
+    }
+
+    func countOf(pattern: [Bool]) -> Int {
+        var r = 0
+        var i = 0
+        let end = count-pattern.count+1
+        while i < end {
+            var j = i
+            while j < count, j-i < pattern.count, self[j] == pattern[j-i] {
+                j += 1
+            }
+            if (j-i) == pattern.count {
+                r += 1
+                i += pattern.count
+            } else {
+                i += 1
+            }
+        }
+        return r
+    }
+
+    static func allPermutations(n: Int) -> [[Bool]] {
+        return [false,true].generate(n)
     }
 }

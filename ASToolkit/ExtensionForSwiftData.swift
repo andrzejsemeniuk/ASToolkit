@@ -9,6 +9,7 @@
 import Foundation
 
 public extension Data {
+    
     func append(fileURL: URL, withNewLine: Bool = true) throws {
         if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
             defer {
@@ -23,4 +24,9 @@ public extension Data {
     }
     
     static let empty : Data = .init()
+    
+    var asString : String? {
+        .init(data: self, encoding: .utf8)
+    }
+
 }

@@ -87,6 +87,8 @@ public extension FloatingPoint {
 //    var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
 //    var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
 
+    func lerp                (from: Self, for:Self) -> Self { from + `for` * self }
+
 }
 
 
@@ -108,6 +110,7 @@ public extension Double
     func lerp01              (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
     static func lerp         (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
     static func lerp01       (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
+    
     
     func progress            (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
     func progress01          () -> Self { progress(from:0,to:1) }

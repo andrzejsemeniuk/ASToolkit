@@ -61,6 +61,12 @@ public func += <K,V>(lhs: inout Dictionary<K,V>, rhs: Dictionary<K,V>) {
     lhs = lhs.merging(rhs, uniquingKeysWith: { $1 })
 }
 
-public func asDictionary<K,V>(_ keys: [K], _ values: [V]) -> Dictionary<K,V> {
-    keys.reduce([:], { $0[$1] = values })
+public func + <K,V>(lhs: Dictionary<K,V>, rhs: Dictionary<K,V>) -> Dictionary<K,V> {
+    return lhs.merging(rhs, uniquingKeysWith: { $1 })
+}
+
+public func asDictionary<K,V>(_ keys: [K], _ value: V) -> Dictionary<K,V> {
+    keys.reduce([:], { dictionary,key in
+        dictionary + [key : value]
+    })
 }

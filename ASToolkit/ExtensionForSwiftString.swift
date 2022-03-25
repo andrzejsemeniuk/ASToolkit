@@ -570,3 +570,10 @@ public extension String {
     
 }
 
+public extension String {
+    
+    var asBytes     : [UInt8]   { .init(self.utf8) }
+    var asData      : Data      { asDataUTF8 }
+    var asDataUTF8  : Data      { .init(utf8) }
+
+}

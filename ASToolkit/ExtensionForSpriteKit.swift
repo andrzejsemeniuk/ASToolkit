@@ -83,6 +83,15 @@ extension SKNode
         }
     }
     
+    open func x(forAlignmentX x: CGFloat) -> CGFloat {
+        parent!.hFrom(ratio11: x) - parent!.width/2.0
+    }
+    
+    open func y(forAlignmentY y: CGFloat) -> CGFloat {
+        parent!.vFrom(ratio11: y) - parent!.height/2.0
+    }
+    
+
 
 
     public var r: CGFloat {
@@ -1239,6 +1248,12 @@ extension SKAction {
         .run(block)
     }
 
+    public static func instant(_ block: @escaping (SKNode) -> Void) -> SKAction {
+        .customAction(withDuration: 0) { n,_,_ in
+            block(n)
+        }
+    }
+
     public static func block(_ duration: TimeInterval, _ block: @escaping Block) -> SKAction {
         .customAction(withDuration: duration, actionBlock: { _,_ in block() })
     }
@@ -1347,6 +1362,36 @@ public extension SKAction {
             return .move(to: to, duration: duration)
         }
         return transform(\SKNode.position, to: to, with: "mt", duration: duration, timing: timing)
+    }
+
+    static func moveX(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .moveTo(x: to, duration: duration)
+        }
+        return transform(\SKNode.position.x, to: to, with: "mxt", duration: duration, timing: timing)
+    }
+
+    static func moveY(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        guard let timing = timing else {
+            return .moveTo(y: to, duration: duration)
+        }
+        return transform(\SKNode.position.y, to: to, with: "myt", duration: duration, timing: timing)
+    }
+
+    static func alignX(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        let x = on.x(forAlignmentX: to)
+        guard let timing = timing else {
+            return .moveTo(x: x, duration: duration)
+        }
+        return transform(\SKNode.position.x, to: x, with: "pxt", duration: duration, timing: timing)
+    }
+
+    static func alignY(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+        let y = on.y(forAlignmentY: to)
+        guard let timing = timing else {
+            return .moveTo(y: y, duration: duration)
+        }
+        return transform(\SKNode.position.y, to: y, with: "pyt", duration: duration, timing: timing)
     }
 
     static func scaleX(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
