@@ -1118,7 +1118,7 @@ extension SKNode
             
             self.addChild(n)
             
-            n.position          = self.frame.bl
+//            n.position          = self.frame.bl
         }
         if true
         {
@@ -1135,7 +1135,7 @@ extension SKNode
             
             self.addChild(n)
             
-            n.position          = self.frame.tl
+//            n.position          = self.frame.tl
         }
         
         return self
