@@ -570,7 +570,8 @@ public extension Int {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
-    
+    var asUInt          : UInt          { UInt(self) }
+
     var pick            : Int { self < 0 ? .random(in: self..<0) : self > 0 ? .random(in: 0..<self) : 0 }
 
 }

@@ -498,18 +498,21 @@ extension Array where Element == String {
 
 public extension String {
 
-    func splitAndKeep(on: (Character)->Bool) -> [Substring] {
-        var splits : [Substring] = []
-        var i0 = 0
+    func split(on: (Character)->Bool) -> [Substring] {
+        var indexes : [Int] = [0]
         for (index,c) in self.enumerated() {
-            if on(c) && i0 < index {
-                splits.append(self.substring(i0..<index))
-                i0 = index
+            if on(c) {
+                indexes.append(index)
             }
         }
-        if i0 < self.count-1 {
-            splits.append(substring(i0..<count))
+        indexes.append(count)
+
+        var splits : [Substring] = []
+
+        indexes.forEachAdjacent() { from,to in
+            splits.append(self.substring(from: from.asUInt, to: to.asUInt))
         }
+        
         return splits
     }
     
@@ -546,7 +549,7 @@ public extension String {
     }
     
     var asCapitalizedWords : String {
-        asPhrase.splitAndKeep(on: { $0 == " "}).map {
+        asPhrase.split(on: { $0 == " "}).map {
             $0.capitalized
         }.joined(separator: " ")
     }
