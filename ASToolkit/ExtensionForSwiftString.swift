@@ -506,6 +506,10 @@ public extension String {
             }
         }
         indexes.append(count)
+        
+        if indexes[safe: 1] == 0 {
+            indexes.removeFirst()
+        }
 
         var splits : [Substring] = []
 
@@ -552,6 +556,18 @@ public extension String {
         asPhrase.split(on: { $0 == " "}).map {
             $0.capitalized
         }.joined(separator: " ")
+    }
+    
+    func surrounded(by: String) -> Self {
+        "\(by)\(self)\(by)"
+    }
+        
+    var quoted : Self {
+        surrounded(by: "\"")
+    }
+        
+    var singlequoted : Self {
+        surrounded(by: "'")
     }
         
 }
