@@ -345,6 +345,27 @@ extension SKNode
         return r
     }
 
+    public func descendants(named: String) -> [SKNode] {
+        descendants.filter { $0.name?.matches(regex: named) ?? false }
+    }
+    
+    @discardableResult
+    public func removeDescendants(named: String) -> [SKNode] {
+        let c = descendants(named: named)
+        c.forEach { $0.removeFromParent() }
+        return c
+    }
+
+    public func children(named: String) -> [SKNode] {
+        children.filter { $0.name?.matches(regex: named) ?? false }
+    }
+    
+    @discardableResult
+    public func removeChildren(named: String) -> [SKNode] {
+        let c = children(named: named)
+        c.forEach { $0.removeFromParent() }
+        return c
+    }
 }
 
 public extension SKSpriteNode {
@@ -1111,6 +1132,7 @@ extension SKNode
             path.addLine        (to: frame.size.asCGPoint)
             
             let n = SKShapeNode(path:path)
+            n.name = "debugAddX"
             //            let n = SKShapeNode(rectOfSize:size,cornerRadius:32)
             
             n.strokeColor       = color
@@ -1128,6 +1150,7 @@ extension SKNode
             path.addLine        (to: CGPoint(x:self.frame.size.width,y:0))
             
             let n = SKShapeNode(path:path)
+            n.name = "debugAddX"
             //            let n = SKShapeNode(rectOfSize:size,cornerRadius:32)
             
             n.strokeColor       = color
@@ -1152,6 +1175,7 @@ extension SKNode
             path.addLine        (to: CGPoint(x:self.frame.size.width/2,y:self.frame.size.height))
             
             let n = SKShapeNode(path:path)
+            n.name = "debugAddCross"
             //            let n = SKShapeNode(rectOfSize:size,cornerRadius:32)
             
             n.strokeColor       = color
@@ -1169,6 +1193,7 @@ extension SKNode
             path.addLine        (to:CGPoint(x: self.frame.size.width,y: self.frame.size.height/2))
             
             let n = SKShapeNode(path:path)
+            n.name = "debugAddCross"
             //            let n = SKShapeNode(rectOfSize:size,cornerRadius:32)
             
             n.strokeColor       = color
