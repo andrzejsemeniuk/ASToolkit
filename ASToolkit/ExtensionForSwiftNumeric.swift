@@ -504,6 +504,17 @@ public extension Int {
         self = self + n
     }
 
+    @discardableResult
+    mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
+        self = incremented(by: increment, modulo: modulo)
+        return self
+    }
+
+    func incremented(by increment: Int = 1, modulo: Int) -> Int {
+        let r = (self + increment) % modulo
+        return r < 0 ? r + modulo : r
+    }
+
     @discardableResult mutating func assign(max v:Int) -> Int {
         self = Swift.max(self,v)
         return self
@@ -548,20 +559,6 @@ public extension Int {
 
 }
 
-public extension Int {
-
-    @discardableResult
-    mutating func increment(by increment: Int = 1, modulo: Int) -> Int {
-        self = incremented(by: increment, modulo: modulo)
-        return self
-    }
-
-    func incremented(by increment: Int = 1, modulo: Int) -> Int {
-        let r = (self + increment) % modulo
-        return r < 0 ? r + modulo : r
-    }
-
-}
 
 public func pick(_ n: Int) -> Int { n.pick }
 
