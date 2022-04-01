@@ -700,6 +700,7 @@ public extension Array {
     
 }
 
+
 public extension Array {
     
     func padded(with: Element, upto limit: Int) -> Self {
@@ -797,6 +798,20 @@ public extension Array where Element : Equatable {
         runCountsAsArray(of: of).enumerated().map { index,run in (index + 1) * run }.sum
     }
     
+    
+    func previousLooped(_ e: Element) -> Element! {
+        if let index = firstIndex(of: e) {
+            return index > 0 ? self[index-1] : self.last
+        }
+        return nil
+    }
+    
+    func nextLooped(_ e: Element) -> Element! {
+        if let index = firstIndex(of: e) {
+            return index < count-1 ? self[index+1] : self.first
+        }
+        return nil
+    }
 }
 
 public extension Array where Element : Hashable {
