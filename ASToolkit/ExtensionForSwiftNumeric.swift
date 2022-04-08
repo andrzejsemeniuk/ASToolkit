@@ -187,6 +187,8 @@ public extension Double {
     var format3 : String { NSString(format: "%.3f", self) as String }
     var format4 : String { NSString(format: "%.4f", self) as String }
     
+    var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
+
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
 }
 
@@ -305,7 +307,9 @@ public extension CGFloat {
     var format2 : String { NSString(format: "%.2f", self) as String }
     var format3 : String { NSString(format: "%.3f", self) as String }
     var format4 : String { NSString(format: "%.4f", self) as String }
-    
+
+    var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
+
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
 }
 
