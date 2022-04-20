@@ -1403,7 +1403,8 @@ public extension SKAction {
         return transform(\SKNode.position.y, to: to, with: "myt", duration: duration, timing: timing)
     }
 
-    static func alignX(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+    static func alignX(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction? {
+        guard on.parent != nil else { return nil }
         let x = on.x(forAlignmentX: to)
         guard let timing = timing else {
             return .moveTo(x: x, duration: duration)
@@ -1411,7 +1412,8 @@ public extension SKAction {
         return transform(\SKNode.position.x, to: x, with: "pxt", duration: duration, timing: timing)
     }
 
-    static func alignY(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
+    static func alignY(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction? {
+        guard on.parent != nil else { return nil }
         let y = on.y(forAlignmentY: to)
         guard let timing = timing else {
             return .moveTo(y: y, duration: duration)
