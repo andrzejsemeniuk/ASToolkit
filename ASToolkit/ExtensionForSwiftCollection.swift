@@ -11,7 +11,7 @@ import Foundation
 public extension Collection {
     
     var isEmpty: Bool {
-        return startIndex == endIndex
+        count == 0
     }
     
     var isNotEmpty : Bool {
