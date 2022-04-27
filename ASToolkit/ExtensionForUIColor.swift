@@ -7,7 +7,14 @@
 //
 
 import Foundation
+#if os(iOS)
 import UIKit
+#endif
+#if os(macOS)
+import AppKit
+
+public typealias UIColor = NSColor
+#endif
 
 extension UIColor
 {

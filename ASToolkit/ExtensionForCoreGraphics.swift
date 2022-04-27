@@ -8,7 +8,12 @@
 
 import Foundation
 import CoreGraphics
+#if os(iOS)
 import UIKit
+#endif
+#if os(macOS)
+import AppKit
+#endif
 
 
 public typealias CGFloat01      = CGFloat
@@ -380,13 +385,21 @@ extension CGSize
 	public func ratioFrom              (point:CGPoint)             -> CGPoint { return CGPoint(x: width != 0.0 ? (point.x / width) : 0.0, y: height != 0.0 ? (point.y / height) : 0.0 ) }
 }
 
+#if os(iOS)
 public func UIScreenGetCenter() -> CGPoint {
-
 	return CGPoint(x:UIScreen.main.bounds.width/2.0,
 				   y:UIScreen.main.bounds.height/2.0)
 }
+#endif
+
+public extension NSScreen {
+    var center : CGPoint {
+        self.frame.center
+    }
+}
 
 
+#if os(iOS)
 public struct CGScreen
 {
 	public static var bounds:CGRect = CGRect(x:UIScreen.main.bounds.origin.x,
@@ -408,6 +421,7 @@ public struct CGScreen
 
 	public static func ratioFrom               (point:CGPoint)                 -> CGPoint  { return bounds.ratioFrom(point:point) }
 }
+#endif
 
 public struct CGSlope {
     public var point0  : CGPoint
@@ -545,6 +559,7 @@ public func / (left: CGSize, right: CGSize) -> CGSize {
 	return CGSize(width: left.width / right.width, height: left.height / right.height)
 }
 
+#if os(iOS)
 public func += (left: inout CGSize, right: UIEdgeInsets) {
 	left.width += right.left + right.right
 	left.height += right.top + right.bottom
@@ -559,6 +574,7 @@ public func + (left: CGSize, right: UIEdgeInsets) -> CGSize {
 public func - (left: CGSize, right: UIEdgeInsets) -> CGSize {
 	return CGSize(width: left.width - right.left - right.right, height: left.height - right.top - right.bottom)
 }
+#endif
 
 
 /** CGPoint+OperatorsAdditions */

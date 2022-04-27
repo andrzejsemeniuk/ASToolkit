@@ -195,12 +195,6 @@ extension Array {
 }
 
 
-extension Array where Element == Character {
-    
-    public var asArrayOfUInt32      : [UInt32]      { return self.map { $0.unicodeScalarCodePoint } }
-    
-}
-
 public extension Array where Element : Numeric {
     
     var sum                         : Element      { self.reduce(0, { $0 + $1 }) }
@@ -484,70 +478,6 @@ public extension Array {
     }
 }
 
-extension Array {
-
-	public func indexes(_ indexes:Indexes, validate:Bool = true) -> [Int] {
-		var r : [Int] = []
-
-		switch indexes {
-
-		case .none:
-			break
-
-		case .all:
-			r = Array<Int>(0..<count)
-		case .one(let v):
-			if !validate || v < count {
-				r = [v]
-			}
-		case .two(let a, let b):
-			if !validate || a < count {
-				r.append(a)
-			}
-			if !validate || b < count {
-				r.append(b)
-			}
-		case .some(let array):
-			for i in array {
-				if !validate || i < count {
-					r.append(i)
-				}
-			}
-		case .span(let from, let to):
-			for i in from...to {
-				if !validate || i < count {
-					r.append(i)
-				}
-			}
-		case .ranges(let ranges):
-			for range in ranges {
-				r += self.indexes(range, validate:validate)
-			}
-		case .exceptOne(let a):
-			r.remove(a)
-		case .exceptTwo(let a, let b):
-			r.remove(a)
-			r.remove(b)
-		case .exceptSome(let some):
-			for v in some {
-				r.remove(v)
-			}
-		case .exceptSpan(let from, let to):
-			for v in from...to {
-				r.remove(v)
-			}
-		case .exceptRanges(let ranges):
-			for range in ranges {
-				for v in self.indexes(range, validate:validate) {
-					r.remove(v)
-				}
-			}
-		}
-
-		return r
-	}
-
-}
 
 
 public func + <T:Equatable>(lhs:Array<T>, rhs:Array<T>) -> Array<T> {

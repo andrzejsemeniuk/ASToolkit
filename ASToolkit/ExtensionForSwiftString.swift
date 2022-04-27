@@ -6,7 +6,7 @@
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
 //
 
-//import Foundation
+import Foundation
 
 extension String
 {

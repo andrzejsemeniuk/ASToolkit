@@ -9,7 +9,12 @@
 import Foundation
 import SpriteKit
 import SwiftUI
+#if os(iOS)
 import UIKit
+#endif
+#if os(macOS)
+import AppKit
+#endif
 
 public struct Attributes {
     
@@ -113,7 +118,7 @@ public struct Attributes {
         if let values = dictionary[name] {
             let xy = values.split(",")
             if xy.count > 1, let x = CGFloat(xy[0]), let y = CGFloat(xy[1]) {
-                return CGPoint(x,y)
+                return CGPoint.init(x: x, y: y)
             }
         }
         return nil
@@ -205,12 +210,14 @@ public struct Attributes {
         asArrayOfInt(key) ?? fallback
     }
 
+    #if os(iOS)
     public func asBlurEffectStyle(_ key: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
         if let value = dictionary[key], let int = Int(value) {
             return UIBlurEffect.Style.init(rawValue: int) ?? fallback
         }
         return fallback
     }
+    #endif
     
 
     
@@ -271,12 +278,11 @@ public struct Attributes {
         dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
     }
 
-
+    #if os(iOS)
     public mutating func set(_ key: String, _ v: UIBlurEffect.Style) {
         dictionary[key] = String(v.rawValue)
     }
-    
-
+    #endif
 
 
 

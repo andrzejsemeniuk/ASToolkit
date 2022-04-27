@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import UIKit
+//import UIKit
 import SpriteKit
 
 @available(iOS 13, *)
@@ -227,12 +227,14 @@ public extension Color {
     
     var name : String { self.description }
     
+    #if os(iOS)
     func uiColor(_ c: UIColor = .white) -> UIKit.UIColor {
-        if let rgba = name.rgba {
-            return UIKit.UIColor.init(r: CGFloat(rgba.r) / CGFloat(255.0) , g: CGFloat(rgba.g) / CGFloat(255.0) , b: CGFloat(rgba.b) / CGFloat(255.0) , a: CGFloat(rgba.a) / CGFloat(255.0) )
-        } else {
-            return c
-        }
+        UIColor(self)
+//        if let rgba = name.rgba {
+//            return UIKit.UIColor.init(r: CGFloat(rgba.r) / CGFloat(255.0) , g: CGFloat(rgba.g) / CGFloat(255.0) , b: CGFloat(rgba.b) / CGFloat(255.0) , a: CGFloat(rgba.a) / CGFloat(255.0) )
+//        } else {
+//            return c
+//        }
     }
 
     func asUIColor(_ c: UIColor = .white) -> UIKit.UIColor {
@@ -246,6 +248,25 @@ public extension Color {
     var hsba : [Double] {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
+    #endif
+    #if os(macOS)
+    func nsColor() -> NSColor {
+        NSColor(self)
+    }
+
+    var asNSColor : NSColor {
+        NSColor(self)
+    }
+    var hsva : [Double] {
+        var array : [CGFloat] = [0,0,0,0]
+        asNSColor.getComponents(&array)
+        return array.asArrayOfDouble
+    }
+
+    var hsba : [Double] {
+        hsva
+    }
+    #endif
 
     var isBlack : Bool {
         name == "black"
@@ -990,6 +1011,7 @@ public struct Pie : Shape {
     
 }
 
+#if os(iOS)
 @available(iOS 13, *)
 public struct ActivityIndicator: UIViewRepresentable {
     
@@ -1011,6 +1033,7 @@ public struct ActivityIndicator: UIViewRepresentable {
         isAnimating.wrappedValue ? uiView.startAnimating() : uiView.stopAnimating()
     }
 }
+#endif
 
 
 @available(iOS 13, *)
@@ -1241,6 +1264,7 @@ public extension Color {
     
 }
 
+#if os(iOS)
 public struct Blur: UIViewRepresentable {
     
     public var style: UIBlurEffect.Style = .systemMaterial
@@ -1356,3 +1380,5 @@ struct SaveScreenshotView: UIViewRepresentable {
     func updateUIView(_ view: UIView, context: Context) {
     }
 }
+
+#endif

@@ -19,3 +19,11 @@ extension Character
         return scalars[scalars.startIndex].value
     }
 }
+
+extension Array where Element == Character {
+    
+    public var asArrayOfUInt32      : [UInt32]      { return self.map { $0.unicodeScalarCodePoint } }
+    
+}
+
+

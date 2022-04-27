@@ -8,7 +8,12 @@
 
 import Foundation
 import SpriteKit
+#if os(iOS)
 import UIKit
+#endif
+#if os(macOS)
+import AppKit
+#endif
 import SwiftUI
 import CoreImage
 
@@ -161,39 +166,20 @@ extension SKNode
         }
     }
     
-    class public func resolveResourceImageName(name:String, suffix:String = ".png") -> String {
-        
-        // if has .suffix
-        // if is suffixed with ~5
-        // if not has .suffix
-        
-        if Environment.DeviceType.iPhone5 {
-            return name + (name.hasSuffix("~5") ? "" : "~5") + suffix
-        }
-        if Environment.DeviceType.iPhone6 {
-            return name + (name.hasSuffix("~6") ? "" : "~6") + suffix
-        }
-        if Environment.DeviceType.iPhone6plus {
-            return name + (name.hasSuffix("~6+") ? "" : "~6+") + suffix
-        }
-        
-        return name
-    }
-    
     public func addChild               (sprite:SKSpriteNode)                    -> SKSpriteNode
     {
         addChild(sprite)
         return sprite
     }
     
-    public func addChildSprite         (imageNamed:String, suffix:String = ".png")                  -> SKSpriteNode
-    {
-        let name = SKNode.resolveResourceImageName(name:imageNamed,suffix:suffix)
-        let node = SKSpriteNode(imageNamed:name)
-        addChild(node)
-        node.anchorPoint = CGPoint(x: 0.5,y: 0.5)
-        return node
-    }
+//    public func addChildSprite         (imageNamed:String, suffix:String = ".png")                  -> SKSpriteNode
+//    {
+//        let name = SKNode.resolveResourceImageName(name:imageNamed,suffix:suffix)
+//        let node = SKSpriteNode(imageNamed:name)
+//        addChild(node)
+//        node.anchorPoint = CGPoint(x: 0.5,y: 0.5)
+//        return node
+//    }
     
     public func addChildSpriteEmpty    ()                                              -> SKSpriteNode
     {
@@ -207,7 +193,7 @@ extension SKNode
     
     
     
-    
+    #if os(iOS)
     public func positionFromScreenRatio  (to:CGXY)
     {
         if let parent = self.scene
@@ -222,6 +208,7 @@ extension SKNode
     {
         positionFromScreenRatio(to:CGXY(x,y))
     }
+    #endif
     
     
     
@@ -1880,6 +1867,7 @@ public extension SKColor {
 }
 
 
+#if os(iOS)
 open class SKTouchNode : SKNode {
     
     public enum Condition {
@@ -1913,3 +1901,4 @@ open class SKTouchNode : SKNode {
         handler?(.cancelled,touches,event)
     }
 }
+#endif
