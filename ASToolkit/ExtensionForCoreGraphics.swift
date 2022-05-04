@@ -391,12 +391,13 @@ public func UIScreenGetCenter() -> CGPoint {
 				   y:UIScreen.main.bounds.height/2.0)
 }
 #endif
-
+#if os(macOS)
 public extension NSScreen {
     var center : CGPoint {
         self.frame.center
     }
 }
+#endif
 
 
 #if os(iOS)
