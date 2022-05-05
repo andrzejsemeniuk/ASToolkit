@@ -258,9 +258,12 @@ public extension Color {
         NSColor(self)
     }
     var hsva : [Double] {
-        var array : [CGFloat] = [0,0,0,0]
-        asNSColor.getComponents(&array)
-        return array.asArrayOfDouble
+        var h : CGFloat = 0
+        var s : CGFloat = 0
+        var v : CGFloat = 0
+        var a : CGFloat = 0
+        asNSColor.getHue(&h, saturation: &s, brightness: &v, alpha: &a)
+        return [h,s,v,a]
     }
 
     var hsba : [Double] {
@@ -1218,7 +1221,7 @@ public extension Binding {
 
 public extension View {
     
-    func visible(_ flag: Bool) -> some View {
+    func visible(_ flag: Bool) -> AnyView {
         if flag {
             return self.asAnyView
         } else {
