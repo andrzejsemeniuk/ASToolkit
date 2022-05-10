@@ -561,6 +561,12 @@ public extension Int {
         Swift.min(to,Swift.max(from,self))
     }
 
+    var stringWithSign : String {
+        self < 0 ? "\(self)" : "+\(self)"
+    }
+    var stringWithPositiveSign : String {
+        self < 0 ? "\(self)" : self > 0 ? "+\(self)" : "\(self)"
+    }
 }
 
 
