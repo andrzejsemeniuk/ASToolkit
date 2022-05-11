@@ -36,6 +36,25 @@ public func printMirrorAttributesOf(_ any: Any) {
     }
 }
 
+extension Equatable {
+    func `in`(_ parameters: Self...) -> Bool {
+        for p in parameters {
+            if self == p {
+                return true
+            }
+        }
+        return false
+    }
+    func `in`(_ parameters: [Self]) -> Bool {
+        for p in parameters {
+            if self == p {
+                return true
+            }
+        }
+        return false
+    }
+}
+
 //public protocol JSONCodable : Codable {
 //    
 //    var encoded : Data! { get }
