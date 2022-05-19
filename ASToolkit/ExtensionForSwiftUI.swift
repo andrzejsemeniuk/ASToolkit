@@ -147,13 +147,13 @@ public extension View {
 @available(iOS 13, *)
 public extension Color {
     
-    init(hsba   : [Double])                                         { self.init(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], opacity: hsba[3]) }
-    init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0], saturation: hsb[1], brightness: hsb[2], opacity: opacity) }
-    init(hsva   : [Double])                                         { self.init(hue: hsva[0], saturation: hsva[1], brightness: hsva[2], opacity: hsva[3]) }
-    init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0], saturation: hsv[1], brightness: hsv[2], opacity: opacity) }
-    init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue, saturation: 1, brightness: 1, opacity: opacity) }
-    init(rgba   : [Double])                                         { self.init(red: rgba[0], green: rgba[1], blue: rgba[2], opacity: rgba[3]) }
-    init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0], green: rgb[1], blue: rgb[2], opacity: opacity) }
+    init(hsba   : [Double])                                         { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[3].clampedTo01) }
+    init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(hsva   : [Double])                                         { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[3].clampedTo01) }
+    init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0].clampedTo01, saturation: hsv[1].clampedTo01, brightness: hsv[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue.clampedTo01, saturation: 1, brightness: 1, opacity: opacity.clampedTo01) }
+    init(rgba   : [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
+    init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
     
     static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
     static func hsb     (_ hsb      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsb: hsb, opacity: opacity) }
@@ -249,20 +249,30 @@ public extension Color {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
     #endif
+    
     #if os(macOS)
     func nsColor() -> NSColor {
         NSColor(self)
     }
 
     var asNSColor : NSColor {
-        NSColor(self)
+//        NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self).usingColorSpace(.extendedSRGB) ?? NSColor(self).usingColorSpace(.genericRGB) ?? NSColor(self)
+//        NSColor(self) // crash during getHue() for some colors ... requires setting colorspace
+        NSColor(self).usingColorSpace(.deviceRGB)!
+//        NSColor(self).usingColorSpace(.extendedSRGB)!
+//        NSColor(self).usingColorSpace(.genericRGB)!
     }
+    
     var hsva : [Double] {
         var h : CGFloat = 0
         var s : CGFloat = 0
         var v : CGFloat = 0
-        var a : CGFloat = 0
-        asNSColor.getHue(&h, saturation: &s, brightness: &v, alpha: &a)
+        var a : CGFloat = 1
+        asNSColor.getHue(&h, saturation: &s, brightness: &v, alpha: &a) // crash if NSColor has not set colorspace
+        
+//        https://stackoverflow.com/questions/15682923/convert-nscolor-to-rgb
+//        NSColor *testColor = [[NSColor colorWithCalibratedWhite:0.65 alpha:1.0] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        
         return [h,s,v,a]
     }
 
@@ -342,7 +352,16 @@ public extension Color {
         }
 
         public static let clear     : HSBA = .init(white: 1, alpha: 0)
-        
+        public static let black     : HSBA = .init(white: 0, alpha: 0)
+        public static let white     : HSBA = .init(white: 1, alpha: 1)
+
+        public static func white(_ value: CGFloat, opacity: CGFloat) -> HSBA {
+            .init(white: value, alpha: opacity)
+        }
+        public static func white(_ value: CGFloat, alpha: CGFloat) -> HSBA {
+            .init(white: value, alpha: alpha)
+        }
+
         public var isClear          : Bool { a <= 0 }
         public var isTransparent    : Bool { a <= 0 }
         public var isOpaque         : Bool { a > 0 }
