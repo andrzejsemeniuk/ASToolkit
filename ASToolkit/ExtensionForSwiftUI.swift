@@ -729,8 +729,8 @@ public extension View {
 public extension View {
     
     
-    func frame(side: CGFloat) -> some View {
-        self.frame(width: side, height: side)
+    func frame(side: CGFloat, alignment: Alignment = .center) -> some View {
+        self.frame(width: side, height: side, alignment: alignment)
     }
 
 //    static var neomorphicFillColorDefault = Color.offWhite
