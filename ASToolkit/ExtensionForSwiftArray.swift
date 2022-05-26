@@ -266,11 +266,12 @@ extension Array {
 
 extension Array {
     
-    public func appended(_ element:Element) -> Array<Element> {
+    public func appended(_ element:Element) -> Self {
         var result = self
         result.append(element)
         return result
     }
+    
 }
 
 extension Array {
@@ -307,6 +308,15 @@ extension Array where Element : Equatable {
         }
         return nil
     }
+    
+    public func removed(_ element:Element) -> Self {
+        var result = self
+        if let index = result.firstIndex(where: { $0 == element }) {
+            result.remove(at: index)
+        }
+        return result
+    }
+    
 }
 
 public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
