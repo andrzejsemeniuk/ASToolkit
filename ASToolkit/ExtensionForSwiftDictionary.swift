@@ -70,3 +70,19 @@ public func asDictionary<K,V>(_ keys: [K], _ value: V) -> Dictionary<K,V> {
         dictionary + [key : value]
     })
 }
+
+public extension Dictionary.Keys where Key : Equatable {
+    @inlinable func missing(_ element: Key) -> Bool {
+        !contains(element)
+    }
+}
+
+public extension Dictionary where Key : Equatable {
+    @inlinable func contains(key: Key) -> Bool {
+        keys.contains(key)
+    }
+    @inlinable func missing(key: Key) -> Bool {
+        keys.missing(key)
+    }
+}
+
