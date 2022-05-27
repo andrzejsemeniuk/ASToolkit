@@ -371,6 +371,10 @@ extension Array where Element: Equatable {
 		return self.index(of:element) != nil
 	}
 
+    public func missing(_ element:Element) -> Bool {
+        return !contains(element)
+    }
+
 	@discardableResult mutating public func remove(_ element:Element) -> Bool {
 		if let index = self.index(of: element) {
 			_ = self.remove(at: index)
