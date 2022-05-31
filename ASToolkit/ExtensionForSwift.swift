@@ -30,9 +30,15 @@ public func ifTrueElseNil       <V>(_ flag: Bool, _ value: V) -> V?             
 public func ifFalseElseNil      <V>(_ flag: Bool, _ value: V) -> V?             { flag ? nil : value }
 public func nilOr               <V>(_ flag: Bool, _ value: V) -> V?             { flag ? value : nil }
 
-public func printMirrorAttributesOf(_ any: Any) {
+public func printMirrorAttributesOf(_ any: Any, prefix: String = "", suffix: String = "") {
     for child in Mirror(reflecting: any).children {
-        print(" \(String(describing: child.label))               = \(child.value)")
+        print("\(prefix)\(String(describing: child.label))               = \(child.value)\(suffix)")
+    }
+}
+
+public func getMirrorAttributesOf(_ any: Any) -> [String] {
+    Mirror(reflecting: any).children.map { child in
+        String(describing: child.label)
     }
 }
 

@@ -189,6 +189,8 @@ public extension Double {
     
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
 
+    var format22 : String { NSString(format: "%3.2f", self) as String }
+
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
 }
 
