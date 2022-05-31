@@ -246,3 +246,21 @@ public extension TimeInterval {
     }
 
 }
+
+public extension Date {
+
+    func convert(timeZoneFrom: TimeZone, timeZoneTo: TimeZone) -> Date? {
+        let formatter = DateFormatter()
+        formatter.calendar = .current
+        formatter.timeZone = timeZoneFrom
+        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let string = formatter.string(from: self)
+        formatter.timeZone = timeZoneTo
+        return formatter.date(from: string)
+    }
+    
+    func convertToUTC(timeZoneFrom: TimeZone = .current) -> Date? {
+        convert(timeZoneFrom: timeZoneFrom, timeZoneTo: TimeZone(abbreviation: "UTC")!)
+    }
+    
+}
