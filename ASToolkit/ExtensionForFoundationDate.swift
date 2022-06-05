@@ -204,7 +204,7 @@ extension Date {
 
 public extension Date {
 
-	public var midnight : Date {
+	var midnight : Date {
 		let calendar = Calendar.current
 //		return self.adding(withCalendar: calendar,
 //						   years: 0,
@@ -231,6 +231,21 @@ public extension Date {
     static var timestamp : TimeInterval {
         Date().timeIntervalSince1970
     }
+    
+    static var yesterday : Date {
+        .now.yesterday
+    }
+    
+    func adding(days: Double) -> Date {
+        Date.init(timeIntervalSince1970: timeIntervalSince1970 + days * Self.secondsIn1Day)
+    }
+    
+    var yesterday : Date {
+        adding(days: -1)
+    }
+
+    static let secondsIn1Hour   : TimeInterval = 60.0 * 60.0
+    static let secondsIn1Day    : TimeInterval = 24.0 * secondsIn1Hour
 }
 
 public extension TimeInterval {
@@ -244,6 +259,7 @@ public extension TimeInterval {
     static var now : TimeInterval {
         Date().timeIntervalSince1970
     }
+
 
 }
 
