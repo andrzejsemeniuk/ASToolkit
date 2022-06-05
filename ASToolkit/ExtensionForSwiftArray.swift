@@ -272,6 +272,12 @@ extension Array {
         return result
     }
     
+    public func prepended(_ element:Element) -> Self {
+        var result = self
+        result.prepend(element)
+        return result
+    }
+    
 }
 
 extension Array {
