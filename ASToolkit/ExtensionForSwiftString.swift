@@ -461,9 +461,9 @@ extension String {
     
 }
 
-extension Array where Element == String {
+public extension Array where Element == String {
     
-    public func split(span chars: Int) -> ([String],[String]) {
+    func split(span chars: Int) -> ([String],[String]) {
         var length = 0
         for (index,word) in self.enumerated() {
             if word.length + length <= chars {
@@ -477,7 +477,7 @@ extension Array where Element == String {
         return (self,[])
     }
 
-    public func lines(span chars: Int) -> [[String]] {
+    func lines(span chars: Int) -> [[String]] {
         var words = self
         var r : [[String]] = []
         while true {
@@ -494,6 +494,12 @@ extension Array where Element == String {
         return r
     }
     
+    func joined(_ transform: (String)->String, separator: String = ",") -> String {
+        map { transform($0) }.joined(separator: separator)
+    }
+    var cqq : String {
+        joined({ $0.qq})
+    }
 }
 
 public extension String {
@@ -563,14 +569,19 @@ public extension String {
         "\(by)\(self)\(by)"
     }
         
-    var quoted : Self {
+    var doublequoted : Self {
         surrounded(by: "\"")
     }
-        
+    var dquoted : Self { doublequoted }
+    var dq : Self { doublequoted }
+    var qq : Self { doublequoted }
+
     var singlequoted : Self {
         surrounded(by: "'")
     }
-        
+    var squoted : Self { singlequoted }
+    var sq : Self { singlequoted }
+
 }
 
 

@@ -213,7 +213,9 @@ extension CGLineCap {
             case .round				: return CAShapeLayerLineCap.round.rawValue
             case .butt				: return CAShapeLayerLineCap.butt.rawValue
             case .square			: return CAShapeLayerLineCap.square.rawValue
-		}
+            @unknown default:
+                fatalError()
+        }
 	}
 }
 
@@ -224,6 +226,8 @@ extension CGLineJoin {
             case .round				: return CAShapeLayerLineJoin.round.rawValue
             case .bevel				: return CAShapeLayerLineJoin.bevel.rawValue
             case .miter				: return CAShapeLayerLineJoin.miter.rawValue
+            @unknown default:
+                fatalError()
 		}
 	}
 }
