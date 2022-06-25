@@ -607,7 +607,9 @@ public extension Array where Element == Int {
         return r
     }
     
-
+    var asArrayOfString : [String] {
+        map { "\($0)"}
+    }
 }
 
 public extension Array {

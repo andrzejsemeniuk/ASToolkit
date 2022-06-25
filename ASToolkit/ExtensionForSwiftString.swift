@@ -500,6 +500,11 @@ public extension Array where Element == String {
     var cqq : String {
         joined({ $0.qq})
     }
+    
+    var joinedByComma : String {
+        self.joined(separator: ",")
+    }
+    
 }
 
 public extension String {
@@ -526,6 +531,9 @@ public extension String {
         return splits
     }
     
+    var splitByComma : [String] {
+        split(",")
+    }
 }
 
 public extension String {
