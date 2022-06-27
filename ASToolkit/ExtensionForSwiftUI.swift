@@ -21,6 +21,18 @@ public extension View {
         AnyView.init(self)
     }
 
+    func padding(top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: top, leading: leading, bottom: bottom, trailing: trailing))
+    }
+    
+    func padding(_ top: CGFloat, _ leading: CGFloat, _ bottom: CGFloat, _ trailing: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: top, leading: leading, bottom: bottom, trailing: trailing))
+    }
+    
+    func padding(t: CGFloat, l: CGFloat, b: CGFloat, r: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: t, leading: l, bottom: b, trailing: r))
+    }
+    
     func padding(top: CGFloat) -> some View {
         self.padding(EdgeInsets.init(top: top, leading: 0, bottom: 0, trailing: 0))
     }
