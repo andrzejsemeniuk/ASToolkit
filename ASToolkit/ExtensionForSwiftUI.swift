@@ -235,6 +235,8 @@ public extension Color {
     
     static let transparent = Color.init(white: 1, alpha: 0.00001)
     
+    static let almostTransparent = Color.init(white: 1, alpha: 0.001)
+    
     static var offWhite = Color.init(hsba: [0, 0, 0.94, 1])
     
     var name : String { self.description }
@@ -695,8 +697,8 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
 
 
 
-@available(iOS 13, *)
-public extension View {
+//@available(iOS 13, *)
+//public extension View {
     
     func hline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
         GeometryReader { geometry in
@@ -730,7 +732,7 @@ public extension View {
     }
     
 
-}
+//}
 
 
 
