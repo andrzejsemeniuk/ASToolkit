@@ -159,7 +159,8 @@ public extension Double {
     
     static var   random01        : Double { Double(arc4random() % resolution) / resolution.asDouble }
     static var   random          : Double { random01 }
-    
+    static var   random11        : Self                                      { random(min: -1, max: +1) }
+
     static func  random          (min: Double, max: Double) -> Double { Double.random * (max - min) + min }
     static func  random          (_ min: Double, _ max: Double) -> Double { Double.random * (max - min) + min }
     static func  random          (min: Double, max: Double, resolution: UInt32) -> Double {
@@ -383,6 +384,7 @@ public extension Float {
     static var   random01        : Self { Double.random01.asFloat }
     static var   random          : Self { random01 }
     static func  random          (min: Self, max: Self) -> Self { Float.random * (max - min) + min }
+    static var   random11        : Self                                      { random(min: -1, max: +1) }
 
     static var   maximum         : Self { .greatestFiniteMagnitude }
     static var   minimum         : Self { -maximum }
