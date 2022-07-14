@@ -212,7 +212,7 @@ public struct Attributes {
 
     #if os(iOS)
     public func asBlurEffectStyle(_ key: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
-        if let value = dictionary[key], let int = Int(value) {
+        if let operand = dictionary[key], let int = Int(operand) {
             return UIBlurEffect.Style.init(rawValue: int) ?? fallback
         }
         return fallback

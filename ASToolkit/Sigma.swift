@@ -20,7 +20,7 @@
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
   Computes central moment of the dataset.
@@ -75,7 +75,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Computes coefficient of variation based on a sample.
@@ -118,7 +118,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Computes covariance of a sample between two variables: x and y.
@@ -243,7 +243,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /*
 
   Returns a dictionary with the keys containing the numbers from the input array and the values corresponding to the frequencies of those numbers.
@@ -284,7 +284,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Computes kurtosis of a series of numbers. This implementation is the same as the SKEW function in Excel and Google Docs Sheets.
@@ -359,7 +359,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
    Returns the central value from the array after it is sorted.
@@ -450,7 +450,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   
   /**
    
@@ -672,7 +672,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Calculates the Pearson product-moment correlation coefficient between two variables: x and y.
@@ -723,7 +723,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Calculates Percentile value for the given dataset. This method is used same in Microsoft Excel (PERCENTILE or PERCENTILE.INC) and Google Docs Sheets (PERCENTILE). Same as the 7th sample quantile method from the Hyndman and Fan paper (1996).
@@ -762,7 +762,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
   The class contains nine functions that calculate sample quantiles corresponding to the given probability. The implementation is the same as in R. This is an implementation of the algorithms described in the Hyndman and Fan paper, 1996:
@@ -991,7 +991,7 @@ public class SigmaQuantiles {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
 
   /// Determines how the ranks for the equal values ('ties') are calculated.
   public enum RankTieMethod {
@@ -1224,7 +1224,7 @@ public struct Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
   Returns the skewness of the dataset. This implementation is the same as the SKEW function in Excel and Google Docs Sheets.
@@ -1293,7 +1293,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
    Computes standard deviation based on a sample.
@@ -1374,7 +1374,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
 
   Computes standard error of the mean.
@@ -1425,7 +1425,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
 
   /**
 
@@ -1454,7 +1454,7 @@ public extension Sigma {
 
 import Foundation
 
-public extension Sigma {
+extension Sigma {
   /**
    
    Computes variance based on a sample.

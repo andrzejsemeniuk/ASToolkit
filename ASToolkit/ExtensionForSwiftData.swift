@@ -28,5 +28,20 @@ public extension Data {
     var asString : String? {
         .init(data: self, encoding: .utf8)
     }
+    
 
+    static func create<T>(from value: T) -> Self {
+        // https://www.hackingwithswift.com/forums/swift/how-do-i-get-a-uint32-into-a-data/8802
+        var value = value
+        return Data.init(bytes: &value, count: MemoryLayout<T>.size)
+    }
+    
+    func load<T>() -> T {
+        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
+        return self.withUnsafeBytes { bytes in
+            bytes.load(as: T.self)
+        }
+    }
+    
+    
 }

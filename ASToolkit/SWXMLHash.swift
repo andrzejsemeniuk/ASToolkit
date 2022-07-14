@@ -205,7 +205,7 @@ extension XMLParserDelegate {
 
     func parser(_ parser: Foundation.XMLParser,
                 foundInternalEntityDeclarationWithName name: String,
-                value: String?) { }
+                operand: String?) { }
 
     func parser(_ parser: Foundation.XMLParser,
                 foundExternalEntityDeclarationWithName name: String,
