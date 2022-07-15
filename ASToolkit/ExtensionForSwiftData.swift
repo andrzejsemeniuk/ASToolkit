@@ -43,5 +43,12 @@ public extension Data {
         }
     }
     
+    func loaded<T>() -> T? {
+        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
+        return self.withUnsafeBytes { bytes in
+            bytes.load(as: T.self)
+        }
+    }
     
+
 }

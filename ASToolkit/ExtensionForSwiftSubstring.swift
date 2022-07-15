@@ -24,5 +24,8 @@ public extension Substring {
     var  asUInt64  :  UInt64?  { UInt64(self.replacingOccurrences(of:  ",",  with:  "")) }
     var  asFloat   :  Float?   { Float(self.asString) }
 
+    var asData     : Data      { asDataUTF8 }
+    var asDataUTF8 : Data      { .init(utf8) }
+
 }
 
