@@ -498,7 +498,7 @@ public extension Array where Element == String {
         map { transform($0) }.joined(separator: separator)
     }
     var cqq : String {
-        joined({ $0.qq})
+        joined({ $0.qq })
     }
     
     var joinedByComma : String {
