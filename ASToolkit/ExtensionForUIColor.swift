@@ -125,7 +125,13 @@ extension UIColor
         var b:CGFloat = 0
         var a:CGFloat = 1
         
+//        NSColor(self).usingColorSpace(.deviceRGB)!
+        #if os(macOS)
+        self.usingColorSpace(.deviceRGB)!.getRed(&r,green:&g,blue:&b,alpha:&a)
+        #endif
+        #if os(iOS)
         self.getRed(&r,green:&g,blue:&b,alpha:&a)
+        #endif
         
         return (r,g,b,a)
     }
@@ -148,7 +154,12 @@ extension UIColor
         var b:CGFloat = 0
         var a:CGFloat = 1
         
+#if os(macOS)
+        self.usingColorSpace(.deviceRGB)!.getHue(&h,saturation:&s,brightness:&b,alpha:&a)
+#endif
+#if os(iOS)
         self.getHue(&h,saturation:&s,brightness:&b,alpha:&a)
+#endif
         
         return (h,s,b,a)
     }

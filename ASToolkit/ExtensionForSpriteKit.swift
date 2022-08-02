@@ -1212,6 +1212,18 @@ extension SKNode
         return self
     }
     
+    
+    open func children(at: CGPoint, in radius: CGFloat) -> [SKNode] {
+        children.filter {
+            let r = $0.frame.size.maxSide/2
+            let d = $0.position - at
+            let l = d.length
+//            print("examining: \($0.name ?? "?"), L=\(l), r=\(r), L-r=\(l-r), radius=\(radius)")
+//            return $0.position.length - $0.radius < radius
+            return l-r < radius
+        }
+    }
+
 }
 
 
