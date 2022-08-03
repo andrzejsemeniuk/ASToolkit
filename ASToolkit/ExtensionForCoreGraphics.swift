@@ -182,6 +182,14 @@ extension CGRect {
         self.init(x: origin.x, y: origin.y, width: side, height: side)
     }
     
+    public init(center: CGPoint, side: CGFloat) {
+        self.init(x: center.x - side/2, y: center.y - side/2, width: side, height: side)
+    }
+    
+    public init(center: CGPoint, size: CGSize) {
+        self.init(x: center.x - size.width/2, y: center.y - size.height/2, width: size.width, height: size.height)
+    }
+    
 	public init(size: CGSize) {
 		self.init(x: 0, y: 0, width: size.width, height: size.height)
 	}
