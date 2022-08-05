@@ -96,14 +96,12 @@ public extension Array
         return subarray(from: 0, to:from)
     }
     
-    @discardableResult
-    mutating func keep(to:Int) -> Array {
-        trimmed(from: to)
+    mutating func keep(to:Int) {
+        self = trimmed(from: to)
     }
     
-    @discardableResult
-    mutating func keep(from:Int) -> Array {
-        trimmed(to: from)
+    mutating func keep(from:Int) {
+        self = trimmed(to: from)
     }
     
     func kept(to:Int) -> Array {
