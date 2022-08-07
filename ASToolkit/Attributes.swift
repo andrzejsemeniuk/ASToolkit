@@ -16,7 +16,7 @@ import UIKit
 import AppKit
 #endif
 
-public struct Attributes {
+public struct Attributes : Equatable {
     
     
     public var title        : String?

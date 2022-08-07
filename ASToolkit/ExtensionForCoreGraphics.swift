@@ -122,38 +122,42 @@ extension CGPoint {
     }()
 }
 
-extension CGSize {
+public extension CGSize {
 
-	public static let minimal = CGSize(side: 1)
+    static let minimal = CGSize(side: 1)
 
-    public init(side:CGFloat) {
+    init(side:CGFloat) {
         self.init(width:side, height:side)
     }
     
-    public init(_ w: CGFloat, _ h: CGFloat) {
+    init(_ w: CGFloat, _ h: CGFloat) {
         self.init(width: w, height: h)
     }
     
-    public var asCGPoint        : CGPoint {
+    var asCGPoint        : CGPoint {
         CGPoint(x:width,y:height)
     }
-    public var diagonal         : CGFloat {
+    var diagonal         : CGFloat {
         sqrt(width*width + height*height)
     }
     
-    public var clampedTo01      : CGSize {
+    var clampedTo01      : CGSize {
         .init(width: width.clampedTo01, height: height.clampedTo01)
     }
     
-    static public var almostZero:CGSize = {
+    static var almostZero:CGSize = {
         CGSize(width: CGFloat.leastNormalMagnitude, height: CGFloat.leastNormalMagnitude)
     }()
     
-    public func insetBy(w: CGFloat = 0, h: CGFloat = 0) -> CGSize {
+    func insetBy(w: CGFloat = 0, h: CGFloat = 0) -> CGSize {
         var r = self
         r.width -= w
         r.height -= h
         return r
+    }
+    
+    var inverted : CGSize {
+        .init(height, width)
     }
     
 }
