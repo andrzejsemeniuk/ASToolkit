@@ -306,6 +306,7 @@ public extension CGFloat {
 }
 
 public extension CGFloat {
+    var format0 : String { NSString(format: "%.0f", self) as String }
     var format1 : String { NSString(format: "%.1f", self) as String }
     var format2 : String { NSString(format: "%.2f", self) as String }
     var format3 : String { NSString(format: "%.3f", self) as String }

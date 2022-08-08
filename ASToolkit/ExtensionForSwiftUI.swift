@@ -159,9 +159,9 @@ public extension View {
 @available(iOS 13, *)
 public extension Color {
     
-    init(hsba   : [Double])                                         { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[3].clampedTo01) }
+    init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
-    init(hsva   : [Double])                                         { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[3].clampedTo01) }
+    init(hsva   : [Double], alpha: Double = 1)                      { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0].clampedTo01, saturation: hsv[1].clampedTo01, brightness: hsv[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue.clampedTo01, saturation: 1, brightness: 1, opacity: opacity.clampedTo01) }
     init(rgba   : [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
@@ -623,7 +623,9 @@ public extension EdgeInsets {
     init(h: CGFloat) { self.init(top: 0, leading: h, bottom: 0, trailing: h) }
     init(v: CGFloat) { self.init(top: v, leading: 0, bottom: v, trailing: 0) }
     init(h: CGFloat, v:CGFloat) { self.init(top: v, leading: h, bottom: v, trailing: h) }
-    
+
+    init(t: CGFloat, b: CGFloat, l: CGFloat, r: CGFloat) { self.init(top: t, leading: l, bottom: b, trailing: r) }
+
     static let zero : EdgeInsets = .init()
     
 }
