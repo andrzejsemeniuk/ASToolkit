@@ -84,6 +84,9 @@ extension Date {
     public var month3Letters : String {
         ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][month()-1]
     }
+    public var monthName : String {
+        ["January","February","March","April","May","June","July","August","September","October","November","December"][month()-1]
+    }
 }
 
 extension Date {
