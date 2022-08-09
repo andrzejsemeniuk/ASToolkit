@@ -1876,6 +1876,12 @@ public extension SKColor {
     var asCIColor : CIColor {
         CIColor.init(cgColor: self.cgColor)
     }
+    var asRGBAValues : RGBAValues {
+        .init(r: redComponent, g: greenComponent, b: blueComponent, a: alphaComponent)
+    }
+    var asHSBAValues : HSBAValues {
+        .init(h: hueComponent, s: saturationComponent, b: brightnessComponent, a: alphaComponent)
+    }
 }
 
 
@@ -1914,3 +1920,16 @@ open class SKTouchNode : SKNode {
     }
 }
 #endif
+
+
+extension RGBAValues {
+    
+    var asSKColor       : SKColor { .init(RGBA: self) }
+
+}
+
+extension HSBAValues {
+    
+    var asSKColor       : SKColor { .init(HSBA: self) }
+
+}

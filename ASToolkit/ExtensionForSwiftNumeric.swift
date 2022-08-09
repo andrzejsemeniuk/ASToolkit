@@ -262,6 +262,17 @@ public extension CGFloat
         self = Swift.min(self,v)
         return self
     }
+    
+    mutating func add(_ v: CGFloat, from: CGFloat = 0, to: CGFloat) {
+        let n = self + v
+        if n > to {
+            self = from
+        } else if n < from {
+            self = to
+        } else {
+            self = n
+        }
+    }
 }
 
 public extension CGFloat {

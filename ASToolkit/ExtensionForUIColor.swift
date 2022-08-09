@@ -16,6 +16,117 @@ import AppKit
 public typealias UIColor = NSColor
 #endif
 
+public struct RGBAValues : Codable, Equatable {
+    init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
+    init(r red: Double, g green: Double, b blue: Double, a alpha: Double = 1) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
+    init(_ red: Double, _ green: Double, _ blue: Double, _ alpha: Double = 1) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
+    init(_ array: [Double], fallback: Double = 1) {
+        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
+    }
+
+    init(_ array: [CGFloat], fallback: CGFloat = 1) {
+        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
+    }
+    
+ 
+    var red     : Double
+    var green   : Double
+    var blue    : Double
+    var alpha   : Double
+    
+    var r : Double { get { red } set { red = newValue }}
+    var g : Double { get { green } set { green = newValue }}
+    var b : Double { get { blue } set { blue = newValue }}
+    var a : Double { get { alpha } set { alpha = newValue }}
+    
+    var arrayOfRGB      : [Double] { [r,g,b] }
+    var arrayOfRGBA     : [Double] { [r,g,b,a] }
+
+    var asStringOfRGB     : String { arrayOfRGB.map { $0.format4 }.joinedByComma }
+    var asStringOfRGBA    : String { arrayOfRGBA.map { $0.format4 }.joinedByComma }
+    
+    func with(r: Double? = nil, g: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
+        .init(r: r ?? self.r, g: g ?? self.g, b: b ?? self.b, a: a ?? self.a)
+    }
+
+    static let black    : Self = .init(0,0,0,1)
+    static let red      : Self = .init(1,0,0,1)
+    static let white    : Self = .init(1,1,1,1)
+}
+
+public struct HSBAValues : Codable, Equatable {
+    init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
+        self.hue = hue
+        self.saturation = saturation
+        self.brightness = brightness
+        self.alpha = alpha
+    }
+    
+    init(h hue: Double, s saturation: Double, b brightness: Double, a alpha: Double = 1) {
+        self.hue = hue
+        self.saturation = saturation
+        self.brightness = brightness
+        self.alpha = alpha
+    }
+    
+    init(_ hue: Double, _ saturation: Double, _ brightness: Double, _ alpha: Double = 1) {
+        self.hue = hue
+        self.saturation = saturation
+        self.brightness = brightness
+        self.alpha = alpha
+    }
+    
+    init(_ array: [Double], fallback: Double = 1) {
+        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
+    }
+
+    init(_ array: [CGFloat], fallback: CGFloat = 1) {
+        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
+    }
+    
+    var hue         : Double
+    var saturation  : Double
+    var brightness  : Double
+    var alpha       : Double
+    
+    var h : Double { get { hue } set { hue = newValue }}
+    var s : Double { get { saturation } set { saturation = newValue }}
+    var b : Double { get { brightness } set { brightness = newValue }}
+    var a : Double { get { alpha } set { alpha = newValue }}
+    
+    var arrayOfHSB      : [Double] { [h,s,b] }
+    var arrayOfHSBA     : [Double] { [h,s,b,a] }
+    
+    var asStringOfHSB     : String { arrayOfHSB.map { $0.format4 }.joinedByComma }
+    var asStringOfHSBA    : String { arrayOfHSBA.map { $0.format4 }.joinedByComma }
+    
+    func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
+        .init(h: h ?? self.h, s: s ?? self.s, b: b ?? self.b, a: a ?? self.a)
+    }
+    
+    static let black    : Self = .init(0,0,0,1)
+    static let red      : Self = .init(0,1,1,1)
+    static let white    : Self = .init(0,0,1,1)
+}
+
 extension UIColor
 {
     public convenience init(white:CGFloat) {
@@ -116,10 +227,9 @@ extension UIColor
 //	public var alpha : CGFloat { return WA.alpha }
 
 
+
     
-    public typealias RGBATuple = (red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)
-    
-    public var RGBA : RGBATuple {
+    public var RGBA : RGBAValues {
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
@@ -133,7 +243,7 @@ extension UIColor
         self.getRed(&r,green:&g,blue:&b,alpha:&a)
         #endif
         
-        return (r,g,b,a)
+        return .init(r,g,b,a)
     }
 
     public var arrayOfRGBA : [CGFloat] {
@@ -141,14 +251,13 @@ extension UIColor
         return [v.red, v.green, v.blue, v.alpha]
     }
 
-    public convenience init(RGBA:RGBATuple) {
+    public convenience init(RGBA:RGBAValues) {
         self.init(red:RGBA.red, green:RGBA.green, blue:RGBA.blue, alpha:RGBA.alpha)
     }
     
     
-    public typealias HSBATuple = (hue:CGFloat,saturation:CGFloat,brightness:CGFloat,alpha:CGFloat)
     
-    public var HSBA : HSBATuple {
+    public var HSBA : HSBAValues {
         var h:CGFloat = 0
         var s:CGFloat = 0
         var b:CGFloat = 0
@@ -161,7 +270,7 @@ extension UIColor
         self.getHue(&h,saturation:&s,brightness:&b,alpha:&a)
 #endif
         
-        return (h,s,b,a)
+        return .init(h,s,b,a)
     }
     
     public var arrayOfHSBA : [CGFloat] {
@@ -169,7 +278,7 @@ extension UIColor
         return [v.hue, v.saturation, v.brightness, v.alpha]
     }
     
-    public convenience init(HSBA:HSBATuple) {
+    public convenience init(HSBA:HSBAValues) {
         self.init(hue:HSBA.hue, saturation:HSBA.saturation, brightness:HSBA.brightness, alpha:HSBA.alpha)
     }
     
