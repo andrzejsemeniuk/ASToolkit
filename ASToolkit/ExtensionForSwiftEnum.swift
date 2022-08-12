@@ -26,6 +26,47 @@ public extension CaseIterable where Self: Equatable, Self.AllCases: Bidirectiona
         return Self.allCases[index]
     }
     
+    var previousRemaining : [Self] {
+        var r : [Self] = []
+        var e = self
+        while let n = e.previous {
+            r.prepend(n)
+            e = n
+        }
+        return r
+    }
+    
+    var previousRemainingWithSelf : [Self] {
+        var r : [Self] = [self]
+        var e = self
+        while let n = e.previous {
+            r.prepend(n)
+            e = n
+        }
+        return r
+    }
+    
+    var nextRemaining: [Self] {
+        var r : [Self] = []
+        var e = self
+        while let n = e.next {
+            r.append(n)
+            e = n
+        }
+        return r
+    }
+
+    var nextRemainingWithSelf: [Self] {
+        var r : [Self] = [self]
+        var e = self
+        while let n = e.next {
+            r.append(n)
+            e = n
+        }
+        return r
+    }
+    
+
 //    var previous : Self? {
 //        let index = Self.allCases.index(before: Self.allCases.firstIndex(of: self)!)
 //        guard index != Self.allCases.endIndex else {
