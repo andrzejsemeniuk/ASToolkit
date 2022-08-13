@@ -21,8 +21,8 @@ import CoreImage
 
 extension SKNode
 {
-    @objc var width   :CGFloat                                                                    { return 0 }
-    @objc var height  :CGFloat                                                                    { return 0 }
+    @objc var width   :CGFloat                                                                    { return frame.size.width }
+    @objc var height  :CGFloat                                                                    { return frame.size.height }
     
     public func hFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.width * ratio }
     public func vFrom                  (ratio:CGFloat)                                 -> CGFloat  { return self.height * ratio }

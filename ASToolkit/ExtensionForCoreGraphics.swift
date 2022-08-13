@@ -178,8 +178,8 @@ extension CGRect {
         self.init(x: 0, y: 0, width: size.width, height: size.height)
     }
 
-    public init(width: CGFloat, height:CGFloat) {
-        self.init(x: 0, y: 0, width: width, height: height)
+    public init(width: CGFloat, height:CGFloat, centered: Bool = false) {
+        self.init(x: centered ? -width/2 : 0, y: centered ? -height/2 : 0, width: width, height: height)
     }
     
     public init(origin: CGPoint = .zero, side: CGFloat) {
@@ -681,6 +681,14 @@ public extension CGPath {
         let r = CGMutablePath.init()
         r.move(to: p0)
         r.addCurve(to: p1, control1: c0, control2: c1)
+        r.closeSubpath()
+        return r
+    }
+    
+    static func create(rect: CGRect) -> CGPath {
+        let r = CGMutablePath.init()
+//        r.move(to: .zero)
+        r.addRect(rect)
         r.closeSubpath()
         return r
     }
