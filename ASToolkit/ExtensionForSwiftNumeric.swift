@@ -263,12 +263,12 @@ public extension CGFloat
         return self
     }
     
-    mutating func add(_ v: CGFloat, from: CGFloat = 0, to: CGFloat) {
+    mutating func add(_ v: CGFloat, from: CGFloat = 0, to: CGFloat, loop: Bool = true) {
         let n = self + v
         if n > to {
-            self = from
+            self = loop ? from : to
         } else if n < from {
-            self = to
+            self = loop ? to : from
         } else {
             self = n
         }
