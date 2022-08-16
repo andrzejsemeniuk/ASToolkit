@@ -472,6 +472,33 @@ public extension Int32 {
     var CGLineCapSquare : Int32         { CGLineCap.square.rawValue }
 }
 
+
+public struct CGLineStyle : Codable {
+    var lineWidth       : CGFloat       = 1
+    var lineCap         : CGLineCap     = .butt
+    var lineJoin        : CGLineJoin    = .miter
+    var miterLimit      : CGFloat       = 10
+    var dashPhase       : CGFloat       = 0
+    var dashPattern     : [CGFloat]     = []
+    
+    enum CodingKeys : String, CodingKey {
+        case lineWidth      = "w"
+        case lineCap        = "c"
+        case lineJoin       = "j"
+        case miterLimit     = "m"
+        case dashPhase      = "p"
+        case dashPattern    = "d"
+    }
+}
+
+extension CGLineCap : Codable {
+    
+}
+
+extension CGLineJoin : Codable {
+    
+}
+
 // From GitHub: ldesroziers/CGRect+OperatorsAdditions
 
 /**
