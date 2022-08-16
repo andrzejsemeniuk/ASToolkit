@@ -52,6 +52,14 @@ public struct RGBAValues : Codable, Equatable {
     var blue    : Double
     var alpha   : Double
     
+    enum CodingKeys : String, CodingKey {
+        case red        = "r"
+        case green      = "g"
+        case blue       = "b"
+        case alpha      = "a"
+    }
+    
+
     var r : Double { get { red } set { red = newValue }}
     var g : Double { get { green } set { green = newValue }}
     var b : Double { get { blue } set { blue = newValue }}
@@ -107,6 +115,13 @@ public struct HSBAValues : Codable, Equatable {
     var brightness  : Double
     var alpha       : Double
     
+    enum CodingKeys : String, CodingKey {
+        case hue        = "h"
+        case saturation = "s"
+        case brightness = "b"
+        case alpha      = "a"
+    }
+    
     var h : Double { get { hue } set { hue = newValue }}
     var s : Double { get { saturation } set { saturation = newValue }}
     var b : Double { get { brightness } set { brightness = newValue }}
@@ -124,6 +139,7 @@ public struct HSBAValues : Codable, Equatable {
     
     static let black    : Self = .init(0,0,0,1)
     static let red      : Self = .init(0,1,1,1)
+    static let yellow   : Self = .init(0.13,1,1,1)
     static let white    : Self = .init(0,0,1,1)
 }
 

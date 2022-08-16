@@ -473,13 +473,33 @@ public extension Int32 {
 }
 
 
-public struct CGLineStyle : Codable {
+public struct CGLineStyle : Codable, Equatable {
     var lineWidth       : CGFloat       = 1
     var lineCap         : CGLineCap     = .butt
     var lineJoin        : CGLineJoin    = .miter
     var miterLimit      : CGFloat       = 10
     var dashPhase       : CGFloat       = 0
     var dashPattern     : [CGFloat]     = []
+    
+    var thickness       : CGFloat {
+        get { lineWidth }
+        set { lineWidth = newValue }
+    }
+    
+    var cap             : CGLineCap {
+        get { lineCap }
+        set { lineCap = newValue }
+    }
+    
+    var join            : CGLineJoin {
+        get { lineJoin }
+        set { lineJoin = newValue }
+    }
+    
+    var pattern         : [CGFloat] {
+        get { dashPattern }
+        set { dashPattern = newValue }
+    }
     
     enum CodingKeys : String, CodingKey {
         case lineWidth      = "w"
