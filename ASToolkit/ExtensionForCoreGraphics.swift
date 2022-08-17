@@ -229,6 +229,26 @@ extension CGLineCap {
                 fatalError()
         }
 	}
+    
+    public var name : String {
+        switch self {
+            case .round             : return "Round"
+            case .butt              : return "Butt"
+            case .square            : return "Square"
+            @unknown default:
+                fatalError()
+        }
+    }
+    
+    public var nextLooped : Self {
+        switch self {
+            case .round             : return .butt
+            case .butt              : return .square
+            case .square            : return .round
+            @unknown default:
+                fatalError()
+        }
+    }
 }
 
 extension CGLineJoin {
@@ -242,6 +262,26 @@ extension CGLineJoin {
                 fatalError()
 		}
 	}
+
+    public var name : String {
+        switch self {
+            case .round             : return "Round"
+            case .bevel             : return "Bevel"
+            case .miter             : return "Miter"
+            @unknown default:
+                fatalError()
+        }
+    }
+
+    public var nextLooped : Self {
+        switch self {
+            case .round             : return .bevel
+            case .bevel             : return .miter
+            case .miter             : return .round
+            @unknown default:
+                fatalError()
+        }
+    }
 }
 
 
