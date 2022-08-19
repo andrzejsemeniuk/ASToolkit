@@ -94,6 +94,16 @@ public struct HSBAValues : Codable, Equatable {
         lhs.asStringOfHSB == rhs.asStringOfHSB
     }
     
+    
+    
+    public static func compareByH(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.h < rhs.h : rhs.h < lhs.h }
+    public static func compareByS(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.s < rhs.s : rhs.s < lhs.s }
+    public static func compareByB(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.b < rhs.b : rhs.b < lhs.b }
+    public static func compareByA(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.a < rhs.a : rhs.a < lhs.a }
+    
+    
+    
+    
     init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
         self.hue = hue
         self.saturation = saturation
@@ -163,7 +173,7 @@ public struct HSBAValues : Codable, Equatable {
     static let white    : Self = .init(0,0,1,1)
     
     static func generate(count: Int, from: HSBAValues, to: HSBAValues) -> [HSBAValues] {
-        let divisor : Double = count.asDouble
+        let divisor : Double = max(1, count-1).asDouble
         let delta = HSBAValues.init(h: (to.h - from.h)/divisor, s: (to.s - from.s)/divisor, b: (to.b - from.b)/divisor, a: (to.a - from.a)/divisor)
         var from = from
         var r : [HSBAValues] = []
@@ -185,13 +195,64 @@ public struct HSBAValues : Codable, Equatable {
         generate(count: count, from: .init(h: h, s: s, b: b, a: a), to: .init(h: H ?? h, s: S ?? s, b: B ?? b, a: A ?? a))
     }
     
-    static func paletteCommon(columns count: Int) -> String {
+    static func paletteDefault(columns count: Int) -> String {
         [
-            Self.generate(count: count, h: 0, s: 0, b: 0, B: 1),
-            Self.generate(count: count, hues: [0,0.08,0.11,0.12,0.13,0.24,0.3,0.45,0.5,0.55,0.62,0.7,0.8,0.9], s: 1, S: 0.3, b: 1),
+            Self.generate(grayscale: count),
+            Self.generate(pale: count),
+            Self.generate(vivid: count),
+            Self.generate(dark: count)
         ].asPalette
     }
             
+    static func paletteDefaultPale(columns count: Int) -> String {
+        [
+            Self.generate(pale: count)
+        ].asPalette
+    }
+            
+    static func paletteDefaultVivid(columns count: Int) -> String {
+        [
+            Self.generate(vivid: count),
+        ].asPalette
+    }
+            
+    static func paletteDefaultDark(columns count: Int) -> String {
+        [
+            Self.generate(dark: count)
+        ].asPalette
+    }
+            
+    static func paletteDefaultGrayscale(columns count: Int) -> String {
+        [
+            Self.generate(grayscale: count)
+        ].asPalette
+    }
+            
+    static func generate(grayscale count: Int) -> [HSBAValues] {
+        Self.generate(count: count, h: 0, s: 0, b: 0, B: 1)
+    }
+    
+    static func generate(vivid count: Int) -> [HSBAValues] {
+        Self.generate(common: count, s: 1, S: 0.65)
+    }
+    
+    static func generate(dark count: Int) -> [HSBAValues] {
+        Self.generate(common: count, b: 0.70, B: 0.9)
+    }
+
+    static func generate(pale count: Int) -> [HSBAValues] {
+        Self.generate(common: count, s: 0.60, S: 0.1)
+    }
+    
+
+    static let defaultHues : [CGFloat] = [0,0.08,0.12,0.27,0.45,0.55,0.6,0.7,0.8,0.9]
+//    static let defaultHues : [CGFloat] = [0,0.08,0.115,0.14,0.24,0.33,0.48,0.55,0.6,0.67,0.74,0.82,0.9]
+//    static let defaultHues : [CGFloat] = [0,0.08,0.11,0.12,0.13,0.24,0.3,0.45,0.5,0.55,0.62,0.7,0.8,0.9]
+    
+    static func generate(common count: Int, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil) -> [HSBAValues] {
+        Self.generate(count: count, hues: Self.defaultHues, s: s, S: S, b: b, B: B)
+    }
+    
     static func generate(count: Int, hues: [CGFloat], s: CGFloat, S: CGFloat? = nil, b: CGFloat, B: CGFloat? = nil) -> [HSBAValues] {
         hues.map { Self.generate(count: count, h: $0, H: nil, s: s, S: S, b: b, B: B, a: 1, A: nil) }.reduce([], { $0 + $1 })
     }
