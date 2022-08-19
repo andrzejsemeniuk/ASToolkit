@@ -81,6 +81,19 @@ public struct RGBAValues : Codable, Equatable {
 }
 
 public struct HSBAValues : Codable, Equatable {
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.asStringOfHSBA == rhs.asStringOfHSBA
+    }
+    
+    public static func equalHSBA(lhs: Self, rhs: Self) -> Bool {
+        lhs.asStringOfHSBA == rhs.asStringOfHSBA
+    }
+    
+    public static func equalHSB(lhs: Self, rhs: Self) -> Bool {
+        lhs.asStringOfHSB == rhs.asStringOfHSB
+    }
+    
     init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
         self.hue = hue
         self.saturation = saturation
@@ -108,6 +121,10 @@ public struct HSBAValues : Codable, Equatable {
 
     init(_ array: [CGFloat], fallback: CGFloat = 1) {
         self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
+    }
+    
+    init(_ string: String) {
+        self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4))
     }
     
     var hue         : Double
@@ -141,6 +158,75 @@ public struct HSBAValues : Codable, Equatable {
     static let red      : Self = .init(0,1,1,1)
     static let yellow   : Self = .init(0.13,1,1,1)
     static let white    : Self = .init(0,0,1,1)
+    
+    static func generate(count: Int, from: HSBAValues, to: HSBAValues) -> [HSBAValues] {
+        let divisor : Double = count.asDouble
+        let delta = HSBAValues.init(h: (to.h - from.h)/divisor, s: (to.s - from.s)/divisor, b: (to.b - from.b)/divisor, a: (to.a - from.a)/divisor)
+        var from = from
+        var r : [HSBAValues] = []
+        count.loop {
+            r.append(from)
+            from.h += delta.h
+            from.s += delta.s
+            from.b += delta.b
+            from.a += delta.a
+        }
+        return r
+    }
+    
+    static func generate(count: Int, h0: CGFloat, h1: CGFloat? = nil, s0: CGFloat, s1: CGFloat? = nil, b0: CGFloat, b1: CGFloat? = nil, a0: CGFloat = 1, a1: CGFloat? = nil) -> [HSBAValues] {
+        generate(count: count, from: .init(h: h0, s: s0, b: b0, a: a0), to: .init(h: h1 ?? h0, s: s1 ?? s0, b: b1 ?? b0, a: a1 ?? a0))
+    }
+    
+    static func generate(count: Int, h: CGFloat, H: CGFloat? = nil, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil, a: CGFloat = 1, A: CGFloat? = nil) -> [HSBAValues] {
+        generate(count: count, from: .init(h: h, s: s, b: b, a: a), to: .init(h: H ?? h, s: S ?? s, b: B ?? b, a: A ?? a))
+    }
+    
+    static let paletteCommon : String = {
+        [
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.00, s: 0, b: 0, B: 1)), // greyscale
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.00, s: 1, S: 0.5, b: 1)), // reds
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.09, s: 1, S: 0.5, b: 1)), // orange
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.12, s: 1, S: 0.5, b: 1)), // yellow
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.35, s: 1, S: 0.5, b: 1)), // green
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.60, s: 1, S: 0.5, b: 1)), // blue
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.80, s: 1, S: 0.5, b: 1)), // purple
+            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.04, H: 0.08, s: 0.5, S: 0.7, b: 0.8, B: 0.6)), // browns
+        ].joined(separator: "|")
+    }()
+            
+    static func createPalette(from: [HSBAValues]) -> String {
+        from.map {
+            $0.asStringOfHSBA
+        }.joined(separator: "|")
+    }
+
+    struct Palette : Codable {
+        var entries : [HSBAValues] = []
+        
+        var asArrayOfString : [String] {
+            entries.map { $0.asStringOfHSBA }
+        }
+
+        var asString : String {
+            asArrayOfString.joined(separator: "|")
+        }
+        
+        var asArrayOfDoubleTuples : [[Double]] {
+            asArrayOfString.map { tuple in
+                tuple.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+            }
+        }
+        
+        static func create(from string: String) -> Self {
+            .init(entries: string.split("|").map { tuple in
+                HSBAValues.init(tuple.split(",").map { Double($0) ?? 1.0 })
+            })
+        }
+    }
+    
+    
+    
 }
 
 extension UIColor

@@ -621,11 +621,10 @@ public extension Array {
 public extension Array {
     
     func removedEqualAdjacent(_ equal: (Element,Element)->Bool) -> Self {
+        guard count > 1 else { return self }
         var r : Self = []
         r.reserveCapacity(count)
-        if count > 0 {
-            r.append(self[0])
-        }
+        r.append(self[0])
         for i in 1..<count {
             if equal(self[i-1],self[i]) {
                 continue
@@ -636,7 +635,8 @@ public extension Array {
     }
     
     func sortedAndUniqued(_ less: (Element,Element)->Bool) -> Self {
-        self.sorted(by: less).removedEqualAdjacent { a,b in
+        guard count > 1 else { return self }
+        return self.sorted(by: less).removedEqualAdjacent { a,b in
             !less(a,b) && !less(b,a)
         }
     }

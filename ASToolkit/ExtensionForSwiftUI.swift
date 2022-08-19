@@ -161,12 +161,16 @@ public extension Color {
     
     init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(HSBA hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
+    init(HSB hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(hsva   : [Double], alpha: Double = 1)                      { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0].clampedTo01, saturation: hsv[1].clampedTo01, brightness: hsv[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue.clampedTo01, saturation: 1, brightness: 1, opacity: opacity.clampedTo01) }
     init(rgba   : [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
     init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
-    
+    init(RGBA rgba: [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
+    init(RGB rgb  : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
+
     static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
     static func hsb     (_ hsb      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsb: hsb, opacity: opacity) }
     static func hsva    (_ hsva     : [Double])                                         -> Color { Color.init(hsva: hsva) }
@@ -1421,3 +1425,16 @@ struct SaveScreenshotView: UIViewRepresentable {
 }
 
 #endif
+
+
+extension RGBAValues {
+    
+    var asSwiftUIColor       : SwiftUI.Color { .init(RGBA: arrayOfRGBA) }
+
+}
+
+extension HSBAValues {
+    
+    var asSwiftUIColor       : SwiftUI.Color { .init(HSBA: arrayOfHSBA) }
+
+}
