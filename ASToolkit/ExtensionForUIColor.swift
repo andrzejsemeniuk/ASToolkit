@@ -144,12 +144,15 @@ public struct HSBAValues : Codable, Equatable {
     var b : Double { get { brightness } set { brightness = newValue }}
     var a : Double { get { alpha } set { alpha = newValue }}
     
-    var arrayOfHSB      : [Double] { [h,s,b] }
-    var arrayOfHSBA     : [Double] { [h,s,b,a] }
+    var arrayOfHSB                  : [Double] { [h,s,b] }
+    var arrayOfHSBA                 : [Double] { [h,s,b,a] }
     
-    var asStringOfHSB     : String { arrayOfHSB.map { $0.format4 }.joinedByComma }
-    var asStringOfHSBA    : String { arrayOfHSBA.map { $0.format4 }.joinedByComma }
-    
+    var asStringOfHSB               : String { arrayOfHSB.map { $0.format4 }.joinedByComma }
+    var asStringOfHSBA              : String { arrayOfHSBA.map { $0.format4 }.joinedByComma }
+
+    var asDescriptiveStringOfHSB    : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)" }
+    var asDescriptiveStringOfHSBA   : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)  A \(a.format4)" }
+
     func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
         .init(h: h ?? self.h, s: s ?? self.s, b: b ?? self.b, a: a ?? self.a)
     }
@@ -182,25 +185,21 @@ public struct HSBAValues : Codable, Equatable {
         generate(count: count, from: .init(h: h, s: s, b: b, a: a), to: .init(h: H ?? h, s: S ?? s, b: B ?? b, a: A ?? a))
     }
     
-    static let paletteCommon : String = {
+    static func paletteCommon(columns count: Int) -> String {
         [
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.00, s: 0, b: 0, B: 1)), // greyscale
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.00, s: 1, S: 0.5, b: 1)), // reds
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.09, s: 1, S: 0.5, b: 1)), // orange
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.12, s: 1, S: 0.5, b: 1)), // yellow
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.35, s: 1, S: 0.5, b: 1)), // green
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.60, s: 1, S: 0.5, b: 1)), // blue
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.80, s: 1, S: 0.5, b: 1)), // purple
-            Self.createPalette(from: HSBAValues.generate(count: 10, h: 0.04, H: 0.08, s: 0.5, S: 0.7, b: 0.8, B: 0.6)), // browns
-        ].joined(separator: "|")
-    }()
-            
-    static func createPalette(from: [HSBAValues]) -> String {
-        from.map {
-            $0.asStringOfHSBA
-        }.joined(separator: "|")
+            Self.generate(count: count, h: 0, s: 0, b: 0, B: 1),
+            Self.generate(count: count, hues: [0,0.08,0.11,0.12,0.13,0.24,0.3,0.45,0.5,0.55,0.62,0.7,0.8,0.9], s: 1, S: 0.3, b: 1),
+        ].asPalette
     }
-
+            
+    static func generate(count: Int, hues: [CGFloat], s: CGFloat, S: CGFloat? = nil, b: CGFloat, B: CGFloat? = nil) -> [HSBAValues] {
+        hues.map { Self.generate(count: count, h: $0, H: nil, s: s, S: S, b: b, B: B, a: 1, A: nil) }.reduce([], { $0 + $1 })
+    }
+            
+//    static func palette(columns count: Int, h: CGFloat, s: CGFloat, S: CGFloat, b: CGFloat) -> String {
+//        hues.map { Self.generate(count: count, h: h, H: nil, s: s, S: S, b: b, B: nil, a: 1, A: nil) }.reduce([], { $0 + $1 }).asPalette
+//    }
+            
     struct Palette : Codable {
         var entries : [HSBAValues] = []
         
@@ -219,14 +218,32 @@ public struct HSBAValues : Codable, Equatable {
         }
         
         static func create(from string: String) -> Self {
-            .init(entries: string.split("|").map { tuple in
-                HSBAValues.init(tuple.split(",").map { Double($0) ?? 1.0 })
-            })
+            .init(entries: string.asArrayOfHSBAValues)
         }
     }
     
-    
-    
+}
+
+extension Array where Element == HSBAValues {
+    var asPalette : String {
+        isEmpty ? "" : self.map {
+            $0.asStringOfHSBA
+        }.joined(separator: "|")
+    }
+}
+
+extension Array where Element == [HSBAValues] {
+    var asPalette : String {
+        flatMap { $0 }.asPalette
+    }
+}
+
+extension String {
+    var asArrayOfHSBAValues : [HSBAValues] {
+        isEmpty ? [] : split("|").map { tuple in
+            HSBAValues.init(tuple.split(",").map { Double($0) ?? 1.0 })
+        }
+    }
 }
 
 extension UIColor
