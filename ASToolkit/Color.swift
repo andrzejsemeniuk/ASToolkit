@@ -375,19 +375,18 @@ public extension HSBAInfo {
         }
         
         
-        func contains(_ entry: HSBAInfo, withAlpha: Bool) -> Bool {
-//            asEntriesOfString(withAlpha: withAlpha).contains(entry.asStringOfHSBA(withAlpha: withAlpha))
-            let e = entry.asStringOfHSBA(withAlpha: withAlpha)
-            return entries.contains(where: { $0.asStringOfHSBA(withAlpha: withAlpha) == e })
+        func contains(entry: HSBAInfo) -> Bool {
+            let e = entry.asStringOfHSBA
+            return entries.contains(where: { $0.asStringOfHSBA == e })
         }
         
-        mutating func remove(_ entry: HSBAInfo, withAlpha: Bool) {
-            let e = entry.asStringOfHSBA(withAlpha: withAlpha)
-            return entries.removeAll(where: { $0.asStringOfHSBA(withAlpha: withAlpha) == e })
+        mutating func remove(entry: HSBAInfo) {
+            let e = entry.asStringOfHSBA
+            return entries.removeAll(where: { $0.asStringOfHSBA == e })
         }
         
-        mutating func add(_ entry: HSBAInfo, withAlpha: Bool) {
-            remove(entry, withAlpha: withAlpha)
+        mutating func add(entry: HSBAInfo) {
+            remove(entry: entry)
             entries.prepend(entry)
         }
         
