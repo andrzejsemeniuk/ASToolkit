@@ -16,296 +16,6 @@ import AppKit
 public typealias UIColor = NSColor
 #endif
 
-public struct RGBAValues : Codable, Equatable {
-    init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
-    }
-    
-    init(r red: Double, g green: Double, b blue: Double, a alpha: Double = 1) {
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
-    }
-    
-    init(_ red: Double, _ green: Double, _ blue: Double, _ alpha: Double = 1) {
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
-    }
-    
-    init(_ array: [Double], fallback: Double = 1) {
-        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
-    }
-
-    init(_ array: [CGFloat], fallback: CGFloat = 1) {
-        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
-    }
-    
- 
-    var red     : Double
-    var green   : Double
-    var blue    : Double
-    var alpha   : Double
-    
-    enum CodingKeys : String, CodingKey {
-        case red        = "r"
-        case green      = "g"
-        case blue       = "b"
-        case alpha      = "a"
-    }
-    
-
-    var r : Double { get { red } set { red = newValue }}
-    var g : Double { get { green } set { green = newValue }}
-    var b : Double { get { blue } set { blue = newValue }}
-    var a : Double { get { alpha } set { alpha = newValue }}
-    
-    var arrayOfRGB      : [Double] { [r,g,b] }
-    var arrayOfRGBA     : [Double] { [r,g,b,a] }
-
-    var asStringOfRGB     : String { arrayOfRGB.map { $0.format4 }.joinedByComma }
-    var asStringOfRGBA    : String { arrayOfRGBA.map { $0.format4 }.joinedByComma }
-    
-    func with(r: Double? = nil, g: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
-        .init(r: r ?? self.r, g: g ?? self.g, b: b ?? self.b, a: a ?? self.a)
-    }
-
-    static let black    : Self = .init(0,0,0,1)
-    static let red      : Self = .init(1,0,0,1)
-    static let white    : Self = .init(1,1,1,1)
-}
-
-public struct HSBAValues : Codable, Equatable {
-    
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.asStringOfHSBA == rhs.asStringOfHSBA
-    }
-    
-    public static func equalHSBA(lhs: Self, rhs: Self) -> Bool {
-        lhs.asStringOfHSBA == rhs.asStringOfHSBA
-    }
-    
-    public static func equalHSB(lhs: Self, rhs: Self) -> Bool {
-        lhs.asStringOfHSB == rhs.asStringOfHSB
-    }
-    
-    
-    
-    public static func compareByH(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.h < rhs.h : rhs.h < lhs.h }
-    public static func compareByS(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.s < rhs.s : rhs.s < lhs.s }
-    public static func compareByB(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.b < rhs.b : rhs.b < lhs.b }
-    public static func compareByA(lhs: Self, rhs: Self, up: Bool) -> Bool { up ? lhs.a < rhs.a : rhs.a < lhs.a }
-    
-    
-    
-    
-    init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
-        self.hue = hue
-        self.saturation = saturation
-        self.brightness = brightness
-        self.alpha = alpha
-    }
-    
-    init(h hue: Double, s saturation: Double, b brightness: Double, a alpha: Double = 1) {
-        self.hue = hue
-        self.saturation = saturation
-        self.brightness = brightness
-        self.alpha = alpha
-    }
-    
-    init(_ hue: Double, _ saturation: Double, _ brightness: Double, _ alpha: Double = 1) {
-        self.hue = hue
-        self.saturation = saturation
-        self.brightness = brightness
-        self.alpha = alpha
-    }
-    
-    init(_ array: [Double], fallback: Double = 1) {
-        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
-    }
-
-    init(_ array: [CGFloat], fallback: CGFloat = 1) {
-        self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
-    }
-    
-    init(_ string: String) {
-        self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4))
-    }
-    
-    var hue         : Double
-    var saturation  : Double
-    var brightness  : Double
-    var alpha       : Double
-    
-    enum CodingKeys : String, CodingKey {
-        case hue        = "h"
-        case saturation = "s"
-        case brightness = "b"
-        case alpha      = "a"
-    }
-    
-    var h : Double { get { hue } set { hue = newValue }}
-    var s : Double { get { saturation } set { saturation = newValue }}
-    var b : Double { get { brightness } set { brightness = newValue }}
-    var a : Double { get { alpha } set { alpha = newValue }}
-    
-    var arrayOfHSB                  : [Double] { [h,s,b] }
-    var arrayOfHSBA                 : [Double] { [h,s,b,a] }
-    
-    var asStringOfHSB               : String { arrayOfHSB.map { $0.format4 }.joinedByComma }
-    var asStringOfHSBA              : String { arrayOfHSBA.map { $0.format4 }.joinedByComma }
-
-    var asDescriptiveStringOfHSB    : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)" }
-    var asDescriptiveStringOfHSBA   : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)  A \(a.format4)" }
-
-    func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
-        .init(h: h ?? self.h, s: s ?? self.s, b: b ?? self.b, a: a ?? self.a)
-    }
-    
-    static let black    : Self = .init(0,0,0,1)
-    static let red      : Self = .init(0,1,1,1)
-    static let yellow   : Self = .init(0.13,1,1,1)
-    static let white    : Self = .init(0,0,1,1)
-    
-    static func generate(count: Int, from: HSBAValues, to: HSBAValues) -> [HSBAValues] {
-        let divisor : Double = max(1, count-1).asDouble
-        let delta = HSBAValues.init(h: (to.h - from.h)/divisor, s: (to.s - from.s)/divisor, b: (to.b - from.b)/divisor, a: (to.a - from.a)/divisor)
-        var from = from
-        var r : [HSBAValues] = []
-        count.loop {
-            r.append(from)
-            from.h += delta.h
-            from.s += delta.s
-            from.b += delta.b
-            from.a += delta.a
-        }
-        return r
-    }
-    
-    static func generate(count: Int, h0: CGFloat, h1: CGFloat? = nil, s0: CGFloat, s1: CGFloat? = nil, b0: CGFloat, b1: CGFloat? = nil, a0: CGFloat = 1, a1: CGFloat? = nil) -> [HSBAValues] {
-        generate(count: count, from: .init(h: h0, s: s0, b: b0, a: a0), to: .init(h: h1 ?? h0, s: s1 ?? s0, b: b1 ?? b0, a: a1 ?? a0))
-    }
-    
-    static func generate(count: Int, h: CGFloat, H: CGFloat? = nil, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil, a: CGFloat = 1, A: CGFloat? = nil) -> [HSBAValues] {
-        generate(count: count, from: .init(h: h, s: s, b: b, a: a), to: .init(h: H ?? h, s: S ?? s, b: B ?? b, a: A ?? a))
-    }
-    
-    static func paletteDefault(columns count: Int) -> String {
-        [
-            Self.generate(grayscale: count),
-            Self.generate(pale: count),
-            Self.generate(vivid: count),
-            Self.generate(dark: count)
-        ].asPalette
-    }
-            
-    static func paletteDefaultPale(columns count: Int) -> String {
-        [
-            Self.generate(pale: count)
-        ].asPalette
-    }
-            
-    static func paletteDefaultVivid(columns count: Int) -> String {
-        [
-            Self.generate(vivid: count),
-        ].asPalette
-    }
-            
-    static func paletteDefaultDark(columns count: Int) -> String {
-        [
-            Self.generate(dark: count)
-        ].asPalette
-    }
-            
-    static func paletteDefaultGrayscale(columns count: Int) -> String {
-        [
-            Self.generate(grayscale: count)
-        ].asPalette
-    }
-            
-    static func generate(grayscale count: Int) -> [HSBAValues] {
-        Self.generate(count: count, h: 0, s: 0, b: 0, B: 1)
-    }
-    
-    static func generate(vivid count: Int) -> [HSBAValues] {
-        Self.generate(common: count, s: 1, S: 0.65)
-    }
-    
-    static func generate(dark count: Int) -> [HSBAValues] {
-        Self.generate(common: count, b: 0.70, B: 0.9)
-    }
-
-    static func generate(pale count: Int) -> [HSBAValues] {
-        Self.generate(common: count, s: 0.60, S: 0.1)
-    }
-    
-
-    static let defaultHues : [CGFloat] = [0,0.08,0.12,0.27,0.45,0.55,0.6,0.7,0.8,0.9]
-//    static let defaultHues : [CGFloat] = [0,0.08,0.115,0.14,0.24,0.33,0.48,0.55,0.6,0.67,0.74,0.82,0.9]
-//    static let defaultHues : [CGFloat] = [0,0.08,0.11,0.12,0.13,0.24,0.3,0.45,0.5,0.55,0.62,0.7,0.8,0.9]
-    
-    static func generate(common count: Int, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil) -> [HSBAValues] {
-        Self.generate(count: count, hues: Self.defaultHues, s: s, S: S, b: b, B: B)
-    }
-    
-    static func generate(count: Int, hues: [CGFloat], s: CGFloat, S: CGFloat? = nil, b: CGFloat, B: CGFloat? = nil) -> [HSBAValues] {
-        hues.map { Self.generate(count: count, h: $0, H: nil, s: s, S: S, b: b, B: B, a: 1, A: nil) }.reduce([], { $0 + $1 })
-    }
-            
-//    static func palette(columns count: Int, h: CGFloat, s: CGFloat, S: CGFloat, b: CGFloat) -> String {
-//        hues.map { Self.generate(count: count, h: h, H: nil, s: s, S: S, b: b, B: nil, a: 1, A: nil) }.reduce([], { $0 + $1 }).asPalette
-//    }
-            
-    struct Palette : Codable {
-        var entries : [HSBAValues] = []
-        
-        var asArrayOfString : [String] {
-            entries.map { $0.asStringOfHSBA }
-        }
-
-        var asString : String {
-            asArrayOfString.joined(separator: "|")
-        }
-        
-        var asArrayOfDoubleTuples : [[Double]] {
-            asArrayOfString.map { tuple in
-                tuple.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
-            }
-        }
-        
-        static func create(from string: String) -> Self {
-            .init(entries: string.asArrayOfHSBAValues)
-        }
-    }
-    
-}
-
-extension Array where Element == HSBAValues {
-    var asPalette : String {
-        isEmpty ? "" : self.map {
-            $0.asStringOfHSBA
-        }.joined(separator: "|")
-    }
-}
-
-extension Array where Element == [HSBAValues] {
-    var asPalette : String {
-        flatMap { $0 }.asPalette
-    }
-}
-
-extension String {
-    var asArrayOfHSBAValues : [HSBAValues] {
-        isEmpty ? [] : split("|").map { tuple in
-            HSBAValues.init(tuple.split(",").map { Double($0) ?? 1.0 })
-        }
-    }
-}
 
 extension UIColor
 {
@@ -409,7 +119,7 @@ extension UIColor
 
 
     
-    public var RGBA : RGBAValues {
+    public var RGBA : RGBAInfo {
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
@@ -431,13 +141,13 @@ extension UIColor
         return [v.red, v.green, v.blue, v.alpha]
     }
 
-    public convenience init(RGBA:RGBAValues) {
+    public convenience init(RGBA:RGBAInfo) {
         self.init(red:RGBA.red, green:RGBA.green, blue:RGBA.blue, alpha:RGBA.alpha)
     }
     
     
     
-    public var HSBA : HSBAValues {
+    public var HSBA : HSBAInfo {
         var h:CGFloat = 0
         var s:CGFloat = 0
         var b:CGFloat = 0
@@ -458,7 +168,7 @@ extension UIColor
         return [v.hue, v.saturation, v.brightness, v.alpha]
     }
     
-    public convenience init(HSBA:HSBAValues) {
+    public convenience init(HSBA:HSBAInfo) {
         self.init(hue:HSBA.hue, saturation:HSBA.saturation, brightness:HSBA.brightness, alpha:HSBA.alpha)
     }
     

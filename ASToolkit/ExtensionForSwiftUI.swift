@@ -1427,14 +1427,3 @@ struct SaveScreenshotView: UIViewRepresentable {
 #endif
 
 
-extension RGBAValues {
-    
-    var asSwiftUIColor       : SwiftUI.Color { .init(RGBA: arrayOfRGBA) }
-
-}
-
-extension HSBAValues {
-    
-    var asSwiftUIColor       : SwiftUI.Color { .init(HSBA: arrayOfHSBA) }
-
-}
