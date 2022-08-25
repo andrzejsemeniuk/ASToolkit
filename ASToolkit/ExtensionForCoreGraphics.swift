@@ -162,47 +162,51 @@ public extension CGSize {
     
 }
 
-extension CGRect {
+public extension CGRect {
 
-	public static let minimal = CGRect(side:1)
+	static let minimal = CGRect(side:1)
 
-    public init(_ point:CGPoint) {
+    init(_ point:CGPoint) {
         self.init(x:point.x, y:point.y, width:0, height:0)
     }
     
-    public init(x:CGFloat, y:CGFloat) {
+    init(x:CGFloat, y:CGFloat) {
         self.init(x: x, y: y, width: 0, height: 0)
     }
     
-    public init(_ size: CGSize) {
+    init(_ size: CGSize) {
         self.init(x: 0, y: 0, width: size.width, height: size.height)
     }
 
-    public init(width: CGFloat, height:CGFloat, centered: Bool = false) {
+    init(width: CGFloat, height:CGFloat, centered: Bool = false) {
         self.init(x: centered ? -width/2 : 0, y: centered ? -height/2 : 0, width: width, height: height)
     }
     
-    public init(origin: CGPoint = .zero, side: CGFloat) {
+    init(origin: CGPoint = .zero, side: CGFloat) {
         self.init(x: origin.x, y: origin.y, width: side, height: side)
     }
     
-    public init(center: CGPoint, side: CGFloat) {
+    init(center: CGPoint, side: CGFloat) {
         self.init(x: center.x - side/2, y: center.y - side/2, width: side, height: side)
     }
     
-    public init(center: CGPoint, size: CGSize) {
+    init(center: CGPoint, size: CGSize) {
         self.init(x: center.x - size.width/2, y: center.y - size.height/2, width: size.width, height: size.height)
     }
     
-	public init(size: CGSize) {
+	init(size: CGSize) {
 		self.init(x: 0, y: 0, width: size.width, height: size.height)
 	}
 
-    public var diagonal: CGFloat {
+    init(x0: CGFloat, y0: CGFloat, x1: CGFloat, y1: CGFloat) {
+        self.init(x: min(x0,x1), y: min(y0,y1), width: max(x0,x1)-min(x0,x1), height: max(y0,y1)-min(y0,y1))
+    }
+    
+    var diagonal: CGFloat {
         return sqrt(width*width + height*height)
     }
     
-    static public var almostZero:CGRect = {
+    static var almostZero:CGRect = {
         return CGRect(origin:CGPoint.almostZero, size:CGSize.almostZero)
     }()
 }
