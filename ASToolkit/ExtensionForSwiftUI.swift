@@ -711,6 +711,10 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
 //@available(iOS 13, *)
 //public extension View {
     
+    func hline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+        hline(color, thickness, discrete.asArrayOfCGFloat)
+    }
+
     func hline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
         GeometryReader { geometry in
             Path { path in
@@ -724,6 +728,10 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
     }
     
     
+    func vline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+        vline(color, thickness, discrete.asArrayOfCGFloat)
+    }
+
     func vline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
         GeometryReader { geometry in
             Path { path in
