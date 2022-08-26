@@ -23,6 +23,7 @@ public struct Attributes : Equatable {
     
     public var dictionary   : [String : String]                     = [:]
     
+    public static let empty : Self = .init()
     
     public init(title: String? = nil, dictionary: [String : String] = [:]) {
         self.title = title
@@ -40,12 +41,24 @@ public struct Attributes : Equatable {
     
 
     public func merged(from attributes: Attributes?) -> Attributes {
-        attributes == nil ? self : merged(from: attributes!)
+        attributes == nil ? self : merged(from: attributes!.dictionary)
     }
     
     public func merged(into attributes: Attributes?) -> Attributes {
-        attributes == nil ? self : merged(into: attributes!)
+        attributes == nil ? self : merged(into: attributes!.dictionary)
     }
+
+    
+
+    mutating public func merge(from dictionary: [String : String]?) {
+        self = merged(from: dictionary)
+    }
+    
+    mutating public func merge(from attributes: Attributes?) {
+        self = merged(from: attributes)
+    }
+    
+
     
 
     public func asColor(_ name: String) -> Color? {
@@ -182,22 +195,28 @@ public struct Attributes : Equatable {
 
     
     
+    public func asBool(_ key: String) -> Bool? {
+        if let value = dictionary[key] {
+            return Bool(value)
+        }
+        return nil
+    }
     public func asBool(_ key: String, _ fallback: Bool) -> Bool {
         if let value = dictionary[key] {
             return Bool(value) ?? fallback
         }
         return fallback
     }
-    
+
     public func asArrayOfDouble(_ key: String) -> [Double]? {
-        dictionary[key]?.split(",").map { Double($0)! }
+        dictionary[key]?.split(",").map { Double($0) ?? 0 }
     }
     public func asArrayOfDouble(_ key: String, _ fallback: [Double]) -> [Double] {
         asArrayOfDouble(key) ?? fallback
     }
 
     public func asArrayOfCGFloat(_ key: String) -> [CGFloat]? {
-        dictionary[key]?.split(",").map { CGFloat($0)! }
+        dictionary[key]?.split(",").map { CGFloat($0) ?? 0 }
     }
     public func asArrayOfCGFloat(_ key: String, _ fallback: [CGFloat]) -> [CGFloat] {
         asArrayOfCGFloat(key) ?? fallback
