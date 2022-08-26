@@ -76,9 +76,23 @@ public struct Attributes : Equatable {
         return nil
     }
     
-    public func asHSBAArrayOfDouble(_ name: String, _ fallback: [Double]) -> [Double] {
-        asHSBAArrayOfDouble(name) ?? fallback.padded(with: 1, upto: 4)
+    public func asHSBArrayOfDouble(_ name: String, _ fallback: [Double], padding: Double = 1) -> [Double] {
+        asHSBAArrayOfDouble(name) ?? fallback.padded(with: padding, upto: 3)
     }
+
+    public func asHSBAArrayOfDouble(_ name: String, _ fallback: [Double], padding: Double = 1) -> [Double] {
+        asHSBAArrayOfDouble(name) ?? fallback.padded(with: padding, upto: 4)
+    }
+
+
+    public func asHSBArrayOfCGFloat(_ name: String, _ fallback: [CGFloat], padding: CGFloat = 1) -> [CGFloat] {
+        asHSBAArrayOfDouble(name)?.map { $0.asCGFloat } ?? fallback.padded(with: padding, upto: 3)
+    }
+
+    public func asHSBAArrayOfCGFloat(_ name: String, _ fallback: [CGFloat], padding: CGFloat = 1) -> [CGFloat] {
+        asHSBAArrayOfDouble(name)?.map { $0.asCGFloat } ?? fallback.padded(with: padding, upto: 4)
+    }
+
 
     
     public func asColorHSBA(_ name: String) -> Color.HSBA? {
@@ -208,15 +222,15 @@ public struct Attributes : Equatable {
         return fallback
     }
 
-    public func asArrayOfDouble(_ key: String) -> [Double]? {
-        dictionary[key]?.split(",").map { Double($0) ?? 0 }
+    public func asArrayOfDouble(_ key: String, safe: Double = 0) -> [Double]? {
+        dictionary[key]?.split(",").map { Double($0) ?? safe }
     }
     public func asArrayOfDouble(_ key: String, _ fallback: [Double]) -> [Double] {
         asArrayOfDouble(key) ?? fallback
     }
 
-    public func asArrayOfCGFloat(_ key: String) -> [CGFloat]? {
-        dictionary[key]?.split(",").map { CGFloat($0) ?? 0 }
+    public func asArrayOfCGFloat(_ key: String, safe: CGFloat = 0) -> [CGFloat]? {
+        dictionary[key]?.split(",").map { CGFloat($0) ?? safe }
     }
     public func asArrayOfCGFloat(_ key: String, _ fallback: [CGFloat]) -> [CGFloat] {
         asArrayOfCGFloat(key) ?? fallback
@@ -321,11 +335,19 @@ public struct Attributes : Equatable {
         
 
     static public func toArrayOfDouble(hsba: String, v: Double = 1.0) -> [Double] {
-        hsba.split(",").map { Double($0) ?? v }.padded(with: 1.0, upto: 4)
+        hsba.split(",").map { Double($0) ?? v }.padded(with: v, upto: 4)
     }
     
     static public func toArrayOfCGFloat(hsba: String, v: CGFloat = 1.0) -> [CGFloat] {
-        hsba.split(",").map { CGFloat($0) ?? v }.padded(with: 1.0, upto: 4)
+        hsba.split(",").map { CGFloat($0) ?? v }.padded(with: v, upto: 4)
+    }
+    
+    static public func toArrayOfDouble(hsb: String, v: Double = 1.0) -> [Double] {
+        hsb.split(",").map { Double($0) ?? v }.padded(with: v, upto: 3)
+    }
+    
+    static public func toArrayOfCGFloat(hsb: String, v: CGFloat = 1.0) -> [CGFloat] {
+        hsb.split(",").map { CGFloat($0) ?? v }.padded(with: v, upto: 3)
     }
     
 

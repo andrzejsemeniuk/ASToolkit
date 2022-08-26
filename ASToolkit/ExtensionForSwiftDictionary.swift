@@ -86,3 +86,23 @@ public extension Dictionary where Key : Equatable {
     }
 }
 
+
+public extension Dictionary {
+    
+    func merged(from dictionary: Dictionary<Key, Value>?, override: Bool) -> Self {
+        if dictionary == nil {
+            return self
+        } else {
+            return self.merging(dictionary!, uniquingKeysWith: { override ? $1 : $0 })
+        }
+    }
+    
+    func merged(into dictionary: Dictionary<Key, Value>?, override: Bool) -> Self? {
+        if dictionary == nil {
+            return nil
+        } else {
+            return dictionary!.merging(self, uniquingKeysWith: { override ? $1 : $0 })
+        }
+    }
+}
+
