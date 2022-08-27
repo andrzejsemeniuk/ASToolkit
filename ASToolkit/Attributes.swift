@@ -62,7 +62,7 @@ public struct Attributes : Equatable {
     
 
     public func asColor(_ name: String) -> Color? {
-        if let value = dictionary[name] {
+        if let value = dictionary[name], value.isNotEmpty {
             return Self.toColor(hsba: value)
         }
         return nil
@@ -70,7 +70,7 @@ public struct Attributes : Equatable {
     
     
     public func asHSBAArrayOfDouble(_ name: String) -> [Double]? {
-        if let hsba = dictionary[name] {
+        if let hsba = dictionary[name], hsba.isNotEmpty {
             return Self.toArrayOfDouble(hsba: hsba)
         }
         return nil
@@ -96,7 +96,7 @@ public struct Attributes : Equatable {
 
     
     public func asColorHSBA(_ name: String) -> Color.HSBA? {
-        if let hsba = asHSBAArrayOfDouble(name) {
+        if let hsba = asHSBAArrayOfDouble(name), hsba.isNotEmpty {
             return .init(hsba: hsba)
         }
         return nil
@@ -111,7 +111,7 @@ public struct Attributes : Equatable {
     }
     
     public func asSKColor(_ name: String) -> SKColor? {
-        if let value = dictionary[name] {
+        if let value = dictionary[name], value.isNotEmpty {
             return Self.toSKColor(hsba: value)
         }
         return nil
@@ -122,7 +122,7 @@ public struct Attributes : Equatable {
     
     
     public func asCGLineCap(_ name: String) -> CGLineCap? {
-        if let value = asInt32(name) {
+        if name.isNotEmpty, let value = asInt32(name) {
             return CGLineCap.init(rawValue: value)
         }
         return nil
@@ -132,7 +132,7 @@ public struct Attributes : Equatable {
     }
 
     public func asCGLineJoin(_ name: String) -> CGLineJoin? {
-        if let value = asInt32(name) {
+        if name.isNotEmpty, let value = asInt32(name) {
             return CGLineJoin.init(rawValue: value)
         }
         return nil
