@@ -25,11 +25,19 @@ public struct Attributes : Equatable {
     
     public static let empty : Self = .init()
     
+    
+    
     public init(title: String? = nil, dictionary: [String : String] = [:]) {
         self.title = title
         self.dictionary = dictionary 
     }
 
+    
+    public func with(prefix: String) -> Self {
+        .init(title: title, dictionary: dictionary.map { (k,v) in [ "\(prefix)\(k)" : v ] }.reduce([:], { $0 + $1 } ))
+    }
+    
+    
     
     public func merged(from dictionary: [String : String]?) -> Attributes {
         dictionary == nil ? self : Attributes.init(dictionary: self.dictionary.merging(dictionary!, uniquingKeysWith: { s0, s1 in s1 }))
