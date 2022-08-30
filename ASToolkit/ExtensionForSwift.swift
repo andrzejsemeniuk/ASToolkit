@@ -42,7 +42,7 @@ public func getMirrorAttributesOf(_ any: Any) -> [String] {
     }
 }
 
-extension Equatable {
+public extension Equatable {
     func `in`(_ parameters: Self...) -> Bool {
         for p in parameters {
             if self == p {
@@ -58,6 +58,12 @@ extension Equatable {
             }
         }
         return false
+    }
+}
+
+public extension Optional where Wrapped : Equatable {
+    mutating func assignDifferent(_ a: Wrapped?, _ b: Wrapped?) {
+        self = self == a ? b : a
     }
 }
 
