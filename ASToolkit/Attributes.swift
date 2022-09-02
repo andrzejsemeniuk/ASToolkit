@@ -39,31 +39,31 @@ public struct Attributes : Equatable {
     
     
     
-    public func merged(from dictionary: [String : String]?) -> Attributes {
-        dictionary == nil ? self : Attributes.init(dictionary: self.dictionary.merging(dictionary!, uniquingKeysWith: { s0, s1 in s1 }))
+    public func merged(from dictionary: [String : String]?, override: Bool = true) -> Attributes {
+        dictionary == nil ? self : Attributes.init(title: title, dictionary: self.dictionary.merged(from: dictionary!, override: override))
     }
     
-    public func merged(into dictionary: [String : String]?) -> Attributes {
-        dictionary == nil ? self : Attributes.init(dictionary: self.dictionary.merging(dictionary!, uniquingKeysWith: { s0, s1 in s0 }))
+    public func merged(into dictionary: [String : String]?, override: Bool = true) -> Attributes {
+        dictionary == nil ? self : Attributes.init(title: title, dictionary: self.dictionary.merged(into: dictionary!, override: override) ?? self.dictionary)
     }
     
 
-    public func merged(from attributes: Attributes?) -> Attributes {
-        attributes == nil ? self : merged(from: attributes!.dictionary)
+    public func merged(from attributes: Attributes?, override: Bool = true) -> Attributes {
+        attributes == nil ? self : merged(from: attributes!.dictionary, override: override)
     }
     
-    public func merged(into attributes: Attributes?) -> Attributes {
-        attributes == nil ? self : merged(into: attributes!.dictionary)
+    public func merged(into attributes: Attributes?, override: Bool = true) -> Attributes {
+        attributes == nil ? self : merged(into: attributes!.dictionary, override: override)
     }
 
     
 
-    mutating public func merge(from dictionary: [String : String]?) {
-        self = merged(from: dictionary)
+    mutating public func merge(from dictionary: [String : String]?, override: Bool = true) {
+        self = merged(from: dictionary, override: override)
     }
     
-    mutating public func merge(from attributes: Attributes?) {
-        self = merged(from: attributes)
+    mutating public func merge(from attributes: Attributes?, override: Bool = true) {
+        self = merged(from: attributes, override: override)
     }
     
 
