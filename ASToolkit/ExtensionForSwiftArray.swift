@@ -753,14 +753,14 @@ public extension Array where Element : Equatable {
         if let index = firstIndex(of: e) {
             return index > 0 ? self[index-1] : self.last
         }
-        return nil
+        return e
     }
     
     func nextLooped(_ e: Element) -> Element! {
         if let index = firstIndex(of: e) {
             return index < count-1 ? self[index+1] : self.first
         }
-        return nil
+        return e
     }
 }
 
