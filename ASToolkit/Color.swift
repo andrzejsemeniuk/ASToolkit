@@ -235,9 +235,9 @@ public struct HSBAInfo : Codable, Equatable {
     static func paletteDefault(columns count: Int) -> Palette {
         [
             Self.generate(grayscale: count),
+            Self.generate(pale: count),
             Self.generate(vivid: count),
             Self.generate(dark: count),
-            Self.generate(pale: count),
         ].asPalette
     }
             
