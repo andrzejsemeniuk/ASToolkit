@@ -264,6 +264,12 @@ public struct Attributes : Equatable {
     
     
     
+    public mutating func set(ifMissing key: String, _ value: String?) {
+        if dictionary.missing(key: key), let value = value {
+            dictionary[key] = value
+        }
+    }
+    
 
 //    func value<T>(_ name: String, _ fallback: T) -> T {
 //        if fallback is SKColor { return asSKColor(name, fallback as! SKColor) as! T }
