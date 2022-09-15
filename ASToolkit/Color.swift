@@ -497,4 +497,8 @@ extension Array where Element == [HSBAInfo] {
 
 
 
-
+extension SKColor {
+    var asHSBAInfo : HSBAInfo {
+        .init(self.arrayOfHSBA)
+    }
+}
