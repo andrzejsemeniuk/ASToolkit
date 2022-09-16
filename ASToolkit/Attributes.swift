@@ -16,6 +16,13 @@ import UIKit
 import AppKit
 #endif
 
+protocol HavingAttributes {
+
+    var attributes : Attributes { get set }
+    
+}
+
+
 public struct Attributes : Equatable {
     
     
