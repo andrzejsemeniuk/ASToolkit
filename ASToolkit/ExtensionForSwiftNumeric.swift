@@ -173,7 +173,9 @@ public extension Double {
 public extension Double {
 
     var asInt           : Int { Int(self) }
-    var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
+    var asInt64         : Int64 { Int64(self) }
+//    var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
+//    var asInt64Rounded  : Int64 { self < 0.5 ? Int64(self) : Int64(self) + 1 }
     var asFloat         : Float { Float(self) }
     var asCGFloat       : CGFloat { CGFloat(self) }
 
