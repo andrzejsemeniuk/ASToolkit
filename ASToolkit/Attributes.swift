@@ -135,6 +135,16 @@ public struct Attributes : Equatable {
         asSKColor(name) ?? fallback
     }
     
+    public func asHSBAInfo(_ name: String) -> HSBAInfo? {
+        if let value = dictionary[name], value.isNotEmpty {
+            return Self.toHSBAInfo(hsba: value)
+        }
+        return nil
+    }
+    public func asHSBAInfo(_ name: String, _ fallback: HSBAInfo) -> HSBAInfo {
+        asHSBAInfo(name) ?? fallback
+    }
+
     
     public func asCGLineCap(_ name: String) -> CGLineCap? {
         if name.isNotEmpty, let value = asInt32(name) {
@@ -290,6 +300,10 @@ public struct Attributes : Equatable {
         dictionary[key] = Self.stringForColor(from: color)
     }
 
+    public mutating func set(_ key: String, _ color: HSBAInfo) {
+        dictionary[key] = Self.stringForColor(from: color.asSKColor)
+    }
+
     public mutating func set(_ key: String, _ color: Color) {
         dictionary[key] = Self.stringForColor(from: color)
     }
@@ -316,6 +330,13 @@ public struct Attributes : Equatable {
         dictionary[key] = "\(v)"
     }
     
+    public mutating func set(_ key: String, _ v: Int, min: Int, max: Int, roll: Bool) {
+        var v = v
+        if v > max { v = roll ? min : max }
+        if v < min { v = roll ? max : min }
+        dictionary[key] = "\(v))"
+    }
+        
     public mutating func set(_ key: String, _ v: Bool) {
         dictionary[key] = "\(v)"
     }
@@ -378,6 +399,10 @@ public struct Attributes : Equatable {
 
     static public func toSKColor(hsba: String) -> SKColor {
         SKColor.init(hsba: toArrayOfCGFloat(hsba: hsba))
+    }
+
+    static public func toHSBAInfo(hsba: String) -> HSBAInfo {
+        SKColor.init(hsba: toArrayOfCGFloat(hsba: hsba)).asHSBAInfo
     }
 
 }
