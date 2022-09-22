@@ -277,6 +277,10 @@ public extension Color {
     }
     #endif
     
+    var asSKColor : SKColor {
+        SKColor.init(hsba: self.hsba.asArrayOfCGFloat)
+    }
+    
     #if os(macOS)
     func nsColor() -> NSColor {
         NSColor(self)
