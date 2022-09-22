@@ -38,3 +38,10 @@ public func ignore(report:Bool = true, file:String = #file, line:Int = #line, _ 
 	}
 }
 
+public func perform(after: TimeInterval, _ f: @escaping ()->Void) {
+    let _ = Timer.scheduledTimer(withTimeInterval: after, repeats: false, block: { t in
+        f()
+        t.invalidate()
+    })
+    
+}
