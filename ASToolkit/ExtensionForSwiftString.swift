@@ -381,9 +381,23 @@ extension String {
 
 }
 
+//public extension Range {
+//
+//    var distance : Int {
+//        self.endIndex - self.startIndex
+//    }
+//}
 
 public extension String {
 
+    func index(at: Int) -> Index {
+        index(startIndex, offsetBy: at)
+    }
+    
+    func indexDistance(to: Index) -> IndexDistance {
+        distance(from: startIndex, to: to)
+    }
+    
 	func matches(regex: String) -> Bool {
 		return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
 	}
@@ -395,6 +409,20 @@ public extension String {
 		}
 		return nil
 	}
+
+    func replacing(regex: String, with: (Substring)->String) -> String {
+        var r = ""
+        var i = 0
+        while let range = self.range(of: regex, options: .regularExpression, range: index(at: i)..<endIndex, locale: nil) {
+            r += self.substring(from: UInt(i), to: indexDistance(to: range.lowerBound).magnitude)
+            i = indexDistance(to: range.upperBound)
+            r += with(self[range])
+        }
+        if index(at: i) < endIndex {
+            r += self.substring(from: i)
+        }
+        return r
+    }
 
 	func escaped() -> String {
 		var r = ""
