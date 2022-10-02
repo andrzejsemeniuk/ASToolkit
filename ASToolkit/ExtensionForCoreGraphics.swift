@@ -522,31 +522,50 @@ public extension Int32 {
 
 
 public struct CGLineStyle : Codable, Equatable {
-    var lineWidth       : CGFloat       = 1
-    var lineCap         : CGLineCap     = .butt
-    var lineJoin        : CGLineJoin    = .miter
-    var miterLimit      : CGFloat       = 10
-    var dashPhase       : CGFloat       = 0
-    var dashPattern     : [CGFloat]     = []
+    var lineWidth       : CGFloat!      = 1
+    var lineCap         : CGLineCap!    = .butt
+    var lineJoin        : CGLineJoin!   = .miter
+    var miterLimit      : CGFloat!      = 10
+    var dashPhase       : CGFloat!      = 0
+    var dashPattern     : [CGFloat]!    = []
     
-    var thickness       : CGFloat {
+    var thickness       : CGFloat! {
         get { lineWidth }
         set { lineWidth = newValue }
     }
     
-    var cap             : CGLineCap {
+    func thickness(_ fallback: CGFloat) -> CGFloat { self.thickness ?? fallback }
+    
+    var cap             : CGLineCap! {
         get { lineCap }
         set { lineCap = newValue }
     }
     
-    var join            : CGLineJoin {
+    func cap(_ fallback: CGLineCap) -> CGLineCap { self.cap ?? fallback }
+
+    var join            : CGLineJoin! {
         get { lineJoin }
         set { lineJoin = newValue }
     }
-    
-    var pattern         : [CGFloat] {
+
+    func join(_ fallback: CGLineJoin) -> CGLineJoin { self.join ?? fallback }
+
+    var pattern         : [CGFloat]! {
         get { dashPattern }
         set { dashPattern = newValue }
+    }
+
+    func pattern(_ fallback: [CGFloat]) -> [CGFloat] { self.pattern ?? fallback }
+
+    func filled(with: CGLineStyle?) -> CGLineStyle {
+        var r = self
+        r.lineWidth         ?= with?.lineWidth
+        r.lineCap           ?= with?.lineCap
+        r.lineJoin          ?= with?.lineJoin
+        r.miterLimit        ?= with?.miterLimit
+        r.dashPhase         ?= with?.dashPhase
+        r.dashPattern       ?= with?.dashPattern
+        return r
     }
     
     enum CodingKeys : String, CodingKey {

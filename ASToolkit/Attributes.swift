@@ -146,6 +146,16 @@ public struct Attributes : Equatable {
     }
 
     
+    public func asCGLineStyle(_ name: String) -> CGLineStyle? {
+        if name.isNotEmpty, let value = dictionary[name], value.isNotEmpty {
+            return value.decoded(CGLineStyle.self)
+        }
+        return nil
+    }
+    public func asCGLineStyle(_ name: String, _ fallback: CGLineStyle) -> CGLineStyle {
+        asCGLineStyle(name) ?? fallback
+    }
+
     public func asCGLineCap(_ name: String) -> CGLineCap? {
         if name.isNotEmpty, let value = asInt32(name) {
             return CGLineCap.init(rawValue: value)
@@ -359,6 +369,11 @@ public struct Attributes : Equatable {
     }
     #endif
 
+    public mutating func set(_ key: String, _ v: CGLineStyle) {
+        dictionary[key] = Self.value(from: v)
+    }
+
+
 
 
     static public func stringForColor(from color: SKColor) -> String {
@@ -403,6 +418,10 @@ public struct Attributes : Equatable {
 
     static public func toHSBAInfo(hsba: String) -> HSBAInfo {
         SKColor.init(hsba: toArrayOfCGFloat(hsba: hsba)).asHSBAInfo
+    }
+    
+    static public func value(from v: CGLineStyle) -> String {
+        .encoded(v)!
     }
 
 }
