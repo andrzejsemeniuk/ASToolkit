@@ -248,6 +248,16 @@ extension CGLineCap {
         }
     }
     
+    public var previousLooped : Self {
+        switch self {
+            case .round             : return .square
+            case .butt              : return .round
+            case .square            : return .butt
+            @unknown default:
+                fatalError()
+        }
+    }
+
     public var nextLooped : Self {
         switch self {
             case .round             : return .butt
@@ -276,6 +286,16 @@ extension CGLineJoin {
             case .round             : return "Round"
             case .bevel             : return "Bevel"
             case .miter             : return "Miter"
+            @unknown default:
+                fatalError()
+        }
+    }
+
+    public var previousLooped : Self {
+        switch self {
+            case .round             : return .miter
+            case .bevel             : return .round
+            case .miter             : return .bevel
             @unknown default:
                 fatalError()
         }

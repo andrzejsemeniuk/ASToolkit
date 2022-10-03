@@ -565,6 +565,9 @@ public extension String {
     var splitByComma : [String] {
         split(",")
     }
+    var splitByPipe : [String] {
+        split("|")
+    }
 }
 
 public extension String {

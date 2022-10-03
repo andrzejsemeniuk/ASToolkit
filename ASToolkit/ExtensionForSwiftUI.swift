@@ -735,7 +735,19 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
         .foregroundColor(color)
     }
     
-    
+    func hline(color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+        GeometryReader { geometry in
+            Path { path in
+                path.move(to: .init(x: 0, y: thickness/2))
+                path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
+            }
+            .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
+        }
+        .frame(height:thickness)
+        .foregroundColor(color)
+    }
+
+
     func vline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
         vline(color, thickness, discrete.asArrayOfCGFloat)
     }
@@ -757,7 +769,26 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
 //        Lines.create(horizontal: true, color: Color.gray7, style: StrokeStyle.init(lineWidth: 1, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: [], dashPhase: 0))
 //            .frame(height:1)
     }
-    
+
+
+
+func zigzag(points: [CGPoint], color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            guard points.isNotEmpty else { return }
+            path.move(to: points[0])
+            for i in points.range {
+                if i > 0 {
+                    path.addLine(to: points[i])
+                }
+            }
+        }
+        .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
+    }
+    .foregroundColor(color)
+}
+
+
 
 //}
 

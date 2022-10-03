@@ -23,14 +23,21 @@ protocol HavingAttributes {
 }
 
 
-public struct Attributes : Equatable {
+public class Attributes : Codable, Equatable {
+    
+    public static func == (lhs: Attributes, rhs: Attributes) -> Bool {
+        lhs === rhs
+    }
+    
     
     
     public var title        : String?
     
     public var dictionary   : [String : String]                     = [:]
     
-    public static let empty : Self = .init()
+    
+    
+    public static let empty : Attributes = .init()
     
     
     
@@ -39,8 +46,13 @@ public struct Attributes : Equatable {
         self.dictionary = dictionary 
     }
 
+    public var duplicate : Attributes {
+        try! JSONDecoder().decode(Attributes.self, from: try! JSONEncoder().encode(self))
+    }
     
-    public func with(prefix: String) -> Self {
+    
+    
+    public func with(prefix: String) -> Attributes {
         .init(title: title, dictionary: dictionary.map { (k,v) in [ "\(prefix)\(k)" : v ] }.reduce([:], { $0 + $1 } ))
     }
     
@@ -65,12 +77,12 @@ public struct Attributes : Equatable {
 
     
 
-    mutating public func merge(from dictionary: [String : String]?, override: Bool = true) {
-        self = merged(from: dictionary, override: override)
+    public func merge(from dictionary: [String : String]?, override: Bool = true) {
+        self.dictionary = merged(from: dictionary, override: override).dictionary
     }
     
-    mutating public func merge(from attributes: Attributes?, override: Bool = true) {
-        self = merged(from: attributes, override: override)
+    public func merge(from attributes: Attributes?, override: Bool = true) {
+        self.dictionary = merged(from: attributes, override: override).dictionary
     }
     
 
@@ -257,25 +269,39 @@ public struct Attributes : Equatable {
         return fallback
     }
 
+    
     public func asArrayOfDouble(_ key: String, safe: Double = 0) -> [Double]? {
-        dictionary[key]?.split(",").map { Double($0) ?? safe }
+        if let s = dictionary[key], s.isNotEmpty {
+            return s.split(",").map { Double($0) ?? safe }
+        }
+        return nil
     }
+    
     public func asArrayOfDouble(_ key: String, _ fallback: [Double]) -> [Double] {
         asArrayOfDouble(key) ?? fallback
     }
 
     public func asArrayOfCGFloat(_ key: String, safe: CGFloat = 0) -> [CGFloat]? {
-        dictionary[key]?.split(",").map { CGFloat($0) ?? safe }
+        if let s = dictionary[key], s.isNotEmpty {
+            return s.split(",").map { CGFloat($0) ?? safe }
+        }
+        return nil
     }
+    
     public func asArrayOfCGFloat(_ key: String, _ fallback: [CGFloat]) -> [CGFloat] {
         asArrayOfCGFloat(key) ?? fallback
     }
 
-    public func asArrayOfInt(_ key: String) -> [Int]? {
-        dictionary[key]?.split(",").map { Int($0)! }
+    
+    public func asArrayOfInt(_ key: String, safe: Int) -> [Int]? {
+        if let s = dictionary[key], s.isNotEmpty {
+            return s.split(",").map { Int($0) ?? safe }
+        }
+        return nil
     }
+    
     public func asArrayOfInt(_ key: String, _ fallback: [Int]) -> [Int] {
-        asArrayOfInt(key) ?? fallback
+        asArrayOfInt(key, safe: 0) ?? fallback
     }
 
     #if os(iOS)
@@ -291,7 +317,7 @@ public struct Attributes : Equatable {
     
     
     
-    public mutating func set(ifMissing key: String, _ value: String?) {
+    public func set(ifMissing key: String, _ value: String?) {
         if dictionary.missing(key: key), let value = value {
             dictionary[key] = value
         }
@@ -306,70 +332,70 @@ public struct Attributes : Equatable {
 //    }
 
     
-    public mutating func set(_ key: String, _ color: SKColor) {
+    public func set(_ key: String, _ color: SKColor) {
         dictionary[key] = Self.stringForColor(from: color)
     }
 
-    public mutating func set(_ key: String, _ color: HSBAInfo) {
+    public func set(_ key: String, _ color: HSBAInfo) {
         dictionary[key] = Self.stringForColor(from: color.asSKColor)
     }
 
-    public mutating func set(_ key: String, _ color: Color) {
+    public func set(_ key: String, _ color: Color) {
         dictionary[key] = Self.stringForColor(from: color)
     }
 
-    public mutating func set(_ key: String, _ string: String?) {
+    public func set(_ key: String, _ string: String?) {
         if let string = string {
             dictionary[key] = string
         }
     }
 
-    public mutating func set(_ key: String, _ v: Double) {
+    public func set(_ key: String, _ v: Double) {
         dictionary[key] = "\(v)"
     }
 
-    public mutating func set(_ key: String, _ v: CGFloat) {
+    public func set(_ key: String, _ v: CGFloat) {
         dictionary[key] = "\(v)"
     }
 
-    public mutating func set(_ key: String, _ v: CGPoint) {
+    public func set(_ key: String, _ v: CGPoint) {
         dictionary[key] = "\(v.x),\(v.y)"
     }
 
-    public mutating func set(_ key: String, _ v: Int) {
+    public func set(_ key: String, _ v: Int) {
         dictionary[key] = "\(v)"
     }
     
-    public mutating func set(_ key: String, _ v: Int, min: Int, max: Int, roll: Bool) {
+    public func set(_ key: String, _ v: Int, min: Int, max: Int, roll: Bool) {
         var v = v
         if v > max { v = roll ? min : max }
         if v < min { v = roll ? max : min }
         dictionary[key] = "\(v))"
     }
         
-    public mutating func set(_ key: String, _ v: Bool) {
+    public func set(_ key: String, _ v: Bool) {
         dictionary[key] = "\(v)"
     }
     
-    public mutating func set(_ key: String, _ v: [Double]) {
+    public func set(_ key: String, _ v: [Double]) {
         dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
     }
 
-    public mutating func set(_ key: String, _ v: [CGFloat]) {
+    public func set(_ key: String, _ v: [CGFloat]) {
         dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
     }
 
-    public mutating func set(_ key: String, _ v: [Int]) {
+    public func set(_ key: String, _ v: [Int]) {
         dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
     }
 
     #if os(iOS)
-    public mutating func set(_ key: String, _ v: UIBlurEffect.Style) {
+    public func set(_ key: String, _ v: UIBlurEffect.Style) {
         dictionary[key] = String(v.rawValue)
     }
     #endif
 
-    public mutating func set(_ key: String, _ v: CGLineStyle) {
+    public func set(_ key: String, _ v: CGLineStyle) {
         dictionary[key] = Self.value(from: v)
     }
 
@@ -426,22 +452,22 @@ public struct Attributes : Equatable {
 
 }
 
-extension Attributes : Codable {
-    
-    public var encoded : Data! {
-        try? JSONEncoder.init().encode(self)
-    }
-    
-    @discardableResult
-    public mutating func decode(from: Data!) -> Bool {
-        guard let from = from else {
-            return false
-        }
-        guard let new = try? JSONDecoder.init().decode(Self.self, from: from) else {
-            return false
-        }
-        self = new
-        return true
-    }
-
-}
+//extension Attributes : Codable {
+//
+//    public var encoded : Data! {
+//        try? JSONEncoder.init().encode(self)
+//    }
+//
+//    @discardableResult
+//    public func decode(from: Data!) -> Bool {
+//        guard let from = from else {
+//            return false
+//        }
+//        guard let new = try? JSONDecoder.init().decode(Self.self, from: from) else {
+//            return false
+//        }
+//        self = new
+//        return true
+//    }
+//
+//}

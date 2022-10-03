@@ -503,3 +503,9 @@ extension SKColor {
         .init(self.arrayOfHSBA)
     }
 }
+
+extension String {
+    var asHSBAInfo : HSBAInfo {
+        .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, upto: 4), fallback: 1)
+    }
+}
