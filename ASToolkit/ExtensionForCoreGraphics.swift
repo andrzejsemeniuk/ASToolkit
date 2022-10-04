@@ -577,6 +577,11 @@ public struct CGLineStyle : Codable, Equatable {
 
     func pattern(_ fallback: [CGFloat]) -> [CGFloat] { self.pattern ?? fallback }
 
+//    var linePattern     : [CGFloat]! {
+//        get { dashPattern }
+//        set { dashPattern = newValue }
+//    }
+
     func filled(with: CGLineStyle?) -> CGLineStyle {
         var r = self
         r.lineWidth         ?= with?.lineWidth
@@ -595,6 +600,10 @@ public struct CGLineStyle : Codable, Equatable {
         case miterLimit     = "m"
         case dashPhase      = "p"
         case dashPattern    = "d"
+    }
+    
+    static func create(_ width: CGFloat) -> CGLineStyle {
+        .init(lineWidth: width, lineCap: .butt, lineJoin: .miter, miterLimit: 10, dashPhase: 0, dashPattern: [])
     }
 }
 
