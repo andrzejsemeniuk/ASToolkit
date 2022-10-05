@@ -541,7 +541,40 @@ public extension Int32 {
 }
 
 
-public struct CGLineStyle : Codable, Equatable {
+public struct CGLineStyle : Codable, Equatable, RawRepresentable {
+    
+    internal init(lineWidth: CGFloat? = 1, lineCap: CGLineCap? = .butt, lineJoin: CGLineJoin? = .miter, miterLimit: CGFloat? = 10, dashPhase: CGFloat? = 0, dashPattern: [CGFloat]? = []) {
+        self.lineWidth = lineWidth
+        self.lineCap = lineCap
+        self.lineJoin = lineJoin
+        self.miterLimit = miterLimit
+        self.dashPhase = dashPhase
+        self.dashPattern = dashPattern
+    }
+    
+    
+    public init?(rawValue: String) {
+        let split = rawValue.split("|")
+        lineWidth = split[safe: 0]?.asCGFloat
+        lineCap = split[safe: 1]?.asInt == nil ? nil : CGLineCap.init(rawValue: split[1].asInt?.asInt32 ?? 0)
+        lineJoin = split[safe: 2]?.asInt == nil ? nil : CGLineJoin.init(rawValue: split[2].asInt?.asInt32 ?? 0)
+        miterLimit = split[safe: 3]?.asCGFloat
+        dashPhase = split[safe: 4]?.asCGFloat
+        dashPattern = split[safe: 5]?.asArrayOfDouble().asArrayOfCGFloat
+    }
+    
+    public var rawValue : String {
+        "\(lineWidth == nil ? "nil" : lineWidth.format2)"
+        + "|\(lineCap?.rawValue.asString ?? "nil")"
+        + "|\(lineJoin?.rawValue.asString ?? "nil")"
+        + "|\(miterLimit?.format2 ?? "nil")"
+        + "|\(dashPhase?.format2 ?? "nil")"
+        + "|\(dashPattern?.asArrayOfString() ?? "nil")"
+    }
+    
+    
+    public typealias RawValue = String
+    
     var lineWidth       : CGFloat!      = 1
     var lineCap         : CGLineCap!    = .butt
     var lineJoin        : CGLineJoin!   = .miter
