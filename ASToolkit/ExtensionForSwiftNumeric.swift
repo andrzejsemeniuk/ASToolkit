@@ -330,6 +330,24 @@ public extension CGFloat {
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
 }
 
+extension CGFloat : RawRepresentable {
+    
+    public init?(rawValue: String) {
+        if let v = CGFloat(rawValue) {
+            self = v
+        } else {
+            return nil
+        }
+    }
+    
+    public var rawValue: String {
+        NSString(format: "%f", self) as String
+    }
+    
+    public typealias RawValue = String
+    
+    
+}
 
 public extension CGFloat {
     var asInt           : Int { Int(self) }
