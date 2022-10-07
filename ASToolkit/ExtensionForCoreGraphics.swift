@@ -122,6 +122,17 @@ extension CGPoint {
     }()
 }
 
+extension Array where Element == CGPoint {
+    
+    var bounds : CGRect? {
+        guard count > 0 else { return nil }
+        let X = map { $0.x }
+        let Y = map { $0.y }
+        return .init(x0: X.min()!, x1: X.max()!, y0: Y.min()!, y1: Y.max()!)
+    }
+    
+}
+
 public extension CGSize {
 
     static let minimal = CGSize(side: 1)
@@ -166,6 +177,11 @@ public extension CGRect {
 
 	static let minimal = CGRect(side:1)
 
+    var x0 : CGFloat { minX }
+    var x1 : CGFloat { maxX }
+    var y0 : CGFloat { minY }
+    var y1 : CGFloat { maxY }
+    
     init(_ point:CGPoint) {
         self.init(x:point.x, y:point.y, width:0, height:0)
     }
