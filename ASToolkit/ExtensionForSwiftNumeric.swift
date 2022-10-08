@@ -651,6 +651,10 @@ public extension UInt64 {
 
     func isInInterval(_ l:UInt64, _ u:UInt64) -> Bool { return l <= self && self < u }
 
+    
+    static var timestampYYYYMMDD                    : UInt64 { UInt64(Date().timeIntervalSince1970) / 1000000 }
+    static var timestampYYYYMMDDhhmmss              : UInt64 { UInt64(Date().timeIntervalSince1970) }
+    static var timestampYYYYMMDDhhmmssms            : UInt64 { UInt64(Date().timeIntervalSince1970 * 1000.0) }
 }
 
 public extension Int64 {
