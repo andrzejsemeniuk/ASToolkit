@@ -353,7 +353,49 @@ extension SKNode
         c.forEach { $0.removeFromParent() }
         return c
     }
+    
+    public func moveAllChildren(toParent: SKNode, withHiding: Bool) {
+        children.forEach {
+            $0.move(toParent: toParent)
+        }
+        if withHiding {
+            self.isHidden = true
+            toParent.isHidden = false
+        }
+    }
+    
+    public func swapAllChildren(toParent: SKNode, withHiding: Bool) {
+        let children0 = children
+        let children1 = toParent.children
+        
+        removeAllChildren()
+        toParent.removeAllChildren()
+        
+        children0.forEach {
+            $0.move(toParent: toParent)
+        }
+        children1.forEach {
+            $0.move(toParent: self)
+        }
+        if withHiding {
+            self.isHidden = true
+            toParent.isHidden = false
+        }
+    }
+    
+    @discardableResult
+    public func addChildNode(named: String? = nil) -> SKNode {
+        let n = SKNode()
+        addChild(n)
+        n.name = named
+        return n
+    }
 }
+
+
+
+
+
 
 public extension SKSpriteNode {
     
