@@ -109,6 +109,10 @@ extension CGPoint {
         sqrt(x * x + y * y)
 	}
 
+    public var lengthSquared : CGFloat {
+        x * x + y * y
+    }
+
     public var clampedTo01      : CGPoint {
         .init(x: x.clampedTo01, y: y.clampedTo01)
     }
@@ -131,6 +135,24 @@ extension Array where Element == CGPoint {
         return .init(x0: X.min()!, x1: X.max()!, y0: Y.min()!, y1: Y.max()!)
     }
     
+    func indexOfPointWithMinimalDistance(to: CGPoint) -> Int? {
+        guard isNotEmpty else { return nil }
+        var minimalIndex : Int = 0
+        let measure = { (a: CGPoint, b: CGPoint) -> CGFloat in
+//            abs(a.x - b.x) + abs(a.y - b.y)
+            (a-b).lengthSquared
+        }
+        var minimalDistance : CGFloat = measure(.zero,self[0])
+        for i in 1..<count {
+//            let d = self[i].distance(to: to)
+            let d = measure(self[i],to)
+            if d < minimalDistance {
+                minimalDistance = d
+                minimalIndex = i
+            }
+        }
+        return minimalIndex
+    }
 }
 
 public extension CGSize {
@@ -424,6 +446,7 @@ public extension CGPoint
     }
     
     func distance               (to: CGPoint) -> CGFloat { (to-self).length }
+    func distanceSquared        (to: CGPoint) -> CGFloat { (to-self).lengthSquared }
 }
 
 extension CGRect
