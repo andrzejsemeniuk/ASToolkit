@@ -882,3 +882,34 @@ public extension Array where Element == Bool {
         return [false,true].generate(n)
     }
 }
+
+public extension Array where Element : Comparable {
+    
+    func minimal(_ less: (Element,Element)->Bool) -> Element? {
+        guard isNotEmpty else { return nil }
+        return self.reduce(first!, { before,current in
+            less(before,current) ? before : current
+        })
+    }
+    func maximal(_ less: (Element,Element)->Bool) -> Element? {
+        guard isNotEmpty else { return nil }
+        return self.reduce(first!, { before,current in
+            less(before,current) ? current : before
+        })
+    }
+    func minimalIndex(_ less: (Element,Element)->Bool) -> Int? {
+        guard isNotEmpty else { return nil }
+        let E = self.enumerated()
+        return E.reduce(0, { before,current in
+            less(self[before],current.1) ? before : current.0
+        })
+    }
+    func maximalIndex(_ less: (Element,Element)->Bool) -> Int? {
+        guard isNotEmpty else { return nil }
+        let E = self.enumerated()
+        return E.reduce(0, { before,current in
+            less(self[before],current.1) ? current.0 : before
+        })
+    }
+
+}
