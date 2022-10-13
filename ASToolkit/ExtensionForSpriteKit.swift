@@ -390,6 +390,12 @@ extension SKNode
         n.name = named
         return n
     }
+    
+    public func addChildNode<NODE: SKNode>(_ n: NODE, named: String? = nil) -> NODE {
+        addChild(n)
+        n.name ?= named
+        return n
+    }
 }
 
 
