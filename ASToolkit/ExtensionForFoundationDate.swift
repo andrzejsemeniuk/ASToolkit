@@ -105,6 +105,7 @@ extension Date {
     }
     
     public func formatted(_ format:String) -> String {
+        // "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
