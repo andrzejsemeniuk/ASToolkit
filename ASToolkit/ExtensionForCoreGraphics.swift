@@ -244,6 +244,10 @@ public extension CGRect {
         self.init(x: min(x0,x1), y: min(y0,y1), width: max(x0,x1)-min(x0,x1), height: max(y0,y1)-min(y0,y1))
     }
     
+    init(_ p0: CGPoint, _ p1: CGPoint) {
+        self.init(x0: p0.x, x1: p1.x, y0: p0.y, y1: p1.y)
+    }
+    
     var diagonal: CGFloat {
         return sqrt(width*width + height*height)
     }
