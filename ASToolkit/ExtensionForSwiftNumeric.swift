@@ -196,7 +196,12 @@ public extension Double {
     var format2 : String { NSString(format: "%.2f", self) as String }
     var format3 : String { NSString(format: "%.3f", self) as String }
     var format4 : String { NSString(format: "%.4f", self) as String }
-    
+
+    var format1p : String { NSString(format: "%+.1f", self) as String }
+    var format2p : String { NSString(format: "%+.2f", self) as String }
+    var format3p : String { NSString(format: "%+.3f", self) as String }
+    var format4p : String { NSString(format: "%+.4f", self) as String }
+
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
 
     var format22 : String { NSString(format: "%3.2f", self) as String }
