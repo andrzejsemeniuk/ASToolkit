@@ -132,6 +132,13 @@ public extension Double
         self = self.crunched(into: 1.0)
         return self
     }
+    
+    var fromFractionToPercent : Double {
+        // fraction : 1 = 100%
+        //  0.97 = -3%
+        //  1.02 = +2%
+        (self - 1.0) * 100.0
+    }
         
 }
 
