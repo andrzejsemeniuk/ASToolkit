@@ -255,6 +255,15 @@ public extension CGRect {
     static var almostZero:CGRect = {
         return CGRect(origin:CGPoint.almostZero, size:CGSize.almostZero)
     }()
+    
+    func scaled(_ factor: CGFloat) -> Self {
+        var r = self
+        r.size.width *= factor
+        r.size.height *= factor
+        r.origin.x += (size.width - r.width)/2
+        r.origin.y += (size.height - r.height)/2
+        return r
+    }
 }
 
 extension CGAffineTransform {

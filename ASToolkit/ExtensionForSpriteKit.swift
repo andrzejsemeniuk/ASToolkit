@@ -526,6 +526,20 @@ extension SKScene
 
 
 
+public extension SKNode {
+    
+    func adjustScaleToFit(size: CGSize) {
+        guard frame.width > 0, frame.height > 0, size.width > 0, size.height > 0 else { return }
+        
+        let sx = size.width / frame.width
+        let sy = size.height / frame.height
+        
+        let s = min(sx,sy)
+        
+        self.scale = s
+    }
+}
+
 
 public extension SKLabelNode {
 
