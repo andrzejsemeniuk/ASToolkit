@@ -23,7 +23,7 @@ protocol HavingAttributes {
 }
 
 
-public class Attributes : Codable, Equatable {
+public class Attributes : Codable, Equatable, ObservableObject {
     
     public static func == (lhs: Attributes, rhs: Attributes) -> Bool {
         lhs === rhs
@@ -31,13 +31,32 @@ public class Attributes : Codable, Equatable {
     
     
     
-    public var title        : String?
+    @Published public var title        : String?
     
-    public var dictionary   : [String : String]                     = [:]
+    @Published public var dictionary   : [String : String]                     = [:]
     
     
     
     public static let empty : Attributes = .init()
+    
+    
+    
+    enum CodingKeys : String, CodingKey {
+        case title, dictionary
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = c.decode(.title, nil)
+        self.dictionary = c.decode(.dictionary, [:])
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(title, forKey: .title)
+        try c.encode(dictionary, forKey: .dictionary)
+    }
+    
     
     
     
