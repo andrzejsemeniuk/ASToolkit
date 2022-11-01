@@ -95,35 +95,43 @@ public struct CGDimensions
 
 
 
-extension CGPoint {
+public extension CGPoint {
     
-    public init(_ x:CGFloat, _ y:CGFloat) {
+    init(_ x:CGFloat, _ y:CGFloat) {
         self.init(x:x, y:y)
     }
     
-    public init(xy:CGFloat) {
+    init(xy:CGFloat) {
         self.init(x:xy, y:xy)
     }
 
-	public var length : CGFloat {
+	var length : CGFloat {
         sqrt(x * x + y * y)
 	}
 
-    public var lengthSquared : CGFloat {
+    var lengthSquared : CGFloat {
         x * x + y * y
     }
 
-    public var clampedTo01      : CGPoint {
+    var clampedTo01      : CGPoint {
         .init(x: x.clampedTo01, y: y.clampedTo01)
     }
 
-    public var asCGSize:CGSize {
+    var asCGSize:CGSize {
         CGSize(width:x,height:y)
     }
     
-    static public var almostZero:CGPoint = {
+    static var almostZero:CGPoint = {
         CGPoint(x: CGFloat.leastNormalMagnitude, y: CGFloat.leastNormalMagnitude)
     }()
+    
+    func with(y: CGFloat) -> CGPoint {
+        .init(x: x, y: y)
+    }
+    
+    func with(x: CGFloat) -> CGPoint {
+        .init(x: x, y: y)
+    }
 }
 
 extension Array where Element == CGPoint {
