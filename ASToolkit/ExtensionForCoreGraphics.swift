@@ -178,6 +178,11 @@ public extension CGSize {
     var asCGPoint        : CGPoint {
         CGPoint(x:width,y:height)
     }
+
+    var asCGRect         : CGRect {
+        .init(center: .zero, size: self)
+    }
+
     var diagonal         : CGFloat {
         sqrt(width*width + height*height)
     }

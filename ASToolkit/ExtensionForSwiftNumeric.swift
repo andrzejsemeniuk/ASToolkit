@@ -629,7 +629,9 @@ public extension Int {
     var asUInt64        : UInt64        { UInt64(self) }
     var asInt32         : Int32         { Int32(self) }
 
-    var pick            : Int { self < 0 ? .random(in: self..<0) : self > 0 ? .random(in: 0..<self) : 0 }
+    var pick            : Int           { self < 0 ? .random(in: self..<0) : self > 0 ? .random(in: 0..<self) : 0 }
+
+    var formatp         : String        { NSString(format: "%+d", self) as String }
 
 }
 
