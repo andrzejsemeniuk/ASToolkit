@@ -192,15 +192,15 @@ public extension Double {
 }
 
 public extension Double {
-    var format1 : String { NSString(format: "%.1f", self) as String }
-    var format2 : String { NSString(format: "%.2f", self) as String }
-    var format3 : String { NSString(format: "%.3f", self) as String }
-    var format4 : String { NSString(format: "%.4f", self) as String }
+    var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
+    var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
+    var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
+    var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
 
-    var format1p : String { NSString(format: "%+.1f", self) as String }
-    var format2p : String { NSString(format: "%+.2f", self) as String }
-    var format3p : String { NSString(format: "%+.3f", self) as String }
-    var format4p : String { NSString(format: "%+.4f", self) as String }
+    var format1p : String { self == 0 ? "0.0" : NSString(format: "%+.1f", self) as String }
+    var format2p : String { self == 0 ? "0.00" : NSString(format: "%+.2f", self) as String }
+    var format3p : String { self == 0 ? "0.000" : NSString(format: "%+.3f", self) as String }
+    var format4p : String { self == 0 ? "0.0000" : NSString(format: "%+.4f", self) as String }
 
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
 
@@ -331,11 +331,11 @@ public extension CGFloat {
 }
 
 public extension CGFloat {
-    var format0 : String { NSString(format: "%.0f", self) as String }
-    var format1 : String { NSString(format: "%.1f", self) as String }
-    var format2 : String { NSString(format: "%.2f", self) as String }
-    var format3 : String { NSString(format: "%.3f", self) as String }
-    var format4 : String { NSString(format: "%.4f", self) as String }
+    var format0 : String { self == 0 ? "0" : NSString(format: "%.0f", self) as String }
+    var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
+    var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
+    var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
+    var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
 
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
 
@@ -444,10 +444,10 @@ public extension Float {
 }
 
 public extension Float {
-    var format1 : String { NSString(format: "%.1f", self) as String }
-    var format2 : String { NSString(format: "%.2f", self) as String }
-    var format3 : String { NSString(format: "%.3f", self) as String }
-    var format4 : String { NSString(format: "%.4f", self) as String }
+    var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
+    var format2 : String { self == 0 ? "0.00" :  NSString(format: "%.2f", self) as String }
+    var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
+    var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
     
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
 }
