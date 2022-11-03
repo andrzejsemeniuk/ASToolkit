@@ -132,6 +132,14 @@ public extension CGPoint {
     func with(x: CGFloat) -> CGPoint {
         .init(x: x, y: y)
     }
+    
+    func with(y point: CGPoint) -> CGPoint {
+        .init(x: x, y: point.y)
+    }
+    
+    func with(x point: CGPoint) -> CGPoint {
+        .init(x: point.x, y: y)
+    }
 }
 
 extension Array where Element == CGPoint {
