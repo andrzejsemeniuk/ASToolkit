@@ -54,3 +54,10 @@ public extension Collection where Element: Comparable {
     }
     
 }
+
+public extension Collection where Element: Hashable {
+    
+    var asSet : Set<Element> {
+        .init(self)
+    }
+}
