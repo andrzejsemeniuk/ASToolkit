@@ -211,10 +211,12 @@ public extension Color {
     
     static let gray1    = Color.init(white: 0.1)
     static let gray2    = Color.init(white: 0.2)
+    static let gray25   = Color.init(white: 0.25)
     static let gray3    = Color.init(white: 0.3)
     static let gray35   = Color.init(white: 0.35)
     static let gray4    = Color.init(white: 0.4)
     static let gray45   = Color.init(white: 0.45)
+    static let gray48   = Color.init(white: 0.48)
     static let gray5    = Color.init(white: 0.5)
     static let gray55   = Color.init(white: 0.55)
     static let gray6    = Color.init(white: 0.6)
