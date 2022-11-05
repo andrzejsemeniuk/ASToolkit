@@ -582,21 +582,31 @@ public struct CGScreen
 #endif
 
 public struct CGSlope {
-    public var point0  : CGPoint
-    public var point1  : CGPoint
-    public var dy      : CGFloat   { point1.y - point0.y }
-    public var dx      : CGFloat   { point1.x - point0.x }
-    public var slope   : CGFloat?  { dx == 0 ? nil : dy/dx }
-    
+    public let point0  : CGPoint
+    public let point1  : CGPoint
+    public let dy      : CGFloat
+    public let dx      : CGFloat
+    public let slope   : CGFloat!
+    public let b       : CGFloat!
+
     public init(point0: CGPoint, point1: CGPoint) {
         self.point0 = point0
         self.point1 = point1
+        dy      = point1.y - point0.y
+        dx      = point1.x - point0.x
+        slope   = dx == 0 ? nil : dy/dx
+        b       = dx == 0 ? nil : (point0.y - slope * point0.x)
     }
     
-    public func y(x: CGFloat) -> CGFloat? {
+    public static func create(_ point0: CGPoint, _ point1: CGPoint) -> Self {
+        .init(point0: point0, point1: point1)
+    }
+    
+    public func y(x: CGFloat) -> CGFloat! {
         // y = mx + b
         guard let slope = slope else { return nil }
-        return slope * (x - point0.x) + point0.y
+//        return slope * (x - point0.x) + point0.y
+        return slope * x + b
     }
 }
 
