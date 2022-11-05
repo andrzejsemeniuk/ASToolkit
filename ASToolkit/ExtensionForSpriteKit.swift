@@ -788,39 +788,49 @@ public extension SKShapeNode
 extension SKShapeNode {
     
     @discardableResult
-    open func configured (position          : CGPoint? = nil,
-                          fillColor         : UIColor? = nil,
-                          strokeColor       : UIColor? = nil,
-                          glowWidth         : CGFloat? = nil,
-                          lineWidth         : CGFloat? = nil,
-                          lineCap           : CGLineCap? = nil,
-                          lineJoin          : CGLineJoin? = nil,
-                          miterLimit        : CGFloat? = nil,
-                          lineDash          : [CGFloat]? = nil) -> Self {
-        if let position = position {
-            self.position = position
-        }
-        if let fillColor = fillColor {
-            self.fillColor = fillColor
-        }
-        if let strokeColor = strokeColor {
-            self.strokeColor = strokeColor
-        }
-        else {
-            self.strokeColor = .clear
-        }
-        if let lineWidth = lineWidth {
-            self.lineWidth = lineWidth
-        }
-        if let lineCap = lineCap {
-            self.lineCap = lineCap
-        }
-        if let lineJoin = lineJoin {
-            self.lineJoin = lineJoin
-        }
-        if let miterLimit = miterLimit {
-            self.miterLimit = miterLimit
-        }
+    public func configured (position        : CGPoint? = nil,
+                            fillColor         : UIColor? = nil,
+                            strokeColor       : UIColor? = nil,
+                            glowWidth         : CGFloat? = nil,
+                            lineWidth         : CGFloat? = nil,
+                            lineCap           : CGLineCap? = nil,
+                            lineJoin          : CGLineJoin? = nil,
+                            miterLimit        : CGFloat? = nil,
+                            lineDash          : [CGFloat]? = nil) -> Self {
+        
+        self.position       ?= position
+        self.fillColor      ?= fillColor
+        self.strokeColor    = strokeColor ?? .clear
+        self.glowWidth      ?= glowWidth
+        self.lineWidth      ?= lineWidth
+        self.lineCap        ?= lineCap
+        self.lineJoin       ?= lineJoin
+        self.miterLimit     ?= miterLimit
+        
+//        if let position = position {
+//            self.position = position
+//        }
+//        if let fillColor = fillColor {
+//            self.fillColor = fillColor
+//        }
+//        if let strokeColor = strokeColor {
+//            self.strokeColor = strokeColor
+//        }
+//        else {
+//            self.strokeColor = .clear
+//        }
+//        if let lineWidth = lineWidth {
+//            self.lineWidth = lineWidth
+//        }
+//        if let lineCap = lineCap {
+//            self.lineCap = lineCap
+//        }
+//        if let lineJoin = lineJoin {
+//            self.lineJoin = lineJoin
+//        }
+//        if let miterLimit = miterLimit {
+//            self.miterLimit = miterLimit
+//        }
         if let lineDash = lineDash {
             addDashes(lengths: lineDash)
         }
@@ -828,7 +838,7 @@ extension SKShapeNode {
     }
     
     @discardableResult
-    open func with(fillColor        : UIColor? = nil,
+    public func with(fillColor        : UIColor? = nil,
                    strokeColor      : UIColor? = nil,
                    glowWidth        : CGFloat? = nil,
                    lineWidth        : CGFloat? = nil,
@@ -850,12 +860,12 @@ extension SKShapeNode {
         return self
     }
     
-    open func addDashes(phase: CGFloat = 0, lengths: [CGFloat]) {
+    public func addDashes(phase: CGFloat = 0, lengths: [CGFloat]) {
         path = path?.copy(dashingWithPhase: phase, lengths: lengths)
     }
     
     @discardableResult
-    open func with(dash lengths: [CGFloat], phase: CGFloat = 0) -> Self {
+    public func with(dash lengths: [CGFloat], phase: CGFloat = 0) -> Self {
         path = path?.copy(dashingWithPhase: phase, lengths: lengths)
         return self
     }
