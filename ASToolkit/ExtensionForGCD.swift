@@ -38,3 +38,9 @@ public extension DispatchQueue {
     
 }
 
+public func later(_ block: @escaping Block) {
+    DispatchQueue.main.async {
+        block()
+    }
+}
+
