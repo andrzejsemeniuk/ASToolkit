@@ -391,12 +391,16 @@ extension Array where Element: Equatable {
 
 public extension Array {
 
-	func compacted() -> [Element] {
-//		return self.filter({ $0 != nil }).map { $0! })
-		return self.compactMap({
-			return $0
-		})
-	}
+    func compacted() -> [Element] {
+//        return self.filter({ $0 != nil }).map { $0! })
+        return self.compactMap({
+            return $0
+        })
+    }
+    
+}
+
+public extension Array {
     
     var odd : [Element] {
         enumerated().filter { $0.0.isOdd }.map { $0.1 }
@@ -626,10 +630,9 @@ public extension Array {
         r.reserveCapacity(count)
         r.append(self[0])
         for i in 1..<count {
-            if equal(self[i-1],self[i]) {
-                continue
+            if !equal(r.last!,self[i]) {
+                r.append(self[i])
             }
-            r.append(self[i])
         }
         return r
     }
