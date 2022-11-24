@@ -390,6 +390,17 @@ extension Array where Element: Equatable {
 }
 
 public extension Array {
+    
+    func contains(_ element: Element, equatable: (Element,Element)->Bool) -> Bool {
+        first(where: { equatable($0, element) }) != nil
+    }
+    
+    func predicate(_ predicate: (Element)->Bool) -> Bool {
+        first(where: { predicate($0) }) != nil
+    }
+}
+
+public extension Array {
 
     func compacted() -> [Element] {
 //        return self.filter({ $0 != nil }).map { $0! })
