@@ -650,3 +650,13 @@ public extension String {
     var asDataUTF8  : Data      { .init(utf8) }
 
 }
+
+public extension String {
+    
+    var formatterForDate : DateFormatter {
+        let r = DateFormatter()
+        r.dateFormat = self //format //"yyyy.MM.dd"
+        return r
+    }
+
+}
