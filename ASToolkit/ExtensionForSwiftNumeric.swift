@@ -154,6 +154,14 @@ public extension Double {
         return self
     }
     
+    func max(_ v: Double) -> Double {
+        Swift.max(self,v)
+    }
+
+    func min(_ v: Double) -> Double {
+        Swift.min(self,v)
+    }
+
 }
 
 //public func pick<T>(_ from: [T]) -> T {
