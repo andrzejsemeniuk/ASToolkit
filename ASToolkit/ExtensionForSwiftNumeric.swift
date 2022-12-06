@@ -189,6 +189,7 @@ public extension Double {
 
     var asInt           : Int { Int(self) }
     var asInt64         : Int64 { Int64(self) }
+    var asUInt64        : UInt64 { UInt64(self) }
 //    var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
 //    var asInt64Rounded  : Int64 { self < 0.5 ? Int64(self) : Int64(self) + 1 }
     var asFloat         : Float { Float(self) }
@@ -196,10 +197,111 @@ public extension Double {
 
     var from01to11      : Self { (self * 2 - 1) }
     var from11to01      : Self { ((self + 1) / 2) }
+    
+    var abs             : Self { Swift.abs(self) }
+    var floor           : Self { Darwin.floor(self) }
+    var ceil            : Self { Darwin.ceil(self) }
 
 }
 
+extension Int64 {
+
+    // https://stackoverflow.com/questions/18267211/ios-convert-large-numbers-to-smaller-format
+    static fileprivate let formatterWithAbbreviation : NumberFormatter = {
+        let numFormatter = NumberFormatter()
+//        numFormatter.positiveSuffix = abbreviation.suffix
+//        numFormatter.negativeSuffix = abbreviation.suffix
+        numFormatter.allowsFloats = true
+        numFormatter.minimumIntegerDigits = 1
+        numFormatter.minimumFractionDigits = 0
+        numFormatter.maximumFractionDigits = 2
+        numFormatter.locale = .current
+        return numFormatter
+    }()
+    var formatWithAbbrevation : String {
+
+        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+        
+        let abbreviations: [Abbrevation] = [
+            (0, 1, ""),
+            (1000.0, 1000.0, "K"),
+            (999_999.0, 1_000_000.0, "M"),
+            (999_999_999.0, 1_000_000_000.0, "G"),
+            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
+            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
+            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
+        ]
+
+        let startValue = Double(abs(self))
+        
+        let abbreviation: Abbrevation = {
+            var prevAbbreviation = abbreviations[0]
+            for tmpAbbreviation in abbreviations {
+                if (startValue < tmpAbbreviation.threshold) {
+                    break
+                }
+                prevAbbreviation = tmpAbbreviation
+            }
+            return prevAbbreviation
+        }()
+
+        let value = Double(self) / abbreviation.divisor
+
+        let formatter = Self.formatterWithAbbreviation
+        
+        formatter.positiveSuffix = abbreviation.suffix
+        formatter.negativeSuffix = abbreviation.suffix
+        
+        return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
+    }
+}
+
 public extension Double {
+    
+    static let formatterAsUInt64 : NumberFormatter = {
+        let r = NumberFormatter.init()
+        r.numberStyle = .ordinal
+        return r
+    }()
+    
+//    func formatAsInt64WithAcronym(decimals: Int) -> String {
+//        let v = self.asInt64
+//        let p = log10(self.abs).asInt
+//        let suffix : String
+//        let d1 = pow(10,p.asDouble).asInt64
+//        switch p {
+//            case  0: return "\(v)"
+//            case  1: return "\(v)"
+//            case  2: return "\(v)"
+//            case  3: return "\(v/d1).K"
+//            case  4: return "\(v)K"
+//            case  5: return "\(v)K"
+//            case  6: return "\(v)M"
+//            case  7: return "\(v)M"
+//            case  8: return "\(v)M"
+//            case  9: return "\(v)G"
+//            case 10: return "\(v)G"
+//            case 11: return "\(v)G"
+//            case 12: return "\(v)T"
+//            case 13: return "\(v)T"
+//            case 14: return "\(v)T"
+//            case 15: return "\(v)P"
+//            case 16: return "\(v)P"
+//            case 17: return "\(v)P"
+//            case 18: return "\(v)E"
+//            case 19: return "\(v)E"
+//            case 20: return "\(v)E"
+//            default: return "\(v)!"
+//        }
+//
+//    }
+    
+    var formatWithAbbreviation : String {
+        self.asInt64.formatWithAbbrevation
+    }
+    
+    var format0 : String { self == 0 ? "0" : Self.formatterAsUInt64.string(from: self.asUInt64 as NSNumber) ?? "?" } //NSString(format: "%U", self.asUInt64) as String }
+    
     var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
     var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
     var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
