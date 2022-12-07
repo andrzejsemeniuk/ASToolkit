@@ -7,7 +7,53 @@
 //
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+
+public func | (string:String,font:UIFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(string: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func | (string:NSAttributedString,font:UIFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func |= (string:inout NSAttributedString, font:UIFont) {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    string = r
+}
+
+#endif
+
+#if os(macOS)
+import AppKit
+
+public func | (string:String,font:NSFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(string: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func | (string:NSAttributedString,font:NSFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func |= (string:inout NSAttributedString, font:NSFont) {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    string = r
+}
+
+
+#endif
 
 extension NSAttributedString {
     public subscript(_ text:String) -> NSRange {
@@ -63,18 +109,6 @@ public func | (string:NSAttributedString,color:UIColor) -> NSAttributedString {
     return r
 }
 
-
-public func | (string:String,font:UIFont) -> NSAttributedString {
-    let r = NSMutableAttributedString(string: string)
-    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
-    return r
-}
-
-public func | (string:NSAttributedString,font:UIFont) -> NSAttributedString {
-    let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
-    return r
-}
 
 
 public func | (string:NSAttributedString,attributes:[NSAttributedString.Key:Any]) -> NSAttributedString {
@@ -151,12 +185,6 @@ public func |= (a:inout NSAttributedString,b:NSAttributedString)  {
 public func |= (string:inout NSAttributedString, color:UIColor) {
     let r = NSMutableAttributedString(attributedString: string)
     r.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:0,length:r.length))
-    string = r
-}
-
-public func |= (string:inout NSAttributedString, font:UIFont) {
-    let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
     string = r
 }
 
