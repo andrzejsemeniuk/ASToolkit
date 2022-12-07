@@ -104,6 +104,9 @@ public extension Double
     var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
     var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
 
+    func isInClosedInterval (_ l: Double, _ u: Double) -> Bool { l <= self && self <= u }
+    func isInOpenInterval   (_ l: Double, _ u: Double) -> Bool { l < self && self < u }
+
     func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
     func lerp01              (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
     func lerp                (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
@@ -218,7 +221,8 @@ extension Int64 {
         numFormatter.locale = .current
         return numFormatter
     }()
-    var formatWithAbbrevation : String {
+    
+    var formatWithAbbrevationAsString : String {
 
         typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
         
@@ -254,6 +258,42 @@ extension Int64 {
         
         return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
     }
+//    var formatWithAbbrevationAsAttributedString : AttributedString {
+//
+//        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+//
+//        let abbreviations: [Abbrevation] = [
+//            (0, 1, ""),
+//            (1000.0, 1000.0, "K"),
+//            (999_999.0, 1_000_000.0, "M"),
+//            (999_999_999.0, 1_000_000_000.0, "G"),
+//            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
+//            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
+//            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
+//        ]
+//
+//        let startValue = Double(abs(self))
+//
+//        let abbreviation: Abbrevation = {
+//            var prevAbbreviation = abbreviations[0]
+//            for tmpAbbreviation in abbreviations {
+//                if (startValue < tmpAbbreviation.threshold) {
+//                    break
+//                }
+//                prevAbbreviation = tmpAbbreviation
+//            }
+//            return prevAbbreviation
+//        }()
+//
+//        let value = Double(self) / abbreviation.divisor
+//
+//        let formatter = Self.formatterWithAbbreviation
+//
+//        formatter.positiveSuffix = abbreviation.suffix
+//        formatter.negativeSuffix = abbreviation.suffix
+//
+//        return formatter.attributedString(for: NSNumber(value: value), withDefaultAttributes: )(from: NSNumber(value: value)) ?? "\(self)"
+//    }
 }
 
 public extension Double {
@@ -264,42 +304,13 @@ public extension Double {
         return r
     }()
     
-//    func formatAsInt64WithAcronym(decimals: Int) -> String {
-//        let v = self.asInt64
-//        let p = log10(self.abs).asInt
-//        let suffix : String
-//        let d1 = pow(10,p.asDouble).asInt64
-//        switch p {
-//            case  0: return "\(v)"
-//            case  1: return "\(v)"
-//            case  2: return "\(v)"
-//            case  3: return "\(v/d1).K"
-//            case  4: return "\(v)K"
-//            case  5: return "\(v)K"
-//            case  6: return "\(v)M"
-//            case  7: return "\(v)M"
-//            case  8: return "\(v)M"
-//            case  9: return "\(v)G"
-//            case 10: return "\(v)G"
-//            case 11: return "\(v)G"
-//            case 12: return "\(v)T"
-//            case 13: return "\(v)T"
-//            case 14: return "\(v)T"
-//            case 15: return "\(v)P"
-//            case 16: return "\(v)P"
-//            case 17: return "\(v)P"
-//            case 18: return "\(v)E"
-//            case 19: return "\(v)E"
-//            case 20: return "\(v)E"
-//            default: return "\(v)!"
-//        }
-//
-//    }
-    
-    var formatWithAbbreviation : String {
-        self.asInt64.formatWithAbbrevation
+    var withAbbreviationAsString : String {
+        self.asInt64.formatWithAbbrevationAsString
     }
-    
+//    var withAbbreviationAsAttributedString : String {
+//        self.asInt64.formatWithAbbrevation
+//    }
+
     var format0 : String { self == 0 ? "0" : Self.formatterAsUInt64.string(from: self.asUInt64 as NSNumber) ?? "?" } //NSString(format: "%U", self.asUInt64) as String }
     
     var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
@@ -364,6 +375,9 @@ public extension CGFloat
     var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
     var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
     var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
+    
+    func isInClosedInterval (_ l: CGFloat, _ u: CGFloat) -> Bool { l <= self && self <= u }
+    func isInOpenInterval   (_ l: CGFloat, _ u: CGFloat) -> Bool { l < self && self < u }
     
     func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
     func lerp01              (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
@@ -525,6 +539,9 @@ public extension Float
     var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
     var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
     
+    func isInClosedInterval (_ l: Float, _ u: Float) -> Bool { l <= self && self <= u }
+    func isInOpenInterval   (_ l: Float, _ u: Float) -> Bool { l < self && self < u }
+
     func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
     func lerp01              (from:Self, to:Self) -> Self { min(1,max(0,self.lerp(from:from,to:to))) }
     static func lerp         (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
