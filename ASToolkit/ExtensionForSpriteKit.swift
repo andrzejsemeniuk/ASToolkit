@@ -668,6 +668,52 @@ public extension SKShapeNode
     }
 
 
+    static func line(x0: CGFloat, y0: CGFloat, x1: CGFloat, y1: CGFloat,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode(lines:[.init(x0, y0),.init(x1, y1)])
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
+                        lineDash        : lineDash)
+        return r
+    }
+
+    static func line(x0: CGFloat, x1: CGFloat, y0: CGFloat, y1: CGFloat,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode {
+        let r = SKShapeNode(lines:[.init(x0, y0),.init(x1, y1)])
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
+                        lineDash        : lineDash)
+        return r
+    }
+
     static func line(from: CGPoint, to: CGPoint,
                      position           : CGPoint? = nil,
                      fillColor          : UIColor? = nil,
