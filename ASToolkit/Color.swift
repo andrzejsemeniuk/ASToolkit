@@ -209,6 +209,7 @@ public struct HSBAInfo : Codable, Equatable {
     static let red      : Self = .init(0,1,1,1)
     static let yellow   : Self = .init(0.13,1,1,1)
     static let white    : Self = .init(0,0,1,1)
+    static let clear    : Self = .init(1,1,1,0)
     
     static func generate(count: Int, from: HSBAInfo, to: HSBAInfo) -> [HSBAInfo] {
         let divisor : Double = max(1, count-1).asDouble
