@@ -532,6 +532,9 @@ public extension Array where Element == String {
     var joinedByComma : String {
         self.joined(separator: ",")
     }
+    var joinedByPipe : String {
+        self.joined(separator: "|")
+    }
     var joinedByNewline : String {
         self.joined(separator: "\n")
     }
