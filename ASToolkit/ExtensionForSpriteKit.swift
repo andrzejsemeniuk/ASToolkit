@@ -281,6 +281,12 @@ extension SKNode
         return self
     }
 
+    public func positioned(x: CGFloat? = nil, y: CGFloat? = nil) -> Self {
+        self.position.x ?= x
+        self.position.y ?= y
+        return self
+    }
+
     
     
     public func userDataGet(_ key: String) -> Any? {
@@ -558,6 +564,41 @@ public extension SKLabelNode {
         adjustFontSizeToFit(rectangle: CGRect(size: CGSize(width: w, height: h)), height: factor)
     }
     
+    func with(text: String?) -> Self {
+        self.text = text
+        return self
+    }
+    
+    func with(font: String) -> Self {
+        self.fontName = font
+        return self
+    }
+    
+    func with(size: CGFloat) -> Self {
+        self.fontSize = size
+        return self
+    }
+
+    func with(fg: SKColor) -> Self {
+        self.fontColor = fg
+        return self
+    }
+
+    func with(bg: SKColor, padding: (h: CGFloat, v: CGFloat) = (0,0)) -> SKShapeNode {
+        self.removeAllChildren()
+        let frame = self.calculateAccumulatedFrame().insetBy(dx: -padding.h, dy: -padding.v)
+        let shape = SKShapeNode.init(rectangle: .init(center: .zero, size: frame.size), fillColor: bg, strokeColor: .clear, lineWidth: 0)
+        shape.addChild(self)
+        self.horizontalAlignmentMode = .center
+        self.verticalAlignmentMode = .center
+        return shape
+    }
+
+    func with(alignment: SKLabelHorizontalAlignmentMode) -> Self {
+        self.horizontalAlignmentMode = alignment
+        return self
+    }
+
 }
 
 

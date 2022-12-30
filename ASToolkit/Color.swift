@@ -203,7 +203,19 @@ public struct HSBAInfo : Codable, Equatable {
     var asSKColor                   : SKColor { .init(HSBA: self) }
     var asSwiftUIColor              : SwiftUI.Color { .init(HSBA: asArrayOfHSBA) }
 
-    
+    func extreme(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
+        .init(hue < threshold ? l : u, saturation < threshold ? l : u, brightness < threshold ? l : u)
+    }
+    func opposite(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
+        .init(hue < threshold ? u : l, saturation < threshold ? u : l, brightness < threshold ? u : l)
+    }
+    func brighter(by delta: Double = 0.1) -> Self {
+        .init((hue + delta).clampedTo01, (saturation + delta).clampedTo01, (brightness + delta).clampedTo01)
+    }
+    func lighter(by delta: Double = 0.1) -> Self {
+        .init((hue - delta).clampedTo01, (saturation - delta).clampedTo01, (brightness - delta).clampedTo01)
+    }
+
     static let black    : Self = .init(0,0,0,1)
     static let gray     : Self = .init(0,0,0.5,1)
     static let red      : Self = .init(0,1,1,1)
@@ -503,6 +515,20 @@ extension SKColor {
     var asHSBAInfo : HSBAInfo {
         .init(self.arrayOfHSBA)
     }
+    
+    func extreme(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> SKColor {
+        asHSBAInfo.extreme(threshold: threshold, lowerbound: l, upperbound: u).asSKColor
+    }
+    func opposite(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> SKColor {
+        asHSBAInfo.opposite(threshold: threshold, lowerbound: l, upperbound: u).asSKColor
+    }
+    func brighter(by delta: Double = 0.1) -> SKColor {
+        asHSBAInfo.brighter(by: delta).asSKColor
+    }
+    func lighter(by delta: Double = 0.1) -> SKColor {
+        asHSBAInfo.lighter(by: delta).asSKColor
+    }
+
 }
 
 extension String {
