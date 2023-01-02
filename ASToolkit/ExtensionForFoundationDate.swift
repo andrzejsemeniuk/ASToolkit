@@ -257,7 +257,7 @@ public extension Date {
             switch component {
                 case  .year:        date1  =  date0.adding(years:    delta)
                 case  .month:       date1  =  date0.adding(months:   delta)
-                case  .weekOfYear:  date1  =  date0.adding(days:     delta   *  7)
+                case  .weekOfYear:  date1  =  date0.adding(days:     delta * 7)
                 case  .day:         date1  =  date0.adding(days:     delta)
                 case  .hour:        date1  =  date0.adding(hours:    delta)
                 case  .minute:      date1  =  date0.adding(minutes:  delta)
