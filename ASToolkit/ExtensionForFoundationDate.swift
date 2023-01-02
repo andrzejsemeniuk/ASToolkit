@@ -240,19 +240,33 @@ public extension Date {
         .now.yesterday
     }
     
-    func adding(days: Double) -> Date {
-        Date.init(timeIntervalSince1970: timeIntervalSince1970 + days * Self.secondsIn1Day)
-    }
-    
     var yesterday : Date {
-        adding(days: -1)
+        adding(days: -1)!
     }
 
-    func collect(days: Int, ahead: Bool, condition: (Date)->Bool) -> [Date] {
+    func collect(days: Int, delta: Int, condition: (Date)->Bool) -> [Date] {
+        collect(component: .day, count: days, delta: delta, condition: condition)
+    }
+
+    func collect(component: Calendar.Component, count: Int, delta: Int, condition: (Date)->Bool = { _ in true }) -> [Date] {
         var r : [Date] = []
         var date0 = self
-        while r.count < days {
-            date0 = date0.adding(days: ahead ? +1 : -1)
+        let delta = delta
+        while r.count < count {
+            var date1 : Date!
+            switch component {
+                case  .year:        date1  =  date0.adding(years:    delta)
+                case  .month:       date1  =  date0.adding(months:   delta)
+                case  .weekOfYear:  date1  =  date0.adding(days:     delta   *  7)
+                case  .day:         date1  =  date0.adding(days:     delta)
+                case  .hour:        date1  =  date0.adding(hours:    delta)
+                case  .minute:      date1  =  date0.adding(minutes:  delta)
+                case  .second:      date1  =  date0.adding(seconds:  delta)
+                default:
+                    break
+            }
+            guard date1 != nil else { break }
+            date0 = date1
             if condition(date0) {
                 r.append(date0)
             }
@@ -260,14 +274,14 @@ public extension Date {
         return r
     }
 
-    static let sunday = 1
-    static let monday = 2
-    static let tuesday = 3
-    static let wednesday = 4
-    static let thursday = 5
-    static let friday = 6
-    static let saturday = 7
-    
+    static  let  sunday     =  1
+    static  let  monday     =  2
+    static  let  tuesday    =  3
+    static  let  wednesday  =  4
+    static  let  thursday   =  5
+    static  let  friday     =  6
+    static  let  saturday   =  7
+
     var isWeekday : Bool {
         !Calendar.current.component(.weekday, from: self).in([Date.saturday,Date.sunday])
     }
