@@ -248,6 +248,30 @@ public extension Date {
         adding(days: -1)
     }
 
+    func collect(days: Int, ahead: Bool, condition: (Date)->Bool) -> [Date] {
+        var r : [Date] = []
+        var date0 = self
+        while r.count < days {
+            date0 = date0.adding(days: ahead ? +1 : -1)
+            if condition(date0) {
+                r.append(date0)
+            }
+        }
+        return r
+    }
+
+    static let sunday = 1
+    static let monday = 2
+    static let tuesday = 3
+    static let wednesday = 4
+    static let thursday = 5
+    static let friday = 6
+    static let saturday = 7
+    
+    var isWeekday : Bool {
+        !Calendar.current.component(.weekday, from: self).in([Date.saturday,Date.sunday])
+    }
+    
     static let secondsIn1Hour   : TimeInterval = 60.0 * 60.0
     static let secondsIn1Day    : TimeInterval = 24.0 * secondsIn1Hour
 }
