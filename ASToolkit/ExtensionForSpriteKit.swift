@@ -397,6 +397,7 @@ extension SKNode
         return n
     }
     
+    @discardableResult
     public func addChildNode<NODE: SKNode>(_ n: NODE, named: String? = nil) -> NODE {
         addChild(n)
         n.name ?= named
@@ -405,6 +406,24 @@ extension SKNode
 }
 
 
+
+public extension SKNode {
+    
+    func positionChildrenVertically(spacing: CGFloat, offset: CGFloat = 0) {
+        let children = children
+        guard children.isNotEmpty else { return }
+        
+        let HEIGHTS = children.map { $0.calculateAccumulatedFrame().height }
+        var HEIGHT : CGFloat = HEIGHTS.reduce(0.0, { $0 + $1 }) + spacing * (children.count-1).asCGFloat
+        var y : CGFloat = -HEIGHT/2.0 + offset
+        for (i,child) in children.enumerated() {
+            y += HEIGHTS[i]/2
+            child.position.y = y
+            y += HEIGHTS[i]/2 + spacing
+        }
+    }
+    
+}
 
 
 
