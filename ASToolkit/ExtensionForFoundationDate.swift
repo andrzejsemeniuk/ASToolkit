@@ -186,11 +186,34 @@ extension Date {
         return yyyy + mm + dd + hh + mi + ss
     }
 
+    public var toYYYYMMDDHHMM : UInt64 {
+        let yyyy = UInt64(year())   * 100000000
+        let   mm = UInt64(month())  *   1000000
+        let   dd = UInt64(day())    *     10000
+        let   hh = UInt64(hour())   *       100
+        let   mi = UInt64(minute())
+        return yyyy + mm + dd + hh + mi
+    }
+
+    public var toYYYYMMDDHH : UInt64 {
+        let yyyy = UInt64(year())   * 1000000
+        let   mm = UInt64(month())  *   10000
+        let   dd = UInt64(day())    *     100
+        let   hh = UInt64(hour())
+        return yyyy + mm + dd + hh
+    }
+
     public var toYYYYMMDD : UInt64 {
         let yyyy = UInt64(year())   * 10000
         let   mm = UInt64(month())  *   100
         let   dd = UInt64(day())
         return yyyy + mm + dd
+    }
+
+    public var toYYYYMM : UInt64 {
+        let yyyy = UInt64(year())   * 100
+        let   mm = UInt64(month())
+        return yyyy + mm
     }
 
 }

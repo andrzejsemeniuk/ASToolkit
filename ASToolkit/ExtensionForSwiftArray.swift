@@ -171,9 +171,9 @@ public extension Array {
 	}
 }
 
-extension Array {
+public extension Array {
     
-    mutating public func rotate(_ amount: Int) {
+    mutating func rotate(_ amount: Int) {
         
         if isEmpty || amount % count == 0 {
             return
@@ -185,12 +185,48 @@ extension Array {
         self = Array(self[amount1..<count] + self[0..<amount1])
     }
     
-    public func rotated(_ amount: Int) -> Self {
+    func rotated(_ amount: Int) -> Self {
         var r = self
         r.rotate(amount)
         return r
     }
 }
+
+
+
+public extension Array{
+
+    func sortedCombinedWithSorted(other: Array, comparing comparator: (Element,Element)->Int, uniqued: Bool) -> Array {
+        var r : Self = []
+        var i0 = 0
+        var i1 = 0
+        while i0 < count, i1 < other.count {
+            let c = comparator(self[i0], other[i1])
+            if c < 0 {
+                r.append(self[i0])
+                i0 += 1
+            } else if c > 0 {
+                r.append(other[i1])
+                i1 += 1
+            } else {
+                r.append(self[i0])
+                if !uniqued {
+                    r.append(other[i0])
+                }
+                i0 += 1
+                i1 += 1
+            }
+        }
+        if i0 < count {
+            r += self[i0..<count]
+        } else if i1 < other.count {
+            r += other[i1..<other.count]
+        }
+        
+        return r
+    }
+}
+
 
 
 public extension Array where Element : Numeric {
