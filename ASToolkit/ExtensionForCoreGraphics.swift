@@ -174,6 +174,7 @@ extension Array where Element == CGPoint {
 public extension CGSize {
 
     static let minimal = CGSize(side: 1)
+    static let zero = CGSize(side: 0)
 
     init(side:CGFloat) {
         self.init(width:side, height:side)
