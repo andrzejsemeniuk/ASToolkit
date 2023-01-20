@@ -1422,11 +1422,11 @@ public struct TapGestureWithLocation : UIViewRepresentable {
     }
     
     public func makeUIView(context: UIViewRepresentableContext<TapGestureWithLocation>) -> UIView {
-        let v = UIView(frame: .zero)
+        let mappingYToV = UIView(frame: .zero)
         let gesture = UITapGestureRecognizer(target: context.coordinator,
                                              action: #selector(Coordinator.tapped))
-        v.addGestureRecognizer(gesture)
-        return v
+        mappingYToV.addGestureRecognizer(gesture)
+        return mappingYToV
     }
 
     public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {

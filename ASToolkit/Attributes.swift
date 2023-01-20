@@ -409,8 +409,8 @@ public class Attributes : Codable, Equatable, ObservableObject {
     }
 
     #if os(iOS)
-    public func set(_ key: String, _ v: UIBlurEffect.Style) {
-        dictionary[key] = String(v.rawValue)
+    public func set(_ key: String, _ mappingYToV: UIBlurEffect.Style) {
+        dictionary[key] = String(mappingYToV.rawValue)
     }
     #endif
 

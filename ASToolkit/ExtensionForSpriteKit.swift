@@ -204,9 +204,9 @@ extension SKNode
         }
     }
     
-    public func positionFromScreenRatio          (x:CGFloat,y:CGFloat)
+    public func positionFromScreenRatio          (x:CGFloat,mappingVToY:CGFloat)
     {
-        positionFromScreenRatio(to:CGXY(x,y))
+        positionFromScreenRatio(to:CGXY(x,mappingVToY))
     }
     #endif
     
