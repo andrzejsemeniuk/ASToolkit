@@ -106,7 +106,7 @@ public struct RGBAInfo : Codable, Equatable {
 
 
 
-public struct HSBAInfo : Codable, Equatable {
+public struct HSBAInfo : Codable, Equatable, Hashable {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.asStringOfHSBA == rhs.asStringOfHSBA
