@@ -243,13 +243,31 @@ public extension Date {
 
 		var components      = DateComponents()
 
-		components.hour     = -self.hour()
-		components.minute   = -self.minute()
-		components.second   = -self.second()
-
+        components.hour        =  -self.hour()
+        components.minute      =  -self.minute()
+        components.second      =  -self.second()
+        
 		return calendar.date(byAdding: components, to: self)!
-
 	}
+    
+    var normalizedToDay : Date { midnight }
+    var normalizedToHour : Date {
+        let calendar            = Calendar.current
+        var components          = DateComponents()
+
+        components.minute       =  -self.minute()
+        components.second       =  -self.second()
+
+        return calendar.date(byAdding: components, to: self)!
+    }
+    var normalizedToMinute : Date {
+        let calendar            = Calendar.current
+        var components          = DateComponents()
+
+        components.second       =  -self.second()
+
+        return calendar.date(byAdding: components, to: self)!
+    }
     
     static var midnight : Date {
         Date().midnight
