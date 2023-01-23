@@ -299,6 +299,11 @@ extension CGAffineTransform {
     }
 }
 
+
+
+
+
+
 extension CGLineCap {
 
 	public var string : String {
@@ -307,7 +312,8 @@ extension CGLineCap {
             case .butt				: return CAShapeLayerLineCap.butt.rawValue
             case .square			: return CAShapeLayerLineCap.square.rawValue
             @unknown default:
-                fatalError()
+//                fatalError()
+                return "?"
         }
 	}
     
@@ -317,7 +323,8 @@ extension CGLineCap {
             case .butt              : return "Butt"
             case .square            : return "Square"
             @unknown default:
-                fatalError()
+//                fatalError()
+                return "?"
         }
     }
     
@@ -327,7 +334,8 @@ extension CGLineCap {
             case .butt              : return .round
             case .square            : return .butt
             @unknown default:
-                fatalError()
+//                fatalError()
+                return .square
         }
     }
 
@@ -337,7 +345,8 @@ extension CGLineCap {
             case .butt              : return .square
             case .square            : return .round
             @unknown default:
-                fatalError()
+//                fatalError()
+                return .round
         }
     }
 }
@@ -350,7 +359,8 @@ extension CGLineJoin {
             case .bevel				: return CAShapeLayerLineJoin.bevel.rawValue
             case .miter				: return CAShapeLayerLineJoin.miter.rawValue
             @unknown default:
-                fatalError()
+//                fatalError()
+                return "?"
 		}
 	}
 
@@ -360,7 +370,8 @@ extension CGLineJoin {
             case .bevel             : return "Bevel"
             case .miter             : return "Miter"
             @unknown default:
-                fatalError()
+//                fatalError()
+                return "?"
         }
     }
 
@@ -370,7 +381,8 @@ extension CGLineJoin {
             case .bevel             : return .round
             case .miter             : return .bevel
             @unknown default:
-                fatalError()
+//                fatalError()
+                return .miter
         }
     }
 
@@ -380,7 +392,8 @@ extension CGLineJoin {
             case .bevel             : return .miter
             case .miter             : return .round
             @unknown default:
-                fatalError()
+//                fatalError()
+                return .round
         }
     }
 }
@@ -628,87 +641,79 @@ public extension Int32 {
 public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
     
     internal init(lineWidth: CGFloat? = 1, lineCap: CGLineCap? = .butt, lineJoin: CGLineJoin? = .miter, miterLimit: CGFloat? = 10, dashPhase: CGFloat? = 0, dashPattern: [CGFloat]? = []) {
-        self.lineWidth = lineWidth
-        self.lineCap = lineCap
-        self.lineJoin = lineJoin
-        self.miterLimit = miterLimit
-        self.dashPhase = dashPhase
-        self.dashPattern = dashPattern
+        self.lineWidth ?= lineWidth
+        self.lineCap ?= lineCap
+        self.lineJoin ?= lineJoin
+        self.miterLimit ?= miterLimit
+        self.dashPhase ?= dashPhase
+        self.dashPattern ?= dashPattern
     }
     
     
     public init?(rawValue: String) {
         let split = rawValue.split("|")
-        lineWidth = split[safe: 0]?.asCGFloat
-        lineCap = split[safe: 1]?.asInt == nil ? nil : CGLineCap.init(rawValue: split[1].asInt?.asInt32 ?? 0)
-        lineJoin = split[safe: 2]?.asInt == nil ? nil : CGLineJoin.init(rawValue: split[2].asInt?.asInt32 ?? 0)
-        miterLimit = split[safe: 3]?.asCGFloat
-        dashPhase = split[safe: 4]?.asCGFloat
-        dashPattern = split[safe: 5]?.asArrayOfDouble().asArrayOfCGFloat
+        lineWidth ?= split[safe: 0]?.asCGFloat
+        lineCap ?= split[safe: 1]?.asInt == nil ? nil : CGLineCap.init(rawValue: split[1].asInt?.asInt32 ?? 0)
+        lineJoin ?= split[safe: 2]?.asInt == nil ? nil : CGLineJoin.init(rawValue: split[2].asInt?.asInt32 ?? 0)
+        miterLimit ?= split[safe: 3]?.asCGFloat
+        dashPhase ?= split[safe: 4]?.asCGFloat
+        dashPattern ?= split[safe: 5]?.asArrayOfDouble().asArrayOfCGFloat
     }
     
     public var rawValue : String {
-        "\(lineWidth == nil ? "nil" : lineWidth.format2)"
-        + "|\(lineCap?.rawValue.asString ?? "nil")"
-        + "|\(lineJoin?.rawValue.asString ?? "nil")"
-        + "|\(miterLimit?.format2 ?? "nil")"
-        + "|\(dashPhase?.format2 ?? "nil")"
-        + "|\(dashPattern?.asArrayOfString() ?? "nil")"
+        "\(lineWidth.format2)"
+        + "|\(lineCap.rawValue.asString)"
+        + "|\(lineJoin.rawValue.asString)"
+        + "|\(miterLimit.format2)"
+        + "|\(dashPhase.format2)"
+        + "|\(dashPattern.asArrayOfString())"
     }
     
     
     public typealias RawValue = String
     
-    var lineWidth       : CGFloat!      = 1
-    var lineCap         : CGLineCap!    = .butt
-    var lineJoin        : CGLineJoin!   = .miter
-    var miterLimit      : CGFloat!      = 10
-    var dashPhase       : CGFloat!      = 0
-    var dashPattern     : [CGFloat]!    = []
+    var lineWidth       : CGFloat       = 1
+    var lineCap         : CGLineCap     = .butt
+    var lineJoin        : CGLineJoin    = .miter
+    var miterLimit      : CGFloat       = 10
+    var dashPhase       : CGFloat       = 0
+    var dashPattern     : [CGFloat]     = []
     
-    var thickness       : CGFloat! {
+    var thickness       : CGFloat {
         get { lineWidth }
         set { lineWidth = newValue }
     }
     
-    func thickness(_ fallback: CGFloat) -> CGFloat { self.thickness ?? fallback }
-    
-    var cap             : CGLineCap! {
+    var cap             : CGLineCap {
         get { lineCap }
         set { lineCap = newValue }
     }
     
-    func cap(_ fallback: CGLineCap) -> CGLineCap { self.cap ?? fallback }
-
-    var join            : CGLineJoin! {
+    var join            : CGLineJoin {
         get { lineJoin }
         set { lineJoin = newValue }
     }
 
-    func join(_ fallback: CGLineJoin) -> CGLineJoin { self.join ?? fallback }
-
-    var pattern         : [CGFloat]! {
+    var pattern         : [CGFloat] {
         get { dashPattern }
         set { dashPattern = newValue }
     }
 
-    func pattern(_ fallback: [CGFloat]) -> [CGFloat] { self.pattern ?? fallback }
-
-//    var linePattern     : [CGFloat]! {
-//        get { dashPattern }
-//        set { dashPattern = newValue }
-//    }
-
-    func filled(with: CGLineStyle?) -> CGLineStyle {
-        var r = self
-        r.lineWidth         ?= with?.lineWidth
-        r.lineCap           ?= with?.lineCap
-        r.lineJoin          ?= with?.lineJoin
-        r.miterLimit        ?= with?.miterLimit
-        r.dashPhase         ?= with?.dashPhase
-        r.dashPattern       ?= with?.dashPattern
-        return r
+    var linePattern     : [CGFloat]! {
+        get { dashPattern }
+        set { dashPattern = newValue }
     }
+
+//    func filled(with: CGLineStyle?) -> CGLineStyle {
+//        var r = self
+//        r.lineWidth         ?= with?.lineWidth
+//        r.lineCap           ?= with?.lineCap
+//        r.lineJoin          ?= with?.lineJoin
+//        r.miterLimit        ?= with?.miterLimit
+//        r.dashPhase         ?= with?.dashPhase
+//        r.dashPattern       ?= with?.dashPattern
+//        return r
+//    }
     
     enum CodingKeys : String, CodingKey {
         case lineWidth      = "w"
@@ -717,6 +722,16 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
         case miterLimit     = "m"
         case dashPhase      = "p"
         case dashPattern    = "d"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.lineWidth =  c.decode(.lineWidth, 1)
+        self.lineCap = c.decode(.lineCap, .butt)
+        self.lineJoin = c.decode(.lineJoin, .miter)
+        self.miterLimit = c.decode(.miterLimit, 10)
+        self.dashPhase = c.decode(.dashPhase, 0)
+        self.dashPattern = c.decode(.dashPattern, [])
     }
     
     static func create(_ width: CGFloat) -> CGLineStyle {
