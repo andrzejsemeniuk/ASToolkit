@@ -726,12 +726,22 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
     
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        self.lineWidth =  c.decode(.lineWidth, 1)
-        self.lineCap = c.decode(.lineCap, .butt)
-        self.lineJoin = c.decode(.lineJoin, .miter)
-        self.miterLimit = c.decode(.miterLimit, 10)
-        self.dashPhase = c.decode(.dashPhase, 0)
-        self.dashPattern = c.decode(.dashPattern, [])
+        self.dashPattern  =  c.decode(.dashPattern,  [])
+        self.dashPhase    =  c.decode(.dashPhase,    0)
+        self.lineCap      =  c.decode(.lineCap,      .butt)
+        self.lineJoin     =  c.decode(.lineJoin,     .miter)
+        self.lineWidth    =  c.decode(.lineWidth,    1)
+        self.miterLimit   =  c.decode(.miterLimit,   10)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(self.dashPattern, forKey: .dashPattern)
+        try c.encode(self.dashPhase, forKey: .dashPhase)
+        try c.encode(self.lineCap, forKey: .lineCap)
+        try c.encode(self.lineJoin, forKey: .lineJoin)
+        try c.encode(self.lineWidth, forKey: .lineWidth)
+        try c.encode(self.miterLimit, forKey: .miterLimit)
     }
     
     static func create(_ width: CGFloat) -> CGLineStyle {
