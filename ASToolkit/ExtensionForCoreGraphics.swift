@@ -669,6 +669,21 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
         + "|\(dashPattern.asArrayOfString())"
     }
     
+//    enum LineCap : Int, Codable, Equatable, Hashable {
+//        case butt = 0
+//        case round = 1
+//        case square = 2
+//    }
+//
+//    enum LineJoin : Int, Codable, Equatable, Hashable {
+//        case miter = 0
+//        case butt = 1
+//        case bevel = 2
+//
+//        var asCGLineJoin : CGLineJoin {
+//
+//        }
+//    }
     
     public typealias RawValue = String
     
