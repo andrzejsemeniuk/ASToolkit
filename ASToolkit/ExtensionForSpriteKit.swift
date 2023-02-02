@@ -196,7 +196,7 @@ extension SKNode
     #if os(iOS)
     public func positionFromScreenRatio  (to:CGXY)
     {
-        if let parent = self.scene
+        if let parent = self.chart
         {
             let position = parent.position + CGScreen.pointFrom(ratio:to)
             //            print("positionFromScreen(\(to))=\(position),screen=\(CGScreen.bounds)")
