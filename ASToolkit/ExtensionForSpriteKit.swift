@@ -888,6 +888,40 @@ public extension SKShapeNode
         return r
     }
 
+    static func polygon(_ points             : [CGPoint],
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     miterLimit        : CGFloat? = nil,
+                     lineDash           : [CGFloat]? = nil) -> SKShapeNode? {
+        guard points.count > 2 else { return nil }
+        let path = CGMutablePath.init()
+        path.move(to: points[0])
+        for i in 1..<points.count {
+            path.addLine(to: points[i])
+        }
+        if points.last != points.first {
+            path.addLine(to: points[0])
+        }
+        path.closeSubpath()
+        let r = SKShapeNode.init(path: path)
+        r.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
+                        lineDash        : lineDash)
+        return r
+    }
+
+    
 
 }
 

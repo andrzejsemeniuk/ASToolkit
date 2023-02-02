@@ -462,6 +462,9 @@ public struct CGAngle
         }
     }
     public      init(point: CGPoint)                { self.init(y: point.y, x: point.x)}
+    public      init(_ a: CGPoint, _ b: CGPoint)    {
+        self.init(y: b.y - a.y, x: b.x - a.x)
+    }
     
 	public func toDegrees   ()  -> CGFloat          { return CGAsDegrees(radians:value) }
 	public func toRadians   ()  -> CGFloat          { return value }
@@ -475,9 +478,9 @@ public struct CGAngle
     public var  point                       : CGPoint      { CGPoint.from(angle: self) }
     public func point(radius: CGFloat)      -> CGPoint     { CGPoint.from(angle: self, radius: radius) }
     
-    static let zero : CGAngle = .init(radians: 0)
-    static let ninety : CGAngle = .init(degrees: 90)
-    static let fortyfive : CGAngle = .init(degrees: 45)
+    static let zero                         : CGAngle = .init(radians: 0)
+    static let ninety                       : CGAngle = .init(degrees: 90)
+    static let fortyfive                    : CGAngle = .init(degrees: 45)
 }
 
 public extension CGPoint
@@ -499,6 +502,14 @@ public extension CGPoint
     
     func distance               (to: CGPoint) -> CGFloat { (to-self).length }
     func distanceSquared        (to: CGPoint) -> CGFloat { (to-self).lengthSquared }
+    
+    
+    func isLeft                 (of: CGPoint) -> Bool   { x < of.x }
+    func isRight                (of: CGPoint) -> Bool   { x > of.x }
+    func isDown                 (of: CGPoint) -> Bool   { y < of.y }
+    func isUp                   (of: CGPoint) -> Bool   { y > of.y }
+    func isBelow                (_ of: CGPoint) -> Bool   { y < of.y }
+    func isAbove                (_ of: CGPoint) -> Bool   { y > of.y }
 }
 
 extension CGRect
