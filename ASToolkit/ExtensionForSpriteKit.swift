@@ -905,9 +905,9 @@ public extension SKShapeNode
             path.addLine(to: points[i])
         }
         if points.last != points.first {
-            path.addLine(to: points[0])
+//            path.addLine(to: points[0])
+            path.closeSubpath()
         }
-        path.closeSubpath()
         let r = SKShapeNode.init(path: path)
         r.configured(position        : position,
                         fillColor       : fillColor,
