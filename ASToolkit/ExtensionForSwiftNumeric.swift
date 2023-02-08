@@ -411,6 +411,8 @@ public extension CGFloat
             self = n
         }
     }
+    
+    var sqrt : CGFloat { Darwin.sqrt(self) }
 }
 
 public extension CGFloat {

@@ -146,6 +146,13 @@ public extension CGPoint {
     }
 }
 
+extension CGPoint : Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(x)
+        hasher.combine(y)
+    }
+}
+
 extension Array where Element == CGPoint {
     
     var bounds : CGRect? {
@@ -219,6 +226,49 @@ public extension CGSize {
         .init(height, width)
     }
     
+}
+
+public struct CGSegment : Codable, Equatable, Hashable {
+    var from : CGPoint
+    var to : CGPoint
+    
+    var midpoint : CGPoint {
+        (from+to)/2
+    }
+    
+    func intersection(with s: CGSegment) -> CGPoint? {
+        // https://www.hackingwithswift.com/example-code/core-graphics/how-to-calculate-the-point-where-two-lines-intersect
+        // calculate the differences between the start and end X/Y positions for each of our points
+        let delta1x = to.x - from.x
+        let delta1y = to.y - from.y
+        let delta2x = s.to.x - s.from.x
+        let delta2y = s.to.y - s.from.y
+
+        // create a 2D matrix from our vectors and calculate the determinant
+        let determinant = delta1x * delta2y - delta2x * delta1y
+
+        if abs(determinant) < 0.0001 {
+            // if the determinant is effectively zero then the lines are parallel/colinear
+            return nil
+        }
+
+        // if the coefficients both lie between 0 and 1 then we have an intersection
+        let ab = ((from.y - s.from.y) * delta2x - (from.x - s.from.x) * delta2y) / determinant
+
+        if ab > 0 && ab < 1 {
+            let cd = ((from.y - s.from.y) * delta1x - (from.x - s.from.x) * delta1y) / determinant
+
+            if cd > 0 && cd < 1 {
+                // lines cross – figure out exactly where and return it
+                let intersectX = from.x + ab * delta1x
+                let intersectY = from.y + ab * delta1y
+                return .init(intersectX, intersectY)
+            }
+        }
+
+        // lines don't cross
+        return nil
+    }
 }
 
 public extension CGRect {
@@ -503,7 +553,7 @@ public extension CGPoint
     func distance               (to: CGPoint) -> CGFloat { (to-self).length }
     func distanceSquared        (to: CGPoint) -> CGFloat { (to-self).lengthSquared }
     
-    func distanceToSegment(_ v: CGPoint, _ w: CGPoint) -> CGFloat {
+    func distanceSquaredToSegment(_ v: CGPoint, _ w: CGPoint) -> CGFloat {
         let pv_dx = x - v.x
         let pv_dy = y - v.y
         let wv_dx = w.x - v.x
@@ -530,7 +580,16 @@ public extension CGPoint
         let dx = x - int_x
         let dy = y - int_y
 
-        return sqrt(dx * dx + dy * dy)
+        return dx * dx + dy * dy
+    }
+    func distanceToSegment(_ v: CGPoint, _ w: CGPoint) -> CGFloat {
+        sqrt(distanceSquaredToSegment(v,w))
+    }
+    func distanceSquaredToSegment(_ s: CGSegment) -> CGFloat {
+        distanceSquaredToSegment(s.from,s.to)
+    }
+    func distanceToSegment(_ s: CGSegment) -> CGFloat {
+        sqrt(distanceSquaredToSegment(s.from,s.to))
     }
     
     func isLeft                 (of: CGPoint) -> Bool   { x < of.x }
