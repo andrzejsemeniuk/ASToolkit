@@ -52,7 +52,7 @@ extension SKNode
     @objc public func positionFromRatio      (x:CGFloat, y:CGFloat)                          -> CGPoint  { return position + pointFromRatio(h:x,v:y) }
     
     
-    open func place_01(x: CGFloat? = nil, y: CGFloat? = nil) {
+    public func place_01(x: CGFloat? = nil, y: CGFloat? = nil) {
         guard let parent = parent else {
             return
         }
@@ -64,7 +64,7 @@ extension SKNode
         }
     }
     
-    open func place_11(x: CGFloat? = nil, y: CGFloat? = nil) {
+    public func place_11(x: CGFloat? = nil, y: CGFloat? = nil) {
         guard let parent = parent else {
             return
         }
@@ -76,7 +76,7 @@ extension SKNode
         }
     }
     
-    open func place_55(x: CGFloat? = nil, y: CGFloat? = nil) {
+    public func place_55(x: CGFloat? = nil, y: CGFloat? = nil) {
         guard let parent = parent else {
             return
         }
@@ -88,11 +88,11 @@ extension SKNode
         }
     }
     
-    open func x(forAlignmentX x: CGFloat) -> CGFloat {
+    public func x(forAlignmentX x: CGFloat) -> CGFloat {
         parent!.hFrom(ratio11: x) - parent!.width/2.0
     }
     
-    open func y(forAlignmentY y: CGFloat) -> CGFloat {
+    public func y(forAlignmentY y: CGFloat) -> CGFloat {
         parent!.vFrom(ratio11: y) - parent!.height/2.0
     }
     
@@ -389,6 +389,15 @@ extension SKNode
         }
     }
     
+    
+    @discardableResult
+    public func prependChildNode(named: String? = nil) -> SKNode {
+        let n = SKNode()
+        insertChild(n, at: 0)
+        n.name = named
+        return n
+    }
+    
     @discardableResult
     public func addChildNode(named: String? = nil) -> SKNode {
         let n = SKNode()
@@ -403,6 +412,24 @@ extension SKNode
         n.name ?= named
         return n
     }
+    
+    @discardableResult
+    public func prependChildNode<NODE: SKNode>(_ n: NODE, named: String? = nil) -> NODE {
+        insertChild(n, at: 0)
+        n.name ?= named
+        return n
+    }
+    
+    public func addChild(_ n: SKNode, named: String?) {
+        addChild(n)
+        n.name ?= named
+    }
+    
+    public func prependChild(_ n: SKNode, named: String? = nil) {
+        insertChild(n, at: 0)
+        n.name ?= named
+    }
+
 }
 
 
@@ -1266,41 +1293,41 @@ extension SKSpriteNode
 
 extension SKNode
 {
-    open func run(_ action: SKAction, delay:TimeInterval) {
+    public func run(_ action: SKAction, delay:TimeInterval) {
         self.run(aDelayed(delay:delay, action: action))
     }
     
-    open func run(_ action: SKAction, delay:TimeInterval, completion block: @escaping () -> Swift.Void) {
+    public func run(_ action: SKAction, delay:TimeInterval, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: action), completion: block)
     }
     
-    open func run(_ action: SKAction, withKey key: String, delay:TimeInterval) {
+    public func run(_ action: SKAction, withKey key: String, delay:TimeInterval) {
         self.run(aDelayed(delay:delay, action: action), withKey: key)
     }
     
 
-    open func run(sequence: [SKAction], delay:TimeInterval = 0) {
+    public func run(sequence: [SKAction], delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)))
     }
     
-    open func run(sequence: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
+    public func run(sequence: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)), completion: block)
     }
     
-    open func run(sequence: [SKAction], withKey key: String, delay:TimeInterval = 0) {
+    public func run(sequence: [SKAction], withKey key: String, delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)), withKey: key)
     }
     
 
-    open func run(group: [SKAction], delay:TimeInterval = 0) {
+    public func run(group: [SKAction], delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aGroup(group)))
     }
     
-    open func run(group: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
+    public func run(group: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: aGroup(group)), completion: block)
     }
     
-    open func run(group: [SKAction], withKey key: String, delay:TimeInterval = 0) {
+    public func run(group: [SKAction], withKey key: String, delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aGroup(group)), withKey: key)
     }
     
@@ -1310,18 +1337,18 @@ extension SKNode
         self.name = named
     }
     
-    open func pointFromCenter(rx: CGFloat, ry: CGFloat) -> CGPoint {
+    public func pointFromCenter(rx: CGFloat, ry: CGFloat) -> CGPoint {
         return CGPoint.init(x: rx * self.frame.size.width + self.frame.size.width/2,
                             y: ry * self.frame.size.height + self.frame.size.height/2)
     }
     
-    open func pointFromFrameOrigin(rx: CGFloat, ry: CGFloat) -> CGPoint {
+    public func pointFromFrameOrigin(rx: CGFloat, ry: CGFloat) -> CGPoint {
         return self.frame.origin + CGPoint.init(x: rx * self.frame.size.width, y: ry * self.frame.size.height)
     }
 
 
     @discardableResult
-    open func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
+    public func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1364,7 +1391,7 @@ extension SKNode
     }
     
     @discardableResult
-    open func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
+    public func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1407,7 +1434,7 @@ extension SKNode
     }
     
     @discardableResult
-    open func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 0, color:UIColor = .white) -> SKNode
+    public func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 0, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1425,7 +1452,7 @@ extension SKNode
     }
     
     
-    open func children(at: CGPoint, in radius: CGFloat) -> [SKNode] {
+    public func children(at: CGPoint, in radius: CGFloat) -> [SKNode] {
         children.filter {
             let r = $0.frame.size.maxSide/2
             let d = $0.position - at
@@ -1444,22 +1471,22 @@ extension SKNode
 
 extension SKAction {
     
-    open func runOn(node:SKNode,delay sec:TimeInterval = 0) -> SKAction {
+    public func runOn(node:SKNode,delay sec:TimeInterval = 0) -> SKAction {
         let _ = aRun(on:node,action:self,delay:sec)
         return self
     }
     
-    open func with(timingMode: SKActionTimingMode) -> Self {
+    public func with(timingMode: SKActionTimingMode) -> Self {
         self.timingMode = timingMode
         return self
     }
 
-    open func with(timingFunction: @escaping SKActionTimingFunction) -> Self {
+    public func with(timingFunction: @escaping SKActionTimingFunction) -> Self {
         self.timingFunction = timingFunction
         return self
     }
     
-    open func configured(timingMode: SKActionTimingMode? = nil, timingFunction: SKActionTimingFunction? = nil) -> Self {
+    public func configured(timingMode: SKActionTimingMode? = nil, timingFunction: SKActionTimingFunction? = nil) -> Self {
         self.timingMode ?= timingMode
         self.timingFunction ?= timingFunction
         return self
