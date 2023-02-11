@@ -95,6 +95,26 @@ public struct CGDimensions
 
 
 
+public enum CGRelativePlacement : String, Codable, Hashable, Equatable, RawRepresentable, CaseIterable {
+    case none,above,right,below,left
+}
+
+public enum CGPerpendicularPlacement : String, Codable, Hashable, Equatable, RawRepresentable, CaseIterable {
+    case none,top,right,bottom,left
+}
+
+public enum CGDiagonalPlacement : String, Codable, Hashable, Equatable, RawRepresentable, CaseIterable {
+    case none,tl,tr,br,bl
+}
+
+public enum CG8DirectionPlacement : String, Codable, Hashable, Equatable, RawRepresentable, CaseIterable {
+    case none,top,tr,right,br,bottom,bl,left,tl
+}
+
+
+
+
+
 public extension CGPoint {
     
     init(_ x:CGFloat, _ y:CGFloat) {
@@ -862,8 +882,8 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
         try c.encode(self.miterLimit, forKey: .miterLimit)
     }
     
-    static func create(_ width: CGFloat) -> CGLineStyle {
-        .init(lineWidth: width, lineCap: .butt, lineJoin: .miter, miterLimit: 10, dashPhase: 0, dashPattern: [])
+    static func create(_ width: CGFloat, _ pattern: [CGFloat] = []) -> CGLineStyle {
+        .init(lineWidth: width, lineCap: .butt, lineJoin: .miter, miterLimit: 10, dashPhase: 0, dashPattern: pattern)
     }
 }
 

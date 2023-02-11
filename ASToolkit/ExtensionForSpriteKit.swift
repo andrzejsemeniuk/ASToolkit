@@ -344,9 +344,15 @@ extension SKNode
     
     @discardableResult
     public func removeDescendants(named: String) -> [SKNode] {
-        let c = descendants(named: named)
-        c.forEach { $0.removeFromParent() }
-        return c
+//        let c = descendants(named: named)
+//        c.forEach { $0.removeFromParent() }
+//        return c
+        var r = children.filter({ $0.name == named })
+        r.forEach { $0.removeFromParent() }
+        children.forEach {
+            r += $0.removeDescendants(named: named)
+        }
+        return r
     }
 
     public func children(named: String) -> [SKNode] {
@@ -661,7 +667,7 @@ public extension SKLightNode
 
 public extension SKShapeNode
 {
-    convenience init(lines:[CGPoint],
+    convenience init(lines              : [CGPoint],
                      position           : CGPoint? = nil,
                      fillColor          : UIColor? = nil,
                      strokeColor        : UIColor? = nil,
@@ -669,12 +675,43 @@ public extension SKShapeNode
                      lineWidth          : CGFloat? = nil,
                      lineCap            : CGLineCap? = nil,
                      lineJoin           : CGLineJoin? = nil,
-                     miterLimit        : CGFloat? = nil,
+                     miterLimit         : CGFloat? = nil,
                      lineDash           : [CGFloat]? = nil) {
         let path = CGMutablePath()
         path.move(to:lines[0])
         for i in stride(from:1,to:lines.count,by:1) {
             path.addLine(to:lines[i])
+        }
+        self.init(path:path)
+        self.configured(position        : position,
+                        fillColor       : fillColor,
+                        strokeColor     : strokeColor,
+                        glowWidth       : glowWidth,
+                        lineWidth       : lineWidth,
+                        lineCap         : lineCap,
+                        lineJoin        : lineJoin,
+                        miterLimit      : miterLimit,
+                        lineDash        : lineDash)
+    }
+
+    convenience init(polygon            : [CGPoint],
+                     close              : Bool,
+                     position           : CGPoint? = nil,
+                     fillColor          : UIColor? = nil,
+                     strokeColor        : UIColor? = nil,
+                     glowWidth          : CGFloat? = nil,
+                     lineWidth          : CGFloat? = nil,
+                     lineCap            : CGLineCap? = nil,
+                     lineJoin           : CGLineJoin? = nil,
+                     miterLimit         : CGFloat? = nil,
+                     lineDash           : [CGFloat]? = nil) {
+        let path = CGMutablePath()
+        path.move(to:polygon[0])
+        for i in stride(from:1,to:polygon.count,by:1) {
+            path.addLine(to:polygon[i])
+        }
+        if close {
+            path.closeSubpath()
         }
         self.init(path:path)
         self.configured(position        : position,
