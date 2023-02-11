@@ -1011,33 +1011,21 @@ extension SKShapeNode {
         self.lineJoin       ?= lineJoin
         self.miterLimit     ?= miterLimit
         
-//        if let position = position {
-//            self.position = position
-//        }
-//        if let fillColor = fillColor {
-//            self.fillColor = fillColor
-//        }
-//        if let strokeColor = strokeColor {
-//            self.strokeColor = strokeColor
-//        }
-//        else {
-//            self.strokeColor = .clear
-//        }
-//        if let lineWidth = lineWidth {
-//            self.lineWidth = lineWidth
-//        }
-//        if let lineCap = lineCap {
-//            self.lineCap = lineCap
-//        }
-//        if let lineJoin = lineJoin {
-//            self.lineJoin = lineJoin
-//        }
-//        if let miterLimit = miterLimit {
-//            self.miterLimit = miterLimit
-//        }
         if let lineDash = lineDash {
             addDashes(lengths: lineDash)
         }
+        return self
+    }
+
+    @discardableResult
+    public func configured (lineStyle          : CGLineStyle) -> Self {
+        self.lineWidth      = lineStyle.lineWidth
+        self.lineCap        = lineStyle.lineCap
+        self.lineJoin       = lineStyle.lineJoin
+        self.miterLimit     = lineStyle.miterLimit
+        
+        addDashes(lengths: lineStyle.pattern)
+        
         return self
     }
     

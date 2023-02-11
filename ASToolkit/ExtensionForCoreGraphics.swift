@@ -164,6 +164,10 @@ public extension CGPoint {
     func adding(x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
         .init(x: self.x + (x ?? 0), y: self.y + (y ?? 0))
     }
+    
+    func offset(x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
+        adding(x: x, y: y)
+    }
 }
 
 extension CGPoint : Hashable {
@@ -842,6 +846,22 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
         set { dashPattern = newValue }
     }
 
+    
+    
+    func with(thickness: CGFloat? = nil, cap: CGLineCap? = nil, join: CGLineJoin? = nil, pattern: [CGFloat]? = nil) -> Self {
+        var r = self
+        r.thickness ?= thickness
+        r.cap ?= cap
+        r.join ?= join
+        r.pattern ?= pattern
+        return r
+    }
+    
+    func rounded() -> Self {
+        with(cap: .round, join: .round)
+    }
+    
+    
 //    func filled(with: CGLineStyle?) -> CGLineStyle {
 //        var r = self
 //        r.lineWidth         ?= with?.lineWidth
