@@ -364,6 +364,13 @@ public extension CGRect {
         r.origin.y += (size.height - r.height)/2
         return r
     }
+    
+    func centered(at: CGPoint = .zero) -> Self {
+        var r = self
+        r.origin.x = -r.width/2 + at.x
+        r.origin.y = +r.height/2 + at.y
+        return r
+    }
 }
 
 extension CGAffineTransform {

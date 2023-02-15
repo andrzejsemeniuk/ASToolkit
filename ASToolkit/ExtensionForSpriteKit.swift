@@ -1004,7 +1004,7 @@ extension SKShapeNode {
         
         self.position       ?= position
         self.fillColor      ?= fillColor
-        self.strokeColor    = strokeColor ?? .clear
+        self.strokeColor    ?= strokeColor //?? .clear
         self.glowWidth      ?= glowWidth
         self.lineWidth      ?= lineWidth
         self.lineCap        ?= lineCap
