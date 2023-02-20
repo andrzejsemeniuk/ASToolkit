@@ -20,10 +20,18 @@ infix operator   ?= : AssignmentPrecedence
 
 @discardableResult
 public func ?= <T>(lhs: inout T, rhs: T?) -> T {
-	if let rhs = rhs {
-		lhs = rhs
-	}
-	return lhs
+    if let rhs = rhs {
+        lhs = rhs
+    }
+    return lhs
+}
+
+infix operator   ??= : AssignmentPrecedence
+
+public func ??= <T: Equatable>(lhs: inout T, rhs: T) {
+    if lhs != rhs {
+        lhs = rhs
+    }
 }
 
 public func ifTrueElseNil       <V>(_ flag: Bool, _ value: V) -> V?             { flag ? value : nil }
@@ -66,6 +74,7 @@ public extension Optional where Wrapped : Equatable {
         self = self == a ? b : a
     }
 }
+
 
 //public protocol JSONCodable : Codable {
 //    

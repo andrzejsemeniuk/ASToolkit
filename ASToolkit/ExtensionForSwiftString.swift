@@ -663,3 +663,15 @@ public extension String {
     }
 
 }
+
+public extension String {
+    mutating func assignIf(_ condition0: Bool, _ value0: String, _ condition1: Bool? = nil, _ value1: String? = nil, _ otherwise: String) {
+        if condition0 {
+            self = value0
+        } else if let condition1, let value1, condition1 {
+            self = value1
+        } else {
+            self = otherwise
+        }
+    }
+}
