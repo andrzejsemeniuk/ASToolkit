@@ -978,6 +978,77 @@ public extension Array where Element: Equatable {
     mutating func sendToBack(item: Element) {
         move(item, to: endIndex-1)
     }
+    
+    mutating func moveUp(_ item: Element, loop: Bool = true) {
+        guard count > 1 else { return }
+        if let index = index(of: item) {
+            let newIndex = index + 1
+            if newIndex >= count {
+                if loop {
+                    move(at: index, to: 0)
+                }
+            } else {
+                move(at: index, to: newIndex)
+            }
+        }
+    }
+    
+    mutating func moveDown(_ item: Element, loop: Bool = true) {
+        guard count > 1 else { return }
+        if let index = index(of: item) {
+            let newIndex = index - 1
+            if newIndex < 0 {
+                if loop {
+                    move(at: index, to: count-1)
+                }
+            } else {
+                move(at: index, to: newIndex)
+            }
+        }
+    }
+    
+    mutating func moveUp(index: Index, loop: Bool = true) {
+        guard count > 1 else { return }
+        let newIndex = index + 1
+        if newIndex >= count {
+            if loop {
+                move(at: index, to: 0)
+            }
+        } else {
+            move(at: index, to: Swift.max(0,newIndex))
+        }
+    }
+    
+    mutating func moveDown(index: Index, loop: Bool = true) {
+        guard count > 1 else { return }
+        let newIndex = index - 1
+        if newIndex < 0 {
+            if loop {
+                move(at: index, to: count-1)
+            }
+        } else {
+            move(at: index, to: Swift.min(count-1,newIndex))
+        }
+    }
+
+    mutating func moveUp(index: Index, by: Int, loop: Bool = true) {
+        guard count > 1 else { return }
+        var by = by
+        while by > 0 {
+            moveUp(index: index, loop: loop)
+            by -= 1
+        }
+    }
+    
+    mutating func moveDown(index: Index, by: Int, loop: Bool = true) {
+        guard count > 1 else { return }
+        var by = by
+        while by > 0 {
+            moveDown(index: index, loop: loop)
+            by -= 1
+        }
+    }
+    
 }
 
 public extension Array {
