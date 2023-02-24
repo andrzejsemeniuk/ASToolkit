@@ -912,6 +912,11 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
     static func create(_ width: CGFloat, _ pattern: [CGFloat] = []) -> CGLineStyle {
         .init(lineWidth: width, lineCap: .butt, lineJoin: .miter, miterLimit: 10, dashPhase: 0, dashPattern: pattern)
     }
+    
+    static let line1 : CGLineStyle = .create(1)
+    static let line2 : CGLineStyle = .create(2)
+    static let line3 : CGLineStyle = .create(3)
+    
 }
 
 extension CGLineCap : Codable {
