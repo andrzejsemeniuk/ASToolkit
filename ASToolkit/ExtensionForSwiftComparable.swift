@@ -32,3 +32,17 @@ public extension Comparable {
     }
     
 }
+
+func comparing2<A: Comparable, B: Comparable>(_ first: (A,A), _ second: (B,B)) -> Bool {
+    if first.0 < first.1 { return true }
+    if first.0 == first.1, second.0 < second.1 { return true }
+    return false
+}
+
+func comparing3<A: Comparable, B: Comparable, C: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C)) -> Bool {
+    comparing2(first,second) || third.0 < third.1
+}
+
+func comparing4<A: Comparable, B: Comparable, C: Comparable, D: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C), _ fourth: (D,D)) -> Bool {
+    comparing3(first,second,third) || fourth.0 < fourth.1
+}
