@@ -103,46 +103,50 @@ public extension Double
     var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
     var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
     var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
-
+    
     func isInClosedInterval (_ l: Double, _ u: Double) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: Double, _ u: Double) -> Bool { l < self && self < u }
-
-    func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
-    func lerp01              (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    func lerp                (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
-    func lerp01              (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    static func lerp         (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
-    static func lerp01       (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
+    
+    func lerp               (from:Self, to:Self) -> Self { from + (to - from) * self }
+    func lerp01             (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
+    func lerp               (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
+    func lerp01             (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
+    static func lerp        (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
+    static func lerp01      (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
     
     
-    func progress            (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
-    func progress01          () -> Self { progress(from:0,to:1) }
-
-    func crunched(into: Double) -> Double {
-        var s = self
-        while into < s {
-            s -= into
-        }
-        while s < 0.0 {
-            s += into
-        }
-        return s
+    func progress           (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
+    func progress01         () -> Self { progress(from:0,to:1) }
+    
+    var fromFractionToPercent : Double {
+            // fraction : 1 = 100%
+            //  0.97 = -3%
+            //  1.02 = +2%
+        (self - 1.0) * 100.0
     }
     
-    @discardableResult
-    mutating func addAround01(_ add: Double) -> Double {
+    mutating func addedAround(_ lowerbound: Double, _ upperbound: Double, add: Double) -> Self {
+        guard add != 0 else { return self }
+        guard add.abs < (upperbound-lowerbound) else { return self }
         self += add
-        self = self.crunched(into: 1.0)
+        if upperbound < self {
+            self = lowerbound + (self - upperbound)
+        }
+        if add > 0 {
+            if self < lowerbound {
+                self += add
+            }
+        } else {
+            if self < lowerbound {
+                self = upperbound - (lowerbound - self)
+            }
+        }
         return self
     }
     
-    var fromFractionToPercent : Double {
-        // fraction : 1 = 100%
-        //  0.97 = -3%
-        //  1.02 = +2%
-        (self - 1.0) * 100.0
+    mutating func addedAround01(_ add: Double) -> Self {
+        addedAround(0,1,add: add)
     }
-        
 }
 
 public extension Double {
