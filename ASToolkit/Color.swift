@@ -265,6 +265,12 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         ].asPalette
     }
             
+    static func paletteDefaultBright(columns count: Int) -> Palette {
+        [
+            Self.generate(bright: count)
+        ].asPalette
+    }
+            
     static func paletteDefaultPale(columns count: Int) -> Palette {
         [
             Self.generate(pale: count)
@@ -307,15 +313,19 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     }
     
     static func generate(dark count: Int) -> [HSBAInfo] {
-        Self.generate(common: count, b: 0.55, B: 0.9)
+        Self.generate(common: count, S: 0.7, b: 0.55, B: 0.8)
     }
 
+    static func generate(bright count: Int) -> [HSBAInfo] {
+        Self.generate(common: count, s: 0.7, S: 0.4)
+    }
+    
     static func generate(pale count: Int) -> [HSBAInfo] {
-        Self.generate(common: count, s: 0.60, S: 0.1)
+        Self.generate(common: count, s: 0.5, S: 0.2)
     }
     
     static func generate(faded count: Int) -> [HSBAInfo] {
-        Self.generate(common: count, s: 0.4, S: 0.3, b: 0.5, B: 0.7)
+        Self.generate(common: count, s: 0.4, S: 0.3, b: 0.6, B: 0.8)
     }
     
 
