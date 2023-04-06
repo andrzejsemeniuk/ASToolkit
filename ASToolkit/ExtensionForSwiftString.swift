@@ -678,3 +678,15 @@ public extension String {
         }
     }
 }
+
+public extension String {
+
+    func removingCharacters(in forbiddenChars: CharacterSet) -> String {
+        let passed = self.unicodeScalars.filter { !forbiddenChars.contains($0) }
+        return String(String.UnicodeScalarView(passed))
+    }
+
+    func removingCharacters(in string: String) -> String {
+        return removingCharacters(in: CharacterSet(charactersIn: string))
+    }
+}
