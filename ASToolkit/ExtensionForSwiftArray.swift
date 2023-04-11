@@ -1056,3 +1056,37 @@ public extension Array {
         insert(remove(at: index), at: newIndex)
     }
 }
+
+
+public extension Array where Element == Double {
+    var indexOfMaxValue : Int? {
+        var imax : Int!
+        var vmax : Double!
+        for i in range {
+            if vmax == nil || vmax < self[i] {
+                imax = i
+                vmax = self[i]
+            }
+        }
+        return imax
+    }
+    var indexOfMinValue : Int? {
+        var imin : Int!
+        var vmin : Double!
+        for i in range {
+            if vmin == nil || vmin > self[i] {
+                imin = i
+                vmin = self[i]
+            }
+        }
+        return imin
+    }
+    
+//    var indexOfMinValue1 : Int? {
+//        var v : Double!
+//        return reduce(v, {
+//            $0 == nil ? $1 : $0 > $1 ? $1 : $0
+//        })
+//    }
+}
+
