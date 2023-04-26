@@ -843,3 +843,7 @@ extension Double : Stringable {
         Double(string)
     }
 }
+
+public extension Int16 {
+    var asString : String { String(self) }
+}
