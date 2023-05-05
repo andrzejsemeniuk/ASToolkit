@@ -33,6 +33,10 @@ public extension Data {
         try JSONDecoder().decode(from, from: self)
     }
     
+    func decoded<T: Decodable>(_ from: T.Type, fallback: T) -> T {
+        (try? decoded(from)) ?? fallback
+    }
+    
     static func encoded<T: Encodable>(_ from: T) throws -> Data {
         try JSONEncoder().encode(from)
     }

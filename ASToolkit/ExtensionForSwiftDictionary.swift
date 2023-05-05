@@ -86,6 +86,15 @@ public extension Dictionary where Key : Equatable {
     }
 }
 
+public extension Dictionary where Value : Hashable {
+    func inverted() -> Dictionary<Value,Key> {
+        var r : [Value : Key] = [:]
+        for (k,v) in self {
+            r[v] = k
+        }
+        return r
+    }
+}
 
 public extension Dictionary {
     

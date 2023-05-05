@@ -574,6 +574,9 @@ public extension String {
     var splitByPipe : [String] {
         split("|")
     }
+    var splitByBackslash : [String] {
+        split("/")
+    }
 }
 
 public extension String {
