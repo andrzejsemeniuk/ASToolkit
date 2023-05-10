@@ -168,9 +168,9 @@ extension Date {
     }
 }
 
-extension Date {
+public extension Date {
     
-    public var toYYYYMMDDHHMMSSMS : UInt64 {
+    var toYYYYMMDDHHMMSSMS : UInt64 {
         let yyyy = UInt64(year())   * 10000000000000
         let   mm = UInt64(month())  *   100000000000
         let   dd = UInt64(day())    *     1000000000
@@ -181,7 +181,7 @@ extension Date {
         return yyyy + mm + dd + hh + mi + ss + ms
     }
 
-    public var toYYYYMMDDHHMMSS : UInt64 {
+    var toYYYYMMDDHHMMSS : UInt64 {
         let yyyy = UInt64(year())   * 10000000000
         let   mm = UInt64(month())  *   100000000
         let   dd = UInt64(day())    *     1000000
@@ -191,7 +191,7 @@ extension Date {
         return yyyy + mm + dd + hh + mi + ss
     }
 
-    public var toYYYYMMDDHHMM : UInt64 {
+    var toYYYYMMDDHHMM : UInt64 {
         let yyyy = UInt64(year())   * 100000000
         let   mm = UInt64(month())  *   1000000
         let   dd = UInt64(day())    *     10000
@@ -200,7 +200,7 @@ extension Date {
         return yyyy + mm + dd + hh + mi
     }
 
-    public var toYYYYMMDDHH : UInt64 {
+    var toYYYYMMDDHH : UInt64 {
         let yyyy = UInt64(year())   * 1000000
         let   mm = UInt64(month())  *   10000
         let   dd = UInt64(day())    *     100
@@ -208,19 +208,41 @@ extension Date {
         return yyyy + mm + dd + hh
     }
 
-    public var toYYYYMMDD : UInt64 {
+    var toYYYYMMDD : UInt64 {
         let yyyy = UInt64(year())   * 10000
         let   mm = UInt64(month())  *   100
         let   dd = UInt64(day())
         return yyyy + mm + dd
     }
 
-    public var toYYYYMM : UInt64 {
+    var toYYYYMM : UInt64 {
         let yyyy = UInt64(year())   * 100
         let   mm = UInt64(month())
         return yyyy + mm
     }
 
+    struct Components : Codable {
+        
+        var YYYY    : String
+        var MM      : String
+        var DD      : String
+        var HH      : String
+        var mm      : String
+        var ss      : String
+        
+        init(_ date: Date) {
+            YYYY = DateFormatter.init(withFormat: "yyyy").string(from: date)
+            MM   = DateFormatter.init(withFormat: "MM").string(from: date)
+            DD   = DateFormatter.init(withFormat: "DD").string(from: date)
+            HH   = DateFormatter.init(withFormat: "HH").string(from: date)
+            mm   = DateFormatter.init(withFormat: "mm").string(from: date)
+            ss   = DateFormatter.init(withFormat: "ss").string(from: date)
+        }
+    }
+    
+    var toComponents : Components {
+        .init(self)
+    }
 }
 
 extension Date {
@@ -229,7 +251,7 @@ extension Date {
 		case sunday = 0, monday, tuesday, wednesday, thursday, friday, saturday
 	}
 
-	var weekday:WeekDay {
+	var weekday : WeekDay {
 		return WeekDay(rawValue:Calendar(identifier: .gregorian).component(.weekday, from: self))!
 	}
 }
