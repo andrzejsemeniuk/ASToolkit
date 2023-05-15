@@ -390,3 +390,12 @@ public extension Date {
     }
     
 }
+
+public extension Date {
+    
+    var asString : String { "\(self)" }
+    
+    func asString(withFormat format: String) -> String {
+        DateFormatter.init(withFormat: format).string(from: self)
+    }
+}
