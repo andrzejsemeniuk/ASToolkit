@@ -583,6 +583,20 @@ public extension Float {
     var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
     
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
+    
+    var formattedWithoutRightmostFractionalZeros : String {
+        var r = self.asString
+        if r.contains(where: { $0 == "." }) {
+            var i = r.count-1
+            while r[i] == "0" {
+                i -= 1
+            }
+            if i < r.count {
+                r = r[0...i]
+            }
+        }
+        return r
+    }
 }
 
 public extension Float {
