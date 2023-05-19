@@ -207,7 +207,8 @@ public extension Color {
         .init(white: 0, alpha: 0.9),
     ]
     
-    static let brown    = Color.init(hsb: [0.7, 0.9, 0.7])
+    static let brown    = Color.init(hsb: [0.07, 0.8, 0.8])
+    static let beige    = Color.init(hsb: [0.10, 0.6, 0.8])
     
     static let gray1    = Color.init(white: 0.1)
     static let gray2    = Color.init(white: 0.2)
