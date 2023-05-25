@@ -300,6 +300,10 @@ public extension Date {
         Date().midnight
     }
     
+    static var today : Date {
+        Date().midnight
+    }
+    
     static var timestamp : TimeInterval {
         Date().timeIntervalSince1970
     }
