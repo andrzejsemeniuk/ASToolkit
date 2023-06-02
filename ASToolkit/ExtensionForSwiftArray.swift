@@ -1090,3 +1090,11 @@ public extension Array where Element == Double {
 //    }
 }
 
+
+public extension Array where Element : Hashable {
+    var asDictionaryIndex : [Element : Int] {
+        range.asArray.asDictionary { i in
+            (self[i],i)
+        }
+    }
+}
