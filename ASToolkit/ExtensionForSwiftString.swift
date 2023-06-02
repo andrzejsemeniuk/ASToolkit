@@ -529,6 +529,9 @@ public extension Array where Element == String {
         joined({ $0.qq })
     }
     
+    var joinedByNothing : String {
+        self.joined(separator: "")
+    }
     var joinedByComma : String {
         self.joined(separator: ",")
     }
@@ -848,5 +851,25 @@ public extension String {
         }
     }
 
+
+}
+
+public extension String {    
+    
+    var last8characters : String {
+        last(characters: 8)
+    }
+    
+    var last12characters : String {
+        last(characters: 12)
+    }
+    
+    var last16characters : String {
+        last(characters: 16)
+    }
+    
+    func last(characters limit: Int) -> String {
+        length < (limit + 1) ? self : String(self.characters.trimmed(to: length - limit))
+    }
 
 }
