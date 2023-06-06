@@ -584,6 +584,7 @@ public extension String {
 
 public extension String {
     
+    var  asFloat   :  Float?   { Float(self) }
     var  asDouble  :  Double?  { Double(self) }
     var  asCGFloat :  CGFloat? { CGFloat(self) }
     var  asInt     :  Int?     { Int(self) }

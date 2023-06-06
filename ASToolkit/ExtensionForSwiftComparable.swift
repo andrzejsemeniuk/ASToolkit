@@ -38,9 +38,9 @@ func comparingLessOptionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
         if let second {
             return first.compared(to: second) == .orderedAscending
         }
-        return true
+        return false
     }
-    return false
+    return true
 }
 
 func comparing2<A: Comparable, B: Comparable>(_ first: (A,A), _ second: (B,B)) -> Bool {
