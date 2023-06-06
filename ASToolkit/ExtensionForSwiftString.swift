@@ -282,9 +282,9 @@ extension String
         return self
     }
     
-    public func trimmedFromEndIfLongerThan(_ count:Int) -> Substring {
+    public func trimmedFromEndIfLongerThan(_ count:Int, withSuffix: String = "") -> Substring {
         if count < length {
-            return substring(from:0,length:count)
+            return substring(from:0,length:count) + withSuffix
         }
         return Substring(self)
     }
@@ -573,6 +573,12 @@ public extension String {
     
     var splitByComma : [String] {
         split(",")
+    }
+    var splitByDash : [String] {
+        split("-")
+    }
+    var splitByColon : [String] {
+        split(":")
     }
     var splitByPipe : [String] {
         split("|")
