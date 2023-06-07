@@ -262,6 +262,60 @@ extension Int64 {
         
         return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
     }
+    
+    var formatWithAbbrevationAsMarkdownString : String {
+        let S = formatWithAbbrevationAsString
+        if let last = S.last, last.isLetter {
+            return S[0..<S.count-1] + "**\(last)**"
+        }
+        return S
+    }
+
+    var formatWithFinancialValueAbbrevationAsString : String {
+        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+        
+        let abbreviations: [Abbrevation] = [
+            (0, 1, ""),
+            (1000.0, 1000.0, "k"),
+            (999_999.0, 1_000_000.0, "M"),
+            (999_999_999.0, 1_000_000_000.0, "B"),
+            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
+//            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
+//            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
+        ]
+
+        let startValue = Double(abs(self))
+        
+        let abbreviation: Abbrevation = {
+            var prevAbbreviation = abbreviations[0]
+            for tmpAbbreviation in abbreviations {
+                if (startValue < tmpAbbreviation.threshold) {
+                    break
+                }
+                prevAbbreviation = tmpAbbreviation
+            }
+            return prevAbbreviation
+        }()
+
+        let value = Double(self) / abbreviation.divisor
+
+        let formatter = Self.formatterWithAbbreviation
+        
+        formatter.positiveSuffix = abbreviation.suffix
+        formatter.negativeSuffix = abbreviation.suffix
+        
+        return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
+    }
+
+    var formatWithFinancialValueAbbrevationAsMarkdownString : String {
+        let S = formatWithFinancialValueAbbrevationAsString
+        if let last = S.last, last.isLetter {
+            return S[0..<S.count-1] + "**\(last)**"
+        }
+        return S
+    }
+
+
 //    var formatWithAbbrevationAsAttributedString : AttributedString {
 //
 //        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
