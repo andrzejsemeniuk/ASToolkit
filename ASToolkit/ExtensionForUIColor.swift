@@ -10,6 +10,9 @@ import Foundation
 #if os(iOS)
 import UIKit
 #endif
+#if os(tvOS)
+import UIKit
+#endif
 #if os(macOS)
 import AppKit
 
@@ -182,22 +185,22 @@ extension UIColor
     public var HSBAsaturation   :CGFloat    { return HSBA.saturation }
     public var HSBAbrightness   :CGFloat    { return HSBA.brightness }
     
-    open class func GRAY(_ v:Float, _ a:Float = 1.0) -> UIColor
+    public class func GRAY(_ v:Float, _ a:Float = 1.0) -> UIColor
     {
         return UIColor(white:CGFloat(v),alpha:CGFloat(a))
     }
     
-    open class func RGBA(_ r:Float, _ g:Float, _ b:Float, _ a:Float = 1.0) -> UIColor
+    public class func RGBA(_ r:Float, _ g:Float, _ b:Float, _ a:Float = 1.0) -> UIColor
     {
         return UIColor(red:CGFloat(r),green:CGFloat(g),blue:CGFloat(b),alpha:CGFloat(a))
     }
     
-    open class func HSBA(_ h:Float, _ s:Float, _ b:Float, _ a:Float = 1.0) -> UIColor
+    public class func HSBA(_ h:Float, _ s:Float, _ b:Float, _ a:Float = 1.0) -> UIColor
     {
         return UIColor(hue:CGFloat(h),saturation:CGFloat(s),brightness:CGFloat(b),alpha:CGFloat(a))
     }
     
-    open func multiply     (byRatio ratio:CGFloat) -> UIColor {
+    public func multiply     (byRatio ratio:CGFloat) -> UIColor {
         let RGBA = self.RGBA
         return UIColor(red      : CGFloat(ratio * RGBA.red).clampedTo01,
                        green    : CGFloat(ratio * RGBA.green).clampedTo01,
@@ -205,7 +208,7 @@ extension UIColor
                        alpha    : RGBA.alpha)
     }
     
-    open func higher        (byRatio ratio:CGFloat) -> UIColor {
+    public func higher        (byRatio ratio:CGFloat) -> UIColor {
         let RGBA = self.RGBA
         return UIColor(red      : CGFloat(RGBA.red + (1.0 - RGBA.red) * ratio).clampedTo01,
                        green    : CGFloat(RGBA.green + (1.0 - RGBA.green) * ratio).clampedTo01,
@@ -213,7 +216,7 @@ extension UIColor
                        alpha    : RGBA.alpha)
     }
     
-    open func lower         (byRatio ratio:CGFloat) -> UIColor {
+    public func lower         (byRatio ratio:CGFloat) -> UIColor {
         let RGBA = self.RGBA
         return UIColor(red      : CGFloat(RGBA.red - RGBA.red * ratio).clampedTo01,
                        green    : CGFloat(RGBA.green - RGBA.green * ratio).clampedTo01,
@@ -374,27 +377,27 @@ extension UIColor {
 
 extension UIColor {
 
-    open var descriptionAsRGB : String {
+    public var descriptionAsRGB : String {
         let v = RGBA
         return "UIColor(rgb:[\(v.red),\(v.green),\(v.blue)])"
     }
     
-    open var descriptionAsRGBA : String {
+    public var descriptionAsRGBA : String {
         let v = RGBA
         return "UIColor(rgba:[\(v.red),\(v.green),\(v.blue),\(v.alpha)])"
     }
     
-    open var descriptionAsHSB : String {
+    public var descriptionAsHSB : String {
         let v = HSBA
         return "UIColor(hsb:[\(v.hue),\(v.saturation),\(v.brightness)])"
     }
     
-    open var descriptionAsHSBA : String {
+    public var descriptionAsHSBA : String {
         let v = HSBA
         return "UIColor(hsba:[\(v.hue),\(v.saturation),\(v.brightness),\(v.alpha)])"
     }
 
-    open var representationOfRGBAasHexadecimal : [String] {
+    public var representationOfRGBAasHexadecimal : [String] {
         let v = components_RGBA_UInt8()
         return [
             String(format:"%02X",v.red),
@@ -446,61 +449,61 @@ extension UIColor {
 
 extension UIColor {
     
-    open func withHue(_ value:CGFloat) -> UIColor {
+    public func withHue(_ value:CGFloat) -> UIColor {
         var HSBA = self.HSBA
         HSBA.hue = value
         return UIColor(HSBA:HSBA)
     }
     
-    open func withSaturation(_ value:CGFloat) -> UIColor {
+    public func withSaturation(_ value:CGFloat) -> UIColor {
         var HSBA = self.HSBA
         HSBA.saturation = value
         return UIColor(HSBA:HSBA)
     }
     
-    open func withBrightness(_ value:CGFloat) -> UIColor {
+    public func withBrightness(_ value:CGFloat) -> UIColor {
         var HSBA = self.HSBA
         HSBA.brightness = value
         return UIColor(HSBA:HSBA)
     }
     
-    open func withRed(_ value:CGFloat) -> UIColor {
+    public func withRed(_ value:CGFloat) -> UIColor {
         var RGBA = self.RGBA
         RGBA.red = value
         return UIColor(RGBA:RGBA)
     }
     
-    open func withGreen(_ value:CGFloat) -> UIColor {
+    public func withGreen(_ value:CGFloat) -> UIColor {
         var RGBA = self.RGBA
         RGBA.green = value
         return UIColor(RGBA:RGBA)
     }
     
-    open func withBlue(_ value:CGFloat) -> UIColor {
+    public func withBlue(_ value:CGFloat) -> UIColor {
         var RGBA = self.RGBA
         RGBA.blue = value
         return UIColor(RGBA:RGBA)
     }
     
-    open func withCyan(_ value:CGFloat) -> UIColor {
+    public func withCyan(_ value:CGFloat) -> UIColor {
         var CMYKA = self.CMYKA
         CMYKA.cyan = value
         return UIColor(CMYKA:CMYKA)
     }
     
-    open func withMagenta(_ value:CGFloat) -> UIColor {
+    public func withMagenta(_ value:CGFloat) -> UIColor {
         var CMYKA = self.CMYKA
         CMYKA.magenta = value
         return UIColor(CMYKA:CMYKA)
     }
     
-    open func withYellow(_ value:CGFloat) -> UIColor {
+    public func withYellow(_ value:CGFloat) -> UIColor {
         var CMYKA = self.CMYKA
         CMYKA.yellow = value
         return UIColor(CMYKA:CMYKA)
     }
     
-    open func withKey(_ value:CGFloat) -> UIColor {
+    public func withKey(_ value:CGFloat) -> UIColor {
         var CMYKA = self.CMYKA
         CMYKA.key = value
         return UIColor(CMYKA:CMYKA)
@@ -513,9 +516,9 @@ extension UIColor {
 
 extension UIColor {
     
-    open class var aqua     : UIColor { return UIColor(hsb:[0.51,1,1]) }
+    public class var aqua     : UIColor { return UIColor(hsb:[0.51,1,1]) }
     
-    open class var pink     : UIColor { return UIColor(rgb:[1,0.80,0.90]) }
+    public class var pink     : UIColor { return UIColor(rgb:[1,0.80,0.90]) }
     
 }
 

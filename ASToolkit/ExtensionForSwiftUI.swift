@@ -156,7 +156,7 @@ public extension View {
 
 }
 
-@available(iOS 13, *)
+//@available(iOS 13, *)
 public extension Color {
     
     init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
@@ -257,7 +257,7 @@ public extension Color {
     
     var name : String { self.description }
     
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     func uiColor(_ c: UIColor = .white) -> UIKit.UIColor {
         UIColor(self)
 //        if let rgba = name.rgba {
@@ -1482,3 +1482,24 @@ struct SaveScreenshotView: UIViewRepresentable {
 #endif
 
 
+
+#if os(macOS)
+
+public extension Scene {
+    
+    func defaultSizeFullscreen(size: CGSize = .init(1024, 768)) -> some Scene {
+        self.defaultSize(NSScreen.main?.frame.size ?? size)
+    }
+}
+
+public extension View {
+    
+    func defaultSizeFullscreen(size: CGSize = .init(1024, 768)) -> some View {
+        self.frame(NSScreen.main!.frame.size.width,NSScreen.main!.frame.size.height)
+//        self.frame(size: NSScreen.main!.frame.size)
+//        return self.frame(size: NSScreen.main?.frame.size ?? size)
+    }
+    
+}
+
+#endif

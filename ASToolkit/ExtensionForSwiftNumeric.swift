@@ -915,3 +915,47 @@ extension Double : Stringable {
 public extension Int16 {
     var asString : String { String(self) }
 }
+
+extension Int {
+    var asString : String { String(self) }
+}
+extension Int32 {
+    var asString : String { String(self) }
+}
+extension Int64 {
+    var asString : String { String(self) }
+}
+extension UInt32 {
+    var asString : String { String(self) }
+}
+extension UInt64 {
+    var asString : String { String(self) }
+}
+extension Float {
+    var asString : String { String(self) }
+}
+extension Double {
+    var asString : String { String(self) }
+}
+
+public extension Array where Element == Double {
+    func asStringTuple(delimiter: String = ",") -> String { self.map { $0.format4 }.joined(separator: delimiter) }
+    func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
+}
+
+public extension Array where Element == CGFloat {
+    func asStringTuple(delimiter: String = ",") -> String { self.map { $0.format4 }.joined(separator: delimiter) }
+    func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
+    var asStringHSBA : String { [
+        self[safe: 0] ?? 0.0,
+        self[safe: 1] ?? 0.0,
+        self[safe: 2] ?? 1.0,
+        self[safe: 3] ?? 1.0,
+    ].map { $0.format4 }.joinedByComma }
+//        Array(0...3).map { i in self[safe: Int(i)] ?? 1.0 }.map { $0.format4 }.joinedByComma }
+}
+
+public extension Array where Element == Int {
+    func asStringTuple(delimiter: String = ",") -> String { self.map { "\($0)" }.joined(separator: delimiter) }
+    func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
+}

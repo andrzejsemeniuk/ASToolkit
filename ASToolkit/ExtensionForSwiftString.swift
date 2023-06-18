@@ -394,7 +394,7 @@ public extension String {
         index(startIndex, offsetBy: at)
     }
     
-    func indexDistance(to: Index) -> IndexDistance {
+    func indexDistance(to: Index) -> Int {
         distance(from: startIndex, to: to)
     }
     
@@ -583,7 +583,7 @@ public extension String {
     var splitByPipe : [String] {
         split("|")
     }
-    var splitByBackslash : [String] {
+    var splitBySlash : [String] {
         split("/")
     }
 }
@@ -880,3 +880,15 @@ public extension String {
     }
 
 }
+
+public extension String {
+    
+    func asArrayOfInt(delimiter: String = ",") -> [Int] {
+        split(delimiter).map { Int($0) }.compactMap({$0})
+    }
+    func asArrayOfDouble(delimiter: String = ",") -> [Double] {
+        split(delimiter).map { Double($0) }.compactMap({$0})
+    }
+
+}
+

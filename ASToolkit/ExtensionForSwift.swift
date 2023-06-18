@@ -103,3 +103,23 @@ public extension Optional where Wrapped : Equatable {
 //    
 //}
 //
+
+extension KeyedDecodingContainer {
+
+    public func decode<T: Decodable>(forKey key: KeyedDecodingContainer<K>.Key) throws -> T {
+        try decode(T.self, forKey: key)
+    }
+
+    public func decode<T: Decodable>(_ key: KeyedDecodingContainer<K>.Key) throws -> T {
+        try decode(T.self, forKey: key)
+    }
+
+    public func decode<T: Decodable>(_ key: KeyedDecodingContainer<K>.Key, _ fallback: T) -> T {
+        if let r = try? decode(T.self, forKey: key) {
+            return r
+        }
+        return fallback
+    }
+
+}
+
