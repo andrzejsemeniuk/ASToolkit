@@ -324,8 +324,8 @@ public class Attributes : Codable, Equatable, ObservableObject {
     }
 
     #if os(iOS)
-    public func asBlurEffectStyle(_ key: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
-        if let operand = dictionary[key], let int = Int(operand) {
+    public func asBlurEffectStyle(_ dbKeyForData: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
+        if let operand = dictionary[dbKeyForData], let int = Int(operand) {
             return UIBlurEffect.Style.init(rawValue: int) ?? fallback
         }
         return fallback
@@ -409,8 +409,8 @@ public class Attributes : Codable, Equatable, ObservableObject {
     }
 
     #if os(iOS)
-    public func set(_ key: String, _ mappingYToV: UIBlurEffect.Style) {
-        dictionary[key] = String(mappingYToV.rawValue)
+    public func set(_ dbKeyForData: String, _ mappingYToV: UIBlurEffect.Style) {
+        dictionary[dbKeyForData] = String(mappingYToV.rawValue)
     }
     #endif
 

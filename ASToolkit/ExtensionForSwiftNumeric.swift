@@ -211,7 +211,7 @@ public extension Double {
 
 }
 
-extension Int64 {
+public extension Int64 {
 
     // https://stackoverflow.com/questions/18267211/ios-convert-large-numbers-to-smaller-format
     static fileprivate let formatterWithAbbreviation : NumberFormatter = {
@@ -916,25 +916,25 @@ public extension Int16 {
     var asString : String { String(self) }
 }
 
-extension Int {
+public extension Int {
     var asString : String { String(self) }
 }
-extension Int32 {
+public extension Int32 {
     var asString : String { String(self) }
 }
-extension Int64 {
+public extension Int64 {
     var asString : String { String(self) }
 }
-extension UInt32 {
+public extension UInt32 {
     var asString : String { String(self) }
 }
-extension UInt64 {
+public extension UInt64 {
     var asString : String { String(self) }
 }
-extension Float {
+public extension Float {
     var asString : String { String(self) }
 }
-extension Double {
+public extension Double {
     var asString : String { String(self) }
 }
 
