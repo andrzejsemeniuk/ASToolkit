@@ -398,8 +398,12 @@ public extension String {
         distance(from: startIndex, to: to)
     }
     
-	func matches(regex: String) -> Bool {
-		return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    func matches(regex: String) -> Bool {
+        self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    }
+
+	func matches(regex: String?) -> Bool {
+        regex == nil ? true : matches(regex: regex!)
 	}
 
 	func substring(regex: String) -> Substring? {

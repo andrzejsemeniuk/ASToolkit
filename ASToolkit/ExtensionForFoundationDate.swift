@@ -119,6 +119,10 @@ extension Date {
         return formatter.string(from: self)
     }
 
+    public func formattedYYYYMMddHHmmss() -> String {
+        formatted("YYYY-MM-dd HH:mm:ss")
+    }
+    
 	public static func formatter(withFormat format:String) -> DateFormatter {
 		let formatter = DateFormatter()
 		formatter.calendar = Calendar(identifier: .iso8601)

@@ -43,3 +43,11 @@ public extension Bool {
     static var pick     : Bool { .random() }
 
 }
+
+public extension Bool {
+    
+    func XOR (_ rhs: Bool) -> Bool {
+        self != rhs
+    }
+    
+}
