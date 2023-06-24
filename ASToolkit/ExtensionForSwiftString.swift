@@ -647,6 +647,10 @@ public extension String {
     var squoted : Self { singlequoted }
     var sq : Self { singlequoted }
 
+    var bracketed : Self {
+        "[\(self)]"
+    }
+
 }
 
 
