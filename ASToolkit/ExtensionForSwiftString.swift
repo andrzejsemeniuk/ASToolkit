@@ -651,6 +651,9 @@ public extension String {
         "[\(self)]"
     }
 
+    var sp1 : Self { surrounded(by: " ")}
+    var sp2 : Self { surrounded(by: "  ")}
+    var sp3 : Self { surrounded(by: "   ")}
 }
 
 
