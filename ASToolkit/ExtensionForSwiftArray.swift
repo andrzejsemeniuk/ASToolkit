@@ -298,20 +298,28 @@ extension Array {
     }
 }
 
-extension Array {
+public extension Array {
     
-    public func appended(_ element:Element) -> Self {
+    func appended(_ element:Element) -> Self {
         var result = self
         result.append(element)
         return result
     }
     
-    public func prepended(_ element:Element) -> Self {
+    func prepended(_ element:Element) -> Self {
         var result = self
         result.prepend(element)
         return result
     }
     
+    func with(_ element: Element, at: Int) -> Self {
+        if at < count, 0 <= at {
+            var r = self
+            r[at] = element
+            return r
+        }
+        return self
+    }
 }
 
 extension Array {
