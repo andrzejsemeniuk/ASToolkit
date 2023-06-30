@@ -895,10 +895,10 @@ public extension String {
 public extension String {
     
     func asArrayOfInt(delimiter: String = ",") -> [Int] {
-        split(delimiter).map { Int($0) }.compactMap({$0})
+        split(delimiter).compactMap { Int($0) }
     }
     func asArrayOfDouble(delimiter: String = ",") -> [Double] {
-        split(delimiter).map { Double($0) }.compactMap({$0})
+        split(delimiter).compactMap { Double($0) }
     }
 
 }
