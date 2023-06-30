@@ -312,13 +312,27 @@ public extension Array {
         return result
     }
     
-    func with(_ element: Element, at: Int) -> Self {
+    func replaced(_ element: Element, at: Int) -> Self {
         if at < count, 0 <= at {
             var r = self
             r[at] = element
             return r
         }
         return self
+    }
+    
+    func replaced(_ elements: Self, at: [Int]) -> Self {
+        var r = self
+        for index in at {
+            if r.valid(index: index) {
+                r[index] = elements[index]
+            }
+        }
+        return r
+    }
+    
+    func valid(index: Int) -> Bool {
+        index < count && 0 <= index 
     }
 }
 
