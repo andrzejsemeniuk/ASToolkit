@@ -560,3 +560,9 @@ extension String {
         .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, upto: 4), fallback: 1)
     }
 }
+
+extension Color {
+    var asBWExtreme : Color {
+        .init(white: self.hsba[2] < 0.5 ? 0 : 1)
+    }
+}
