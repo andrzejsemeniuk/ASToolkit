@@ -590,6 +590,9 @@ public extension String {
     var splitBySlash : [String] {
         split("/")
     }
+    var splitByNewline : [String] {
+        split("\n")
+    }
 }
 
 public extension String {
