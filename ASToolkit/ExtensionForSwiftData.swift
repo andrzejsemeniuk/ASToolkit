@@ -29,12 +29,12 @@ public extension Data {
         .init(data: self, encoding: .utf8)
     }
     
-    func decoded<T: Decodable>(_ from: T.Type) throws -> T {
-        try JSONDecoder().decode(from, from: self)
+    func decoded<T: Decodable>() throws -> T {
+        try JSONDecoder().decode(T.self, from: self)
     }
     
-    func decoded<T: Decodable>(_ from: T.Type, fallback: T) -> T {
-        (try? decoded(from)) ?? fallback
+    func decoded<T: Decodable>(fallback: T) -> T {
+        (try? self.decoded()) ?? fallback
     }
     
     static func encoded<T: Encodable>(_ from: T) throws -> Data {

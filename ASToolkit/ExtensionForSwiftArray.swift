@@ -159,6 +159,17 @@ public extension Array
     func indexForPreviousLooped(_ i: Int) -> Int {
         count < 1 ? 0 : i > 0 ? i - 1 : count-1
     }
+    
+    @discardableResult
+    mutating func popFirst() -> Element? {
+        count > 0 ? remove(at: 0) : nil
+    }
+
+    @discardableResult
+    mutating func popLast() -> Element? {
+        count > 0 ? remove(at: count-1) : nil
+    }
+    
 }
 
 public extension Array {

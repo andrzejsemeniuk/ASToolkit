@@ -39,6 +39,17 @@ extension Dictionary where Key == String, Value == String {
 
 }
 
+extension Dictionary where Key == String {
+    
+    func with(prefix: String) -> Self {
+        var R : Self = [:]
+        keys.forEach { key in
+            R["a/\(key)"] = self[key]!
+        }
+        return R
+    }
+}
+
 extension Dictionary {
     
     public var isNotEmpty : Bool {
