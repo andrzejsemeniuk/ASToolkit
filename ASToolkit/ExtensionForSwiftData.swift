@@ -29,6 +29,15 @@ public extension Data {
         .init(data: self, encoding: .utf8)
     }
     
+    
+    func decoded<T: Decodable>(as type: T.Type) -> T? {
+        try? JSONDecoder().decode(type.self, from: self)
+    }
+    
+    func decoded<T: Decodable>(as type: T.Type, _ fallback: T) -> T {
+        (try? JSONDecoder().decode(type.self, from: self)) ?? fallback
+    }
+
     func decoded<T: Decodable>() throws -> T {
         try JSONDecoder().decode(T.self, from: self)
     }
@@ -41,6 +50,7 @@ public extension Data {
         try JSONEncoder().encode(from)
     }
 
+    
     static func create<T>(from value: T) -> Self {
         // https://www.hackingwithswift.com/forums/swift/how-do-i-get-a-uint32-into-a-data/8802
         var value = value

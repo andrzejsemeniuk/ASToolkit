@@ -16,12 +16,12 @@ public typealias Block_B_V                  = ((Bool)->Void)
 public typealias BlockBoolToVoid            = Block_B_V
 public typealias BlockAcceptingBool         = Block_B_V
 
-public func sleep(interval:TimeInterval = 0.1, loop:()->Bool, success:()->Bool) -> Bool {
+public func sleep(interval:TimeInterval = 0.1, loop:()->Bool, success:()->Bool) async throws -> Bool {
 	while loop() {
 		if success() {
 			return true
 		}
-		Thread.sleep(forTimeInterval: interval)
+		try await Task.sleep(seconds: interval)
 	}
 	return false
 }
