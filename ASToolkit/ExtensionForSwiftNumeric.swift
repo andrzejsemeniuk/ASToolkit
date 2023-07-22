@@ -524,6 +524,10 @@ public extension CGFloat {
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
 
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
+    
+    var percent1 : String { self == 0 ? "0.000" : NSString(format: "%.1f%%", self * 100.0) as String }
+    var percent2 : String { self == 0 ? "0.000" : NSString(format: "%.2f%%", self * 100.0) as String }
+
 }
 
 extension CGFloat : RawRepresentable {
@@ -827,6 +831,7 @@ public extension Int {
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
     var asUInt          : UInt          { UInt(self) }
+    var asUInt32        : UInt32        { UInt32(self) }
     var asUInt64        : UInt64        { UInt64(self) }
     var asInt32         : Int32         { Int32(self) }
 
