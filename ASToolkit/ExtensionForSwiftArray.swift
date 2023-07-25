@@ -93,7 +93,7 @@ public extension Array
         if from < 1 {
             return []
         }
-        return subarray(from: 0, to:from)
+        return count <= from ? self : subarray(from: 0, to:from)
     }
     
     mutating func keep(to:Int) {
@@ -284,6 +284,18 @@ extension Array where Element == Double {
     public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
+    
+}
+
+public extension Array where Element == String {
+    
+    func uppercased() -> Self {
+        map { $0.uppercased() }
+    }
+    
+    func lowercased() -> Self {
+        map { $0.lowercased() }
+    }
     
 }
 
