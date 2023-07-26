@@ -14,16 +14,16 @@ extension Bool
         self = !self
     }
 
-    public func inverted() -> Bool {
-        return !self
+    public func inverted(_ invert: Bool = true) -> Bool {
+        invert ? !self : self
     }
 
     public mutating func flip() {
         self = !self
     }
     
-    public func flipped() -> Bool {
-        return !self
+    public func flipped(_ invert: Bool = true) -> Bool {
+        inverted(invert)
     }
 }
 

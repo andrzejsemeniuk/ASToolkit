@@ -611,6 +611,10 @@ public extension String {
     
     var asPhrase : String {
 //        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
+        asWordsFromCamelNotation
+    }
+    
+    var asWordsFromCamelNotation : String {
         var r : String = ""
         var spaces = 0
         for c in self {

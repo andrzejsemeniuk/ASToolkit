@@ -402,6 +402,12 @@ extension Array where Element : Equatable {
         return result
     }
     
+    public func removed(at index: Int) -> Self {
+        var result = self
+        result.remove(at: index)
+        return result
+    }
+    
 }
 
 public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
