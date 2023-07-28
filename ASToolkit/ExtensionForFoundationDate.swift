@@ -407,4 +407,35 @@ public extension Date {
     func asString(withFormat format: String) -> String {
         DateFormatter.init(withFormat: format).string(from: self)
     }
+    
+}
+
+public extension Int {
+    
+    func asStringOfProgressHHMMSS(limit: Int = 5) -> String {
+        let SECONDS = self
+        var r = ""
+        let HH = SECONDS / 3600
+        let MM = (SECONDS - HH * 3600) / 60
+        let SS = (SECONDS - HH * 3600 - MM * 60)
+        
+        if HH > 0 {
+            r += "\(HH)h"
+        }
+        if MM > 0 {
+            if r.isNotEmpty {
+                r += " "
+            }
+            r += "\(MM)m"
+        }
+        if HH == 0, MM < 5 {
+            if r.isNotEmpty {
+                r += " "
+            }
+            r += "\(SS)s"
+        }
+        
+        return r
+    }
+
 }
