@@ -248,7 +248,7 @@ public extension Array where Element : Numeric {
 //        reduce(0, { $0 + (condition($1) ? $1 : 0)})
         reduce(0, { condition($1) ? $0 + $1 : $0 })
     }
-
+    
 }
 
 extension Array where Element == Int {
