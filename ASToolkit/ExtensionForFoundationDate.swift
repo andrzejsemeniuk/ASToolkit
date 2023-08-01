@@ -428,7 +428,7 @@ public extension Int {
             }
             r += "\(MM)m"
         }
-        if HH == 0, MM < 5 {
+        if HH == 0, MM < limit {
             if r.isNotEmpty {
                 r += " "
             }
