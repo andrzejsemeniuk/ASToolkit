@@ -450,29 +450,45 @@ extension Array where Element: Collection {
 	}
 }
 
-extension Array where Element: Equatable {
+public extension Array where Element: Equatable {
 
-	public func index(of:Element) -> Int? {
+	func index(of:Element) -> Int? {
 		return self.index(where: { element in
 			return of == element
 		})
 	}
 
-	public func contains(_ element:Element) -> Bool {
+	func contains(_ element:Element) -> Bool {
 		return self.index(of:element) != nil
 	}
 
-    public func missing(_ element:Element) -> Bool {
+    func missing(_ element:Element) -> Bool {
         return !contains(element)
     }
 
-	@discardableResult mutating public func remove(_ element:Element) -> Bool {
+	@discardableResult mutating func remove(_ element:Element) -> Bool {
 		if let index = self.index(of: element) {
 			_ = self.remove(at: index)
 			return true
 		}
 		return false
 	}
+    
+    mutating func toggle(append element: Element) {
+        if contains(element) {
+            remove(element)
+        } else {
+            append(element)
+        }
+    }
+    
+    mutating func toggle(prepend element: Element) {
+        if contains(element) {
+            remove(element)
+        } else {
+            prepend(element)
+        }
+    }
 
 }
 
