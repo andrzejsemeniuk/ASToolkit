@@ -144,7 +144,7 @@ public extension View {
         self.borderRectangle(corner: 0, lineColor: color, lineWidth: thickness, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: dash, dashPhase: phase)
     }
 
-    func frameExpandToFillScreen() -> some View {
+    func frameExpand() -> some View {
         //        return self.edgesIgnoringSafeArea(.all)
         //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         frame(maxWidth: .infinity, maxHeight: .infinity)
