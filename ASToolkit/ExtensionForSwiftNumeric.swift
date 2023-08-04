@@ -530,8 +530,8 @@ public extension CGFloat {
 
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
     
-    var percent1 : String { self == 0 ? "0.0" : NSString(format: "%.1f%%", self * 100.0) as String }
-    var percent2 : String { self == 0 ? "0.00" : NSString(format: "%.2f%%", self * 100.0) as String }
+    var percent1 : String { self == 0 ? "0.0%" : NSString(format: "%.1f%%", self * 100.0) as String }
+    var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
 
 }
 
