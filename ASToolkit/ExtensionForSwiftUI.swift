@@ -1503,3 +1503,29 @@ public extension View {
 }
 
 #endif
+
+public extension UnitPoint {
+    
+}
+
+public extension Alignment {
+    
+    var asUnitPoint : UnitPoint {
+        switch self {
+            case .center                    : return .init(x: 0, y: 0)
+                
+            case .top                       : return .init(x: 0, y: +1)
+            case .bottom                    : return .init(x: 0, y: -1)
+            case .leading                   : return .init(x: -1, y: 0)
+            case .trailing                  : return .init(x: +1, y: 0)
+
+            case .topLeading                : return .init(x: -1, y: +1)
+            case .topTrailing               : return .init(x: +1, y: +1)
+            case .bottomLeading             : return .init(x: -1, y: -1)
+            case .bottomTrailing            : return .init(x: +1, y: -1)
+                
+            default:
+                return .init()
+        }
+    }
+}
