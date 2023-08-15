@@ -524,6 +524,23 @@ public extension Array {
         })
     }
     
+    func ensured(count: Int, fill: Element) -> Self {
+        var R = self
+        while R.count < count {
+            R.append(fill)
+        }
+        return R
+    }
+    
+    func assigned(value: Element, at: Int) -> Self {
+        if at < count {
+            var R = self
+            R[at] = value
+            return R
+        }
+        return self
+    }
+
 }
 
 public extension Array {

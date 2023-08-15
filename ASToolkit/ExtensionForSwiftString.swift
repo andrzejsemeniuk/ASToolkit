@@ -485,9 +485,9 @@ extension String {
     }
 }
 
-extension String {
+public extension String {
     
-    public func uniqued() -> String {
+    func uniqued() -> String {
         String(Set<Character>(self))
     }
     
