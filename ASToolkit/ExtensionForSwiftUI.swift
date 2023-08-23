@@ -61,6 +61,10 @@ public extension View {
         self.padding(EdgeInsets.init(top: v, leading: h, bottom: v, trailing: h))
     }
     
+    func padding(v: CGFloat, h: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: v, leading: h, bottom: v, trailing: h))
+    }
+    
     
     func offset(_ point: CGPoint) -> some View {
         self.offset(CGSize(width: point.x, height: point.y))
