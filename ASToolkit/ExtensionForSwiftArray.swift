@@ -1194,3 +1194,34 @@ public extension Array where Element : Hashable {
         }
     }
 }
+
+
+extension Array {
+
+    @discardableResult
+    func assigned<Value>(value: Value, to: WritableKeyPath<Element,Value>) -> Self {
+        var r = self
+        r.assign(value: value, to: to)
+        return r
+    }
+
+    @discardableResult
+    func assigned<Value>(_ value: Value, to: WritableKeyPath<Element,Value>) -> Self {
+        assigned(value: value, to: to)
+    }
+    
+    mutating func assign<Value>(value: Value, to: WritableKeyPath<Element,Value>) {
+        for i in range {
+            self[i][keyPath: to] = value
+        }
+    }
+    
+    mutating func assign<Value>(_ value: Value, to: WritableKeyPath<Element,Value>) {
+        assign(value: value, to: to)
+    }
+
+    func collect<Value>(on: WritableKeyPath<Element,Value>) -> [Value] {
+        map { $0[keyPath: on] }
+    }
+    
+}
