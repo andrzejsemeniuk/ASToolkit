@@ -1225,3 +1225,11 @@ extension Array {
     }
     
 }
+
+public extension Array where Element : Equatable {
+    
+    @inlinable public func ends<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        reversed().starts(with: possiblePrefix.reversed())
+    }
+
+}
