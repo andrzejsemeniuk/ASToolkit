@@ -9,6 +9,7 @@
 import SwiftUI
 //import UIKit
 import SpriteKit
+import Combine
 
 @available(iOS 13, *)
 public extension View {
@@ -1533,3 +1534,21 @@ public extension Alignment {
         }
     }
 }
+
+
+extension View {
+    func onAppearStartTimer(_ seconds: TimeInterval, _ block: @escaping Block) -> some View {
+        self
+            .onAppear {
+                Timer.publish(every: seconds, on: .main, in: .default)
+                    .autoconnect()
+                    .sink { (_) in
+                        block()
+                    }
+                    .store(in: &cancellables)
+            }
+    }
+    
+}
+
+fileprivate var cancellables = Set<AnyCancellable>()
