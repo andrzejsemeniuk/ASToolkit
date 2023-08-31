@@ -119,6 +119,10 @@ extension Date {
         return formatter.string(from: self)
     }
 
+    public func formatted(_ formatter: DateFormatter) -> String {
+        formatter.string(from: self)
+    }
+    
     public func formattedYYYYMMddHHmmss() -> String {
         formatted("YYYY-MM-dd HH:mm:ss")
     }
