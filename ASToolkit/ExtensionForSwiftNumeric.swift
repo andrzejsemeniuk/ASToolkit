@@ -762,8 +762,11 @@ public extension Int
 }
 
 public extension Int {
-    mutating func advance(by n:Int) {
+    
+    @discardableResult
+    mutating func advance(by n:Int) -> Int {
         self = self + n
+        return self
     }
 
     @discardableResult
