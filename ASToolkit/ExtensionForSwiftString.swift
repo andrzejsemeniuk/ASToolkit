@@ -539,6 +539,9 @@ public extension Array where Element == String {
     var joinedByComma : String {
         self.joined(separator: ",")
     }
+    var joinedByDot : String {
+        self.joined(separator: ".")
+    }
     var joinedBySlash : String {
         self.joined(separator: "/")
     }
