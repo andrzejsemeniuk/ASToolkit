@@ -1511,6 +1511,14 @@ public extension View {
 
 public extension UnitPoint {
     
+    func asAlignment(_ fallback: Alignment = .center) -> Alignment {
+        if self == .bottom { return .bottom }
+        if self == .top { return .top }
+        if self == .leading { return .leading }
+        if self == .trailing { return .trailing }
+        if self == .center { return .center }
+        return fallback
+    }
 }
 
 public extension Alignment {

@@ -33,12 +33,22 @@ public extension Comparable {
     
 }
 
-func comparingLessOptionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
+func comparing2Optionals<A: Comparable>(_ first: A?, _ second: A?, order: ComparisonResult = .orderedAscending) -> Bool {
+    if let first, let second {
+        first.compared(to: second) == order
+    }
+    return false
+}
+
+func less2Optionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
     if let first {
         if let second {
-            return first.compared(to: second) == .orderedAscending
+            return first < second
         }
         return false
+    }
+    if let second {
+        return true
     }
     return true
 }

@@ -811,7 +811,7 @@ public extension Array {
 
 public extension Array {
     
-    func asDictionary<K,V>(_ f: (Element)->(K,V)) -> [K:V] {
+    func asDictionary<K: Hashable & Equatable,V>(_ f: (Element)->(K,V)) -> [K:V] {
         self.map {
             f($0)
         }.reduce([:], {
@@ -821,7 +821,23 @@ public extension Array {
             return d
         })
     }
+    
 }
+
+//public extension Array where Element == (K,V), K: Hashable & Equatable {
+////public extension Array where Element == <K: Hashable & Equatable, V>(K,V) {
+//
+//    func asDictionary<K: Hashable & Equatable,V>() -> [K:V] {
+//        self.map {
+//            f($0.0,$0.1)
+//        }.reduce([:], {
+//            var d = $0
+//            let (k,v) = $1
+//            d[k] = v
+//            return d
+//        })
+//    }
+//}
 
 public extension Array {
     
@@ -1060,6 +1076,37 @@ public extension Array where Element : Comparable {
 
 }
 
+func arrayMinMaxIndexes<T: Comparable>(of VALUES: [T?]) -> (Int?,Int?) {
+    var iMIN : Int!
+    var vMIN : T!
+    var iMAX : Int!
+    var vMAX : T!
+    for i in VALUES.range {
+        if let V = VALUES[i] {
+            if iMIN != nil {
+                if V < vMIN {
+                    iMIN = i
+                    vMIN = V
+                }
+            } else {
+                iMIN = i
+                vMIN = V
+            }
+            if iMAX != nil {
+                if V > vMAX {
+                    iMAX = i
+                    vMAX = V
+                }
+            } else {
+                iMAX = i
+                vMAX = V
+            }
+        }
+    }
+    return (iMIN,iMAX)
+}
+
+
 public extension Array where Element: Equatable {
     mutating func move(_ item: Element, to newIndex: Index) {
         if let index = index(of: item) {
@@ -1228,6 +1275,12 @@ extension Array {
 
 public extension Array where Element : Equatable {
     
+    @inlinable public func startsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        starts(with: possiblePrefix)
+    }
+    @inlinable public func endsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        ends(with: possiblePrefix)
+    }
     @inlinable public func ends<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
         reversed().starts(with: possiblePrefix.reversed())
     }
