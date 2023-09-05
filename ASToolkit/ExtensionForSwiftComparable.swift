@@ -50,7 +50,7 @@ func less2Optionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
     if let second {
         return true
     }
-    return true
+    return false
 }
 
 func comparing2<A: Comparable, B: Comparable>(_ first: (A,A), _ second: (B,B)) -> Bool {
