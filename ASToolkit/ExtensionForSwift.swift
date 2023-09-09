@@ -76,6 +76,11 @@ public extension Optional where Wrapped : Equatable {
 }
 
 
+public func assign<T>(value: T?, or block: () throws -> T) throws -> T {
+    if let value { return value }
+    return try block()
+}
+
 //public protocol JSONCodable : Codable {
 //    
 //    var encoded : Data! { get }

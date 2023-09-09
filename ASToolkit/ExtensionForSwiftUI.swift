@@ -1444,7 +1444,7 @@ public struct TapGestureWithLocation : UIViewRepresentable {
             self.tappedCallback = tappedCallback
         }
         @objc func tapped(gesture:UITapGestureRecognizer) {
-            let point = gesture.location(in: gesture.view)
+            let point = gesture.location(in: gesture.viewForChart)
             self.tappedCallback(point)
         }
     }
@@ -1480,7 +1480,7 @@ struct SaveScreenshotView: UIViewRepresentable {
         return someView
     }
 
-    func updateUIView(_ view: UIView, context: Context) {
+    func updateUIView(_ viewForChart: UIView, context: Context) {
     }
 }
 
