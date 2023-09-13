@@ -13,6 +13,12 @@ import Combine
 
 @available(iOS 13, *)
 public extension View {
+   
+    var inZStack : some View {
+        ZStack {
+            self
+        }
+    }
     
     var asAnyView : AnyView {
         AnyView.init(self)

@@ -1271,6 +1271,7 @@ extension Array {
         map { $0[keyPath: on] }
     }
     
+    
 }
 
 public extension Array where Element : Equatable {
@@ -1312,4 +1313,20 @@ public extension Sequence {
         self.sorted(by: keyPath, ascending: true)
     }
     
+}
+
+public extension Array {
+    
+    func firstWith<V: Equatable>(_ path: KeyPath<Element,V>, equal to: V) -> Element? {
+        self.first(where: { e in
+            e[keyPath: path] == to
+        })
+    }
+
+    func firstIndexWith<V: Equatable>(_ path: KeyPath<Element,V>, equal to: V) -> Int? {
+        self.firstIndex(where: { e in
+            e[keyPath: path] == to
+        })
+    }
+
 }
