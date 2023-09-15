@@ -286,6 +286,10 @@ public extension Date {
 		return calendar.date(byAdding: components, to: self)!
 	}
     
+    var utc : Date {
+        self.convertToUTC() ?? self
+    }
+    
     var normalizedToDay : Date { midnight }
     var normalizedToHour : Date {
         let calendar            = Calendar.current
