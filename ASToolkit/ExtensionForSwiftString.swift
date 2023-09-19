@@ -584,6 +584,9 @@ public extension String {
     var splitByComma : [String] {
         split(",")
     }
+    var splitByDot : [String] {
+        split(".")
+    }
     var splitByDash : [String] {
         split("-")
     }
@@ -902,6 +905,10 @@ public extension String {
     
     var last16characters : String {
         last(characters: 16)
+    }
+    
+    var last32characters : String {
+        last(characters: 32)
     }
     
     func last(characters limit: Int) -> String {
