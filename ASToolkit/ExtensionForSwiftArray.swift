@@ -1085,6 +1085,13 @@ public extension Array where Element : Comparable {
         })
     }
 
+    var minAndMax : (min: Element, max: Element)? {
+        let MM = arrayMinMaxIndexes(of: self)
+        if let iMIN = MM.0, let iMAX = MM.1 {
+            return (self[iMIN],self[iMAX])
+        }
+        return nil
+    }
 }
 
 func arrayMinMaxIndexes<T: Comparable>(of VALUES: [T?]) -> (Int?,Int?) {
