@@ -8,8 +8,7 @@
 
 import Foundation
 
-extension String
-{
+extension String {
     public var asSubstring : Substring {
         return Substring(self)
     }
@@ -27,8 +26,7 @@ extension String
     }
 }
 
-extension String
-{
+extension String {
     public var urlEncoded: String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)!
     }
@@ -43,8 +41,41 @@ extension String
     }
 }
 
-public extension String
-{
+public extension String {
+    
+    static let TRUE     = "true"
+    static let FALSE    = ""
+    
+    static func asBool(_ flag: Bool) -> String {
+        flag ? .TRUE : .FALSE
+    }
+
+    var asBool : Bool {
+        self == Self.TRUE
+    }
+
+    var isTRUE : Bool {
+        asBool
+    }
+
+    var isFALSE : Bool {
+        asBool.not
+    }
+    
+    @discardableResult
+    mutating func setTRUE() -> Self {
+        self = Self.TRUE
+        return self
+    }
+
+    @discardableResult
+    mutating func setFALSE() -> Self {
+        self = Self.FALSE
+        return self
+    }
+}
+
+public extension String {
     subscript (safe i:Int) -> Substring? {
         0 <= i && i < self.count ? self[i] : nil
     }
