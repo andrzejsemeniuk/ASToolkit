@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension Dictionary where Key == String, Value == String {
 
@@ -132,3 +133,15 @@ public extension Dictionary {
     }
 }
 
+public extension Dictionary where Key == String, Value == String {
+    
+    func asBool(_ title: String, _ fallback: Bool = false) -> Bool {
+        self[title]?.asBool ?? fallback
+    }
+    
+    mutating func asBool(_ title: String, set value: Bool) {
+        self[title] = String.asBool(value)
+    }
+    
+
+}
