@@ -1185,4 +1185,71 @@ public extension CGMutablePath {
         return r
     }
     
+    
+    
+    func moved(to: CGPoint, transform: CGAffineTransform = .identity) -> Self {
+        move(to: to, transform: transform)
+        return self
+    }
+    
+    func addedLine(to: CGPoint, transform: CGAffineTransform = .identity) -> Self {
+        addLine(to: to, transform: transform)
+        return self
+    }
+    
+    func addedQuadCurve(to end: CGPoint, control: CGPoint, transform: CGAffineTransform = .identity) -> Self {
+        addQuadCurve(to: end, control: control, transform: transform)
+        return self
+    }
+
+    func addedCurve(to end: CGPoint, control1: CGPoint, control2: CGPoint, transform: CGAffineTransform = .identity) -> Self {
+        addCurve(to: end, control1: control1, control2: control2, transform: transform)
+        return self
+    }
+
+    func addedRect(_ rect: CGRect, transform: CGAffineTransform = .identity) -> Self {
+        addRect(rect, transform: transform)
+        return self
+    }
+
+    func addedRects(_ rects: [CGRect], transform: CGAffineTransform = .identity) -> Self {
+        addRects(rects, transform: transform)
+        return self
+    }
+
+    func addedLines(between points: [CGPoint], transform: CGAffineTransform = .identity) -> Self {
+        addLines(between: points, transform: transform)
+        return self
+    }
+
+    func addedEllipse(in rect: CGRect, transform: CGAffineTransform = .identity) -> Self {
+        addEllipse(in: rect, transform: transform)
+        return self
+    }
+
+    func addedRelativeArc(center: CGPoint, radius: CGFloat, startAngle: CGFloat, delta: CGFloat, transform: CGAffineTransform = .identity) -> Self {
+        addRelativeArc(center: center, radius: radius, startAngle: startAngle, delta: delta, transform: transform)
+        return self
+    }
+
+    func addedArc(center: CGPoint, radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, transform: CGAffineTransform = .identity) -> Self {
+        addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise, transform: transform)
+        return self
+    }
+
+    func addedArc(tangent1End: CGPoint, tangent2End: CGPoint, radius: CGFloat, transform: CGAffineTransform = .identity) -> Self {
+        addArc(tangent1End: tangent1End, tangent2End: tangent2End, radius: radius, transform: transform)
+        return self
+    }
+    
+    func addedPath(_ path: CGPath, transform: CGAffineTransform = .identity) -> Self {
+        addPath(path, transform: transform)
+        return self
+    }
+    
+    func closedSubpath() -> Self {
+        closeSubpath()
+        return self
+    }
+    
 }
