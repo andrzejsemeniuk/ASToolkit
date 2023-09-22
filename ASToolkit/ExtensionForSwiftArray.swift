@@ -1352,3 +1352,30 @@ public extension Array {
     }
 
 }
+
+public extension Array {
+    
+    mutating func swapLeft(at i: Int, loop: Bool) {
+        if i > 0 {
+            swapAt(i, i-1)
+        } else {
+            append(remove(at: 0))
+        }
+    }
+
+    mutating func swapLeft(_ i: Int, _ loop: Bool = true) {
+        swapLeft(at: i, loop: loop)
+    }
+
+    mutating func swapRight(at i: Int, loop: Bool) {
+        if i < count-1 {
+            swapAt(i, i+1)
+        } else {
+            prepend(remove(at: i))
+        }
+    }
+
+    mutating func swapRight(_ i: Int, _ loop: Bool = true) {
+        swapRight(at: i, loop: loop)
+    }
+}
