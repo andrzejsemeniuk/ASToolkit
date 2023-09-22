@@ -8,6 +8,7 @@
 import Foundation
 
 public enum AnError : Swift.Error {
+    case invalidParameter(String)
     case isInvalidState(String)
     case isNil(String)
     case etc(String)

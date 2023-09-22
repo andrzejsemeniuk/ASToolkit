@@ -70,9 +70,17 @@ public extension Equatable {
 }
 
 public extension Optional where Wrapped : Equatable {
+    
     mutating func assignDifferent(_ a: Wrapped?, _ b: Wrapped? = nil) {
         self = self == a ? b : a
     }
+    
+    mutating func assignIfNil(_ a: Wrapped?) {
+        if self == nil {
+            self = a
+        }
+    }
+    
 }
 
 

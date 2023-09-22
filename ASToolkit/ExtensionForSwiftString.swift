@@ -744,6 +744,7 @@ public extension String {
 }
 
 public extension String {
+    
     mutating func assignIf(_ condition0: Bool, _ value0: String, _ condition1: Bool? = nil, _ value1: String? = nil, _ otherwise: String) {
         if condition0 {
             self = value0
@@ -753,6 +754,7 @@ public extension String {
             self = otherwise
         }
     }
+    
 }
 
 public extension String {

@@ -1192,6 +1192,11 @@ public extension CGMutablePath {
         return self
     }
     
+    func addedRoundedRect(in rect: CGRect, cornerWidth: CGFloat, cornerHeight: CGFloat, transform: CGAffineTransform = .identity) -> Self {
+        addRoundedRect(in: rect, cornerWidth: cornerWidth, cornerHeight: cornerHeight, transform: transform)
+        return self
+    }
+    
     func addedLine(to: CGPoint, transform: CGAffineTransform = .identity) -> Self {
         addLine(to: to, transform: transform)
         return self

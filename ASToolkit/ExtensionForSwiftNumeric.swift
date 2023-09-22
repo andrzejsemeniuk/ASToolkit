@@ -171,6 +171,7 @@ public extension Double {
 
 }
 
+
 //public func pick<T>(_ from: [T]) -> T {
 //    from[.random(min: 0, upto: from.count)]
 //}
@@ -209,6 +210,43 @@ public extension Double {
     var floor           : Self { Darwin.floor(self) }
     var ceil            : Self { Darwin.ceil(self) }
 
+}
+
+public extension Double {
+    
+    struct LERP01 {
+        let MIN         : Double
+        let MAX         : Double
+        let DELTA       : Double
+        
+        init(from: [Double?]) throws {
+            guard from.isNotEmpty else {
+                throw AnError.invalidParameter("Empty array")
+            }
+            let FROM = from.compactMap { $0 }
+            guard FROM.isNotEmpty else {
+                throw AnError.invalidParameter("No values found")
+            }
+            if let (MIN,MAX) = FROM.minAndMax {
+                self.MIN = MIN
+                self.MAX = MAX
+                self.DELTA = MAX - MIN
+                guard DELTA != .zero else {
+                    throw AnError.invalidParameter("DELTA is 0 (zero0")
+                }
+            } else {
+                throw AnError.invalidParameter("No min/max values found")
+            }
+        }
+        
+        func lerp01(_ v: Double) -> Double {
+            (v - MIN) / DELTA
+        }
+        func lerp01(_ v: Double?) -> Double? {
+            v == nil ? nil : (v! - MIN) / DELTA
+        }
+    }
+    
 }
 
 public extension Int64 {
@@ -739,7 +777,16 @@ public extension Int
         }
     }
 
-
+    func fractionOfCount(n: Int, _ fallback: Double = 0) -> Double {
+        self > 1 ? n.asDouble / (self - 1).asDouble : fallback
+    }
+    func fractionOf(n: Int, _ fallback: Double = 0) -> Double {
+        self > 0 ? n.asDouble / self.asDouble : fallback
+    }
+    func fractionOf1(_ fallback: Double = 0) -> Double {
+        fractionOf(n: 1, fallback)
+    }
+    
 }
 
 public extension Int

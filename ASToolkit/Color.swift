@@ -164,25 +164,29 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     }
     
     public init(_ string: String) {
-        self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4))
+        self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, till: 4))
     }
     
-    var hue         : Double
-    var saturation  : Double
-    var brightness  : Double
-    var alpha       : Double
+    public init(_ string: String, alpha: Double) {
+        self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, till: 4).replaced(alpha, at: 3))
+    }
+    
+    var hue                 : Double
+    var saturation          : Double
+    var brightness          : Double
+    var alpha               : Double
     
     enum CodingKeys : String, CodingKey {
-        case hue        = "h"
-        case saturation = "s"
-        case brightness = "b"
-        case alpha      = "a"
+        case hue            = "h"
+        case saturation     = "s"
+        case brightness     = "b"
+        case alpha          = "a"
     }
     
-    var h : Double { get { hue } set { hue = newValue }}
-    var s : Double { get { saturation } set { saturation = newValue }}
-    var b : Double { get { brightness } set { brightness = newValue }}
-    var a : Double { get { alpha } set { alpha = newValue }}
+    var h                   : Double { get { hue } set { hue = newValue }}
+    var s                   : Double { get { saturation } set { saturation = newValue }}
+    var b                   : Double { get { brightness } set { brightness = newValue }}
+    var a                   : Double { get { alpha } set { alpha = newValue }}
     
     func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
         .init(h: h ?? self.h, s: s ?? self.s, b: b ?? self.b, a: a ?? self.a)
@@ -408,7 +412,7 @@ public extension HSBAInfo {
         
         var asArrayOfDoubleTuples : [[Double]] {
             asArrayOfString.map { tuple in
-                tuple.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, upto: 4)
+                tuple.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, till: 4)
             }
         }
         
@@ -557,7 +561,7 @@ extension SKColor {
 
 extension String {
     var asHSBAInfo : HSBAInfo {
-        .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, upto: 4), fallback: 1)
+        .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, till: 4), fallback: 1)
     }
 }
 

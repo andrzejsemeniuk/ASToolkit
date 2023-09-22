@@ -807,6 +807,10 @@ public extension Array {
         return r
     }
     
+    func padded(with: Element, till limit: Int) -> Self {
+        padded(with: with, upto: limit + 1)
+    }
+    
 }
 
 public extension Array {
