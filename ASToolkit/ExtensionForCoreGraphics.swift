@@ -1123,7 +1123,7 @@ public extension CGPath {
         let r = CGMutablePath.init()
         r.move(to: p0)
         r.addLine(to: p1)
-        r.closeSubpath()
+//        r.closeSubpath()
         return r
     }
     
@@ -1131,7 +1131,7 @@ public extension CGPath {
         let r = CGMutablePath.init()
         r.move(to: p0)
         r.addQuadCurve(to: p1, control: c0)
-        r.closeSubpath()
+//        r.closeSubpath()
         return r
     }
     
@@ -1139,7 +1139,7 @@ public extension CGPath {
         let r = CGMutablePath.init()
         r.move(to: p0)
         r.addCurve(to: p1, control1: c0, control2: c1)
-        r.closeSubpath()
+//        r.closeSubpath()
         return r
     }
     
@@ -1147,7 +1147,7 @@ public extension CGPath {
         let r = CGMutablePath.init()
             //        r.move(to: .zero)
         r.addRect(rect)
-        r.closeSubpath()
+//        r.closeSubpath()
         return r
     }
     

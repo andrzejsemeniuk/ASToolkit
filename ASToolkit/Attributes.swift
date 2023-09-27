@@ -106,6 +106,19 @@ public class Attributes : Codable, Equatable, ObservableObject {
     
 
     
+    
+    
+    public subscript(_ title: String) -> String? {
+        get {
+            self.dictionary[title]
+        }
+        set {
+            self.dictionary[title] = newValue
+        }
+    }
+    
+    
+    
 
     public func asColor(_ name: String) -> Color? {
         if let value = dictionary[name], value.isNotEmpty {
