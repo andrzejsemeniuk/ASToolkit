@@ -171,6 +171,10 @@ public extension CGPoint {
     func offset(x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
         adding(x: x, y: y)
     }
+    
+    static func P(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+        .init(x,y)
+    }
 }
 
 extension CGPoint : Hashable {
