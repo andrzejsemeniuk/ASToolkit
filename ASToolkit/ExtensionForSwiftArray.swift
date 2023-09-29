@@ -1379,3 +1379,86 @@ public extension Array {
         swapRight(at: i, loop: loop)
     }
 }
+
+public extension Array {
+    
+    @inlinable func minElement(where predicate: (Element) throws -> Double?) rethrows -> (Element,Double)? {
+        var R : Element!
+        var V : Double!
+        for e in self {
+            if let D = try predicate(e) {
+                if V != nil {
+                    if D < V {
+                        V = D
+                        R = e
+                    }
+                } else {
+                    V = D
+                    R = e
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    @inlinable func maxElement(where predicate: (Element) throws -> Double?) rethrows -> (Element,Double)? {
+        var R : Element!
+        var V : Double!
+        for e in self {
+            if let D = try predicate(e) {
+                if V != nil {
+                    if V < D {
+                        V = D
+                        R = e
+                    }
+                } else {
+                    V = D
+                    R = e
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    @inlinable func minIndex(where predicate: (Element) throws -> Double?) rethrows -> (Int,Double)? {
+        var R : Int!
+        var V : Double!
+        for i in self.range {
+            let e = self[i]
+            if let D = try predicate(e) {
+                if V != nil {
+                    if D < V {
+                        V = D
+                        R = i
+                    }
+                } else {
+                    V = D
+                    R = i
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    @inlinable func maxIndex(where predicate: (Element) throws -> Double?) rethrows -> (Int,Double)? {
+        var R : Int!
+        var V : Double!
+        for i in self.range {
+            let e = self[i]
+            if let D = try predicate(e) {
+                if V != nil {
+                    if V < D {
+                        V = D
+                        R = i
+                    }
+                } else {
+                    V = D
+                    R = i
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+
+}
