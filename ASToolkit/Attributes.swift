@@ -124,9 +124,20 @@ public class Attributes : Codable, Equatable, ObservableObject {
         if let value = dictionary[name], value.isNotEmpty {
             return Self.toColor(hsba: value)
         }
+        if let hsba = asColorHSBA(name) {
+            return hsba.asColor
+        }
+        if let hsba = asHSBAArrayOfDouble(name) {
+            return hsba.asColorHSBA
+        }
         return nil
     }
     
+    public func asColor(_ name: String, _ fallback: Color) -> Color {
+        asColor(name) ?? fallback
+    }
+    
+
     
     public func asHSBAArrayOfDouble(_ name: String) -> [Double]? {
         if let hsba = dictionary[name], hsba.isNotEmpty {
@@ -165,10 +176,6 @@ public class Attributes : Codable, Equatable, ObservableObject {
     }
 
 
-    public func asColor(_ name: String, _ fallback: Color) -> Color {
-        asColor(name) ?? fallback
-    }
-    
     public func asSKColor(_ name: String) -> SKColor? {
         if let value = dictionary[name], value.isNotEmpty {
             return Self.toSKColor(hsba: value)
