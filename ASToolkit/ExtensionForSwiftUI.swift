@@ -334,6 +334,11 @@ public extension Color {
         name == "white"
     }
     
+    func inverseBlackOrWhite(_ min: CGFloat = 0, _ mid: CGFloat = 0.5, _ max: CGFloat = 1.0) -> Color {
+        let hsva0 = hsva
+        return Color.init(HSBA: [hsva0[0],0,hsva0[2] < mid ? max : min,hsva0[3]])
+    }
+    
     struct HSBA : Codable, Equatable {
         
         public enum Component : CaseIterable {
