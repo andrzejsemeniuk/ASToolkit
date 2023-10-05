@@ -96,12 +96,22 @@ public extension Array
         return count <= from ? self : subarray(from: 0, to:from)
     }
     
-    mutating func keep(to:Int) {
-        self = trimmed(from: to)
+    @discardableResult
+    mutating func keep(to:Int) -> Array {
+        let R = to < count ? subarray(from: to, to: count) : []
+        if R.isNotEmpty {
+            self = trimmed(from: to)
+        }
+        return R
     }
     
-    mutating func keep(from:Int) {
-        self = trimmed(to: from)
+    @discardableResult
+    mutating func keep(from:Int) -> Array {
+        let R = 0 < from ? subarray(from: 0, to: from + 1) : []
+        if R.isNotEmpty {
+            self = trimmed(to: from)
+        }
+        return R
     }
     
     func kept(to:Int) -> Array {
@@ -113,6 +123,7 @@ public extension Array
     }
     
     func subarray(from:Int, to:Int) -> Array {
+        let to = Swift.min(to,count)
         var result = [Element]()
         for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
             result.append(self[i])
@@ -1097,6 +1108,9 @@ public extension Array where Element : Comparable {
         return nil
     }
 }
+
+//public extension Array where Element : Optional<Comparable> {
+//}
 
 func arrayMinMaxIndexes<T: Comparable>(of VALUES: [T?]) -> (Int?,Int?) {
     var iMIN : Int!
