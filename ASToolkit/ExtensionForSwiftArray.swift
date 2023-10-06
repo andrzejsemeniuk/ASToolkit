@@ -107,7 +107,7 @@ public extension Array
     
     @discardableResult
     mutating func keep(from:Int) -> Array {
-        let R = 0 < from ? subarray(from: 0, to: from + 1) : []
+        let R = 0 < from ? subarray(from: 0, to: from) : []
         if R.isNotEmpty {
             self = trimmed(to: from)
         }

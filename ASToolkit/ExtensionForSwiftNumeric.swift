@@ -810,6 +810,10 @@ public extension Int
 
 public extension Int {
     
+    var range : Range<Int> {
+        0..<abs(self)
+    }
+    
     @discardableResult
     mutating func advance(by n:Int) -> Int {
         self = self + n
