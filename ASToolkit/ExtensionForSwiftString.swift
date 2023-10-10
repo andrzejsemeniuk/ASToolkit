@@ -398,7 +398,7 @@ extension String {
 
 extension String {
     
-    public func appended(with:String, delimiter:String) -> String {
+    public func appended(with:String, delimiter:String = "") -> String {
         if isEmpty {
             return with
         }
