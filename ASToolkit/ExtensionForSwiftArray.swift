@@ -106,6 +106,16 @@ public extension Array
     }
     
     @discardableResult
+    mutating func keepFirst(_ count1: Int) -> Array {
+        keep(to: count1)
+    }
+    
+    @discardableResult
+    mutating func keepLast(_ count1: Int) -> Array {
+        keep(from: count - count1)
+    }
+    
+    @discardableResult
     mutating func keep(from:Int) -> Array {
         let R = 0 < from ? subarray(from: 0, to: from) : []
         if R.isNotEmpty {
@@ -809,6 +819,20 @@ public extension Array {
 
 
 public extension Array {
+    
+    @discardableResult
+    mutating func prepad(with: Element, upto limit: Int) -> Self {
+        while count < limit {
+            prepend(with)
+        }
+        return self
+    }
+    
+    func prepadded(with: Element, upto limit: Int) -> Self {
+        var r = self
+        r.prepad(with: with, upto: limit)
+        return r
+    }
     
     func padded(with: Element, upto limit: Int) -> Self {
         var r = self
