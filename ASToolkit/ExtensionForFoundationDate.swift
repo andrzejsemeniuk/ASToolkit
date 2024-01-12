@@ -18,7 +18,7 @@ extension Date {
         Calendar.Component.hour,
         Calendar.Component.minute,
         Calendar.Component.second
-        ]) -> Calendar.Component? {
+    ]) -> Calendar.Component? {
         
         for component in units
         {
@@ -38,7 +38,7 @@ extension Date {
         Calendar.Component.hour,
         Calendar.Component.minute,
         Calendar.Component.second
-        ]) -> [Calendar.Component] {
+    ]) -> [Calendar.Component] {
         
         var r:[Calendar.Component] = []
         
@@ -64,7 +64,7 @@ extension Date {
         
         return calendar.date(byAdding: components, to: self)
     }
-
+    
     public  func  year         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.year,                        from:    self)  }
     public  func  month        (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.month,                       from:    self)  }
     public  func  week         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.weekOfYear,                  from:    self)  }
@@ -78,11 +78,11 @@ extension Date {
     public  func  millisecond  (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {
         return Int(Int64(timeIntervalSinceReferenceDate * 1000) % 1000)
     }
-
+    
     public  static  let  dateFormatterForDayOfYear    :  DateFormatter  =  .init(withFormat:  "DDD")
     public  static  let  dateFormatterForWeekOfYear   :  DateFormatter  =  .init(withFormat:  "w")
     public  static  let  dateFormatterForMonthOfYear  :  DateFormatter  =  .init(withFormat:  "MM")
-
+    
     public var monthLetter : String {
         month3Letters[0].string
     }
@@ -92,6 +92,15 @@ extension Date {
     public var monthName : String {
         ["January","February","March","April","May","June","July","August","September","October","November","December"][month()-1]
     }
+    
+    // "2018-06-01 00:00:00 +0000"
+    public var GMTYear          : Int? { asString[0...3].asInt }
+    public var GMTMonth         : Int? { asString[5...6].asInt }
+    public var GMTDay           : Int? { asString[8...9].asInt }
+    public var GMTHour          : Int? { asString[11...12].asInt }
+    public var GMTMinute        : Int? { asString[14...15].asInt }
+    public var GMTSecond        : Int? { asString[17...18].asInt }
+
 }
 
 extension Date {
@@ -106,9 +115,9 @@ extension Date {
     }()
     
     public var iso8601: String {
-        return Date.iso8601Formatter.string(from: self)
+        Date.iso8601Formatter.string(from: self)
     }
-    
+
     public func formatted(_ format:String) -> String {
         // "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         let formatter = DateFormatter()
@@ -410,7 +419,9 @@ public extension Date {
 
 public extension Date {
     
-    var asString : String { "\(self)" }
+        // "2018-06-01 00:00:00 +0000"
+    var asString        : String { "\(self)" }
+    var asStringGMT     : String { "\(self)" }
     
     func asString(withFormat format: String) -> String {
         DateFormatter.init(withFormat: format).string(from: self)
