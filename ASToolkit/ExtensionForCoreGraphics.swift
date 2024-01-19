@@ -128,6 +128,10 @@ public extension CGPoint {
         self.init(x:xy, y:xy)
     }
 
+    init(length: CGFloat, angle: CGAngle) {
+        self = angle.point(radius: length)
+    }
+    
 	var length : CGFloat {
         sqrt(x * x + y * y)
 	}
@@ -230,8 +234,12 @@ public extension CGSize {
         CGPoint(x:width,y:height)
     }
 
-    var asCGRect         : CGRect {
+    var asCGRectCenteredOnZero         : CGRect {
         .init(center: .zero, size: self)
+    }
+
+    var asCGRectWithOriginZero : CGRect {
+        .init(origin: .zero, size: self)
     }
 
     var diagonal         : CGFloat {
@@ -267,6 +275,18 @@ public struct CGSegment : Codable, Equatable, Hashable {
         (from+to)/2
     }
     
+    var slope : CGSlope {
+        .init(point0: from, point1: to)
+    }
+    
+    var reversed : Self {
+        .init(from: to, to: from)
+    }
+    
+    var angle : CGAngle {
+        (to - from).angle
+    }
+    
     func intersection(with s: CGSegment) -> CGPoint? {
         // https://www.hackingwithswift.com/example-code/core-graphics/how-to-calculate-the-point-where-two-lines-intersect
         // calculate the differences between the start and end X/Y positions for each of our points
@@ -300,6 +320,76 @@ public struct CGSegment : Codable, Equatable, Hashable {
         // lines don't cross
         return nil
     }
+    
+    public func ray(inside bounds: CGRect) -> CGSegment? {
+        
+        let X0 = from.x, X1 = to.x, Y0 = from.y, Y1 = to.y
+        
+        guard bounds.contains(to) else {
+            return nil
+        }
+        
+        let FROM = to
+
+        var TO : CGPoint
+        
+        let X2 : CGFloat = X0 < X1 ? bounds.x1 : bounds.x0
+            
+        if let Y2 = slope.y(x: X2)
+        {
+            TO = CGPoint.init(X2, Y2)
+        }
+        else
+        {
+            let Y2 = Y0 < Y1 ? bounds.y1 : bounds.y0
+
+            TO = CGPoint.init(X1, Y2)
+        }
+
+        TO ?= CGSegment.init(from: FROM, to: TO).intersection(with: .init(from: bounds.tl, to: bounds.tr))
+        TO ?= CGSegment.init(from: FROM, to: TO).intersection(with: .init(from: bounds.bl, to: bounds.br))
+
+        return .init(from: FROM, to: TO)
+    }
+    
+    public func arrow(length: CGFloat, angle: CGAngle, distance: CGFloat? = nil, offset: CGFloat = 0) -> [CGPoint]? {
+        ending(length: length, angle: angle, distance: distance, offset: offset)
+    }
+    
+    public func ending(length: CGFloat, angle: CGAngle, distance: CGFloat? = nil, offset: CGFloat = 0) -> [CGPoint] {
+        
+        var R : [CGPoint] = []
+        
+        if let distance {
+            
+            R = [
+                to,
+                to + .init(length: length, angle:  angle), // 90 + a
+                to - CGPoint.init(length: distance, angle: self.angle),
+                to + .init(length: length, angle: -angle), // 90 - a
+                to
+            ]
+            
+        } else {
+            
+            R = [
+                to,
+                to + .init(length: length, angle:  angle), // 90 + a
+                to + .init(length: length, angle: -angle), // 90 - a
+                to
+            ]
+            
+        }
+        
+        if offset != 0 {
+            // offset each point in direction of ray by offset distance
+            R = R + CGPoint.init(length: offset, angle: self.angle)
+        }
+        
+        return R
+    }
+    
+
 }
 
 public extension CGRect {
@@ -378,6 +468,11 @@ public extension CGRect {
         r.origin.y = +r.height/2 + at.y
         return r
     }
+    
+    func ray(from: CGSegment) -> CGSegment? {
+        from.ray(inside: self)
+    }
+    
 }
 
 extension CGAffineTransform {
@@ -570,6 +665,11 @@ public struct CGAngle
     static let ninety                       : CGAngle = .init(degrees: 90)
     static let fortyfive                    : CGAngle = .init(degrees: 45)
 }
+
+public prefix func - (angle: CGAngle) -> CGAngle {
+    .init(radians: -angle.radians)
+}
+
 
 public extension CGPoint
 {
@@ -777,6 +877,15 @@ public extension Int32 {
     var CGLineCapRound  : Int32         { CGLineCap.round.rawValue }
     var CGLineCapSquare : Int32         { CGLineCap.square.rawValue }
 }
+
+
+
+
+public struct CGArrow {
+    
+}
+
+
 
 
 public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
@@ -1155,6 +1264,11 @@ public extension CGPath {
         return r
     }
     
+    static func create(polygon points: [CGPoint]) -> CGPath {
+        CGMutablePath.polygon(points: points)
+    }
+    
+
 }
 
 public extension CGMutablePath {
@@ -1184,6 +1298,18 @@ public extension CGMutablePath {
         r.move(to: p0)
         r.addCurve(to: p1, control1: c0, control2: c1)
         if closed {
+            r.closeSubpath()
+        }
+        return r
+    }
+    
+    static func polygon(points: [CGPoint]) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        if points.isNotEmpty {
+            r.move(to: points[0])
+            for i in 1..<points.count {
+                r.addLine(to: points[i])
+            }
             r.closeSubpath()
         }
         return r
