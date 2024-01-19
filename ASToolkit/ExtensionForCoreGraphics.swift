@@ -352,7 +352,7 @@ public struct CGSegment : Codable, Equatable, Hashable {
         return .init(from: FROM, to: TO)
     }
     
-    public func arrow(length: CGFloat, angle: CGAngle, distance: CGFloat? = nil, offset: CGFloat = 0) -> [CGPoint]? {
+    public func arrow(length: CGFloat, angle: CGAngle, distance: CGFloat? = nil, offset: CGFloat = 0) -> [CGPoint] {
         ending(length: length, angle: angle, distance: distance, offset: offset)
     }
     
@@ -391,6 +391,39 @@ public struct CGSegment : Codable, Equatable, Hashable {
     
 
 }
+
+public struct CGArrow  : Codable, Equatable, Hashable {
+    
+    var length      : CGFloat
+    var angle       : CGAngle
+    var distance    : CGFloat?
+    var offset      : CGFloat = 0
+    
+    func points(on segment: CGSegment) -> [CGPoint] {
+        segment.arrow(length: length, angle: angle, distance: distance, offset: offset)
+    }
+    
+}
+
+public struct CGSegmentArrow : Codable, Equatable, Hashable {
+    
+    var segment     : CGSegment
+    var arrow       : CGArrow
+    
+    var points      : [CGPoint] { arrow.points(on: segment) }
+}
+
+
+
+public struct CGPolygon : Codable, Equatable, Hashable {
+    
+    var points : [CGPoint]
+    
+}
+
+
+
+
 
 public extension CGRect {
 
@@ -484,6 +517,11 @@ extension CGAffineTransform {
     public var sy:CGFloat {
         return sqrt(b * b + d * d)
     }
+    
+    public func translatedBy(_ point: CGPoint) -> Self {
+        self.translatedBy(x: point.x, y: point.y)
+    }
+    
 }
 
 
@@ -609,7 +647,7 @@ public typealias CGXY              = (x:CGFloat,y:CGFloat)
 public func CGAsRadians(degrees:CGFloat) -> CGFloat                 { return degrees / 180.0 * .pi }
 public func CGAsDegrees(radians:CGFloat) -> CGFloat                 { return radians / .pi * 180.0 }
 
-public struct CGDegrees
+public struct CGDegrees : Codable, Equatable, Hashable
 {
 	public var value:CGFloat
 
@@ -620,7 +658,7 @@ public struct CGDegrees
 	public func asCGRadians () -> CGRadians         { return CGRadians(toRadians()) }
 }
 
-public struct CGRadians
+public struct CGRadians : Codable, Equatable, Hashable
 {
 	public var value:CGFloat
 
@@ -631,7 +669,7 @@ public struct CGRadians
 	public func asCGDegrees ()  -> CGDegrees        { return CGDegrees(toDegrees()) }
 }
 
-public struct CGAngle
+public struct CGAngle : Codable, Equatable, Hashable
 {
 	private var value:CGFloat
 
@@ -661,6 +699,8 @@ public struct CGAngle
     public var  point                       : CGPoint      { CGPoint.from(angle: self) }
     public func point(radius: CGFloat)      -> CGPoint     { CGPoint.from(angle: self, radius: radius) }
     
+    public var negated      : CGAngle               { -self }
+    
     static let zero                         : CGAngle = .init(radians: 0)
     static let ninety                       : CGAngle = .init(degrees: 90)
     static let fortyfive                    : CGAngle = .init(degrees: 45)
@@ -669,6 +709,32 @@ public struct CGAngle
 public prefix func - (angle: CGAngle) -> CGAngle {
     .init(radians: -angle.radians)
 }
+
+public func + (left: CGAngle, right: CGAngle) -> CGAngle {
+    return CGAngle(radians: left.radians + right.radians)
+}
+public func - (left: CGAngle, right: CGAngle) -> CGAngle {
+    return CGAngle(radians: left.radians - right.radians)
+}
+public func += (left: inout CGAngle, right: CGAngle) {
+    left = CGAngle(radians: left.radians + right.radians)
+}
+public func -= (left: inout CGAngle, right: CGAngle) {
+    left = CGAngle(radians: left.radians - right.radians)
+}
+public func + (left: CGAngle, right: CGFloat) -> CGAngle {
+    return CGAngle(radians: left.radians + right)
+}
+public func - (left: CGAngle, right: CGFloat) -> CGAngle {
+    return CGAngle(radians: left.radians - right)
+}
+public func += (left: inout CGAngle, right: CGFloat) {
+    left = CGAngle(radians: left.radians + right)
+}
+public func -= (left: inout CGAngle, right: CGFloat) {
+    left = CGAngle(radians: left.radians - right)
+}
+
 
 
 public extension CGPoint
@@ -688,6 +754,8 @@ public extension CGPoint
         return d == 0 ? .zero : .init(x / d, y / d)
     }
     
+    var negated                 : CGPoint                       { -self }
+
     func distance               (to: CGPoint) -> CGFloat { (to-self).length }
     func distanceSquared        (to: CGPoint) -> CGFloat { (to-self).lengthSquared }
     
@@ -881,9 +949,6 @@ public extension Int32 {
 
 
 
-public struct CGArrow {
-    
-}
 
 
 
@@ -1269,6 +1334,17 @@ public extension CGPath {
     }
     
 
+    func rotatedBy(_ angle: CGAngle) -> CGPath {
+        rotatedBy(angle.radians)
+    }
+    
+    func rotatedBy(_ radians: CGFloat) -> CGPath {
+        CGMutablePath.init().addedPath(self, transform: .identity.rotated(by: radians))
+    }
+
+    func translatedBy(_ point: CGPoint) -> CGPath {
+        CGMutablePath.init().addedPath(self, transform: .identity.translatedBy(point))
+    }
 }
 
 public extension CGMutablePath {
@@ -1315,7 +1391,34 @@ public extension CGMutablePath {
         return r
     }
     
+    static func arrowHeadOrientedUpWithTipAtOrigin(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        r.move(to: .zero)
+        r.addLine(to: (CGAngle.ninety - angle).negated.point(radius: length))
+//        r.addLine(to: .init(length, -opposite))
+        r.addLine(to: .init(0, -opposite))
+//        r.addLine(to: .init(-length, -opposite))
+        r.addLine(to: (CGAngle.ninety + angle).negated.point(radius: length))
+        r.addLine(to: .zero)
+//        r.closeSubpath()
+        return r
+    }
     
+    static func arrow(from: CGPoint, to: CGPoint, thickness: CGFloat, lineCap: CGLineCap = .butt, lineJoin: CGLineJoin = .miter, lineMiterLimit: CGFloat = 0, side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
+        let r = CGMutablePath.init()
+        let ARROWHEAD = arrowHeadOrientedUpWithTipAtOrigin(side: length, angle: angle, opposite: opposite)
+        let P1 = to-from
+        let ANGLE = P1.angle
+        let LINE = CGMutablePath.init().moved(to: -P1).addedLine(to: .zero, transform: .identity.rotated(by: -ANGLE.radians).translatedBy(x: 0, y: -P1.length - opposite/2.0))
+        r.addPath(ARROWHEAD)
+//        r.addPath(LINE.copy(strokingWithWidth: thickness, lineCap: lineCap, lineJoin: lineJoin, miterLimit: lineMiterLimit))
+        return CGMutablePath.init().addedPath(r) //, transform: .identity.rotated(by: ANGLE.radians))
+    }
+    
+//    static func arrow(points: [CGPoint], lineCap: CGLineCap = .butt, lineJoin: CGLineJoin = .miter, lineMiterLimit: CGFloat = 0, side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
+//        let r = CGMutablePath.init()
+//        return r
+//    }
     
     func moved(to: CGPoint, transform: CGAffineTransform = .identity) -> Self {
         move(to: to, transform: transform)
