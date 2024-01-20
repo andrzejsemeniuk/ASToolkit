@@ -289,6 +289,11 @@ public struct CGSegment : Codable, Equatable, Hashable {
     var to      : CGPoint
     
     
+    var x0      : CGFloat { min(from.x,to.x) }
+    var y0      : CGFloat { min(from.y,to.y) }
+    var x1      : CGFloat { max(from.x,to.x) }
+    var y1      : CGFloat { max(from.y,to.y) }
+    
     
     var midpoint : CGPoint {
         (from+to)/2
@@ -320,6 +325,10 @@ public struct CGSegment : Codable, Equatable, Hashable {
     
     var originated : Self {
         .init(from: .zero, to: point)
+    }
+    
+    var rect : CGRect {
+        .init(x0: x0, x1: x1, y0: y0, y1: y1)
     }
     
     
@@ -1374,8 +1383,20 @@ public prefix func - (point: CGPoint) -> CGPoint {
 
 public extension CGPath {
     
-    static func create(_ segment: CGSegment) -> CGPath {
+    static func rect(_ rect: CGRect) -> CGPath {
+        .init(rect: rect, transform: nil)
+    }
+    
+    static func segment(_ segment: CGSegment) -> CGPath {
         line(p0: segment.from, p1: segment.to)
+    }
+    
+    static func line(_ p0: CGPoint, _ p1: CGPoint) -> CGPath {
+        let r = CGMutablePath.init()
+        r.move(to: p0)
+        r.addLine(to: p1)
+//        r.closeSubpath()
+        return r
     }
     
     static func line(p0: CGPoint, p1: CGPoint) -> CGPath {
@@ -1426,6 +1447,21 @@ public extension CGPath {
     func translatedBy(_ point: CGPoint) -> CGPath {
         CGMutablePath.init().addedPath(self, transform: .identity.translatedBy(point))
     }
+    
+    func addedPath(_ path: CGPath) -> CGMutablePath {
+        let R = CGMutablePath.init()
+        R.addPath(self)
+        R.addPath(path)
+        return R
+    }
+}
+
+public func + (lhs: CGPath, rhs: CGPath) -> CGMutablePath {
+    lhs.addedPath(rhs)
+}
+
+public func += (lhs: inout CGMutablePath, rhs: CGPath) {
+    lhs.addPath(rhs)
 }
 
 public extension CGMutablePath {
@@ -1473,18 +1509,18 @@ public extension CGMutablePath {
     }
     
     
-    static func bracketOrientedUpWithTipAtOrigin(length: CGFloat, height: CGFloat) -> CGMutablePath {
+    static func bracketOrientedUp(length: CGFloat, height: CGFloat) -> CGMutablePath {
         let r = CGMutablePath.init()
         let l2 = length/2.0
-        var P = CGPoint.init(-l2, -height)
+        var P = CGPoint.init(-l2, height)
         r.move(to: P)
-        r.addLine(to: P.adding(y:  height))
-        r.addLine(to: P.adding(x:  length))
         r.addLine(to: P.adding(y: -height))
+        r.addLine(to: P.adding(x:  length))
+        r.addLine(to: P.adding(y: +height))
         return r
     }
     
-    static func arrowHeadOrientedUpWithTipAtOrigin(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
+    static func arrowHead(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
         let r = CGMutablePath.init()
         r.move(to: .zero)
         r.addLine(to: (CGAngle.ninety - angle).negated.point(radius: length))
@@ -1494,11 +1530,11 @@ public extension CGMutablePath {
         return r
     }
     
-    static func arrowHeadOrientedUpWithTipAtOriginConnector(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGPoint {
+    static func arrowHeadConnector(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGPoint {
         .init(x: 0, y: -opposite/2.0)
     }
     
-    static func arrowHeadOrientedUpWithTipAtOrigin(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle) -> CGMutablePath {
+    static func arrowHead(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle) -> CGMutablePath {
         let r = CGMutablePath.init()
         r.move(to: .zero)
         r.addLine(to: (CGAngle.ninety - angle).negated.point(radius: length))
@@ -1507,14 +1543,14 @@ public extension CGMutablePath {
         return r
     }
 
-    static func arrowHeadOrientedUpWithTipAtOriginConnector(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle) -> CGPoint {
+    static func arrowHeadConnector(side length: CGFloat, angle /* from y axis [0,90] */: CGAngle) -> CGPoint {
         .init(x: 0, y: (CGAngle.ninety - angle).negated.point(radius: length).y / 2.0)
     }
     
     
     static func arrow(from: CGPoint, to: CGPoint, thickness: CGFloat, lineCap: CGLineCap = .butt, lineJoin: CGLineJoin = .miter, lineMiterLimit: CGFloat = 0, side length: CGFloat, angle /* from y axis [0,90] */: CGAngle, opposite /* distance from origin */: CGFloat) -> CGMutablePath {
         let r = CGMutablePath.init()
-        let ARROWHEAD = arrowHeadOrientedUpWithTipAtOrigin(side: length, angle: angle, opposite: opposite)
+        let ARROWHEAD = arrowHead(side: length, angle: angle, opposite: opposite)
         let P1 = to-from
         let ANGLE = P1.angle
         let LINE = CGMutablePath.init().moved(to: -P1).addedLine(to: .zero, transform: .identity.rotated(by: -ANGLE.radians).translatedBy(x: 0, y: -P1.length - opposite/2.0))

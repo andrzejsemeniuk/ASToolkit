@@ -49,5 +49,8 @@ public extension Bool {
     func XOR (_ rhs: Bool) -> Bool {
         self != rhs
     }
-    
+
+    func format(_ TRUE: String = "true", _ FALSE: String = "false") -> String {
+        self ? TRUE : FALSE
+    }
 }
