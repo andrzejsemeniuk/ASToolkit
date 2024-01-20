@@ -186,6 +186,13 @@ public extension CGPoint {
         self.y += y
         return self
     }
+    
+    
+    var format0 : String { "(\(x.format0),\(y.format0))" }
+    var format1 : String { "(\(x.format1),\(y.format1))" }
+    var format2 : String { "(\(x.format2),\(y.format2))" }
+    var format3 : String { "(\(x.format3),\(y.format3))" }
+    
 }
 
 extension CGPoint : Hashable {
@@ -277,8 +284,10 @@ public extension CGSize {
 public struct CGSegment : Codable, Equatable, Hashable {
     
     
+    
     var from    : CGPoint
     var to      : CGPoint
+    
     
     
     var midpoint : CGPoint {
@@ -314,18 +323,29 @@ public struct CGSegment : Codable, Equatable, Hashable {
     }
     
     
-    func rotated(_ angle: CGAngle, around: CGPoint = .zero) -> Self {
-        let s0 = translated(-around)
-        let angle0 = s0.angle
-        let angle1 = angle0 + angle
-        let s1 = CGSegment.init(from: angle1.point(radius: s0.from.length), to: angle1.point(radius: s0.to.length))
-        let r = s1.translated(around)
-        return r
+    
+    func rotated(_ rotation: CGAngle, around: CGPoint = .zero) -> Self {
+        translated(-around).translated((angle + rotation).point(radius: length)).translated(around)
     }
+    
+    func rotatedAroundFrom(_ angle: CGAngle) -> Self {
+        rotated(angle, around:from)
+    }
+    
+    func rotatedAroundTo(_ angle: CGAngle) -> Self {
+        rotated(angle, around:to)
+    }
+    
+    func rotatedAroundMidpoint(_ angle: CGAngle) -> Self {
+        rotated(angle, around:midpoint)
+    }
+    
+    
     
     func translated(_ p: CGPoint) -> Self {
         .init(from: from + p, to: to + p)
     }
+    
     
     
     func stretched(to distance: CGFloat) -> Self {
@@ -1353,6 +1373,10 @@ public prefix func - (point: CGPoint) -> CGPoint {
 }
 
 public extension CGPath {
+    
+    static func create(_ segment: CGSegment) -> CGPath {
+        line(p0: segment.from, p1: segment.to)
+    }
     
     static func line(p0: CGPoint, p1: CGPoint) -> CGPath {
         let r = CGMutablePath.init()
