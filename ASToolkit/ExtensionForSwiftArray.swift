@@ -818,6 +818,15 @@ public extension Array {
 }
 
 
+public extension Array where Element == Int {
+    
+    func inverseMapped(to: Int) -> Self {
+        self.map { to - $0 }
+    }
+    
+}
+
+
 public extension Array {
     
     @discardableResult
