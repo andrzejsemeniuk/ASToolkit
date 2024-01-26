@@ -222,6 +222,30 @@ public extension Array {
         r.rotate(amount)
         return r
     }
+
+    mutating func shift(_ amount: Int, fill: Element) {
+        guard isNotEmpty else {
+            return
+        }
+        var amount = amount
+        while amount < 0 {
+            self.removeFirst()
+            self.append(fill)
+            amount += 1
+        }
+        while amount > 0 {
+            self.removeLast()
+            self.prepend(fill)
+            amount -= 1
+        }
+    }
+    
+    func shifted(_ amount: Int, fill: Element) -> Self {
+        var r = self
+        r.shift(amount, fill: fill)
+        return r
+    }
+    
 }
 
 

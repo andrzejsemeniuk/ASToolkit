@@ -989,6 +989,9 @@ public extension Int32 {
 public extension Int64 {
     var asString : String { String(self) }
 }
+public extension UInt {
+    var asString : String { String(self) }
+}
 public extension UInt32 {
     var asString : String { String(self) }
 }
