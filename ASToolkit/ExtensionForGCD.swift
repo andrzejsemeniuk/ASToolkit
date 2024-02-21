@@ -45,7 +45,7 @@ public func wait(_ block: @escaping Block) {
 }
 
 public func now(_ block: @escaping Block) {
-    DispatchQueue.main.async {
+    DispatchQueue.main.sync {
         block()
     }
 }
