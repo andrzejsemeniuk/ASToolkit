@@ -17,5 +17,7 @@ public enum AnError : Swift.Error {
     case decoding, encoding
     case notImplemented
     case programmingError
+    case noValidValuesFound
+    case emptyParameter
 
 }

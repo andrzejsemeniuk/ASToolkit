@@ -633,6 +633,9 @@ public extension String {
     var splitByNewline : [String] {
         split("\n")
     }
+    var splitBySpace : [String] {
+        split(" ")
+    }
     
     static let newline : String = "\n"
     static let LF : String = "\n"

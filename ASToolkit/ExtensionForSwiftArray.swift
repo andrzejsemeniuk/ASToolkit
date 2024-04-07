@@ -9,7 +9,9 @@
 import Foundation
 
 public extension RangeReplaceableCollection {
+    
     var combinations: [Self] { generate(2) }
+    
     func generate(_ n: Int) -> [Self] {
         repeatElement(self, count: n).reduce([.init()]) { result, element in
             result.flatMap { elements in
@@ -172,6 +174,14 @@ public extension Array
 	var preLast : Element? {
 		return self[safe:count-2]
 	}
+    
+    var firstElement : Element {
+        first!
+    }
+    
+    var lastElement : Element {
+        last!
+    }
     
     func indexForNextLooped(_ i: Int) -> Int {
         count < 1 ? 0 : (i + 1) % count
@@ -340,6 +350,10 @@ public extension Array where Element == String {
     
     func lowercased() -> Self {
         map { $0.lowercased() }
+    }
+    
+    func filteredOutEmpty() -> Self {
+        filter { $0.isNotEmpty }
     }
     
 }
