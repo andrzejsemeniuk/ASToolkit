@@ -172,6 +172,7 @@ public extension Double {
 }
 
 
+
 //public func pick<T>(_ from: [T]) -> T {
 //    from[.random(min: 0, upto: from.count)]
 //}
@@ -247,6 +248,50 @@ public extension Double {
         }
     }
     
+    
+    struct MinMax {
+        let minimum     : Double
+        let maximum     : Double
+        let d           : Double
+        
+        let logminimum  : Double
+        let logmaximum  : Double
+        let logd        : Double
+        let logoffset   : Double
+        
+        init(minimum: Double = 0, maximum: Double = 1) {
+            self.minimum = minimum
+            self.maximum = maximum
+            self.d = maximum - minimum
+            // NOTE: minimum needs to be > 0
+            self.logoffset  = minimum > 0.0 ? 0.0 : 1.0
+            self.logminimum = log(logoffset + minimum)
+            self.logmaximum = log(logoffset + maximum)
+//                self.logminimum = log(minimum)
+//                self.logmaximum = log(maximum)
+            self.logd = logmaximum - logminimum
+        }
+        
+        func lerp(_ v: Double, fallback: Double) -> Double {
+            d > 0 ? (v - minimum) / d : fallback
+        }
+        func lerp01(_ v: Double, fallback: Double) -> Double {
+            lerp(v, fallback: fallback).clampedTo01
+        }
+        func loglerp(_ v: Double, fallback: Double) -> Double {
+//                log(v) - logminimum
+            logd != 0 ? (log(logoffset + v) - logminimum) / logd : fallback
+        }
+        func loglerp01(_ v: Double, fallback: Double) -> Double {
+            loglerp(v, fallback: fallback).clampedTo01
+        }
+        
+        func lerp01(logarithmic: Bool, _ v: Double, fallback: Double) -> Double {
+            logarithmic ? loglerp01(v, fallback: fallback) : lerp01(v, fallback: fallback)
+        }
+
+    }
+
 }
 
 public extension Int64 {
@@ -751,16 +796,20 @@ public extension Int
     }
 
     func loop(_ block: ()->()) {
-        let limit = self
-        for _ in 1...limit {
-            block()
+        if self > 0 {
+            let limit = self
+            for _ in 1...limit {
+                block()
+            }
         }
     }
 
     func loop(_ block: (Int)->()) {
-        let limit = self
-        for index in 1...limit {
-            block(index)
+        if self > 0 {
+            let limit = self
+            for index in 1...limit {
+                block(index)
+            }
         }
     }
 
@@ -1026,3 +1075,67 @@ public extension Array where Element == Int {
     func asStringTuple(delimiter: String = ",") -> String { self.map { "\($0)" }.joined(separator: delimiter) }
     func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
 }
+
+
+
+
+
+
+
+
+
+class NumericInterval<NUMBER : Numeric & Comparable> {
+    
+    internal init(lowerbound: NUMBER, upperbound: NUMBER) {
+        self.lowerbound = lowerbound
+        self.upperbound = upperbound
+    }
+    
+    internal init(_ lowerbound: NUMBER, _ upperbound: NUMBER) {
+        self.lowerbound = lowerbound
+        self.upperbound = upperbound
+    }
+    
+    func contains(_ other: NUMBER) -> Bool { false }
+    
+    var lowerbound : NUMBER
+    var upperbound : NUMBER
+}
+
+class NumericIntervalOpenOpen<NUMBER: Numeric & Comparable> : NumericInterval<NUMBER> {
+    
+    override func contains(_ other: NUMBER) -> Bool {
+        lowerbound < other && other < upperbound
+    }
+    
+}
+
+class NumericIntervalOpenClosed<NUMBER: Numeric & Comparable> : NumericInterval<NUMBER> {
+    
+    override func contains(_ other: NUMBER) -> Bool {
+        lowerbound < other && other <= upperbound
+    }
+    
+}
+
+class NumericIntervalClosedClosed<NUMBER: Numeric & Comparable> : NumericInterval<NUMBER> {
+    
+    override func contains(_ other: NUMBER) -> Bool {
+        lowerbound <= other && other <= upperbound
+    }
+    
+}
+
+class NumericIntervalClosedOpen<NUMBER: Numeric & Comparable> : NumericInterval<NUMBER> {
+    
+    override func contains(_ other: NUMBER) -> Bool {
+        lowerbound <= other && other < upperbound
+    }
+    
+}
+
+
+
+
+
+

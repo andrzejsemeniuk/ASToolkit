@@ -295,11 +295,20 @@ public extension Date {
 		return calendar.date(byAdding: components, to: self)!
 	}
     
+    var normalizedToWeekday : Date {
+        switch self.weekday {
+            case .monday, .tuesday, .wednesday, .thursday, .friday: return self
+            case .saturday: return .yesterday
+            case .sunday: return .yesterday.yesterday
+        }
+    }
+    
     var utc : Date {
         self.convertToUTC() ?? self
     }
     
     var normalizedToDay : Date { midnight }
+    
     var normalizedToHour : Date {
         let calendar            = Calendar.current
         var components          = DateComponents()
@@ -309,6 +318,7 @@ public extension Date {
 
         return calendar.date(byAdding: components, to: self)!
     }
+    
     var normalizedToMinute : Date {
         let calendar            = Calendar.current
         var components          = DateComponents()

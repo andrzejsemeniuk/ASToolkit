@@ -12,6 +12,7 @@ public enum AnError : Swift.Error {
     case isInvalidState(String)
     case isNil(String)
     case etc(String)
+    case missing(String)
     
     case valueIsNil
     case decoding, encoding

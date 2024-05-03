@@ -964,3 +964,13 @@ public extension String {
 
 }
 
+public extension String {
+    
+    func matches(_ regex: Regex<String>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+    
+    func matches(_ regex: Regex<Substring>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+}

@@ -29,3 +29,15 @@ public extension Substring {
 
 }
 
+
+public extension Substring {
+    
+    func matches(_ regex: Regex<Substring>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+    
+    func matches(_ regex: Regex<String>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+}
+
