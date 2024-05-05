@@ -1347,6 +1347,20 @@ public extension Array where Element : Hashable {
             (self[i],i)
         }
     }
+    
+    func asArrayIndex(in other: [Element]) -> [Int?] {
+        let indices = other.asDictionaryIndex
+        return self.map { e in
+            indices[e]
+        }
+    }
+    
+    func asArrayIndex(in other: [Element], fallback: Int) -> [Int] {
+        let indices = other.asDictionaryIndex
+        return self.map { e in
+            indices[e] ?? fallback
+        }
+    }
 }
 
 
