@@ -437,11 +437,15 @@ public extension Date {
         DateFormatter.init(withFormat: format).string(from: self)
     }
     
+    func asStringOfElapsedTimeInSecondsAsHHMMSS(from: Date = .now, limit: Int = 5) -> String {
+        abs(from.timeIntervalSince1970 - self.timeIntervalSince1970).asInt.asStringOfElapsedTimeInSecondsAsHHMMSS(limit: limit)
+    }
+    
 }
 
 public extension Int {
     
-    func asStringOfProgressHHMMSS(limit: Int = 5) -> String {
+    func asStringOfElapsedTimeInSecondsAsHHMMSS(limit: Int = 5) -> String {
         let SECONDS = self
         var r = ""
         let HH = SECONDS / 3600
