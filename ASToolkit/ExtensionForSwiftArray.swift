@@ -439,9 +439,9 @@ extension Array {
     }
 }
 
-extension Array where Element : Equatable {
+public extension Array where Element : Equatable {
     
-    public func next(after:Element, wrap: Bool = true) -> Element? {
+    func next(after:Element, wrap: Bool = true) -> Element? {
         if let index = self.index(where: { $0 == after }) {
             if index < (count-1) {
                 return self[index+1]
@@ -453,7 +453,7 @@ extension Array where Element : Equatable {
         return nil
     }
     
-    public func removed(_ element:Element) -> Self {
+    func removed(_ element:Element) -> Self {
         var result = self
         if let index = result.firstIndex(where: { $0 == element }) {
             result.remove(at: index)
@@ -461,10 +461,23 @@ extension Array where Element : Equatable {
         return result
     }
     
-    public func removed(at index: Int) -> Self {
+    func removed(at index: Int) -> Self {
         var result = self
         result.remove(at: index)
         return result
+    }
+    
+    @discardableResult
+    mutating func removeEvery(_ element: Element) -> Int {
+        let count0 = count
+        removeAll(where: { $0 == element })
+        return count0 - count
+    }
+    
+    mutating func removedEvery(_ element: Element) -> Self {
+        var r = self
+        r.removeEvery(element)
+        return r
     }
     
 }
