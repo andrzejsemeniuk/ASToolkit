@@ -1571,3 +1571,65 @@ extension View {
 }
 
 fileprivate var cancellables = Set<AnyCancellable>()
+
+
+
+
+
+
+
+//extension View {
+    
+    struct ViewSize : Equatable, Codable {
+        
+        struct Length : Equatable, Codable {
+            var pixels : CGFloat = 256
+            var unbound : Bool = false
+            var unspecified : Bool = false
+        }
+        
+        var width  : Length
+        var height : Length
+        
+        func frame(width on: some View) -> some View {
+            Group {
+                if width.unspecified {
+                    on
+                } else if width.unbound {
+                    on.frame(maxWidth: nil)
+                } else if width.pixels < 0 {
+                    on.frame(maxWidth: nil)
+                } else {
+                    on.frame(width: width.pixels)
+                }
+            }
+        }
+        
+        func frame(height on: some View) -> some View {
+            Group {
+                if height.unspecified {
+                    on
+                } else if height.unbound {
+                    on.frame(maxHeight: nil)
+                } else if height.pixels < 0 {
+                    on.frame(maxHeight: nil)
+                } else {
+                    on.frame(height: height.pixels)
+                }
+            }
+        }
+        
+        func frame(on: some View) -> some View {
+            frame(width: frame(height: on))
+        }
+        
+    }
+    
+
+extension View {
+    
+    func frame(size: ViewSize) -> some View {
+        size.frame(on: self)
+    }
+    
+}

@@ -1410,13 +1410,13 @@ extension Array {
 
 public extension Array where Element : Equatable {
     
-    @inlinable public func startsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+    @inlinable func startsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
         starts(with: possiblePrefix)
     }
-    @inlinable public func endsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+    @inlinable func endsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
         ends(with: possiblePrefix)
     }
-    @inlinable public func ends<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+    @inlinable func ends<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
         reversed().starts(with: possiblePrefix.reversed())
     }
 

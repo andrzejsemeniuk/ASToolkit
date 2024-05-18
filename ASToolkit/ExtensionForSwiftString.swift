@@ -637,6 +637,12 @@ public extension String {
         split(" ")
     }
     
+    func chunked(by: String) -> [String] {
+        self.split(by).filter { $0.isNotEmpty }
+    }
+    
+    var chunkedBySpace : [String] { chunked(by: " ")}
+    
     static let newline : String = "\n"
     static let LF : String = "\n"
     static let CR : String = "\r"
