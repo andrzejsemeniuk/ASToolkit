@@ -46,9 +46,9 @@ extension XMLElement {
 
 }
 
-extension XMLElement {
+public extension XMLElement {
     
-    open var xmlElements:[XMLElement] {
+    var xmlElements:[XMLElement] {
 		return children.map { $0 as? XMLElement }.compactMap { $0 }
     }
     
