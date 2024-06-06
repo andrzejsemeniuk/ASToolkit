@@ -980,3 +980,14 @@ public extension String {
         self.firstMatch(of: regex) != nil
     }
 }
+
+public extension String {
+    
+    func with(path: String, separator: String = "/") -> String {
+        self + separator + path
+    }
+    
+    func with(path: [String], separator: String = "/") -> String {
+        self + separator + path.joined(separator: separator)
+    }
+}

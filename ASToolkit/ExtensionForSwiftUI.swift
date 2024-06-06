@@ -1583,9 +1583,26 @@ fileprivate var cancellables = Set<AnyCancellable>()
     struct ViewSize : Equatable, Codable {
         
         struct Length : Equatable, Codable {
+            
+            enum Kind : Equatable, Codable {
+                case unbound, unspecified, fixed, min, max
+                
+                var usesPixels : Bool {
+                    switch self {
+                        case .unbound, .unspecified:
+                            return false
+                        case .min, .fixed, .max:
+                            return true
+                    }
+                }
+            }
+            
+            var kind : Kind = .unbound
             var pixels : CGFloat = 256
-            var unbound : Bool = false
-            var unspecified : Bool = false
+            
+            var usesPixels : Bool {
+                kind.usesPixels
+            }
         }
         
         var width  : Length
@@ -1593,28 +1610,34 @@ fileprivate var cancellables = Set<AnyCancellable>()
         
         func frame(width on: some View) -> some View {
             Group {
-                if width.unspecified {
-                    on
-                } else if width.unbound {
-                    on.frame(maxWidth: nil)
-                } else if width.pixels < 0 {
-                    on.frame(maxWidth: nil)
-                } else {
-                    on.frame(width: width.pixels)
+                switch width.kind {
+                    case .unspecified:
+                        on
+                    case .unbound:
+                        on.frame(maxWidth: nil)
+                    case .fixed:
+                        on.frame(width: width.pixels)
+                    case .min:
+                        on.frame(minWidth: width.pixels)
+                    case .max:
+                        on.frame(maxWidth: width.pixels)
                 }
             }
         }
         
         func frame(height on: some View) -> some View {
             Group {
-                if height.unspecified {
-                    on
-                } else if height.unbound {
-                    on.frame(maxHeight: nil)
-                } else if height.pixels < 0 {
-                    on.frame(maxHeight: nil)
-                } else {
-                    on.frame(height: height.pixels)
+                switch height.kind {
+                    case .unspecified:
+                        on
+                    case .unbound:
+                        on.frame(maxHeight: nil)
+                    case .fixed:
+                        on.frame(height: height.pixels)
+                    case .min:
+                        on.frame(minHeight: height.pixels)
+                    case .max:
+                        on.frame(maxHeight: height.pixels)
                 }
             }
         }
@@ -1633,3 +1656,18 @@ extension View {
     }
     
 }
+
+extension EdgeInsets : RawRepresentable {
+    
+    public typealias RawValue = String
+
+    public init?(rawValue: String) {
+        let SPLIT = rawValue.splitByComma
+        self.init(top: SPLIT[safe: 0]?.asCGFloat ?? 0, leading: SPLIT[safe: 1]?.asCGFloat ?? 0, bottom: SPLIT[safe: 2]?.asCGFloat ?? 0, trailing: SPLIT[safe: 3]?.asCGFloat ?? 0)
+    }
+    
+    public var rawValue: String {
+        "\(top),\(bottom),\(leading),\(trailing)"
+    }
+}
+

@@ -439,9 +439,12 @@ public extension Int64 {
 
 public extension Double {
     
-    static let formatterAsUInt64 : NumberFormatter = {
+    static let formatterAsInteger : NumberFormatter = {
         let r = NumberFormatter.init()
-        r.numberStyle = .ordinal
+        r.usesGroupingSeparator = true
+        r.groupingSeparator = ","
+        r.groupingSize = 3
+        r.maximumFractionDigits = 0
         return r
     }()
     
@@ -452,7 +455,7 @@ public extension Double {
 //        self.asInt64.formatWithAbbrevation
 //    }
 
-    var format0 : String { self == 0 ? "0" : Self.formatterAsUInt64.string(from: self.asUInt64 as NSNumber) ?? "?" } //NSString(format: "%U", self.asUInt64) as String }
+    var format0 : String { self == 0 ? "0" : Self.formatterAsInteger.string(from: self.asUInt64 as NSNumber) ?? "?" } //NSString(format: "%U", self.asUInt64) as String }
     
     var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
     var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }

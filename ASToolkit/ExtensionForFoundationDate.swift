@@ -52,7 +52,7 @@ extension Date {
         return r
     }
     
-    public func adding  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), years:Int = 0, months:Int = 0, days:Int = 0, hours:Int = 0, minutes:Int = 0, seconds:Int = 0) -> Date? {
+    public func adding  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), years:Int = 0, quarter:Int = 0, months:Int = 0, days:Int = 0, hours:Int = 0, minutes:Int = 0, seconds:Int = 0) -> Date? {
         var components      = DateComponents()
         
         components.year     = years
@@ -61,6 +61,7 @@ extension Date {
         components.hour     = hours
         components.minute   = minutes
         components.second   = seconds
+        components.quarter  = quarter
         
         return calendar.date(byAdding: components, to: self)
     }

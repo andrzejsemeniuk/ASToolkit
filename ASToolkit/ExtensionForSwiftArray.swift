@@ -1574,3 +1574,45 @@ public extension Array {
 
 
 }
+
+
+extension Array {
+    
+    init(loop: ()->Element?) {
+        var V : [Element] = []
+        while let v = loop() {
+            V.append(v)
+        }
+        self.init(V)
+    }
+    
+    init(initial: Element, loop: (Element)->Element?) {
+        var V = [initial]
+        while let v = loop(V.last!) {
+            V.append(v)
+        }
+        self.init(V)
+    }
+    
+}
+
+extension Array where Element : Comparable & Numeric {
+    
+    init(initial: Element, delta: Element, limit: Element) {
+        var V : Self = []
+        var v = initial
+        if delta > 0 {
+            while v < limit {
+                V.append(v)
+                v += delta
+            }
+        } else if delta < 0 {
+            while v > limit {
+                V.append(v)
+                v += delta
+            }
+        }
+        self.init(V)
+    }
+    
+}

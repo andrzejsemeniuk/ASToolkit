@@ -8,14 +8,15 @@
 
 import Foundation
 
-public typealias Block                      = ()->Void
-public typealias AsyncBlock                 = () async ->Void
-public typealias BlockWithBlock             = (Block)->Void
+public typealias Block                      = () -> Void
+public typealias AsyncBlock                 = () async -> Void
+public typealias BlockWithBlock             = (Block) -> Void
+public typealias BlockWithThrows            = () throws -> Void
 
-public typealias Block_B_V                  = ((Bool)->Void)
+public typealias Block_B_V                  = ((Bool) -> Void)
 public typealias BlockBoolToVoid            = Block_B_V
 public typealias BlockAcceptingBool         = Block_B_V
-public typealias BlockReturningBool         = ()->Bool
+public typealias BlockReturningBool         = () -> Bool
 
 public func sleep(interval:TimeInterval = 0.1, loop:()->Bool, success:()->Bool) async throws -> Bool {
 	while loop() {
