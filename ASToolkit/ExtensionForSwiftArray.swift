@@ -816,6 +816,10 @@ public extension Array {
 
 public extension Array where Element : Equatable {
     
+    func has(_ element: Element) -> Bool {
+        contains(element)
+    }
+    
     func has(none array: [Element]) -> Bool {
         contains(none: array)
     }
