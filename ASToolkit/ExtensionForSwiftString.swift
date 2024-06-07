@@ -641,7 +641,10 @@ public extension String {
         self.split(by).filter { $0.isNotEmpty }
     }
     
-    var chunkedBySpace : [String] { chunked(by: " ")}
+    var chunkedBySpace : [String] {
+        self.split(" ").map { $0.trimmed() }.filter { $0.isNotEmpty }
+//        self.chunked(by: " ")
+    }
     
     static let newline : String = "\n"
     static let LF : String = "\n"
@@ -982,6 +985,10 @@ public extension String {
 }
 
 public extension String {
+    
+    func with(field: String, separator: String = "+") -> String {
+        self + separator + field
+    }
     
     func with(path: String, separator: String = "/") -> String {
         self + separator + path

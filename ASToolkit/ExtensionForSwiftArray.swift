@@ -811,7 +811,47 @@ public extension Array {
         }
         return true
     }
+    
+}
 
+public extension Array where Element : Equatable {
+    
+    func has(none array: [Element]) -> Bool {
+        contains(none: array)
+    }
+    
+    func has(all array: [Element]) -> Bool {
+        contains(all: array)
+    }
+    
+    func has(any array: [Element]) -> Bool {
+        contains(any: array)
+    }
+    
+    func contains(none array: [Element]) -> Bool {
+        array.none { self.contains($0) }
+    }
+    
+    func contains(all array: [Element]) -> Bool {
+        array.all { self.contains($0) }
+    }
+    
+    func contains(any array: [Element]) -> Bool {
+        array.any { self.contains($0) }
+    }
+    
+    func missing(none array: [Element]) -> Bool {
+        contains(all: array)
+    }
+    
+    func missing(all array: [Element]) -> Bool {
+        contains(none: array)
+    }
+    
+    func missing(any array: [Element]) -> Bool {
+        !contains(all: array)
+    }
+    
 }
 
 public extension Array where Element == Int {
