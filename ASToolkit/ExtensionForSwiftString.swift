@@ -313,6 +313,15 @@ extension String
         return self
     }
     
+    public func prefixed(upToLength: Int, with: Character) -> String {
+        var R = self
+        let c = String(with)
+        while R.length < upToLength {
+            R = c + R
+        }
+        return R
+    }
+    
     public func trimmedFromEndIfLongerThan(_ count:Int, withSuffix: String = "") -> Substring {
         if count < length {
             return substring(from:0,length:count) + withSuffix

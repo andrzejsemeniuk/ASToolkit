@@ -189,6 +189,18 @@ extension Date {
 
 public extension Date {
     
+    var idWithNanoseconds : UInt64 {
+        (self.timeIntervalSince1970 * 1000000000.0).asUInt64
+    }
+
+    var nanoseconds : UInt64 {
+        (self.timeIntervalSince1970 * 1000000000.0).asUInt64 - (self.timeIntervalSince1970.asUInt64 * 1000000000)
+    }
+    
+    var toYYYYMMDDHHMMSSMSNS : String {
+        toYYYYMMDDHHMMSS.asString + nanoseconds.asString.prefixed(upToLength: 9, with: "0")
+    }
+
     var toYYYYMMDDHHMMSSMS : UInt64 {
         let yyyy = UInt64(year())   * 10000000000000
         let   mm = UInt64(month())  *   100000000000
