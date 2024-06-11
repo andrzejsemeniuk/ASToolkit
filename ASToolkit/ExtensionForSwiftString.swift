@@ -1019,3 +1019,11 @@ public extension String {
         self + separator + path.joined(separator: separator)
     }
 }
+
+public extension String {
+    
+    func asDateWithFormat(_ format: String) -> Date? {
+        DateFormatter.init(withFormat: format).date(from: self)
+    }
+    
+}

@@ -403,6 +403,18 @@ public extension Date {
         !Calendar.current.component(.weekday, from: self).in([Date.saturday,Date.sunday])
     }
     
+    var isWeekend : Bool {
+        Calendar.current.component(.weekday, from: self).in([Date.saturday,Date.sunday])
+    }
+    
+    var isMonday : Bool { Calendar.current.component(.weekday, from: self) == Date.monday }
+    var isTuesday : Bool { Calendar.current.component(.weekday, from: self) == Date.tuesday }
+    var isWednesday : Bool { Calendar.current.component(.weekday, from: self) == Date.wednesday }
+    var isThursday : Bool { Calendar.current.component(.weekday, from: self) == Date.thursday }
+    var isFriday : Bool { Calendar.current.component(.weekday, from: self) == Date.friday }
+    var isSaturday : Bool { Calendar.current.component(.weekday, from: self) == Date.saturday }
+    var isSunday : Bool { Calendar.current.component(.weekday, from: self) == Date.sunday }
+    
     static let secondsIn1Hour   : TimeInterval = 60.0 * 60.0
     static let secondsIn1Day    : TimeInterval = 24.0 * secondsIn1Hour
 }
@@ -418,6 +430,12 @@ public extension TimeInterval {
     static var now : TimeInterval {
         Date().timeIntervalSince1970
     }
+    
+    static var secondsInHour : TimeInterval { 60 * 60 }
+    static var secondsInDay  : TimeInterval { 60 * 60 * 24 }
+    static var secondsInWeek : TimeInterval { 60 * 60 * 24 * 7 }
+    static var secondsInMonth : TimeInterval { 60 * 60 * 24 * 30 }
+    static var secondsInYear : TimeInterval { 60 * 60 * 24 * 365 }
 
 
 }
