@@ -995,6 +995,18 @@ public extension String {
 
 public extension String {
     
+    init(type: String, key: String) {
+        self = type + "@" + key
+    }
+    
+    init(type: String, key: String, field: String) {
+        self = type + "@" + key + "+" + field
+    }
+    
+    func with(key: String, separator: String = "@") -> String {
+        self + separator + key
+    }
+    
     func with(field: String, separator: String = "+") -> String {
         self + separator + field
     }
