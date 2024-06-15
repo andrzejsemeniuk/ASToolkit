@@ -573,6 +573,14 @@ public extension Array where Element: Equatable {
             prepend(element)
         }
     }
+    
+    mutating func append(missing: Element) {
+        enlist(append: missing)
+    }
+    
+    mutating func prepend(missing: Element) {
+        enlist(prepend: missing)
+    }
 
 }
 
