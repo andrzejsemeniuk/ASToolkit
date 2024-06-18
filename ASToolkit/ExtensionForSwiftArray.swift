@@ -304,6 +304,11 @@ public extension Array where Element : Numeric {
         reduce(0, { condition($1) ? $0 + $1 : $0 })
     }
     
+    var product                     : Element? {
+        guard isNotEmpty else { return nil }
+        return reduce(1, { $0 * $1 })
+    }
+    
 }
 
 extension Array where Element == Int {
@@ -451,6 +456,26 @@ public extension Array where Element : Equatable {
             }
         }
         return nil
+    }
+    
+    func inserted(_ element:Element, at: Int) -> Self {
+        var result = self
+        if at < count {
+            result.insert(element, at: at)
+        } else {
+            result.append(element)
+        }
+        return result
+    }
+    
+    func inserted(_ element:Element, after: Int) -> Self {
+        var result = self
+        if (after+1) < count {
+            result.insert(element, at: 1+after)
+        } else {
+            result.append(element)
+        }
+        return result
     }
     
     func removed(_ element:Element) -> Self {
@@ -602,6 +627,14 @@ public extension Array {
         return self.compactMap({
             return $0
         })
+    }
+    
+    func withCompacted<T>(perform: ([Element])->T) -> T {
+        perform(compacted())
+    }
+    
+    func withCompacted<T>(perform: ([Element])->T?) -> T? {
+        perform(compacted())
     }
     
     func ensured(count: Int, fill: Element) -> Self {
@@ -1243,6 +1276,10 @@ public extension Array where Element : Comparable {
         }
         return nil
     }
+    
+    var min                         : Element? { minimal(<) }
+    var max                         : Element? { maximal(<) }
+
 }
 
 //public extension Array where Element : Optional<Comparable> {

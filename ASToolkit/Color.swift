@@ -569,4 +569,7 @@ extension Color {
     var asBWExtreme : Color {
         .init(white: self.hsba[2] < 0.5 ? 0 : 1)
     }
+    var asBWExtremeOpposite : Color {
+        .init(white: self.hsba[2] > 0.5 ? 0 : 1)
+    }
 }

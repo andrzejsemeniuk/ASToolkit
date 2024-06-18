@@ -252,6 +252,12 @@ public extension Date {
         return yyyy + mm
     }
 
+    var toHHMM : UInt {
+        let   hh = UInt(hour())   *       100
+        let   mi = UInt(minute())
+        return hh + mi
+    }
+
     struct Components : Codable {
         
         var YYYY    : String

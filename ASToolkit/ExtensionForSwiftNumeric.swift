@@ -473,11 +473,33 @@ public extension Double {
 
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
     
+    var formatDynamic : String {
+        let ABS = self.abs
+        return ABS.floor == ABS ? self.asInt.asString : ABS > 10 ? self.format2 : ABS > 1 ? self.format3 : self.formatted4
+    }
     var percent0 : String { self == 0 ? "0%" : NSString(format: "%.0f%%", self * 100.0) as String }
     var percent1 : String { self == 0 ? "0.0%" : NSString(format: "%.1f%%", self * 100.0) as String }
     var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
 
+    var formatted4 : String {
+        if asInt64.asDouble == self {
+            return asInt64.formatted()
+        }
+        let r = format4
+        for i in 0..<r.count {
+            let i = r.count - 1 - i
+            if r[i] == "." {
+                return r.substring(0..<i).asString
+            } else if r[i] != "0" {
+                return r.substring(0...i).asString
+            }
+        }
+        return r
+    }
+
 }
+
+
 
 public extension Double {
     static let twopi            : Self = Self.pi * 2.0
@@ -719,6 +741,7 @@ public extension Float {
 public extension Float {
 
     var asInt           : Int { Int(self) }
+    var asInt64         : Int64 { Int64(self) }
     var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
     var asCGFloat       : CGFloat { CGFloat(self) }
     var asDouble        : Double { Double(self) }
@@ -746,6 +769,23 @@ public extension Float {
         }
         return r
     }
+    
+    var formatted4 : String {
+        if asInt64.asFloat == self {
+            return asInt64.formatted()
+        }
+        let r = format4
+        for i in 0..<r.count {
+            let i = r.count - 1 - i
+            if r[i] == "." {
+                return r.substring(0..<i).asString
+            } else if r[i] != "0" {
+                return r.substring(0...i).asString
+            }
+        }
+        return r
+    }
+
 }
 
 public extension Float {
@@ -994,6 +1034,7 @@ public extension Int64 {
         self < 0 ? -1 : self > 0 ? 1 : 0
     }
     
+    var asFloat         : Float         { Float(self) }
     var asDouble        : Double        { Double(self) }
     var asUInt64        : UInt64        { UInt64(self) }
     var asInt           : Int           { Int(self) }
