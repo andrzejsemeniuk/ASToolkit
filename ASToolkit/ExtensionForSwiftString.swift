@@ -645,6 +645,15 @@ public extension String {
     var splitBySpace : [String] {
         split(" ")
     }
+    var splitByFieldDelimiter : [String] {
+        split("+")
+    }
+    var splitByTypeDelimiter : [String] {
+        split(":")
+    }
+    var splitByIdentifierDelimiter : [String] {
+        split("@")
+    }
     
     func chunked(by: String) -> [String] {
         self.split(by).filter { $0.isNotEmpty }
@@ -1002,28 +1011,28 @@ public extension String {
 
 public extension String {
     
-    init(type: String, key: String) {
-        self = type + "@" + key
+    init(type: String, identifier: String) {
+        self = type + "@" + identifier
     }
     
-    init(type: String, key: String, field: String) {
-        self = type + "@" + key + "+" + field
+    init(type: String, identifier: String, field: String) {
+        self = type + "@" + identifier + "+" + field
     }
     
-    func with(key: String, separator: String = "@") -> String {
-        self + separator + key
+    func with(identifier: String) -> String {
+        self + "@" + identifier
     }
     
-    func with(field: String, separator: String = "+") -> String {
-        self + separator + field
+    func with(field: String) -> String {
+        self + "+" + field
     }
     
-    func with(path: String, separator: String = "/") -> String {
-        self + separator + path
+    func with(path: String) -> String {
+        self + "/" + path
     }
     
-    func with(path: [String], separator: String = "/") -> String {
-        self + separator + path.joined(separator: separator)
+    func with(path: [String]) -> String {
+        self + "/" + path.joinedBySlash
     }
 }
 

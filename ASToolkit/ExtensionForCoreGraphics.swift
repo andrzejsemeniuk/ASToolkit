@@ -193,6 +193,8 @@ public extension CGPoint {
     var format2 : String { "(\(x.format2),\(y.format2))" }
     var format3 : String { "(\(x.format3),\(y.format3))" }
     
+    var isValid : Bool { !(x.isNaN || y.isNaN) }
+    
 }
 
 extension CGPoint : Hashable {

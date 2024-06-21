@@ -96,6 +96,9 @@ public extension Dictionary where Key : Equatable {
     @inlinable func missing(key: Key) -> Bool {
         keys.missing(key)
     }
+    func filterByKey(_ matching: [Key]) -> Self {
+        filter({ k,v in k.in(matching) })
+    }
 }
 
 public extension Dictionary where Value : Hashable {

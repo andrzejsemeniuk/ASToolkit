@@ -42,6 +42,22 @@ public extension Array
         self.insert(element, at: 0)
     }
 
+    mutating func discardFromFront(keeping: Int) {
+//        let range = startIndex.advanced(by: from)..<endIndex
+//        self.removeSubrange(range)
+        while count > keeping {
+            popFirst()
+        }
+    }
+    mutating func discardFromBack(keeping: Int) {
+//        let range = startIndex.advanced(by: from)..<endIndex
+//        self.removeSubrange(range)
+        while count > keeping {
+            popLast()
+        }
+    }
+    
+
     @discardableResult
     mutating func trim(to: Int) -> Array {
         if to >= count {
