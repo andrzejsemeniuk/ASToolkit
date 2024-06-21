@@ -672,13 +672,13 @@ public extension String {
 
 public extension String {
     
-    var  asFloat   :  Float?   { Float(self.trimmed().erasedCommas) }
-    var  asDouble  :  Double?  { Double(self.trimmed().erasedCommas) }
-    var  asCGFloat :  CGFloat? { CGFloat(self.trimmed().erasedCommas) }
-    var  asInt     :  Int?     { Int(self.trimmed().erasedCommas) }
-    var  asUInt    :  UInt?    { UInt(self.trimmed().erasedCommas) }
-    var  asUInt64  :  UInt64?  { UInt64(self.trimmed().erasedCommas) }
-    var  asInt64   :  Int64?   { Int64(self.trimmed().erasedCommas) }
+    var  asFloat   :  Float?   { Float(self.trimmed().erasingCommas) }
+    var  asDouble  :  Double?  { Double(self.trimmed().erasingCommas) }
+    var  asCGFloat :  CGFloat? { CGFloat(self.trimmed().erasingCommas) }
+    var  asInt     :  Int?     { Int(self.trimmed().erasingCommas) }
+    var  asUInt    :  UInt?    { UInt(self.trimmed().erasingCommas) }
+    var  asUInt64  :  UInt64?  { UInt64(self.trimmed().erasingCommas) }
+    var  asInt64   :  Int64?   { Int64(self.trimmed().erasingCommas) }
     
     var asPhrase : String {
 //        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
@@ -738,8 +738,11 @@ public extension String {
     var sp2 : Self { surrounded(by: "  ")}
     var sp3 : Self { surrounded(by: "   ")}
     
-    var erasedCommas : String {
+    var erasingCommas : String {
         self.replacingOccurrences(of: ",", with: "")
+    }
+    var erasingSpaces : String {
+        self.replacingOccurrences(of: " ", with: "")
     }
     
 
