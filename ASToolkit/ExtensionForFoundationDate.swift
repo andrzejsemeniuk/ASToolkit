@@ -56,12 +56,12 @@ extension Date {
         var components      = DateComponents()
         
         components.year     = years
+        components.quarter  = quarter
         components.month    = months
         components.day      = days
         components.hour     = hours
         components.minute   = minutes
         components.second   = seconds
-        components.quarter  = quarter
         
         return calendar.date(byAdding: components, to: self)
     }
@@ -296,22 +296,17 @@ extension Date {
 public extension Date {
 
 	var midnight : Date {
-		let calendar = Calendar.current
-//		return self.adding(withCalendar: calendar,
-//						   years: 0,
-//						   months: 0,
-//						   days: 0,
-//						   hours: -self.hour(),
-//						   minutes: -self.minute(),
-//						   seconds: -self.second())!
-
-		var components      = DateComponents()
-
-        components.hour        =  -self.hour()
-        components.minute      =  -self.minute()
-        components.second      =  -self.second()
+//		let calendar = Calendar.current
+//
+//		var components      = DateComponents()
+//
+//        components.hour        =  -self.hour()
+//        components.minute      =  -self.minute()
+//        components.second      =  -self.second()
+//        
+//		return calendar.date(byAdding: components, to: self)!
         
-		return calendar.date(byAdding: components, to: self)!
+        formatted("yyyy-MM-dd").asDateWithFormat("yyyy-MM-dd")!
 	}
     
     var normalizedToWeekday : Date {
