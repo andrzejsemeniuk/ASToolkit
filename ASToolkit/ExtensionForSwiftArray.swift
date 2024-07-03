@@ -521,6 +521,18 @@ public extension Array where Element : Equatable {
         return r
     }
     
+    func uniquedKeepingOrderOnAdjacentElements() -> Self {
+        reduce([], {
+            if $0.isEmpty {
+                return [$1]
+            } else if $0.last == $1 {
+                return $0
+            } else {
+                return $0 + [$1]
+            }
+        })
+    }
+    
 }
 
 public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {

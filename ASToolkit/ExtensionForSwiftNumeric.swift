@@ -8,6 +8,19 @@
 
 import Foundation
 
+
+
+public extension Numeric where Self : Comparable {
+    
+    func max(_ other: Self) -> Self { Swift.max(self,other) }
+    func min(_ other: Self) -> Self { Swift.min(self,other) }
+    
+    func         clamped         (_ min: Self, _ max: Self) -> Self       { Swift.max(min,Swift.min(max,self)) }
+    var          clamped01       : Self                                   { Swift.max(0,Swift.min(1,self)) }
+
+}
+
+
 public extension BinaryInteger {
     mutating func increment(increment:Self) -> Self {
         self = self + increment
@@ -26,6 +39,35 @@ public extension BinaryInteger {
 }
 
 public extension FloatingPoint {
+    
+    func lerp               (from:Self, to:Self) -> Self { from + (to - from) * self }
+    func lerp01             (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
+    func lerp               (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
+    func lerp01             (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
+    static func lerp        (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
+    static func lerp01      (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
+    
+    
+    func ratio              (from f:Self, to t:Self) -> Self { (self-f)/(t-f) }
+    func ratio01            (from f:Self, to t:Self) -> Self { ratio(from: f, to: t).clamped01 }
+    func progress           (from f:Self, to t:Self) -> Self { ratio(from: f, to: t) }
+
+    
+    
+    @discardableResult
+    mutating func assign(max v:Self) -> Self {
+        self = Swift.max(self,v)
+        return self
+    }
+
+    @discardableResult
+    mutating func assign(min v:Self) -> Self {
+        self = Swift.min(self,v)
+        return self
+    }
+    
+
+    
     mutating func increment(_ increment:Self) -> Self {
         self = self + increment
         return self
@@ -77,6 +119,9 @@ public extension FloatingPoint {
         }
         return r
     }
+    
+    
+
 
 }
 
@@ -107,16 +152,7 @@ public extension Double
     func isInClosedInterval (_ l: Double, _ u: Double) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: Double, _ u: Double) -> Bool { l < self && self < u }
     
-    func lerp               (from:Self, to:Self) -> Self { from + (to - from) * self }
-    func lerp01             (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    func lerp               (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
-    func lerp01             (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    static func lerp        (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
-    static func lerp01      (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
-    
-    
-    func progress           (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
-    func progress01         () -> Self { progress(from:0,to:1) }
+//    func progress01         () -> Self { self }
     
     var fromFractionToPercent : Double {
             // fraction : 1 = 100%
@@ -161,13 +197,6 @@ public extension Double {
         return self
     }
     
-    func max(_ v: Double) -> Double {
-        Swift.max(self,v)
-    }
-
-    func min(_ v: Double) -> Double {
-        Swift.min(self,v)
-    }
 
 }
 
@@ -550,28 +579,6 @@ public extension CGFloat
     func isInClosedInterval (_ l: CGFloat, _ u: CGFloat) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: CGFloat, _ u: CGFloat) -> Bool { l < self && self < u }
     
-    func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
-    func lerp01              (from:Self, to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    func lerp                (_ from:Self, _ to:Self) -> Self { from + (to - from) * self }
-    func lerp01              (_ from:Self, _ to:Self) -> Self { Swift.min(1,Swift.max(0,self.lerp(from:from,to:to))) }
-    static func lerp         (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
-    static func lerp01       (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
-    
-    func progress            (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
-    func progress01          () -> Self { progress(from:0,to:1) }
-
-    @discardableResult
-    mutating func assign(max v:Self) -> Self {
-        self = Swift.max(self,v)
-        return self
-    }
-
-    @discardableResult
-    mutating func assign(min v:Self) -> Self {
-        self = Swift.min(self,v)
-        return self
-    }
-    
     mutating func add(_ v: CGFloat, from: CGFloat = 0, to: CGFloat, loop: Bool = true) {
         let n = self + v
         if n > to {
@@ -607,9 +614,6 @@ public extension CGFloat {
     func         random          (_ ball: Self) -> Self                   { Self.random(min: self-ball, max: self+ball) }
     func         random01        (_ ball: Self) -> Self                   { Self.random(min: self-ball, max: self+ball).clamped01 }
     
-    var          clamped01       : Self                                      { Swift.max(.zero,Swift.min(.one,self)) }
-    func         clamped         (_ min: Self, _ max: Self) -> Self       { Swift.max(min,Swift.min(max,self)) }
-
     static let   zero            : Self   = 0
     static let   one             : Self   = 1
 }
@@ -719,13 +723,6 @@ public extension Float
     func isInClosedInterval (_ l: Float, _ u: Float) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: Float, _ u: Float) -> Bool { l < self && self < u }
 
-    func lerp                (from:Self, to:Self) -> Self { from + (to - from) * self }
-    func lerp01              (from:Self, to:Self) -> Self { min(1,max(0,self.lerp(from:from,to:to))) }
-    static func lerp         (from:Self, to:Self, with:Self) -> Self { with.lerp(from:from,to:to) }
-    static func lerp01       (from:Self, to:Self, with:Self) -> Self { with.lerp01(from:from,to:to) }
-    
-    func progress            (from f:Self, to t:Self) -> Self { f < t ? (self-f)/(t-f) : (f-self)/(f-t) }
-    func progress01          () -> Self { progress(from:0,to:1) }
 }
 
 public extension Float {
@@ -1119,8 +1116,6 @@ public extension Array where Element == Int {
     func asStringTuple(delimiter: String = ",") -> String { self.map { "\($0)" }.joined(separator: delimiter) }
     func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
 }
-
-
 
 
 

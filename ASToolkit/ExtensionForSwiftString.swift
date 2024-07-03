@@ -655,6 +655,11 @@ public extension String {
         split("@")
     }
     
+    func splitOnFirst(_ delimiter: String) -> (first: String, remainder: Substring) {
+        let SPLIT = self.split(delimiter)
+        return (first: SPLIT[0], remainder: self.substring(from: SPLIT[0].count))
+    }
+    
     func chunked(by: String) -> [String] {
         self.split(by).filter { $0.isNotEmpty }
     }

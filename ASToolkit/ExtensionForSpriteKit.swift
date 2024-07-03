@@ -1099,6 +1099,11 @@ public extension SKTexture {
                      start      : CGPoint,
                      stop       : CGPoint)
     {
+        guard size.width > 0, size.height > 0 else {
+            self.init()
+            return
+        }
+        
         let coreImageContext    = CIContext(options: nil)
         let gradientFilter      = CIFilter(name: "CILinearGradient")!
         let startVector         : CIVector = .init(x: start.x * size.width, y: start.y * size.height)

@@ -183,7 +183,9 @@ public extension Color {
     init(RGB rgb  : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
 
     static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
+    static func hsba    (_ h: Double, _ s: Double, _ b: Double, _ a: Double)            -> Color { Color.init(hsba: [h,s,b,a]) }
     static func hsb     (_ hsb      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsb: hsb, opacity: opacity) }
+    static func hsb     (_ h: Double, _ s: Double, _ b: Double)                         -> Color { Color.init(hsb: [h,s,b]) }
     static func hsva    (_ hsva     : [Double])                                         -> Color { Color.init(hsva: hsva) }
     static func hsv     (_ hsv      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsv: hsv) }
     static func hue     (_ hue      : Double, opacity: Double = 1)                      -> Color { Color.init(hue: hue, opacity: opacity) }
