@@ -521,7 +521,7 @@ public extension Array where Element : Equatable {
         return r
     }
     
-    func uniquedKeepingOrderOnAdjacentElements() -> Self {
+    func uniquedOnAdjacentElementsKeepingOrder() -> Self {
         reduce([], {
             if $0.isEmpty {
                 return [$1]
