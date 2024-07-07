@@ -764,8 +764,11 @@ public extension String {
 
 public extension String {
     
-    func repeating(_ count: Int) -> Self {
+    func multiple(_ count: Int) -> Self {
         Array<String>.init(repeating: self, count: count).joined()
+    }
+    func repeated(_ count: Int) -> Self {
+        Array<String>.init(repeating: self, count: 1+count).joined()
     }
     
 }

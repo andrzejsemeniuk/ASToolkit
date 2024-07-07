@@ -159,8 +159,8 @@ public extension Array
         return result
     }
     
-    func subarray(from:Int, length:Int) -> Array {
-        return subarray(from:from, to:from+length)
+    func subarray(from:Int, length:Int? = nil) -> Array {
+        return subarray(from: from, to: from + (length == nil ? (count - from) : length!))
     }
     
     subscript (safe i:Int) -> Array.Element? {
@@ -1733,3 +1733,4 @@ extension Array where Element : Comparable & Numeric {
     }
     
 }
+
