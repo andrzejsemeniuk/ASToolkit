@@ -155,7 +155,7 @@ public extension View {
         self.borderRectangle(corner: 0, lineColor: color, lineWidth: thickness, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: dash, dashPhase: phase)
     }
 
-    func frameExpand() -> some View {
+    func frameUnbounded() -> some View {
         //        return self.edgesIgnoringSafeArea(.all)
         //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -1620,7 +1620,7 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .unspecified:
                         on
                     case .unbound:
-                        on.frame(maxWidth: nil)
+                        on.frame(maxWidth: .infinity)
                     case .fixed:
                         on.frame(width: width.pixels)
                     case .min:
@@ -1637,7 +1637,7 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .unspecified:
                         on
                     case .unbound:
-                        on.frame(maxHeight: nil)
+                        on.frame(maxHeight: .infinity)
                     case .fixed:
                         on.frame(height: height.pixels)
                     case .min:
