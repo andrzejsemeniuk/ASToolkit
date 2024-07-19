@@ -1591,11 +1591,11 @@ fileprivate var cancellables = Set<AnyCancellable>()
         struct Length : Equatable, Codable {
             
             enum Kind : Equatable, Codable {
-                case unbound, unspecified, fixed, min, max
+                case unbound, unspecified, fixed, min, max, infinity
                 
                 var usesPixels : Bool {
                     switch self {
-                        case .unbound, .unspecified:
+                        case .unbound, .unspecified, .infinity:
                             return false
                         case .min, .fixed, .max:
                             return true
@@ -1620,6 +1620,8 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .unspecified:
                         on
                     case .unbound:
+                        on.frame(maxWidth: nil)
+                    case .infinity:
                         on.frame(maxWidth: .infinity)
                     case .fixed:
                         on.frame(width: width.pixels)
@@ -1637,6 +1639,8 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .unspecified:
                         on
                     case .unbound:
+                        on.frame(maxHeight: nil)
+                    case .infinity:
                         on.frame(maxHeight: .infinity)
                     case .fixed:
                         on.frame(height: height.pixels)
@@ -1677,3 +1681,28 @@ extension EdgeInsets : RawRepresentable {
     }
 }
 
+
+// https://stackoverflow.com/questions/57577462/get-width-of-a-view-using-in-swiftui
+
+struct SizeCalculator: ViewModifier {
+    
+    @Binding var size: CGSize
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { proxy in
+                    Color.clear // we just want the reader to get triggered, so let's use an empty color
+                        .onAppear {
+                            size = proxy.size
+                        }
+                }
+            )
+    }
+}
+
+extension View {
+    func save(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+}
