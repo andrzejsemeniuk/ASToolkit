@@ -56,6 +56,12 @@ public func later(_ block: @escaping Block) {
     }
 }
 
+public func later2(_ block: @escaping Block) {
+    later {
+        block()
+    }
+}
+
 public func after(_ seconds: TimeInterval, _ block: @escaping Block) {
     DispatchQueue.main.asyncAfter(seconds) {
         block()

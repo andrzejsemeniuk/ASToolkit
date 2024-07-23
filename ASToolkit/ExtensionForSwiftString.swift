@@ -594,6 +594,9 @@ public extension Array where Element == String {
     var joinedByNewline : String {
         self.joined(separator: "\n")
     }
+    var joinedByPlus : String {
+        self.joined(separator: "+")
+    }
 
 }
 
@@ -641,6 +644,9 @@ public extension String {
     }
     var splitByNewline : [String] {
         split("\n")
+    }
+    var splitByPlus : [String] {
+        split("+")
     }
     var splitBySpace : [String] {
         split(" ")
@@ -814,6 +820,10 @@ public extension String {
 
     func removingCharacters(in string: String) -> String {
         return removingCharacters(in: CharacterSet(charactersIn: string))
+    }
+    
+    func missing(_ string: String) -> Bool {
+        contains(string).not
     }
 }
 
