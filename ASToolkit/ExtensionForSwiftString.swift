@@ -405,9 +405,21 @@ extension String {
     }
 }
 
-extension String {
+public extension String {
     
-    public func appended(with:String, delimiter:String = "") -> String {
+    func prepended(with:String, delimiter:String = "") -> String {
+        if isEmpty {
+            return with
+        }
+        else if with.isEmpty {
+            return self
+        }
+        else {
+            return "\(with)\(delimiter)\(self)"
+        }
+    }
+    
+    func appended(with:String, delimiter:String = "") -> String {
         if isEmpty {
             return with
         }
@@ -596,6 +608,9 @@ public extension Array where Element == String {
     }
     var joinedByPlus : String {
         self.joined(separator: "+")
+    }
+    func joinedBy(_ separator: String) -> String {
+        self.joined(separator: separator)
     }
 
 }

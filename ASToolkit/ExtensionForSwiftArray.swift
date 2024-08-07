@@ -21,6 +21,12 @@ public extension RangeReplaceableCollection {
     }
 }
 
+public extension Array where Element == Int {
+    init(_ range: Range<Int>) {
+        self = range.asArray
+    }
+}
+
 public extension Array
 {
     
@@ -1468,6 +1474,76 @@ public extension Array where Element == Double {
 //            $0 == nil ? $1 : $0 > $1 ? $1 : $0
 //        })
 //    }
+    
+    func indexMatchingTest(from: Int, til: Int, test: (_ stored: Double, _ current: Double)->Bool) -> Int? {
+        
+        let from = from.clamped(minimum: 0, maximum: count)
+        let til  = til.clamped(minimum: from, maximum: count)
+        
+        guard from < til else {
+            return nil
+        }
+        
+        var V0 : Double!
+        var I0 : Index?
+        
+        for i in from..<til {
+            if V0 == nil {
+                V0 = self[i]
+                I0 = i
+                continue
+            }
+            let V = self[i]
+            if test(V0,V) {
+                V0 = V
+                I0 = i
+            }
+        }
+        
+        return I0
+    }
+
+    func indexWithMinimumValue(from: Int, til: Int) -> Int? {
+        indexMatchingTest(from: from, til: til, test: { v0,v1 in
+            v1 < v0
+        })
+    }
+
+    func indexWithMaximumValue(from: Int, til: Int) -> Int? {
+        indexMatchingTest(from: from, til: til, test: { v0,v1 in
+            v0 < v1
+        })
+    }
+
+    func indexesMatchingSpans(from: Int, til: Int, span: Int, test: (ArraySlice<Double>)->Bool) -> [Int] {
+        
+        guard span > 0 else {
+            return []
+            
+        }
+        let from = from.clamped(minimum: 0, maximum: count - span)
+        let til  = til.clamped(minimum: from - span, maximum: count - span)
+        
+        guard from < til else {
+            return []
+        }
+        
+//        var INDEXES : [Int] = []
+//        
+//        for i in from..<til {
+//            if test(self[i...i+span]) {
+//                INDEXES.append(i)
+//            }
+//        }
+//        
+//        return INDEXES
+        
+        return (from..<til).compactMap { i in
+            test(self[i...i+span]) ? i : nil
+        }
+    }
+
+
 }
 
 
@@ -1731,6 +1807,21 @@ extension Array where Element : Comparable & Numeric {
         }
         self.init(V)
     }
+    
+}
+
+extension Array : RawRepresentable where Element == Bool {
+    
+    public init?(rawValue: String) {
+        self = rawValue.splitByComma.map { $0 == "T" }
+    }
+    
+    public var rawValue: String {
+        map { $0 ? "T" : "F" }.joinedByComma
+    }
+    
+    
+    public typealias RawValue = String
     
 }
 

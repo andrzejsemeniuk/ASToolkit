@@ -286,6 +286,30 @@ extension Date {
 
 	enum WeekDay : Int {
 		case sunday = 0, monday, tuesday, wednesday, thursday, friday, saturday
+        
+        var code : String {
+            switch self {
+                case .sunday    : return "N"
+                case .monday    : return "M"
+                case .tuesday   : return "T"
+                case .wednesday : return "W"
+                case .thursday  : return "R"
+                case .friday    : return "F"
+                case .saturday  : return "S"
+            }
+        }
+        
+        var name : String {
+            switch self {
+                case .sunday    : return "Sunday"
+                case .monday    : return "Monday"
+                case .tuesday   : return "Tuesday"
+                case .wednesday : return "Wednesday"
+                case .thursday  : return "Thursday"
+                case .friday    : return "Friday"
+                case .saturday  : return "Saturday"
+            }
+        }
 	}
 
 	var weekday : WeekDay {
@@ -471,6 +495,35 @@ public extension Date {
     
     func asStringOfElapsedTimeInSecondsAsHHMMSS(from: Date = .now, limit: Int = 5) -> String {
         abs(from.timeIntervalSince1970 - self.timeIntervalSince1970).asInt.asStringOfElapsedTimeInSecondsAsHHMMSS(limit: limit)
+    }
+    
+    func asStringComponentsOfElapsedTime(from: Date = .now, minimum: TimeInterval = 0.0) -> [String] {
+        var R : [String] = []
+        var dT = abs(from.timeIntervalSince1970 - self.timeIntervalSince1970)
+        for (duration,suffix,limit) in [
+            (TimeInterval.secondsInYear,"y",999.0),
+            (TimeInterval.secondsInMonth,"m",12.0),
+            (TimeInterval.secondsInWeek,"w",4.0),
+            (TimeInterval.secondsInDay,"d",7.0),
+            (TimeInterval.secondsInHour,"h",24.0),
+            (60.0,"m",60.0),
+            (1.0,"s",1.0),
+        ] {
+            guard duration >= minimum else {
+                break
+            }
+            if dT > duration {
+                let V = dT / duration
+                if V < limit {
+                    let V = V.floor
+                    R.append("\(V.format0)\(suffix)")
+                    dT -= V * duration
+                } else {
+                    break
+                }
+            }
+        }
+        return R
     }
     
 }

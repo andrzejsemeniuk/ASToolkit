@@ -480,26 +480,26 @@ public extension Double {
     var withAbbreviationAsString : String {
         self.asInt64.formatWithAbbrevationAsString
     }
-//    var withAbbreviationAsAttributedString : String {
-//        self.asInt64.formatWithAbbrevation
-//    }
-
+        //    var withAbbreviationAsAttributedString : String {
+        //        self.asInt64.formatWithAbbrevation
+        //    }
+    
     var format0 : String { self == 0 ? "0" : Self.formatterAsInteger.string(from: self.asUInt64 as NSNumber) ?? "?" } //NSString(format: "%U", self.asUInt64) as String }
     
     var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
     var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
     var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
     var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
-
+    
     var format1p : String { self == 0 ? "0.0" : NSString(format: "%+.1f", self) as String }
     var format2p : String { self == 0 ? "0.00" : NSString(format: "%+.2f", self) as String }
     var format3p : String { self == 0 ? "0.000" : NSString(format: "%+.3f", self) as String }
     var format4p : String { self == 0 ? "0.0000" : NSString(format: "%+.4f", self) as String }
-
+    
     var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
-
+    
     var format22 : String { NSString(format: "%3.2f", self) as String }
-
+    
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
     
     var formatDynamic : String {
@@ -509,7 +509,7 @@ public extension Double {
     var percent0 : String { self == 0 ? "0%" : NSString(format: "%.0f%%", self * 100.0) as String }
     var percent1 : String { self == 0 ? "0.0%" : NSString(format: "%.1f%%", self * 100.0) as String }
     var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
-
+    
     var formatted4 : String {
         guard isNormal else {
             return isNaN ? "NaN" : isInfinite ? "oo" : "?"
@@ -527,6 +527,50 @@ public extension Double {
             }
         }
         return r
+    }
+    
+}
+
+public extension Double {
+
+    func percent(on: Double, fallback: Double) -> Double {
+        guard isNormal else { return fallback }
+        guard self != 0 else { return fallback }
+        return (on - self) / self * 100.0
+    }
+
+    func percent(on: Double) -> Double? {
+        guard isNormal else { return nil }
+        guard self != 0 else { return nil }
+        return (on - self) / self * 100.0
+    }
+
+    func ratio(on: Double, fallback: Double) -> Double {
+        guard isNormal else { return fallback }
+        guard self != 0 else { return fallback }
+        return (on - self) / self
+    }
+    
+    func ratio(on: Double) -> Double? {
+        guard isNormal else { return nil }
+        guard self != 0 else { return nil }
+        return (on - self) / self
+    }
+    
+    func percent(of: Double, fallback: Double) -> Double {
+        of.percent(on: self, fallback: fallback)
+    }
+
+    func percent(of: Double) -> Double? {
+        of.percent(on: self)
+    }
+
+    func ratio(of: Double, fallback: Double) -> Double {
+        of.ratio(on: self, fallback: fallback)
+    }
+    
+    func ratio(of: Double) -> Double? {
+        of.ratio(on: self)
     }
 
 }
@@ -879,6 +923,10 @@ public extension Int
         fractionOf(n: 1, fallback)
     }
     
+    var asEnumerationArray : [Int] {
+        self > 0 ? .init(0..<self) : []
+    }
+    
 }
 
 public extension Int
@@ -1181,3 +1229,24 @@ class NumericIntervalClosedOpen<NUMBER: Numeric & Comparable> : NumericInterval<
 
 
 
+public func minmax<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
+    a < b ? (a,b) : (b,a)
+}
+
+public func minmaxOnOptionals<T: Comparable>(_ a: T?, _ b: T?) -> (min: T?, max: T?) {
+    if let a {
+        if let b {
+            return a < b ? (a,b) : (b,a)
+        }
+        return (b,a)
+    }
+    return (a,b)
+}
+
+public func orderedUp<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
+    a < b ? (a,b) : (b,a)
+}
+
+public func orderedDown<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
+    a < b ? (b,a) : (a,b)
+}

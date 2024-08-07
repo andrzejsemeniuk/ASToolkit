@@ -160,6 +160,22 @@ public extension CGPoint {
         .init(x: x, y: y)
     }
     
+    func min(y: CGFloat) -> CGPoint {
+        .init(x: x, y: Swift.min(self.y,y))
+    }
+    
+    func min(x: CGFloat) -> CGPoint {
+        .init(x: Swift.min(self.x,x), y: y)
+    }
+    
+    func max(y: CGFloat) -> CGPoint {
+        .init(x: x, y: Swift.max(self.y,y))
+    }
+    
+    func max(x: CGFloat) -> CGPoint {
+        .init(x: Swift.max(self.x,x), y: y)
+    }
+    
     func with(y point: CGPoint) -> CGPoint {
         .init(x: x, y: point.y)
     }
@@ -168,11 +184,11 @@ public extension CGPoint {
         .init(x: point.x, y: y)
     }
     
-    func added(x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
-        .init(x: self.x + (x ?? 0), y: self.y + (y ?? 0))
+    func added(x: CGFloat = 0, y: CGFloat = 0) -> CGPoint {
+        .init(x: self.x + x, y: self.y + y)
     }
     
-    func offset(x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
+    func offset(x: CGFloat = 0, y: CGFloat = 0) -> CGPoint {
         added(x: x, y: y)
     }
     
