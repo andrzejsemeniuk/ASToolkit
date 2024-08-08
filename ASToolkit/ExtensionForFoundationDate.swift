@@ -285,7 +285,7 @@ public extension Date {
 extension Date {
 
 	enum WeekDay : Int {
-		case sunday = 0, monday, tuesday, wednesday, thursday, friday, saturday
+		case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
         
         var code : String {
             switch self {
@@ -507,7 +507,7 @@ public extension Date {
             (TimeInterval.secondsInDay,"d",7.0),
             (TimeInterval.secondsInHour,"h",24.0),
             (60.0,"m",60.0),
-            (1.0,"s",1.0),
+            (1.0,"s",60.0),
         ] {
             guard duration >= minimum else {
                 break
