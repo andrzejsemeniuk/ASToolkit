@@ -533,44 +533,32 @@ public extension Double {
 
 public extension Double {
 
-    func percent(on: Double, fallback: Double) -> Double {
-        guard isNormal else { return fallback }
-        guard self != 0 else { return fallback }
-        return (on - self) / self * 100.0
-    }
-
-    func percent(on: Double) -> Double? {
-        guard isNormal else { return nil }
-        guard self != 0 else { return nil }
-        return (on - self) / self * 100.0
-    }
-
-    func ratio(on: Double, fallback: Double) -> Double {
-        guard isNormal else { return fallback }
-        guard self != 0 else { return fallback }
-        return (on - self) / self
-    }
-    
-    func ratio(on: Double) -> Double? {
-        guard isNormal else { return nil }
-        guard self != 0 else { return nil }
-        return (on - self) / self
-    }
-    
     func percent(of: Double, fallback: Double) -> Double {
-        of.percent(on: self, fallback: fallback)
+        guard isNormal else { return fallback }
+        guard of.isNormal else { return fallback }
+        guard of != 0 else { return fallback }
+        return self / of * 100.0
     }
 
     func percent(of: Double) -> Double? {
-        of.percent(on: self)
+        guard isNormal else { return nil }
+        guard of.isNormal else { return nil }
+        guard of != 0 else { return nil }
+        return self / of * 100.0
     }
 
     func ratio(of: Double, fallback: Double) -> Double {
-        of.ratio(on: self, fallback: fallback)
+        guard isNormal else { return fallback }
+        guard of.isNormal else { return fallback }
+        guard of != 0 else { return fallback }
+        return self / of
     }
     
     func ratio(of: Double) -> Double? {
-        of.ratio(on: self)
+        guard isNormal else { return nil }
+        guard of.isNormal else { return nil }
+        guard of != 0 else { return nil }
+        return self / of
     }
 
 }
