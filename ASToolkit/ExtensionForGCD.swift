@@ -50,6 +50,12 @@ public func now(_ block: @escaping Block) {
     }
 }
 
+public func now(_ block: @escaping () throws -> Void) rethrows {
+    try DispatchQueue.main.sync {
+        try block()
+    }
+}
+
 public func later(_ block: @escaping Block) {
     DispatchQueue.main.async {
         block()

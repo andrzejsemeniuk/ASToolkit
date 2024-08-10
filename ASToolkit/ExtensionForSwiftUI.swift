@@ -1614,7 +1614,7 @@ fileprivate var cancellables = Set<AnyCancellable>()
         var width  : Length
         var height : Length
         
-        func frame(width on: some View) -> some View {
+        func frame(width on: some View, proportion: CGFloat = 1) -> some View {
             Group {
                 switch width.kind {
                     case .unspecified:
@@ -1624,16 +1624,16 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .infinity:
                         on.frame(maxWidth: .infinity)
                     case .fixed:
-                        on.frame(width: width.pixels)
+                        on.frame(width: width.pixels * proportion)
                     case .min:
-                        on.frame(minWidth: width.pixels)
+                        on.frame(minWidth: width.pixels * proportion)
                     case .max:
-                        on.frame(maxWidth: width.pixels)
+                        on.frame(maxWidth: width.pixels * proportion)
                 }
             }
         }
         
-        func frame(height on: some View) -> some View {
+        func frame(height on: some View, proportion: CGFloat = 1) -> some View {
             Group {
                 switch height.kind {
                     case .unspecified:
@@ -1643,17 +1643,17 @@ fileprivate var cancellables = Set<AnyCancellable>()
                     case .infinity:
                         on.frame(maxHeight: .infinity)
                     case .fixed:
-                        on.frame(height: height.pixels)
+                        on.frame(height: height.pixels * proportion)
                     case .min:
-                        on.frame(minHeight: height.pixels)
+                        on.frame(minHeight: height.pixels * proportion)
                     case .max:
-                        on.frame(maxHeight: height.pixels)
+                        on.frame(maxHeight: height.pixels * proportion)
                 }
             }
         }
         
-        func frame(on: some View) -> some View {
-            frame(width: frame(height: on))
+        func frame(on: some View, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
+            frame(width: frame(height: on, proportion: vfactor), proportion: hfactor)
         }
         
     }
@@ -1661,8 +1661,8 @@ fileprivate var cancellables = Set<AnyCancellable>()
 
 extension View {
     
-    func frame(size: ViewSize) -> some View {
-        size.frame(on: self)
+    func frame(size: ViewSize, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
+        size.frame(on: self, hfactor: hfactor, vfactor: vfactor)
     }
     
 }
