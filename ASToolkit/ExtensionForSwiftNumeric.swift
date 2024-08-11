@@ -547,6 +547,20 @@ public extension Double {
         return self / of * 100.0
     }
 
+    func percentInverted(of: Double, fallback: Double) -> Double {
+        guard isNormal else { return fallback }
+        guard of.isNormal else { return fallback }
+        guard of != 0 else { return fallback }
+        return ((of - self) / of) * 100.0
+    }
+
+    func percentInverted(of: Double) -> Double? {
+        guard isNormal else { return nil }
+        guard of.isNormal else { return nil }
+        guard of != 0 else { return nil }
+        return ((of - self) / of) * 100.0
+    }
+
     func ratio(of: Double, fallback: Double) -> Double {
         guard isNormal else { return fallback }
         guard of.isNormal else { return fallback }
@@ -559,6 +573,20 @@ public extension Double {
         guard of.isNormal else { return nil }
         guard of != 0 else { return nil }
         return self / of
+    }
+
+    func ratioInverted(of: Double, fallback: Double) -> Double {
+        guard isNormal else { return fallback }
+        guard of.isNormal else { return fallback }
+        guard of != 0 else { return fallback }
+        return 1.0 - (self / of)
+    }
+    
+    func ratioInverted(of: Double) -> Double? {
+        guard isNormal else { return nil }
+        guard of.isNormal else { return nil }
+        guard of != 0 else { return nil }
+        return 1.0 - (self / of)
     }
 
 }
