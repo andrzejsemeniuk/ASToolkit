@@ -339,7 +339,10 @@ extension Array where Element == Int {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
 
-    
+    var average : Double? {
+        isEmpty ? nil : Double(sum) / count.asDouble
+    }
+
 }
 
 
@@ -349,6 +352,10 @@ extension Array where Element == Float {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Float? {
+        isEmpty ? nil : sum / count.asFloat
+    }
+
 }
 
 
@@ -358,6 +365,9 @@ extension Array where Element == CGFloat {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Double? {
+        isEmpty ? nil : Double(sum) / count.asDouble
+    }
 }
 
 
@@ -367,6 +377,9 @@ extension Array where Element == Double {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Double? {
+        isEmpty ? nil : sum / count.asDouble
+    }
 }
 
 public extension Array where Element == String {
