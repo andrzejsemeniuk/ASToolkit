@@ -63,6 +63,18 @@ public extension Array
         }
     }
     
+    func discardedFromFront(keeping: Int) -> Self {
+        var R = self
+        R.discardFromFront(keeping: keeping)
+        return R
+    }
+    
+    func discardedFromBack(keeping: Int) -> Self {
+        var R = self
+        R.discardFromBack(keeping: keeping)
+        return R
+    }
+    
 
     @discardableResult
     mutating func trim(to: Int) -> Array {
@@ -398,26 +410,27 @@ public extension Array where Element == String {
     
 }
 
-extension Array {
+public extension Array {
     
-    public func forEachAdjacent(_ handle:(Element,Element)->Void) {
+    func adjacent() -> [(Element,Element)] {
+        var R : [(Element,Element)] = []
+        for i in stride(from:1,to:count,by:1) {
+            R.append((self[i-1],self[i]))
+        }
+        return R
+    }
+
+    func forEachAdjacent(_ handle:(Element,Element)->Void) {
         for i in stride(from:1,to:count,by:1) {
             handle(self[i-1],self[i])
         }
     }
 
-	mutating public func forEachSubsequent(_ handle:(Element,inout Element)->Void) {
+	mutating func forEachSubsequent(_ handle:(Element,inout Element)->Void) {
 		for i in stride(from:1,to:count,by:1) {
 			handle(self[i-1],&self[i])
 		}
 	}
-
-    public func find(_ where:(Element)->Bool) -> Element? {
-        if let index = self.index(where:`where`) {
-            return self[index]
-        }
-        return nil
-    }
 }
 
 public extension Array {
