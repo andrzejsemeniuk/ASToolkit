@@ -17,7 +17,7 @@ extension NSLayoutConstraint {
      - parameter multiplier: CGFloat
      - returns: NSLayoutConstraint
      */
-    @discardableResult open func set(multiplier:CGFloat) -> NSLayoutConstraint {
+    @discardableResult public func set(multiplier:CGFloat) -> NSLayoutConstraint {
 
 		let active = isActive
 
@@ -45,17 +45,17 @@ extension NSLayoutConstraint {
         return newConstraint
     }
     
-    @discardableResult open func activated         (_ value:Bool = true) -> NSLayoutConstraint {
+    @discardableResult public func activated         (_ value:Bool = true) -> NSLayoutConstraint {
         self.isActive=true
         return self
     }
     
-    @discardableResult open func deactivated       () -> NSLayoutConstraint {
+    @discardableResult public func deactivated       () -> NSLayoutConstraint {
         self.isActive=false
         return self
     }
     
-    @discardableResult open func prioritized       (priority:UILayoutPriority) -> NSLayoutConstraint {
+    @discardableResult public func prioritized       (priority:UILayoutPriority) -> NSLayoutConstraint {
 		if false {
 		if isActive {
 			isActive=false
@@ -69,7 +69,7 @@ extension NSLayoutConstraint {
         return self
     }
     
-	@discardableResult open func prioritized       (_ value:Double) -> NSLayoutConstraint {
+	@discardableResult public func prioritized       (_ value:Double) -> NSLayoutConstraint {
 		if false {
 		if isActive {
 			isActive=false
@@ -83,17 +83,17 @@ extension NSLayoutConstraint {
 		return self
 	}
 
-    @discardableResult open func extended          (_ value:CGFloat) -> NSLayoutConstraint {
+    @discardableResult public func extended          (_ value:CGFloat) -> NSLayoutConstraint {
         self.constant = value
         return self
     }
     
-    @discardableResult open func identified        (_ value:String?) -> NSLayoutConstraint {
+    @discardableResult public func identified        (_ value:String?) -> NSLayoutConstraint {
         self.identifier = value
         return self
     }
 
-	@discardableResult open func multiplied			(_ value:CGFloat) -> NSLayoutConstraint {
+	@discardableResult public func multiplied			(_ value:CGFloat) -> NSLayoutConstraint {
 		return self.set(multiplier: value)
 	}
     
@@ -103,7 +103,7 @@ extension NSLayoutConstraint {
 extension Array where Element : NSLayoutConstraint {
 
 	public func get(_ identifier:String) -> NSLayoutConstraint? {
-		return self.find { constraint in
+		return self.first { constraint in
 			return constraint.identifier == identifier
 		}
 	}

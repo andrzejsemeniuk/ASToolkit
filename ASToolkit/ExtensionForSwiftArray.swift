@@ -1851,3 +1851,39 @@ extension Array : RawRepresentable where Element == Bool {
     
 }
 
+
+public extension Array where Element == String {
+    
+    var asSymbolsString : String {
+        self.filteredOutEmpty().joinedBySpace
+    }
+    
+}
+
+
+
+public extension Array where Element : StringProtocol {
+    var concatenated : String {
+        reduce("", { $0 + $1 })
+    }
+}
+
+
+
+
+public extension Array {
+    
+    func sum(where f: (Element)->Int) -> Int {
+        reduce(0, { $0 + f($1) })
+    }
+    
+    func sum(where f: (Element)->Double) -> Double {
+        reduce(0.0, { $0 + f($1) })
+    }
+    
+    func sum(where f: (Element)->CGFloat) -> CGFloat {
+        reduce(0.0, { $0 + f($1) })
+    }
+    
+}
+

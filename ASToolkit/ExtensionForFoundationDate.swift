@@ -379,7 +379,7 @@ public extension Date {
     }
     
     static var yesterday : Date {
-        .now.yesterday
+        Date().yesterday
     }
     
     var yesterday : Date {
@@ -493,10 +493,12 @@ public extension Date {
         DateFormatter.init(withFormat: format).string(from: self)
     }
     
+    @available(iOS 15, *)
     func asStringOfElapsedTimeInSecondsAsHHMMSS(from: Date = .now, limit: Int = 5) -> String {
         abs(from.timeIntervalSince1970 - self.timeIntervalSince1970).asInt.asStringOfElapsedTimeInSecondsAsHHMMSS(limit: limit)
     }
     
+    @available(iOS 15, *)
     func asStringComponentsOfElapsedTime(from: Date = .now, minimum: TimeInterval = 0.0) -> [String] {
         var R : [String] = []
         var dT = abs(from.timeIntervalSince1970 - self.timeIntervalSince1970)

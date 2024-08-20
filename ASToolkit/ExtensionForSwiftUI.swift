@@ -1461,7 +1461,7 @@ public struct TapGestureWithLocation : UIViewRepresentable {
             self.tappedCallback = tappedCallback
         }
         @objc func tapped(gesture:UITapGestureRecognizer) {
-            let point = gesture.location(in: gesture.viewForChartMonthly10years)
+            let point = gesture.location(in: gesture.view)
             self.tappedCallback(point)
         }
     }

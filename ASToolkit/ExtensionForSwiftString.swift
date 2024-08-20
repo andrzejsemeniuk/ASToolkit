@@ -1036,10 +1036,12 @@ public extension String {
 
 public extension String {
     
+    @available(iOS 16.0, *)
     func matches(_ regex: Regex<String>) -> Bool {
         self.firstMatch(of: regex) != nil
     }
     
+    @available(iOS 16.0, *)
     func matches(_ regex: Regex<Substring>) -> Bool {
         self.firstMatch(of: regex) != nil
     }
@@ -1079,3 +1081,213 @@ public extension String {
     }
     
 }
+
+public extension String {
+    
+    func separated(by: String) -> String {
+        self.map { String($0) }.asArray.joined(separator: by)
+    }
+    func padded(by: String) -> String {
+        "\(by)\(self)\(by)"
+    }
+    func suffixed(_ with: String, separator: String = "") -> String {
+        self + separator + with
+    }
+    func prefixed(_ with: String, separator: String = "") -> String {
+        with + separator + self
+    }
+    func truncated(_ limit: Int, _ suffix: String = "") -> String {
+        guard limit < count else {
+            return self
+        }
+        return self.prefix(limit) + suffix
+    }
+    
+    var withConvertedUnicodePatterns : String {
+        replacing(regex: "U\\+....", with: { s in
+            let S = s.asString.split("U+")
+            if S.count == 2, let N = UInt32(S[1], radix: 16) {
+                let U = Unicode.Scalar(N)
+                return U?.escaped(asASCII: false) ?? s.asString
+            }
+            return s.asString
+        })
+    }
+    
+        //    open func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
+    
+    func decoded<T: Decodable>() -> T? {
+        decoded(T.self)
+    }
+
+    func decoded<T: Decodable>(_ fallback: T) -> T {
+        decoded(T.self, fallback)
+    }
+    
+    func decoded<T: Decodable>(_ using: T.Type) -> T? {
+        try? JSONDecoder().decode(using, from: asData)
+    }
+    
+    func decoded<T: Decodable>(_ using: T.Type, _ fallback: T) -> T {
+        (try? JSONDecoder().decode(using, from: asData)) ?? fallback
+    }
+        
+    static func encoded<T: Encodable>(_ from: T) throws -> Data {
+        try JSONEncoder().encode(from)
+    }
+    
+    static func encoded<T: Encodable>(_ from: T) -> String? {
+        try? JSONEncoder().encode(from).asString
+    }
+    
+    static func encoded<T: Encodable>(_ from: T, _ fallback: String) -> String {
+        (try? JSONEncoder().encode(from).asString) ?? fallback
+    }
+    
+    static let ABCDEFGHIJKLMNOPQRSTUVWXYZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    func cased(uppercased: Bool) -> Self {
+        uppercased ? self.uppercased() : self.lowercased()
+    }
+    
+    func asAnotherTypeValue<T: Decodable>() -> T? {
+        self.decoded()
+    }
+    
+    mutating func fromAnotherTypeValue<T: Encodable>(_ value: T) {
+        self ?= String.encoded(value)
+    }
+    
+}
+
+public extension String {
+    
+    mutating func asSet(remove element: String, delimiter: String = ",") {
+        self = split(delimiter).removed(element).filter { $0.isNotEmpty }.joined(separator: delimiter)
+    }
+    mutating func asSet(append element: String, ifMissing: Bool = true, limit: Int? = nil, delimiter: String = ",") {
+        guard element.isNotEmpty else { return }
+        guard ifMissing, contains(element).not else { return }
+        var r = split(delimiter).filter { $0.isNotEmpty && $0 != element }.appended(element)
+        if let limit = limit {
+            while r.count > limit {
+                _ = r.removeFirst()
+            }
+        }
+        self = r.joined(separator: delimiter)
+    }
+    mutating func asSet(prepend element: String, ifMissing: Bool = true, limit: Int? = nil, delimiter: String = ",") {
+        guard element.isNotEmpty else { return }
+        guard ifMissing, contains(element).not else { return }
+        var r = split(delimiter).filter { $0.isNotEmpty && $0 != element }.prepended(element)
+        if let limit = limit {
+            while r.count > limit {
+                _ = r.removeLast()
+            }
+        }
+        self = r.joined(separator: delimiter)
+    }
+    mutating func asSetInsert(prepend element: String, delimiter: String = ",") {
+        if isEmpty {
+            self = element
+        } else {
+            var elements = asSetElements(delimiter: delimiter)
+            elements.removeAll(where: { $0 == element })
+            elements.prepend(element)
+            self = elements.joined(separator: delimiter)
+        }
+    }
+    mutating func asSetInsert(append element: String, delimiter: String = ",") {
+        if isEmpty {
+            self = element
+        } else {
+            var elements = asSetElements(delimiter: delimiter)
+            elements.removeAll(where: { $0 == element })
+            elements.append(element)
+            self = elements.joined(separator: delimiter)
+        }
+    }
+    mutating func asSet(toggle element: String, delimiter: String = ",") {
+        if asSet(contains: element) {
+            asSet(remove: element)
+        } else {
+            asSet(append: element)
+        }
+    }
+    func asSet(contains element: String, delimiter: String = ",") -> Bool {
+        split(delimiter).contains(element)
+    }
+    func asSetElements(delimiter: String = ",") -> [String] {
+        split(delimiter)
+    }
+    func asSet(_ elements: [String], delimiter: String = ",") -> String {
+        elements.joined(separator: delimiter)
+    }
+    mutating func asSetAssign(_ elements: [String], delimiter: String = ",") {
+        self = self.asSet(elements, delimiter: delimiter)
+    }
+
+    func asSetConvert<T: CustomStringConvertible>(delimiter: String = ",", _ converter: (String)->T?) -> [T] {
+        split(delimiter).compactMap { converter($0) }
+    }
+    
+    static func asSet(create from: [String], delimiter: String = ",") -> String {
+        from.joined(separator: delimiter)
+    }
+    
+    static func asSet<T: CustomStringConvertible>(create from: [T], delimiter: String = ",") -> String {
+        from.map { $0.description }.joined(separator: delimiter)
+    }
+    
+    static func asSet<T: StringProtocol>(create from: [T], delimiter: String = ",") -> String {
+        from.joined(separator: delimiter)
+    }
+    
+}
+
+//public extension String {
+//    mutating func asSetOfHSBAValues(remove element: HSBAInfo) {
+//        asSet(remove: element.asStringOfHSBA, delimiter: "|")
+//        asSet(remove: element.asStringOfHSB, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(append element: HSBAInfo) {
+//        asSet(append: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(prepend element: HSBAInfo) {
+//        asSet(prepend: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(set: [HSBAInfo]) {
+//        self = set.map { $0.asStringOfHSBA }.joined(separator: "|") //.sortedAndUniqued(<).joined(separator: "|")
+//    }
+//    func asSetOfHSBAValues(contains element: HSBAInfo) -> Bool {
+//        asSet(contains: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    func asSetOfHSBAValuesStrings() -> [String] {
+//        asSetElements(delimiter: "|").filter { $0.isNotEmpty }
+//    }
+//    func asSetOfHSBAValues() -> [HSBAInfo] {
+//        asSetOfHSBAValuesStrings().map { .init($0) }
+//    }
+//    mutating func asSetOfHSBAValuesNormalize() {
+//        asSetOfHSBAValues(set: asSetOfHSBAValues())
+//    }
+//
+//}
+
+public extension String {
+    
+    func asDoubleTuple(delimiter: String = ",", unparsed: Double) -> [Double] { self.split(delimiter).map { Double($0) ?? unparsed }}
+
+    static func random(length: Int) -> String {
+        length.map { _ in
+//            "\(Character.fromA(scalar: ($0 + Int.random) % 24) ?? "?")"
+            String(format: "%c", 65 + Int.random % 48) as String
+        }.joined()
+    }
+    
+    var asSymbolsArray : [String] {
+        self.splitBySpace.map { $0.trimmed() }.filteredOutEmpty().uppercased()
+    }
+}
+
+

@@ -972,7 +972,8 @@ extension CGSize
 #if os(iOS)
 public func UIScreenGetCenter() -> CGPoint {
 	return CGPoint(x:UIScreen.main.bounds.width/2.0,
-				   mappingVToY:UIScreen.main.bounds.height/2.0)
+                   y:UIScreen.main.bounds.height/2.0)
+//				   mappingVToY:UIScreen.main.bounds.height/2.0)
 }
 #endif
 #if os(macOS)
@@ -988,7 +989,8 @@ public extension NSScreen {
 public struct CGScreen
 {
 	public static var bounds:CGRect = CGRect(x:UIScreen.main.bounds.origin.x,
-											 mappingVToY:UIScreen.main.bounds.origin.mappingVToY,
+                                             y:UIScreen.main.bounds.origin.y,
+//											 mappingVToY:UIScreen.main.bounds.origin.mappingVToY,
 											 width:UIScreen.main.bounds.width * UIScreen.main.scale,
 											 height:UIScreen.main.bounds.height * UIScreen.main.scale)
 
@@ -1001,8 +1003,10 @@ public struct CGScreen
 
 	public static func diagonal                (fraction:CGFloat = 1.0)        -> CGFloat  { return Environment.Screen.diagonal(fraction) }
 
-	public static func pointFromRatio          (x:CGFloat, mappingVToY:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,mappingVToY:mappingVToY) }
-	public static func pointFrom               (ratio:CGXY)                    -> CGPoint  { return pointFromRatio(x:ratio.x,mappingVToY:ratio.mappingVToY) }
+    public static func pointFromRatio          (x:CGFloat, y:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,y:y) }
+//	public static func pointFromRatio          (x:CGFloat, mappingVToY:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,mappingVToY:mappingVToY) }
+    public static func pointFrom               (ratio:CGXY)                    -> CGPoint  { return pointFromRatio(x:ratio.x,y:ratio.y) }
+//	public static func pointFrom               (ratio:CGXY)                    -> CGPoint  { return pointFromRatio(x:ratio.x,mappingVToY:ratio.mappingVToY) }
 
 	public static func ratioFrom               (point:CGPoint)                 -> CGPoint  { return bounds.ratioFrom(point:point) }
 }

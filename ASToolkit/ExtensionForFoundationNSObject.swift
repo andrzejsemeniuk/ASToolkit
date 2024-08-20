@@ -12,7 +12,7 @@ private let __dictionary = "__D"
 
 public extension NSObject {
 
-	public class AssociationForClosure {
+	class AssociationForClosure {
 		public let closure	: () -> ()
 		public let name		: String
 
@@ -27,7 +27,7 @@ public extension NSObject {
 		}
 	}
 
-	public func put(_ key:String, _ object:Any) {
+	func put(_ key:String, _ object:Any) {
 		if let dictionary = objc_getAssociatedObject(self, __dictionary) as? NSDictionary {
 			dictionary.setValue(object, forKey: key)
 		}
@@ -38,14 +38,14 @@ public extension NSObject {
 		}
 	}
 
-	public func peek(_ key:String) -> Any? {
+	func peek(_ key:String) -> Any? {
 		if let dictionary = objc_getAssociatedObject(self, __dictionary) as? NSDictionary {
 			return dictionary.object(forKey:key)
 		}
 		return nil
 	}
 
-	public func get<T>(_ key:String, _ substitute: T) -> T {
+	func get<T>(_ key:String, _ substitute: T) -> T {
 		if let dictionary = objc_getAssociatedObject(self, __dictionary) as? NSDictionary {
 			return (dictionary.object(forKey:key) as? T) ?? substitute
 		}
