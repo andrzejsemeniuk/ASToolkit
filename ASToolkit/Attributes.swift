@@ -343,14 +343,14 @@ public class Attributes : Codable, Equatable, ObservableObject {
         asArrayOfInt(key, safe: 0) ?? fallback
     }
 
-    #if os(iOS)
-    public func asBlurEffectStyle(_ dbKeyForData: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
-        if let operand = storageSymbols[dbKeyForData], let int = Int(operand) {
-            return UIBlurEffect.Style.init(rawValue: int) ?? fallback
-        }
-        return fallback
-    }
-    #endif
+//    #if os(iOS)
+//    public func asBlurEffectStyle(_ dbKeyForData: String, _ fallback: UIBlurEffect.Style) -> UIBlurEffect.Style {
+//        if let operand = storageSymbols[dbKeyForData], let int = Int(operand) {
+//            return UIBlurEffect.Style.init(rawValue: int) ?? fallback
+//        }
+//        return fallback
+//    }
+//    #endif
     
 
     
@@ -428,11 +428,11 @@ public class Attributes : Codable, Equatable, ObservableObject {
         dictionary[key] = v.map { "\($0)" }.joined(separator: ",")
     }
 
-    #if os(iOS)
-    public func set(_ dbKeyForData: String, _ mappingYToV: UIBlurEffect.Style) {
-        storageSymbols[dbKeyForData] = String(mappingYToV.rawValue)
-    }
-    #endif
+//    #if os(iOS)
+//    public func set(_ dbKeyForData: String, _ mappingYToV: UIBlurEffect.Style) {
+//        storageSymbols[dbKeyForData] = String(mappingYToV.rawValue)
+//    }
+//    #endif
 
     public func set(_ key: String, _ v: CGLineStyle) {
         dictionary[key] = Self.value(from: v)

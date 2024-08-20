@@ -106,14 +106,14 @@ extension UIFont {
 extension UIFont {
 
 	public func sibling(withPhrase phrase:String) -> UIFont? {
-		if let name = UIFont.fontNames(forFamilyName: familyName).find({ $0.lowercased().range(of:phrase) != nil }) {
+        if let name = UIFont.fontNames(forFamilyName: familyName).first(where: { $0.lowercased().range(of:phrase) != nil }) {
 			return UIFont.init(name: name, size: self.pointSize)
 		}
 		return nil
 	}
 
 	public func siblings(withPhrase phrase:String) -> [UIFont] {
-		return UIFont.fontNames(forFamilyName: familyName).filter({ $0.lowercased().range(of:phrase) != nil }).flatMap {
+        return UIFont.fontNames(forFamilyName: familyName).filter({ $0.lowercased().range(of:phrase) != nil }).compactMap {
 			UIFont.init(name: $0, size: self.pointSize)
 		}
 	}

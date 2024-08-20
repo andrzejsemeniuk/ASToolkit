@@ -16,19 +16,12 @@ public func not(_ A:Bool) -> Bool
     return !A
 }
 
-public func and(_ A:Bool,_ B:Bool) -> Bool
-{
-    return A && B
-}
+public func and    (_ p: Bool...)      -> Bool             { p.all { $0 } }
+public func or     (_ p: Bool...)      -> Bool             { p.any { $0 } }
 
 public func nand(_ A:Bool,_ B:Bool) -> Bool
 {
     return not(and(A,B))
-}
-
-public func or(_ A:Bool,_ B:Bool) -> Bool
-{
-    return A || B
 }
 
 public func nor(_ A:Bool,_ B:Bool) -> Bool

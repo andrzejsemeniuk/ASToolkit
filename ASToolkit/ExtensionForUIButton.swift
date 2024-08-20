@@ -8,13 +8,14 @@
 
 import Foundation
 
-extension UIButton {
+#if false
+public extension UIButton {
 
-	open func addTap(named: String = "", action: @escaping () -> ()) {
+	func addTap(named: String = "", action: @escaping () -> ()) {
 		self.addAction(named: named, for: .touchUpInside, action: action)
 	}
 
-	open func addTapIfSelected(named: String = "", deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
+	func addTapIfSelected(named: String = "", deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
 		self.addAction(named: named, for: .touchUpInside, action: {
 			if self.isSelected {
 				action()
@@ -27,7 +28,7 @@ extension UIButton {
 		})
 	}
 
-	open func addTapIfNotSelected(named: String = "", select: Bool = true, deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
+	func addTapIfNotSelected(named: String = "", select: Bool = true, deselect after: TimeInterval? = nil, action: @escaping () -> ()) {
 		self.addAction(named: named, for: .touchUpInside, action: {
 			if !self.isSelected {
 				action()
@@ -47,25 +48,26 @@ extension UIButton {
 
 }
 
-extension UIButton {
+public extension UIButton {
     
-    open func decorate(margin:CGFloat) {
+    func decorate(margin:CGFloat) {
         self.contentEdgeInsets = UIEdgeInsets(all:margin)
     }
     
-    open func decorate(borderWidth:CGFloat) {
+    func decorate(borderWidth:CGFloat) {
         self.layer.borderWidth = borderWidth
     }
     
-    open func decorate(borderColor:UIColor) {
+    func decorate(borderColor:UIColor) {
         self.layer.borderColor = borderColor.cgColor
     }
 }
 
-extension UIButton {
+public extension UIButton {
 
-	open func setAttributedTitle(_ string: String, for state: UIControl.State) {
+	func setAttributedTitle(_ string: String, for state: UIControl.State) {
 		self.setAttributedTitle(NSAttributedString(string:string), for: state)
 	}
 
 }
+#endif

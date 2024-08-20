@@ -8,12 +8,15 @@
 
 import Foundation
 import SpriteKit
+
 #if os(iOS)
 import UIKit
 #endif
+
 #if os(macOS)
 import AppKit
 #endif
+
 import SwiftUI
 import CoreImage
 
@@ -193,23 +196,25 @@ extension SKNode
     
     
     
-    #if os(iOS)
-    public func positionFromScreenRatio  (to:CGXY)
-    {
-        if let parent = self.chart
-        {
-            let position = parent.position + CGScreen.pointFrom(ratio:to)
-            //            print("positionFromScreen(\(to))=\(position),screen=\(CGScreen.bounds)")
-            self.position = (self.parent?.convert(position,from:parent))!
-        }
-    }
     
-    public func positionFromScreenRatio          (x:CGFloat,mappingVToY:CGFloat)
-    {
-        positionFromScreenRatio(to:CGXY(x,mappingVToY))
-    }
-    #endif
     
+#if os(iOS)
+public func positionFromScreenRatio  (to:CGXY)
+{
+    if let parent
+    {
+        let position = parent.position + CGScreen.pointFrom(ratio:to)
+        //            print("positionFromScreen(\(to))=\(position),screen=\(CGScreen.bounds)")
+        self.position = (self.parent?.convert(position,from:parent))!
+    }
+}
+
+public func positionFromScreenRatio          (x:CGFloat,mappingVToY:CGFloat)
+{
+    positionFromScreenRatio(to:CGXY(x,mappingVToY))
+}
+#endif
+
     
     
     
@@ -2141,7 +2146,6 @@ public func aPhysicsFalloff     (by v:Float,point:CGPoint,duration:TimeInterval)
 
 
 
-
 public extension SKColor {
     var asColor : Color {
         Color.init(self)
@@ -2149,13 +2153,24 @@ public extension SKColor {
     var asCIColor : CIColor {
         CIColor.init(cgColor: self.cgColor)
     }
+    
+#if os(macOS)
     var asRGBAValues : RGBAInfo {
         .init(r: redComponent, g: greenComponent, b: blueComponent, a: alphaComponent)
     }
     var asHSBAValues : HSBAInfo {
         .init(h: hueComponent, s: saturationComponent, b: brightnessComponent, a: alphaComponent)
     }
+#endif
+
 }
+
+
+
+
+
+
+
 
 
 #if os(iOS)
@@ -2195,3 +2210,743 @@ open class SKTouchNode : SKNode {
 #endif
 
 
+
+
+
+
+
+
+
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+
+//
+//  ExtensionsForSpriteKit.swift
+//  AppSharkeeForMac
+//
+//  Created by andrzej semeniuk on 8/1/22.
+//
+
+
+struct CGMeasure : Codable {
+    
+    enum Kind : String, Codable{
+        case absolute
+        case ratio
+    }
+    
+    let kind            : Kind
+    var value           : CGFloat
+    
+    var isAbsolute      : Bool      { kind == .absolute }
+    var isRatio         : Bool      { kind == .ratio }
+    
+    static func absolute(_ value: CGFloat) -> CGMeasure { .init(kind: .absolute, value: value) }
+    static func ratio   (_ value: CGFloat) -> CGMeasure { .init(kind: .ratio, value: value) }
+}
+
+extension Array where Element == CGFloat {
+    func toSKColorFromHSBA() -> SKColor {
+        .init(hsba: self)
+    }
+    func toSKColorFromRGBA() -> SKColor {
+        .init(rgba: self)
+    }
+    
+    var fromHSBAtoRGBA : Self { toSKColorFromHSBA().arrayOfRGBA }
+    var fromRGBAtoHSBA : Self { toSKColorFromRGBA().arrayOfHSBA }
+    
+    mutating func set(hue: CGFloat)             { self[0] = hue }
+    mutating func set(saturation: CGFloat)      { self[1] = saturation }
+    mutating func set(brightness: CGFloat)      { self[2] = brightness }
+    
+    mutating func set(alpha: CGFloat)           { self[3] = alpha }
+    
+    mutating func set(red: CGFloat)             { self[0] = red }
+    mutating func set(green: CGFloat)           { self[1] = green }
+    mutating func set(blue: CGFloat)            { self[2] = blue }
+
+    var hue             : CGFloat               { self[0] }
+    var saturation      : CGFloat               { self[1] }
+    var brightness      : CGFloat               { self[2] }
+    
+    var alpha           : CGFloat               { self[3] }
+    
+    var red             : CGFloat               { self[0] }
+    var green           : CGFloat               { self[1] }
+    var blue            : CGFloat               { self[2] }
+}
+
+enum ColorGradientDirection : String, Codable, CaseIterable, Equatable {
+    case north,east,south,west
+}
+
+#if os(macOS)
+public extension SKColor {
+    func withAlphaAdded(_ v: CGFloat) -> SKColor {
+        self.withAlphaComponent(v + self.alphaComponent)
+    }
+    func withAlphaMultiplied(_ v: CGFloat) -> SKColor {
+        self.withAlphaComponent(v * self.alphaComponent)
+    }
+}
+#endif
+
+class SKLabelWithRectangleNode : SKShapeNode {
+    
+    private var labelNode : SKLabelNode {
+        children.first as! SKLabelNode
+    }
+
+    var hpad : CGFloat {
+        didSet {
+            update()
+        }
+    }
+    
+    var vpad : CGFloat {
+        didSet {
+            update()
+        }
+    }
+    
+    init(hpad: CGFloat = 0, vpad: CGFloat = 0, text: String? = nil, fontName: String? = nil, fontSize: CGFloat? = nil, fontColor: SKColor? = nil, fillColor: SKColor? = nil, lineWidth: CGFloat = 0) {
+        self.hpad = hpad
+        self.vpad = vpad
+        super.init()
+        addChild(SKLabelNode.init(text: text))
+        labelNode.verticalAlignmentMode = .center
+        labelNode.horizontalAlignmentMode = .center
+        if fontName != nil {
+            labelNode.fontName ?= fontName
+        }
+        labelNode.fontSize ?= fontSize
+        labelNode.fontColor ?= fontColor
+        self.lineWidth = lineWidth
+        self.fillColor ?= fillColor
+        update()
+    }
+    
+    convenience init(hpad: CGFloat = 0, vpad: CGFloat = 0, attributedText: NSAttributedString, fontName: String? = nil, fontSize: CGFloat? = nil, fontColor: SKColor? = nil, fillColor: SKColor? = nil, lineWidth: CGFloat = 0) {
+        self.init(hpad: hpad, vpad: vpad)
+        labelNode.attributedText = attributedText
+        if fontName != nil {
+            labelNode.fontName ?= fontName
+        }
+        labelNode.fontSize ?= fontSize
+        labelNode.fontColor ?= fontColor
+        self.lineWidth = lineWidth
+        self.fillColor ?= fillColor
+        update()
+    }
+    
+    var fontName : String? {
+        get { labelNode.fontName }
+        set {
+            labelNode.fontName = newValue
+        }
+    }
+
+    var fontSize : CGFloat {
+        get { labelNode.fontSize }
+        set {
+            labelNode.fontSize = newValue
+        }
+    }
+
+    var fontColor : SKColor? {
+        get { labelNode.fontColor }
+        set {
+            labelNode.fontColor = newValue
+        }
+    }
+
+    var text : String? {
+        get { labelNode.text }
+        set {
+            labelNode.text = newValue
+        }
+    }
+
+    var attributedText : NSAttributedString? {
+        get { labelNode.attributedText }
+        set {
+            labelNode.attributedText = newValue
+        }
+    }
+    
+    func adjustFontSizeToFit(w: CGFloat, h: CGFloat, height factor: CGFloat = 0.45) {
+        labelNode.adjustFontSizeToFit(w: w, h: h, height: height)
+    }
+    
+    func update() {
+        let frame = labelNode.calculateAccumulatedFrame()
+        self.path = .create(rect: .init(center: .zero, size: .init(frame.width + hpad * 2, frame.height + vpad * 2)))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+
+
+
+@discardableResult
+func labelWithShapeArrowConnector(position p0              : CGPoint,
+                                  insetsX                  : CGFloat,
+                                  insetsY                  : CGFloat,
+                                  corner                   : CGFloat = 0,
+                                  string                   : String,
+                                  textOffsetX              : CGFloat = 0,
+                                  textOffsetY              : CGFloat = 0,
+                                  fontName                 : String,
+                                  fontSize                 : CGFloat,
+                                  textColor                : SKColor,
+                                  fillColor                : SKColor,
+                                  connectorColor           : SKColor! = nil,
+                                  connectorRadius          : CGFloat = 0,
+                                  connectorCircleFill      : Bool = false,
+                                  connectorLineStyle       : CGLineStyle! = nil,
+                                  offset                   : CGFloat = 0,
+                                  placement                : CGPerpendicularPlacement = .none,
+                                  arrowHeight              : CGFloat = 8,
+                                  arrowWidth               : CGFloat = 8,
+                                  arrowColor               : SKColor! = nil,
+                                  rotated                  : CGAngle = .zero) -> SKShapeNode
+{
+    let LABEL = SKLabelNode.init(text: string)
+    
+    LABEL.fontName      = fontName
+    LABEL.fontSize      = fontSize
+    LABEL.fontColor     = textColor
+    
+    LABEL.verticalAlignmentMode = .center
+    LABEL.horizontalAlignmentMode = .center
+    
+    var n : SKShapeNode!
+    
+    if offset > 0 {
+        let RECT = LABEL.calculateAccumulatedFrame().insetBy(dx: insetsX, dy: insetsY).size.asCGRectCenteredOnZero
+        
+        switch placement {
+            case .none:
+                n = SKShapeNode.init(rect: RECT, cornerRadius: corner).configured(fillColor: fillColor)
+                    .positioned(at: p0)
+
+            case .top:
+                var polygon : [CGPoint] = []
+                if arrowWidth > 0 {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0.5, y: 0).added(x: +arrowWidth/2),
+                        RECT.pointFromRatio(x: 0.5, y: 0).added(y: -arrowHeight),
+                        RECT.pointFromRatio(x: 0.5, y: 0).added(x: -arrowWidth/2),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                } else {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0.5, y: 0).added(y: -arrowHeight),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                }
+                
+                n = SKShapeNode.init(polygon: polygon, close: true, fillColor: fillColor)
+                    .positioned(at: p0)
+
+                let FRAME = n.calculateAccumulatedFrame()
+                let OFFSET = FRAME.height/2 + offset
+                n.offset(y: OFFSET)
+
+                if let cc = connectorColor {
+                    if let ls = connectorLineStyle {
+                        let FROM = CGPoint.zero.with(y: connectorRadius + 1)
+                        let   TO = CGPoint.zero.with(y: OFFSET - arrowHeight/2 - FRAME.height/2 - 2)
+                        let c = SKShapeNode.line(from: FROM, to: TO, strokeColor: cc).configured(lineStyle: ls).offset(y: -OFFSET)
+                        n.addChild(c)
+                    }
+                    if connectorRadius > 0 {
+                        if connectorCircleFill {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, fillColor: cc).offset(y: -OFFSET)
+                            n.addChild(c)
+                        } else {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, strokeColor: cc).configured(lineStyle: connectorLineStyle ?? .create(1)).offset(y: -OFFSET)
+                            n.addChild(c)
+                        }
+                    }
+                }
+                
+            case .bottom:
+                var polygon : [CGPoint] = []
+                if arrowWidth > 0 {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 0.5, y: 1).added(x: -arrowWidth/2),
+                        RECT.pointFromRatio(x: 0.5, y: 1).added(y: arrowHeight),
+                        RECT.pointFromRatio(x: 0.5, y: 1).added(x: +arrowWidth/2),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                } else {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 0.5, y: 1).added(y: arrowHeight),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                }
+                n = SKShapeNode.init(polygon: polygon, close: true, fillColor: fillColor)
+                    .positioned(at: p0)
+                
+                let FRAME = n.calculateAccumulatedFrame()
+                let OFFSET = -FRAME.height/2 - offset
+                n.offset(y: OFFSET)
+
+                if let cc = connectorColor {
+                    if let ls = connectorLineStyle {
+                        let FROM = CGPoint.zero.with(y: -(connectorRadius + 1))
+                        let   TO = CGPoint.zero.with(y: OFFSET + arrowHeight/2 + FRAME.height/2 + 2)
+                        let c = SKShapeNode.line(from: FROM, to: TO, strokeColor: cc).configured(lineStyle: ls).offset(y: -OFFSET)
+                        n.addChild(c)
+                    }
+                    if connectorRadius > 0 {
+                        if connectorCircleFill {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, fillColor: cc).offset(y: -OFFSET)
+                            n.addChild(c)
+                        } else {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, strokeColor: cc).configured(lineStyle: connectorLineStyle ?? .create(1)).offset(y: -OFFSET)
+                            n.addChild(c)
+                        }
+                    }
+                }
+
+            case .left:
+                var polygon : [CGPoint] = []
+                if arrowWidth > 0 {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0.5).added(y: +arrowWidth/2),
+                        RECT.pointFromRatio(x: 1, y: 0.5).added(x: +arrowHeight),
+                        RECT.pointFromRatio(x: 1, y: 0.5).added(y: -arrowWidth/2),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                } else {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0.5).added(x: +arrowHeight),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                    ]
+                }
+                
+                n = SKShapeNode.init(polygon: polygon, close: true, fillColor: fillColor)
+                    .positioned(at: p0)
+
+                let FRAME = n.calculateAccumulatedFrame()
+                let OFFSET = -FRAME.width/2 - offset
+                n.offset(x: OFFSET)
+                
+                if let cc = connectorColor {
+                    if let ls = connectorLineStyle {
+                        let FROM = CGPoint.zero.with(x: -(connectorRadius + 1))
+                        let   TO = CGPoint.zero.with(x: OFFSET + arrowHeight/2 + FRAME.width/2 + 2)
+                        let c = SKShapeNode.line(from: FROM, to: TO, strokeColor: cc).configured(lineStyle: ls).offset(x: -OFFSET)
+                        n.addChild(c)
+                    }
+                    if connectorRadius > 0 {
+                        if connectorCircleFill {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, fillColor: cc).offset(x: -OFFSET)
+                            n.addChild(c)
+                        } else {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, strokeColor: cc).configured(lineStyle: connectorLineStyle ?? .create(1)).offset(x: -OFFSET)
+                            n.addChild(c)
+                        }
+                    }
+                }
+
+            case .right:
+                var polygon : [CGPoint] = []
+                if arrowWidth > 0 {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0.5).added(y: -arrowWidth/2),
+                        RECT.pointFromRatio(x: 0, y: 0.5).added(x: -arrowHeight),
+                        RECT.pointFromRatio(x: 0, y: 0.5).added(y: +arrowWidth/2),
+                    ]
+                } else {
+                    polygon = [
+                        RECT.pointFromRatio(x: 0, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 1),
+                        RECT.pointFromRatio(x: 1, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0),
+                        RECT.pointFromRatio(x: 0, y: 0.5).added(x: -arrowHeight),
+                    ]
+                }
+                
+                n = SKShapeNode.init(polygon: polygon, close: true, fillColor: fillColor)
+                    .positioned(at: p0)
+
+                let FRAME = n.calculateAccumulatedFrame()
+                let OFFSET = FRAME.width/2 + offset
+                n.offset(x: OFFSET)
+
+                if let cc = connectorColor {
+                    if let ls = connectorLineStyle {
+                        let FROM = CGPoint.zero.with(x: connectorRadius + 1)
+                        let   TO = CGPoint.zero.with(x: OFFSET - arrowHeight/2 - FRAME.width/2 - 2)
+                        let c = SKShapeNode.line(from: FROM, to: TO, strokeColor: cc).configured(lineStyle: ls).offset(x: -OFFSET)
+                        n.addChild(c)
+                    }
+                    if connectorRadius > 0 {
+                        if connectorCircleFill {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, fillColor: cc).offset(x: -OFFSET)
+                            n.addChild(c)
+                        } else {
+                            let c = SKShapeNode.circle(withRadius: connectorRadius, strokeColor: cc).configured(lineStyle: connectorLineStyle ?? .create(1)).offset(x: -OFFSET)
+                            n.addChild(c)
+                        }
+                    }
+                }
+
+
+        }
+    }
+    
+    n.addChild(LABEL)
+
+    LABEL.verticalAlignmentMode = .center
+    LABEL.horizontalAlignmentMode = .center
+    
+//    let RR = LABEL.calculateAccumulatedFrame()
+    
+//    LABEL.position.y += insetsY / 2
+//    LABEL.position.x += insetsX / 2
+    
+    LABEL.offset(x: textOffsetX, y: textOffsetY)
+    
+    
+    
+    n.zRotation = rotated.radians
+
+    return n
+}
+
+
+class SKTagNode : SKNode {
+    enum Location {
+        case center, top, right, bottom, left
+    }
+    
+    weak var shape       : SKShapeNode!
+    weak var label       : SKLabelNode!
+    
+    typealias Connector = (location: Location, point: CGPoint)
+    
+    let connectors  : [Connector]
+    
+    init(shape: SKShapeNode, label: SKLabelNode, connectors: [Connector]) {
+        self.shape = shape
+        self.label = label
+        self.connectors = connectors
+        super.init()
+        self.addChild(shape)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    static func create(position p0              : CGPoint,
+                       insetsX                  : CGFloat,
+                       insetsY                  : CGFloat,
+                       string                   : String,
+                       textOffsetX              : CGFloat = 0,
+                       textOffsetY              : CGFloat = 0,
+                       fontInfo                 : SKLabelNode.FontInfo,
+                       fillColor                : SKColor,
+                       lineWidth                : CGFloat = 0,
+                       strokeColor              : SKColor = .white,
+                       anchor                   : SKTagNode.Location? = nil,
+                       offset                   : CGFloat = 0,
+                       arrows                   : [SKTagNode.Location],
+                       arrowHeight              : CGFloat = 4,
+                       arrowWidth               : CGFloat = 8,
+                       rotated                  : CGAngle = .zero) -> SKTagNode
+    {
+        let LABEL = SKLabelNode.init(text: string)
+        
+        LABEL.textInfo = fontInfo
+        
+        LABEL.verticalAlignmentMode = .center
+        LABEL.horizontalAlignmentMode = .center
+        
+        LABEL.offset(x: textOffsetX, y: textOffsetY)
+        
+        return create(position: p0, label: LABEL, insetsX: insetsX, insetsY: insetsY, fillColor: fillColor, lineWidth: lineWidth, strokeColor: strokeColor, anchor: anchor, offset: offset, arrows: arrows, arrowHeight: arrowHeight, arrowWidth: arrowWidth, rotated: rotated)
+    }
+    
+    static func create(position p0              : CGPoint,
+                       label LABEL              : SKLabelNode,
+                       insetsX                  : CGFloat,
+                       insetsY                  : CGFloat,
+                       fillColor                : SKColor,
+                       lineWidth                : CGFloat = 0,
+                       strokeColor              : SKColor = .white,
+                       anchor                   : SKTagNode.Location? = nil,
+                       offset                   : CGFloat = 0,
+                       arrows                   : [SKTagNode.Location],
+                       arrowHeight              : CGFloat = 4,
+                       arrowWidth               : CGFloat = 8,
+                       rotated                  : CGAngle = .zero) -> SKTagNode
+    {
+        var connectors  : [SKTagNode.Connector] = []
+        
+        var polygon     : [CGPoint] = []
+        
+        
+        
+        let RECT = LABEL.calculateAccumulatedFrame().insetBy(dx: -insetsX, dy: -insetsY).size.asCGRectCenteredOnZero
+        
+        
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 0, y: 1)
+        ]
+        
+        if arrows.contains(.top) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0.5, y: 1).added(x: -arrowWidth/2),
+                RECT.pointFromRatio(x: 0.5, y: 1).added(y:  arrowHeight),
+                RECT.pointFromRatio(x: 0.5, y: 1).added(x: +arrowWidth/2),
+            ]
+            connectors.append((location: .top, point: RECT.pointFromRatio(x: 0.5, y: 1).added(y: +arrowHeight)))
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 1, y: 1)
+        ]
+        
+        if arrows.contains(.right) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+            polygon += [
+                RECT.pointFromRatio(x: 1, y: 0.5).added(y: +arrowWidth/2),
+                RECT.pointFromRatio(x: 1, y: 0.5).added(x:  arrowHeight),
+                RECT.pointFromRatio(x: 1, y: 0.5).added(y: -arrowWidth/2),
+            ]
+            connectors.append((location: .right, point: RECT.pointFromRatio(x: 1, y: 0.5).added(x: +arrowHeight)))
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 1, y: 0),
+        ]
+        
+        if arrows.contains(.bottom) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0.5, y: 0).added(x: +arrowWidth/2),
+                RECT.pointFromRatio(x: 0.5, y: 0).added(y: -arrowHeight),
+                RECT.pointFromRatio(x: 0.5, y: 0).added(x: -arrowWidth/2),
+            ]
+            connectors.append((location: .bottom, point: RECT.pointFromRatio(x: 0.5, y: 0).added(y: -arrowHeight)))
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 0, y: 0),
+        ]
+        
+        if arrows.contains(.left) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0, y: 0.5).added(y: -arrowWidth/2),
+                RECT.pointFromRatio(x: 0, y: 0.5).added(x: -arrowHeight),
+                RECT.pointFromRatio(x: 0, y: 0.5).added(y: +arrowWidth/2),
+            ]
+            connectors.append((location: .left, point: RECT.pointFromRatio(x: 0, y: 0.5).added(x: -arrowHeight)))
+        }
+        
+ 
+        let SHAPE = SKShapeNode.init(polygon: polygon, close: true, position: p0, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth)
+
+        SHAPE.isAntialiased = true
+        
+        SHAPE.addChild(LABEL)
+        
+        if let anchor = anchor {
+            switch anchor {
+                case .top       : SHAPE.position.y = -offset - (arrows.contains(anchor) ? arrowHeight : 0) - RECT.height/2
+                case .bottom    : SHAPE.position.y = +offset + (arrows.contains(anchor) ? arrowHeight : 0) + RECT.height/2
+                case .left      : SHAPE.position.x = +offset + (arrows.contains(anchor) ? arrowHeight : 0) + RECT.width/2
+                case .right     : SHAPE.position.x = -offset - (arrows.contains(anchor) ? arrowHeight : 0) - RECT.width/2
+                case .center:
+                    break
+            }
+        }
+        
+        SHAPE.zRotation = rotated.radians
+        
+        return .init(shape: SHAPE, label: LABEL, connectors: connectors)
+    }
+    
+}
+
+
+//
+//
+//let RECT = LABEL.calculateAccumulatedFrame().insetBy(dx: -insetsX, dy: -insetsY).size.asCGRect
+//
+//
+//let SHAPE = SKShapeNode.init(rectangle: RECT, position: p0, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth)
+//
+//
+////        polygon += [
+////            RECT.pointFromRatio(x: 0, y: 1)
+////        ]
+//
+//if arrows.contains(.top) {
+//    let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+//    SHAPE.addChildNode(SKShapeNode.init(polygon: [
+//        RECT.pointFromRatio(x: 0.5, y: 1).adding(x: -arrowWidth/2),
+//        RECT.pointFromRatio(x: 0.5, y: 1).adding(y:  arrowHeight),
+//        RECT.pointFromRatio(x: 0.5, y: 1).adding(x: +arrowWidth/2),
+//    ], close: true, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth))
+//    connectors.append((location: .top, point: RECT.pointFromRatio(x: 0.5, y: 1).adding(y: +arrowHeight)))
+//}
+//
+//
+////        polygon += [
+////            RECT.pointFromRatio(x: 1, y: 1)
+////        ]
+//
+//if arrows.contains(.right) {
+//    let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+//    SHAPE.addChildNode(SKShapeNode.init(polygon: [
+//        RECT.pointFromRatio(x: 1, y: 0.5).adding(y: +arrowWidth/2),
+//        RECT.pointFromRatio(x: 1, y: 0.5).adding(x:  arrowHeight),
+//        RECT.pointFromRatio(x: 1, y: 0.5).adding(y: -arrowWidth/2),
+//    ], close: true, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth))
+//    connectors.append((location: .right, point: RECT.pointFromRatio(x: 1, y: 0.5).adding(x: +arrowHeight)))
+//}
+//
+//
+////        polygon += [
+////            RECT.pointFromRatio(x: 1, y: 0),
+////        ]
+//
+//if arrows.contains(.bottom) {
+//    let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+//    SHAPE.addChildNode(SKShapeNode.init(polygon: [
+//        RECT.pointFromRatio(x: 0.5, y: 0).adding(x: +arrowWidth/2),
+//        RECT.pointFromRatio(x: 0.5, y: 0).adding(y: -arrowHeight),
+//        RECT.pointFromRatio(x: 0.5, y: 0).adding(x: -arrowWidth/2),
+//    ], close: true, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth))
+//    connectors.append((location: .bottom, point: RECT.pointFromRatio(x: 0.5, y: 0).adding(y: -arrowHeight)))
+//}
+//
+//
+////        polygon += [
+////            RECT.pointFromRatio(x: 0, y: 0),
+////        ]
+//
+//if arrows.contains(.left) {
+//    let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+//    SHAPE.addChildNode(SKShapeNode.init(polygon: [
+//        RECT.pointFromRatio(x: 0, y: 0.5).adding(y: -arrowWidth/2),
+//        RECT.pointFromRatio(x: 0, y: 0.5).adding(x: -arrowHeight),
+//        RECT.pointFromRatio(x: 0, y: 0.5).adding(y: +arrowWidth/2),
+//    ], close: true, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth))
+//    connectors.append((location: .left, point: RECT.pointFromRatio(x: 0, y: 0.5).adding(x: -arrowHeight)))
+//}
+//
+//
+////        let SHAPE = SKShapeNode.init(polygon: polygon, close: true, position: p0, fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth)
+
+
+//func connectorLine() -> SKShapeNode {
+//    SKShapeNode.init(named: "")
+//}
+//
+//func connectorPoint() -> SKNode {
+//    SKShapeNode.init(named: "")
+//}
+
+extension SKNode {
+    
+    @discardableResult
+    func alignedOn(left x: CGFloat) -> Self {
+        let FRAME = calculateAccumulatedFrame()
+        self.position.x = x + FRAME.width/2
+        return self
+    }
+    
+    @discardableResult
+    func alignedOn(right x: CGFloat) -> Self {
+        let FRAME = calculateAccumulatedFrame()
+        self.position.x = x - FRAME.width/2
+        return self
+    }
+    
+    @discardableResult
+    func aligned11(on: CGPoint, ax: CGFloat, ay: CGFloat) -> Self {
+        let FRAME = calculateAccumulatedFrame()
+        self.position.x = on.x + -FRAME.width/2 * ax
+        self.position.y = on.y + -FRAME.height/2 * ay
+        return self
+    }
+    
+    @discardableResult
+    func aligned01(on: CGPoint, ax: CGFloat, ay: CGFloat) -> Self {
+        aligned11(on: on, ax: 2 * ax - 1, ay: 2 * ay - 1)
+    }
+    
+}
+
+extension SKLabelNode {
+
+    struct FontInfo {
+        var fontName    : String?
+        var fontSize    : CGFloat
+        var fontColor   : SKColor?
+    }
+
+    var textInfo : FontInfo {
+        get {
+            .init(fontName: self.fontName, fontSize: self.fontSize, fontColor: self.fontColor)
+        }
+        set {
+            self.fontName = newValue.fontName
+            self.fontSize = newValue.fontSize
+            self.fontColor = newValue.fontColor
+        }
+    }
+    
+}
+
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------
+// 8< ----------------------------------------------------------------------------------

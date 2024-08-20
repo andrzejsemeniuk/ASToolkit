@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-extension UIImage {
+public extension UIImage {
     
-    open func tinted(withColor color: UIColor) -> UIImage {
+    func tinted(withColor color: UIColor) -> UIImage {
         
         var image = withRenderingMode(.alwaysTemplate)
         

@@ -61,3 +61,65 @@ public extension Collection where Element: Hashable {
         .init(self)
     }
 }
+
+
+
+
+
+
+public extension Set where Element : Equatable {
+    
+    mutating func insert(_ array: [Element]) {
+        array.forEach { insert($0) }
+    }
+    
+    mutating func insert(_ array: [Element?]) {
+        array.compactMap { $0 }.forEach { insert($0) }
+    }
+    
+    mutating func remove(_ array: [Element]) {
+        array.forEach { remove($0) }
+    }
+    
+    func missing(_ element: Element) -> Bool {
+        !contains(element)
+    }
+    
+    mutating func toggle(_ array: [Element]) {
+        array.forEach {
+            toggle($0)
+        }
+    }
+
+    mutating func toggle(_ element: Element) {
+        if contains(element) {
+            remove(element)
+        } else {
+            insert(element)
+        }
+    }
+    
+    mutating func set(_ array: [Element], keepingCapacity: Bool = false) {
+        removeAll(keepingCapacity: keepingCapacity)
+        insert(array)
+    }
+
+    mutating func set(_ array: [Element?], keepingCapacity: Bool = false) {
+        removeAll(keepingCapacity: keepingCapacity)
+        insert(array)
+    }
+    
+    mutating func set(_ element: Element, keepingCapacity: Bool = false) {
+        removeAll(keepingCapacity: keepingCapacity)
+        insert(element)
+    }
+
+    mutating func set(_ element: Element?, keepingCapacity: Bool = false) {
+        removeAll(keepingCapacity: keepingCapacity)
+        if let element {
+            insert(element)
+        }
+    }
+}
+
+

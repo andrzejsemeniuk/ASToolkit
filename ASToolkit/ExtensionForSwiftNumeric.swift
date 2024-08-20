@@ -515,7 +515,12 @@ public extension Double {
             return isNaN ? "NaN" : isInfinite ? "oo" : "?"
         }
         if asInt64.asDouble == self {
-            return asInt64.formatted()
+            if #available(iOS 15.0, *) {
+                return asInt64.formatted()
+            } else {
+                    // Fallback on earlier versions
+                return asInt64.asString
+            }
         }
         let r = format4
         for i in 0..<r.count {
@@ -826,7 +831,12 @@ public extension Float {
     
     var formatted4 : String {
         if asInt64.asFloat == self {
-            return asInt64.formatted()
+            if #available(iOS 15.0, *) {
+                return asInt64.formatted()
+            } else {
+                    // Fallback on earlier versions
+                return asInt64.asString
+            }
         }
         let r = format4
         for i in 0..<r.count {
@@ -1260,3 +1270,35 @@ public func orderedUp<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
 public func orderedDown<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
     a < b ? (b,a) : (a,b)
 }
+
+
+
+
+
+
+public extension Int {
+    
+    var roman : String
+    {
+        let decimals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+        let numerals = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+        
+        var result = ""
+        var number = self
+        
+        while number > 0
+        {
+            for (index, decimal) in decimals.enumerated()
+            {
+                if number - decimal >= 0 {
+                    number -= decimal
+                    result += numerals[index]
+                    break
+                }
+            }
+        }
+        
+        return result
+    }
+}
+

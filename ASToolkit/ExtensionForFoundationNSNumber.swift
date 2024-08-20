@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 
 public extension NSNumber {
-	public convenience init(value: CGFloat) {
+	convenience init(value: CGFloat) {
 		self.init(value: Double(value))
 	}
 }

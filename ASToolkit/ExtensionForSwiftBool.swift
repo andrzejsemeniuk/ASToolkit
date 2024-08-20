@@ -8,26 +8,23 @@
 
 import Foundation
 
-extension Bool
+public extension Bool
 {
-    public mutating func invert() {
+    mutating func invert() {
         self = !self
     }
 
-    public func inverted(_ invert: Bool = true) -> Bool {
+    func inverted(_ invert: Bool = true) -> Bool {
         invert ? !self : self
     }
 
-    public mutating func flip() {
+    mutating func flip() {
         self = !self
     }
     
-    public func flipped(_ invert: Bool = true) -> Bool {
+    func flipped(_ invert: Bool = true) -> Bool {
         inverted(invert)
     }
-}
-
-public extension Bool {
     
     static func compare(_ a: Bool, _ b: Bool) -> ComparisonResult {
         if !a && b { return .orderedAscending }
@@ -35,16 +32,10 @@ public extension Bool {
         return .orderedSame
     }
     
-}
-
-public extension Bool {
     
 //    static var random   : Bool { .random() }
     static var pick     : Bool { .random() }
 
-}
-
-public extension Bool {
     
     func XOR (_ rhs: Bool) -> Bool {
         self != rhs
@@ -53,4 +44,16 @@ public extension Bool {
     func format(_ TRUE: String = "true", _ FALSE: String = "false") -> String {
         self ? TRUE : FALSE
     }
+
+    var asString : String { self ? "true" : "false" }
+    
+    var not : Bool { !self }
+
 }
+
+extension Bool : Comparable {
+    public static func < (lhs: Bool, rhs: Bool) -> Bool {
+        !lhs && rhs
+    }
+}
+

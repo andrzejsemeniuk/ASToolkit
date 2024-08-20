@@ -71,9 +71,12 @@ open class StorableVariable : Codable {
 			public var color : UIColor {
 				return toUIColor()
 			}
-			public var hsba : UIColor.HSBATuple {
-				return toUIColor().HSBA
-			}
+            public var hsba : HSBAInfo {
+                return toUIColor().HSBA
+            }
+//			public var hsba : UIColor.HSBATuple {
+//				return toUIColor().HSBA
+//			}
 			public var wa : (w: Float, a: Float) {
 				return (w: Float((r+b+g)/3.0), a: a)
 			}

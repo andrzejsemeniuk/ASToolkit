@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,18 +31,8 @@
 		570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2841F1124A300FEAC03 /* ExtensionForSwiftCollection.swift */; };
 		570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */; };
 		570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */; };
-		570FC2C31F1124A300FEAC03 /* ExtensionForUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28B1F1124A300FEAC03 /* ExtensionForUIButton.swift */; };
-		570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */; };
-		570FC2C51F1124A300FEAC03 /* ExtensionForUIEdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28D1F1124A300FEAC03 /* ExtensionForUIEdgeInsets.swift */; };
-		570FC2C61F1124A300FEAC03 /* ExtensionForUIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28E1F1124A300FEAC03 /* ExtensionForUIFont.swift */; };
-		570FC2C71F1124A300FEAC03 /* ExtensionForUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28F1F1124A300FEAC03 /* ExtensionForUIView.swift */; };
 		570FC2C91F1124A300FEAC03 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2911F1124A300FEAC03 /* Math.swift */; };
 		570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */; };
-		570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2981F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift */; };
-		570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2991F1124A300FEAC03 /* UIGlyph.swift */; };
-		570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29A1F1124A300FEAC03 /* UILabelWithInsets.swift */; };
-		570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29B1F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift */; };
-		570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC29D1F1124A300FEAC03 /* UIViewCircle.swift */; };
 		570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A41F1124A300FEAC03 /* Utility.swift */; };
 		570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A51F1124A300FEAC03 /* Block.swift */; };
 		570FC2DE1F1124A300FEAC03 /* Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC2A61F1124A300FEAC03 /* Loop.swift */; };
@@ -51,14 +41,18 @@
 		571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */; };
 		571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */; };
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
+		5732AC302C75006600EE8620 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2E2C75006600EE8620 /* Color.swift */; };
+		5732AC312C75006600EE8620 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2F2C75006600EE8620 /* Error.swift */; };
+		5732AC322C7509B600EE8620 /* ExtensionForUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */; };
+		5732AC332C750A7500EE8620 /* ExtensionForUIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28E1F1124A300FEAC03 /* ExtensionForUIFont.swift */; };
+		5732AC3B2C750ED700EE8620 /* ExtensionForAppKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */; };
+		5732AC3D2C750FE600EE8620 /* ExtensionsForSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC3C2C750FE600EE8620 /* ExtensionsForSwiftUI.swift */; };
+		5732AC3F2C75102300EE8620 /* ExtensionsForSwiftUI+Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC3E2C75102300EE8620 /* ExtensionsForSwiftUI+Canvas.swift */; };
 		573C94CB256D7B340027AD39 /* Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C94CA256D7B340027AD39 /* Attributes.swift */; };
-		573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */; };
 		574EF48D1F55089F0094CD9E /* TestForGenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */; };
 		5756CA2B25FD2C70007719C5 /* UIBezierPath+Superpowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756CA2A25FD2C70007719C5 /* UIBezierPath+Superpowers.swift */; };
 		5756CA3325FD2FDE007719C5 /* ASToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756CA3225FD2FDE007719C5 /* ASToolkit.swift */; };
 		57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */; };
-		5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31720965F6B00B7695B /* ExtensionForUIApplication.swift */; };
-		5762D31C2096639B00B7695B /* ExtensionForUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */; };
 		5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */; };
 		5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6721F2F8DB400621781 /* ProtocolResettable.swift */; };
 		5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */; };
@@ -75,27 +69,17 @@
 		577E07AB1F840A5C003808B6 /* TestForCGFloat01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AA1F840A5C003808B6 /* TestForCGFloat01.swift */; };
 		577E07AD1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577E07AC1F840E3C003808B6 /* TestForExtensionForCoreGraphics.swift */; };
 		57851D491F4B9C8900AEFA4B /* ExtensionForUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57851D481F4B9C8800AEFA4B /* ExtensionForUIImage.swift */; };
-		578872B01F6D59C1009E1927 /* ExtensionForUIControlState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578872AF1F6D59C1009E1927 /* ExtensionForUIControlState.swift */; };
 		578F25F61F61EC24008C7C8C /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578F25F51F61EC24008C7C8C /* Weak.swift */; };
-		5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48A1F3100CD002739A6 /* GenericManagerOfSettings.swift */; };
-		5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48B1F3100CD002739A6 /* GenericSetting.swift */; };
-		5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48C1F3100CD002739A6 /* GenericControllerOfSettings.swift */; };
-		5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */; };
-		5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48E1F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift */; };
-		5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */; };
 		579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579346572540649E004D0344 /* ExtensionForSwiftComparable.swift */; };
 		579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579712F91F1E50A6001C4AE3 /* CAGradientRadialLayer.swift */; };
 		579D100D21D7BC9400FDDA96 /* ObjectiveC.h in Headers */ = {isa = PBXBuildFile; fileRef = 579D100B21D7BC9400FDDA96 /* ObjectiveC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */ = {isa = PBXBuildFile; fileRef = 579D100C21D7BC9400FDDA96 /* ObjectiveC.m */; };
-		57A6AC6F1F45EF3E0055341F /* UIViewPile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC6E1F45EF3E0055341F /* UIViewPile.swift */; };
 		57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */; };
 		57A847D624488B05001D5E42 /* ExtensionForSwiftEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */; };
-		57AA4C5D1F475DDD005384AD /* ExtensionForUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */; };
 		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
 		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
 		57CDF0932589B1C400F4F527 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDF0922589B1C400F4F527 /* SwiftyJSON */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
-		57D5746625C1C133007557FB /* ExtensionForUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */; };
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
@@ -109,20 +93,9 @@
 		57F0A0DC1F564FF90015169D /* ASToolkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 570FC1FD1F111E0E00FEAC03 /* ASToolkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57F804102198B31C009B4DE2 /* Sigma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F804092198B31C009B4DE2 /* Sigma.swift */; };
 		57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FBB1091F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift */; };
-		57FBB10C1F44B3C1008FA2D9 /* GenericPickerOfColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FBB10B1F44B3C1008FA2D9 /* GenericPickerOfColor.swift */; };
-		7724E76B20B080D3006F54A0 /* UIViewWithoutInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7724E76A20B080D3006F54A0 /* UIViewWithoutInteraction.swift */; };
-		772D916122E2068E00DEBC6A /* UICalibrator+Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915C22E2068E00DEBC6A /* UICalibrator+Property.swift */; };
 		772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915D22E2068E00DEBC6A /* StorableVariable.swift */; };
-		772D916322E2068E00DEBC6A /* UICalibratorPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915E22E2068E00DEBC6A /* UICalibratorPropertyList.swift */; };
-		772D916422E2068E00DEBC6A /* UICalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D915F22E2068E00DEBC6A /* UICalibrator.swift */; };
-		772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772D916022E2068E00DEBC6A /* UICalibratorForStorableVariables.swift */; };
-		775E433920A67C6200911E85 /* UIViewWithDrawings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775E433820A67C6200911E85 /* UIViewWithDrawings.swift */; };
-		77612A7420B11EA3007C18D7 /* UIViewWithAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77612A7320B11EA3007C18D7 /* UIViewWithAdditions.swift */; };
-		776C3B2122E22EEF0080211E /* UICalibrator+VariableFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776C3B2022E22EEF0080211E /* UICalibrator+VariableFactory.swift */; };
 		777B9EFE2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFD2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift */; };
 		777B9F002087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9EFF2087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift */; };
-		777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F032087EF7800D3FBBD /* ExtensionForUIControl.swift */; };
-		777B9F082087F47100D3FBBD /* UIViewWithBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F072087F47100D3FBBD /* UIViewWithBorder.swift */; };
 		777B9F3F2088E56800D3FBBD /* FiniteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777B9F3E2088E56800D3FBBD /* FiniteState.swift */; };
 		778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */; };
 		778C9D9D22B17C3B005631C1 /* TestExtensionForSUIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778C9D9C22B17C3B005631C1 /* TestExtensionForSUIFont.swift */; };
@@ -221,6 +194,11 @@
 		571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
 		571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationFormatter.swift; sourceTree = "<group>"; };
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
+		5732AC2E2C75006600EE8620 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		5732AC2F2C75006600EE8620 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForAppKit.swift; sourceTree = "<group>"; };
+		5732AC3C2C750FE600EE8620 /* ExtensionsForSwiftUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsForSwiftUI.swift; sourceTree = "<group>"; };
+		5732AC3E2C75102300EE8620 /* ExtensionsForSwiftUI+Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ExtensionsForSwiftUI+Canvas.swift"; sourceTree = "<group>"; };
 		573C94CA256D7B340027AD39 /* Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attributes.swift; sourceTree = "<group>"; };
 		573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIViewController.swift; sourceTree = "<group>"; };
 		574EF48C1F55089F0094CD9E /* TestForGenericSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestForGenericSetting.swift; sourceTree = "<group>"; };
@@ -373,6 +351,7 @@
 				579D100B21D7BC9400FDDA96 /* ObjectiveC.h */,
 				579D100C21D7BC9400FDDA96 /* ObjectiveC.m */,
 				570FC2011F111E0E00FEAC03 /* Info.plist */,
+				5756CA3225FD2FDE007719C5 /* ASToolkit.swift */,
 				573C94CA256D7B340027AD39 /* Attributes.swift */,
 				576B29AB1F868F960001DC97 /* BindingValue.swift */,
 				572A8E031F71DC28008CC1C6 /* Bit.swift */,
@@ -381,8 +360,11 @@
 				570FC2711F1124A300FEAC03 /* CGFloat01.swift */,
 				570E36792094D8FF006FF787 /* CGLip.swift */,
 				77DF095920D9AC5000E4F49D /* CGStroke.swift */,
+				5732AC2E2C75006600EE8620 /* Color.swift */,
 				77A2D3472290A2B600890472 /* CyclicQueue.swift */,
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
+				5732AC2F2C75006600EE8620 /* Error.swift */,
+				5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */,
 				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
 				570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */,
 				571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */,
@@ -428,6 +410,8 @@
 				570FC28F1F1124A300FEAC03 /* ExtensionForUIView.swift */,
 				573D00AF1F67BEEF00F2D5DE /* ExtensionForUIViewController.swift */,
 				5762D31B2096639B00B7695B /* ExtensionForUIWindow.swift */,
+				5732AC3C2C750FE600EE8620 /* ExtensionsForSwiftUI.swift */,
+				5732AC3E2C75102300EE8620 /* ExtensionsForSwiftUI+Canvas.swift */,
 				777B9F3E2088E56800D3FBBD /* FiniteState.swift */,
 				5791F48D1F3100CD002739A6 /* GenericControllerOfList.swift */,
 				5791F48F1F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift */,
@@ -443,6 +427,7 @@
 				570FC2941F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift */,
 				5762F6741F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift */,
 				5762F6761F2F8EE200621781 /* ProtocolAssignableToDictionary.swift */,
+				57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */,
 				5778C7E81F5743BE00C5F6E6 /* ProtocolKeyable.swift */,
 				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
@@ -469,9 +454,7 @@
 				775E433820A67C6200911E85 /* UIViewWithDrawings.swift */,
 				7724E76A20B080D3006F54A0 /* UIViewWithoutInteraction.swift */,
 				570FC2A41F1124A300FEAC03 /* Utility.swift */,
-				57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */,
 				578F25F51F61EC24008C7C8C /* Weak.swift */,
-				5756CA3225FD2FDE007719C5 /* ASToolkit.swift */,
 			);
 			path = ASToolkit;
 			sourceTree = "<group>";
@@ -726,105 +709,78 @@
 			buildActionMask = 2147483647;
 			files = (
 				77FB80AE20DE824400C50726 /* Indexes.swift in Sources */,
-				5791F4901F3100CD002739A6 /* GenericManagerOfSettings.swift in Sources */,
 				5762F6731F2F8DB400621781 /* ProtocolResettable.swift in Sources */,
 				576B29AC1F868F960001DC97 /* BindingValue.swift in Sources */,
 				570FC2B31F1124A300FEAC03 /* ExtensionForFoundationNSLayoutConstraint.swift in Sources */,
 				572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */,
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
-				57D5746625C1C133007557FB /* ExtensionForUIDevice.swift in Sources */,
-				570FC2D51F1124A300FEAC03 /* UIViewCircle.swift in Sources */,
 				579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */,
-				570FC2C41F1124A300FEAC03 /* ExtensionForUIColor.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
-				772D916522E2068E00DEBC6A /* UICalibratorForStorableVariables.swift in Sources */,
+				5732AC332C750A7500EE8620 /* ExtensionForUIFont.swift in Sources */,
 				57760E0927E275E600114F3D /* ExtensionForSwiftData.swift in Sources */,
 				57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
 				570FC2AF1F1124A300FEAC03 /* ExtensionForFoundationDate.swift in Sources */,
-				570FC2C51F1124A300FEAC03 /* ExtensionForUIEdgeInsets.swift in Sources */,
 				777B9EFE2087EECE00D3FBBD /* ExtensionForFoundationNSNumber.swift in Sources */,
 				77A3E68D2110AAE400B4FD9D /* ExtensionForSWXML.swift in Sources */,
-				5762D31C2096639B00B7695B /* ExtensionForUIWindow.swift in Sources */,
 				579712FA1F1E50A6001C4AE3 /* CAGradientRadialLayer.swift in Sources */,
 				570FC2B21F1124A300FEAC03 /* ExtensionForFoundationNSLayoutAnchor.swift in Sources */,
 				570FC2A91F1124A300FEAC03 /* CGFloat01.swift in Sources */,
-				772D916422E2068E00DEBC6A /* UICalibrator.swift in Sources */,
-				5791F4921F3100CD002739A6 /* GenericControllerOfSettings.swift in Sources */,
-				772D916122E2068E00DEBC6A /* UICalibrator+Property.swift in Sources */,
 				5778C80D1F5A0FD100C5F6E6 /* Logic.swift in Sources */,
-				776C3B2122E22EEF0080211E /* UICalibrator+VariableFactory.swift in Sources */,
-				570FC2C61F1124A300FEAC03 /* ExtensionForUIFont.swift in Sources */,
 				57743A8D20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift in Sources */,
 				570FC2DC1F1124A300FEAC03 /* Utility.swift in Sources */,
-				573D00B01F67BEEF00F2D5DE /* ExtensionForUIViewController.swift in Sources */,
 				77A2D3482290A2B600890472 /* CyclicQueue.swift in Sources */,
 				5762F6711F2F8DA100621781 /* ProtocolRemovable.swift in Sources */,
 				571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */,
 				570FC2BB1F1124A300FEAC03 /* ExtensionForSwiftCharacter.swift in Sources */,
-				570FC2C31F1124A300FEAC03 /* ExtensionForUIButton.swift in Sources */,
 				57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */,
-				77612A7420B11EA3007C18D7 /* UIViewWithAdditions.swift in Sources */,
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
-				5791F4941F3100CD002739A6 /* GenericControllerOfPickerOfFont.swift in Sources */,
 				570E367A2094D8FF006FF787 /* CGLip.swift in Sources */,
 				57F804102198B31C009B4DE2 /* Sigma.swift in Sources */,
-				777B9F082087F47100D3FBBD /* UIViewWithBorder.swift in Sources */,
 				5763B2452585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
-				570FC2D21F1124A300FEAC03 /* UILabelWithInsets.swift in Sources */,
+				5732AC322C7509B600EE8620 /* ExtensionForUIColor.swift in Sources */,
+				5732AC3F2C75102300EE8620 /* ExtensionsForSwiftUI+Canvas.swift in Sources */,
 				570FC2B01F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift in Sources */,
 				571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */,
 				5756CA2B25FD2C70007719C5 /* UIBezierPath+Superpowers.swift in Sources */,
-				578872B01F6D59C1009E1927 /* ExtensionForUIControlState.swift in Sources */,
 				5756CA3325FD2FDE007719C5 /* ASToolkit.swift in Sources */,
 				579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */,
 				777B9F3F2088E56800D3FBBD /* FiniteState.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,
 				570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */,
 				5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */,
+				5732AC3D2C750FE600EE8620 /* ExtensionsForSwiftUI.swift in Sources */,
 				57723068251FEAFB0054D12B /* ExtensionForSwiftUI.swift in Sources */,
-				570FC2D11F1124A300FEAC03 /* UIGlyph.swift in Sources */,
 				571C6DB621E91F7800E326CC /* SWXMLHash.swift in Sources */,
-				5791F4951F3100CD002739A6 /* GenericControllerOfPickerOfColor.swift in Sources */,
+				5732AC3B2C750ED700EE8620 /* ExtensionForAppKit.swift in Sources */,
 				570FC2DE1F1124A300FEAC03 /* Loop.swift in Sources */,
 				77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */,
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
-				5791F4931F3100CD002739A6 /* GenericControllerOfList.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */,
-				57FBB10C1F44B3C1008FA2D9 /* GenericPickerOfColor.swift in Sources */,
+				5732AC302C75006600EE8620 /* Color.swift in Sources */,
 				570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */,
-				57A6AC6F1F45EF3E0055341F /* UIViewPile.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
-				775E433920A67C6200911E85 /* UIViewWithDrawings.swift in Sources */,
 				777B9F002087EF0F00D3FBBD /* ExtensionForFoundationNSObject.swift in Sources */,
-				7724E76B20B080D3006F54A0 /* UIViewWithoutInteraction.swift in Sources */,
 				5762F6751F2F8EB400621781 /* ProtocolAssignableFromDictionary.swift in Sources */,
 				570FC2AD1F1124A300FEAC03 /* ExtensionForCoreGraphics.swift in Sources */,
-				57AA4C5D1F475DDD005384AD /* ExtensionForUISlider.swift in Sources */,
 				57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */,
 				57851D491F4B9C8900AEFA4B /* ExtensionForUIImage.swift in Sources */,
 				570FC2B41F1124A300FEAC03 /* ExtensionForFoundationNSRange.swift in Sources */,
 				57A847D624488B05001D5E42 /* ExtensionForSwiftEnum.swift in Sources */,
 				570FC2C91F1124A300FEAC03 /* Math.swift in Sources */,
 				77CD2A2222E883890020CAB5 /* StorableVariableManager.swift in Sources */,
-				570FC2C71F1124A300FEAC03 /* ExtensionForUIView.swift in Sources */,
-				570FC2D01F1124A300FEAC03 /* UIButtonWithCenteredCircle.swift in Sources */,
 				570FC2B51F1124A300FEAC03 /* ExtensionForFoundationUserDefaults.swift in Sources */,
 				573C94CB256D7B340027AD39 /* Attributes.swift in Sources */,
 				578F25F61F61EC24008C7C8C /* Weak.swift in Sources */,
 				570FC2B11F1124A300FEAC03 /* ExtensionForFoundationNSCharacterSet.swift in Sources */,
-				5791F4911F3100CD002739A6 /* GenericSetting.swift in Sources */,
 				57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */,
-				570FC2D31F1124A300FEAC03 /* UILabelWithInsetsAndCenteredCircle.swift in Sources */,
 				570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */,
-				777B9F042087EF7800D3FBBD /* ExtensionForUIControl.swift in Sources */,
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
 				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
-				5762D31820965F6B00B7695B /* ExtensionForUIApplication.swift in Sources */,
 				772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */,
-				772D916322E2068E00DEBC6A /* UICalibratorPropertyList.swift in Sources */,
+				5732AC312C75006600EE8620 /* Error.swift in Sources */,
 				77FD704221A95DCA00F6636B /* ExtensionForSwiftDictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1057,9 +1013,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1087,8 +1046,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.andrzejsemeniuk.ASToolkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

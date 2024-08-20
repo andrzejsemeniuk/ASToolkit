@@ -32,10 +32,12 @@ public extension Substring {
 
 public extension Substring {
     
+    @available(iOS 16.0, *)
     func matches(_ regex: Regex<Substring>) -> Bool {
         self.firstMatch(of: regex) != nil
     }
     
+    @available(iOS 16.0, *)
     func matches(_ regex: Regex<String>) -> Bool {
         self.firstMatch(of: regex) != nil
     }

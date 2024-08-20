@@ -10,7 +10,7 @@ import Foundation
 
 public extension UserDefaults
 {
-    public class func clear()
+    class func clear()
     {
         let domain      = Bundle.main.bundleIdentifier
         
@@ -23,17 +23,17 @@ public extension UserDefaults
 }
 
 public extension UserDefaults {
-    open func date(forKey key:String) -> Date? {
+    func date(forKey key:String) -> Date? {
         return value(forKey: key) as? Date
     }
     
     @nonobjc
-    open func set(_ value:UIColor, forKey:String) {
-        let data = NSKeyedArchiver.archivedData(withRootObject: value)
+    func set(_ value:UIColor, forKey:String) throws {
+        let data = try NSKeyedArchiver.archivedData(withRootObject: value, requiringSecureCoding: false)
         set(data, forKey: forKey)
     }
     
-    open func color(forKey:String) -> UIColor? {
+    func color(forKey:String) -> UIColor? {
         if let data = value(forKey: forKey) as? Data {
             return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIColor
         }
@@ -41,12 +41,12 @@ public extension UserDefaults {
     }
     
     @nonobjc
-    open func set(_ value:UIFont, forKey:String) {
+    func set(_ value:UIFont, forKey:String) {
         let data = NSKeyedArchiver.archivedData(withRootObject: value)
         set(data, forKey: forKey)
     }
     
-    open func font(forKey:String) -> UIFont? {
+    func font(forKey:String) -> UIFont? {
         if let data = value(forKey: forKey) as? Data {
             return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIFont
         }
