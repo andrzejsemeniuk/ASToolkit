@@ -1036,11 +1036,13 @@ public extension String {
 
 public extension String {
     
+    @available(tvOS 16.0, *)
     @available(iOS 16.0, *)
     func matches(_ regex: Regex<String>) -> Bool {
         self.firstMatch(of: regex) != nil
     }
     
+    @available(tvOS 16.0, *)
     @available(iOS 16.0, *)
     func matches(_ regex: Regex<Substring>) -> Bool {
         self.firstMatch(of: regex) != nil

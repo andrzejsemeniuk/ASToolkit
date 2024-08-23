@@ -60,6 +60,18 @@ extension View {
             .frame(maxWidth: .infinity)
     }
 
+#if os(iOS)
+    var onTapGestureConsume : some View {
+        self
+            .onTapGesture {
+            }
+    }
+    var consumeTaps : some View {
+        self
+            .backgroundAlmostTransparent
+            .onTapGestureConsume
+    }
+#elseif os(macOS)
     var onTapGestureConsume : some View {
         self
             .onTapGesture {
@@ -67,12 +79,13 @@ extension View {
             .onHover { _ in
             }
     }
-    
     var consumeTaps : some View {
         self
             .backgroundAlmostTransparent
             .onTapGestureConsume
     }
+#endif
+
     
     func show(_ condition: Bool) -> some View {
         self
@@ -95,6 +108,7 @@ extension Text {
 
 // https://stackoverflow.com/questions/63309407/finding-click-location-in-swiftui-on-macos
 
+#if os(iOS) || os(macOS)
 struct ClickGesture: Gesture {
     let count: Int
     let coordinateSpace: CoordinateSpace
@@ -170,6 +184,8 @@ extension View {
         }
     }
 }
+
+#endif
 
 //@ViewBuilder func TL(_ view: View) -> some View {
 //    HStack {
@@ -266,7 +282,7 @@ extension View {
 func MenuItemDisabled(_ text: String, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
     Button {
     } label: {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
             Text(text).bold(bold).italic(italic).underline(underline)
         } else {
             Text(text).underline(underline)
@@ -278,7 +294,7 @@ func MenuItemDisabled(_ text: String, bold: Bool = false, italic: Bool = false, 
 func RichTextMenuItemDisabled(_ text: LocalizedStringKey, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
     Button {
     } label: {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
             Text(text).bold(bold).italic(italic).underline(underline)
         } else {
             Text(text).underline(underline)
@@ -295,7 +311,7 @@ func MenuItem(_ text: String, bold: Bool = false, italic: Bool = false, underlin
     Button {
         action()
     } label: {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
             Text(text).bold(bold).italic(italic).underline(underline)
         } else {
             Text(text).underline(underline)
@@ -308,7 +324,7 @@ func RichTextMenuItem(_ text: LocalizedStringKey, bold: Bool = false, italic: Bo
     Button {
         action()
     } label: {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
             Text(text).bold(bold).italic(italic).underline(underline)
         } else {
             Text(text).underline(underline)
@@ -401,6 +417,7 @@ func MenuItemForDecrease<T: SignedNumeric & Comparable>(title: String = "", _ on
     MenuItemForIncrease(title: title, on, increment: -abs(decrement), animate: animate, increase: decrease, after: after)
 }
 
+@available(tvOS 17.0, *)
 func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increment: T, decrement: T, min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     Menu(title) {
         MenuItemForIncrease(on, increment: increment, animate: animate, increase: increase, after: after).disabled(on.wrappedValue > max)
@@ -597,7 +614,7 @@ extension View {
     }
 }
 
-
+#if os(macOS)
 struct OnHoverBackgroundColor: ViewModifier {
     
     let color : Color
@@ -625,6 +642,11 @@ extension View {
     func onHoverBackgroundColor(_ color: Color) -> some View {
         self.modifier(OnHoverBackgroundColor(color: color))
     }
+    
+    func onHoverWithAnyView(_ view: AnyView, useAnimation: Bool = false, condition: @escaping (Bool)->Bool = { _ in true }) -> some View {
+        self.modifier(OnHoverWithAnyView(view: view, condition: condition, useAnimation: useAnimation))
+    }
+    
 }
 
 
@@ -662,12 +684,9 @@ struct OnHoverWithAnyView : ViewModifier {
     }
 
 }
+#endif
 
 extension View {
-    
-    func onHoverWithAnyView(_ view: AnyView, useAnimation: Bool = false, condition: @escaping (Bool)->Bool = { _ in true }) -> some View {
-        self.modifier(OnHoverWithAnyView(view: view, condition: condition, useAnimation: useAnimation))
-    }
     
     var backgroundAlmostTransparent : some View {
         self.background(Color.almostTransparent)
@@ -1069,7 +1088,7 @@ var globalStorage : [String : Any] = [:]
 
 
 
-
+#if os(iOS) || os(macOS)
 extension View {
     
     func onDragGesture(minimumDistance: CGFloat = 0, changed: @escaping (DragGesture.Value)->Void, ended: @escaping (DragGesture.Value)->Void) -> some View {
@@ -1114,7 +1133,7 @@ extension View {
     }
     
 }
-
+#endif
 
 
 
