@@ -803,11 +803,15 @@ extension Array {
 public extension Array {
     
     var random : Element {
-        return self[ Int.random(n: UInt32(count)) ]
+        return self[ randomIndex ]
     }
 
     var pick : Element {
         return random
+    }
+
+    var randomIndex : Int {
+        return Int.random(n: UInt32(count))
     }
 
     func picked(_ count: Int) -> Self {
