@@ -178,35 +178,35 @@ public extension Array
     }
     
     func subarray(from:Int, length:Int? = nil) -> Array {
-        return subarray(from: from, to: from + (length == nil ? (count - from) : length!))
+        subarray(from: from, to: from + (length == nil ? (count - from) : length!))
     }
     
     subscript (safe i:Int) -> Array.Element? {
-        return 0 <= i && i < self.count ? self[i] : nil
+        0 <= i && i < self.count ? self[i] : nil
     }
 
 	func filtered<T>(type:T.Type) -> [T] {
-		return self.filter { $0 is T }.map { $0 as! T }
+		self.filter { $0 is T }.map { $0 as! T }
 	}
 
 	var indexForPossibleLastElement : Int? {
-		return 0 < count ? count-1 : nil
+		0 < count ? count-1 : nil
 	}
 
 	var indexForPossiblePreLastElement : Int? {
-		return 1 < count ? count-2 : nil
+		1 < count ? count-2 : nil
 	}
 
 	var indexForSafeLastElement : Int {
-		return 0 < count ? count-1 : 0
+		count-1
 	}
 
 	var indexForSafePreLastElement : Int {
-		return 1 < count ? count-2 : 0
+		1 < count ? count-2 : -1
 	}
 
 	var preLast : Element? {
-		return self[safe:count-2]
+		self[safe:count-2]
 	}
     
     var firstElement : Element {
