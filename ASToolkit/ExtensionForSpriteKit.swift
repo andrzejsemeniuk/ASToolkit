@@ -55,6 +55,15 @@ extension SKNode
     @objc public func positionFromRatio      (x:CGFloat, y:CGFloat)                          -> CGPoint  { return position + pointFromRatio(h:x,v:y) }
     
     
+    public var isShown : Bool {
+        get {
+            !isHidden
+        }
+        set(newValue) {
+            isHidden = !newValue
+        }
+    }
+    
     public func place_01(x: CGFloat? = nil, y: CGFloat? = nil) {
         guard let parent = parent else {
             return
