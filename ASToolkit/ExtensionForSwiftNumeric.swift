@@ -971,7 +971,7 @@ public extension Int
 public extension Int {
     
     var range : Range<Int> {
-        0..<abs(self)
+        0..<self.abs
     }
     
     @discardableResult
@@ -1058,6 +1058,7 @@ public extension Int {
 
     var formatp         : String        { NSString(format: "%+d", self) as String }
 
+    var abs             : Int           { Swift.abs(self) }
 }
 
 public extension UInt {

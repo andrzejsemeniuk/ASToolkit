@@ -148,3 +148,16 @@ public extension Dictionary where Key == String, Value == String {
     
 
 }
+
+public extension Dictionary {
+    
+    func transposed<K: Hashable, V>(_ f: (Key,Value) -> (K,V)?) -> Dictionary<K,V> {
+        var R : Dictionary<K,V> = .init()
+        for (k,v) in self {
+            if let NEW = f(k,v) {
+                R[NEW.0] = NEW.1
+            }
+        }
+        return R
+    }
+}
