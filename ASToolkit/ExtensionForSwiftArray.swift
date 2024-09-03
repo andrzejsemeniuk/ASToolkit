@@ -1891,3 +1891,20 @@ public extension Array {
     
 }
 
+public extension Array {
+    
+    func crossed<T>(with other: [T]) -> [(Element,T)] {
+        var R : [(Element,T)] = []
+        for A in self {
+            for B in other {
+                R.append((A,B))
+            }
+        }
+        return R
+    }
+    
+    func joined<T>(with other: [T]) -> [(Element,T)] {
+        crossed(with: other)
+    }
+    
+}
