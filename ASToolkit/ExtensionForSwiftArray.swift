@@ -816,7 +816,11 @@ public extension Array {
 
     func picked(_ count: Int) -> Self {
         // EXPENSIVE O(n)
-        self.shuffled().enumerated().filter { $0.0 < count }.map { $0.1 }
+        self.shuffled().kept(to: count)
+    }
+    
+    func element(some: Int) -> Element {
+        self[some % count]
     }
 }
 
