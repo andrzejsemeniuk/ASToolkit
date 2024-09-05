@@ -18,12 +18,12 @@ import AppKit
 #endif
 
 
-//extension SKAction {
+//public extension SKAction {
 //    static func animateColorAdjustments(from initialHue: CGFloat? = nil, to finalHue: CGFloat? = nil,
 //                                        from initialSaturation: CGFloat? = nil, to finalSaturation: CGFloat? = nil,
 //                                        from initialBrightness: CGFloat? = nil, to finalBrightness: CGFloat? = nil,
 //                                        duration: TimeInterval) -> SKAction {
-//        return SKAction.customAction(withDuration: duration) { node, elapsedTime in
+//        SKAction.customAction(withDuration: duration) { node, elapsedTime in
 //            guard let effectNode = node as? SKEffectNode, let filter = effectNode.filter as? CIFilter else {
 //                return
 //            }
@@ -64,44 +64,53 @@ import AppKit
 //}
 
 
-extension SKAction {
+public extension SKAction {
+    
     static func animateColorAdjustments(from initialHue: CGFloat? = nil, to finalHue: CGFloat? = nil,
                                         from initialSaturation: CGFloat? = nil, to finalSaturation: CGFloat? = nil,
                                         from initialBrightness: CGFloat? = nil, to finalBrightness: CGFloat? = nil,
                                         duration: TimeInterval) -> SKAction {
         return SKAction.customAction(withDuration: duration) { node, elapsedTime in
-            guard let effectNode = node as? SKEffectNode, let filter = effectNode.filter as? CIFilter else {
+            guard let effectNode = node as? SKEffectNode else {
                 return
             }
 
             let t = CGFloat(elapsedTime / CGFloat(duration)) // Normalize time [0,1]
 
+            // Get current filter from the node
+            let originalFilter = effectNode.filter
+            
             // Use default values if needed (i.e., the last set value if available)
-            let previousHue = filter.value(forKey: kCIInputAngleKey) as? CGFloat ?? 0.0
-            let previousSaturation = filter.value(forKey: kCIInputSaturationKey) as? CGFloat ?? 1.0
-            let previousBrightness = filter.value(forKey: kCIInputBrightnessKey) as? CGFloat ?? 0.0
+            let previousHue: CGFloat = 0.0  // Assume default starting hue (or fetch if already used)
+            let previousSaturation: CGFloat = 1.0  // Normal saturation (or fetch from node state)
+            let previousBrightness: CGFloat = 0.0  // Normal brightness (or fetch from node state)
 
             // Interpolate values for each component
             let currentHue = (initialHue != nil && finalHue != nil) ? (initialHue! + (finalHue! - initialHue!) * t) : previousHue
             let currentSaturation = (initialSaturation != nil && finalSaturation != nil) ? (initialSaturation! + (finalSaturation! - initialSaturation!) * t) : previousSaturation
             let currentBrightness = (initialBrightness != nil && finalBrightness != nil) ? (initialBrightness! + (finalBrightness! - initialBrightness!) * t) : previousBrightness
 
-            // Update the filter with the new values
-            if let hueFilter = CIFilter(name: "CIHueAdjust"),
-               let colorFilter = CIFilter(name: "CIColorControls") {
-                hueFilter.setValue(currentHue * .pi * 2, forKey: kCIInputAngleKey)
-                colorFilter.setValue(currentSaturation * 2.0, forKey: kCIInputSaturationKey)
-                colorFilter.setValue(currentBrightness * 2.0 - 1.0, forKey: kCIInputBrightnessKey)
+            // Create a hue and color filter with the current interpolation values
+            let hueFilter = CIFilter(name: "CIHueAdjust")
+            let colorFilter = CIFilter(name: "CIColorControls")
+            hueFilter?.setValue(currentHue * .pi * 2, forKey: kCIInputAngleKey)
+            colorFilter?.setValue(currentSaturation * 2.0, forKey: kCIInputSaturationKey)
+            colorFilter?.setValue(currentBrightness * 2.0 - 1.0, forKey: kCIInputBrightnessKey)
 
-                // Composite filters
-                let compositeFilter = CIFilter(name: "CISourceOverCompositing")!
-                compositeFilter.setValue(hueFilter.outputImage, forKey: kCIInputImageKey)
-                compositeFilter.setValue(colorFilter.outputImage, forKey: kCIInputBackgroundImageKey)
+            // Create a composite filter to combine the original and new filters
+            if let hueOutputImage = hueFilter?.outputImage, let colorOutputImage = colorFilter?.outputImage {
+                let compositeFilter = CIFilter(name: "CISourceOverCompositing")
+                compositeFilter?.setValue(colorOutputImage, forKey: kCIInputImageKey)
 
+                // If there's an original filter, apply it before the color adjustment
+                if let originalOutputImage = originalFilter?.outputImage {
+                    compositeFilter?.setValue(originalOutputImage, forKey: kCIInputBackgroundImageKey)
+                }
+
+                // Apply the composite filter back to the effect node
                 effectNode.filter = compositeFilter
             }
         }
     }
 }
-
 

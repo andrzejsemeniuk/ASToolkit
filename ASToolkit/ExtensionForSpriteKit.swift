@@ -380,6 +380,27 @@ public func positionFromScreenRatio          (x:CGFloat,mappingVToY:CGFloat)
         return c
     }
     
+    public func position(atGlobalLocation p: CGPoint) {
+        guard let SCENE = scene else {
+            return
+        }
+        position ?= parent?.convert(p, from: SCENE)
+    }
+    
+    public func reparent(to: SKNode) {
+        move(toParent: to)
+    }
+    
+    public func reparent(to: SKNode, preservingGlobalPositioning: Bool) {
+        if preservingGlobalPositioning, let SCENE = scene {
+            let POSITION1 = self.convert(.zero, to: SCENE)
+            move(toParent: to)
+            position ?= parent?.convert(POSITION1, from: SCENE)
+        } else {
+            move(toParent: to)
+        }
+    }
+    
     public func moveAllChildren(toParent: SKNode, withHiding: Bool) {
         children.forEach {
             $0.move(toParent: toParent)

@@ -22,7 +22,7 @@ import CoreImage
 
 
 
-extension SKNode {
+public extension SKNode {
     
     func applyColorAdjustments(hue: CGFloat, saturation: CGFloat, brightness: CGFloat) {
         // Wrap the node in an SKEffectNode if not already
@@ -55,7 +55,7 @@ extension SKNode {
     }
 }
 
-extension SKEffectNode {
+public extension SKEffectNode {
 
 //    var hue : CGFloat? {
 //        get {

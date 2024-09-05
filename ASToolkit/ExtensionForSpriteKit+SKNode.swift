@@ -18,7 +18,7 @@ import AppKit
 #endif
 
 
-extension SKNode {
+public extension SKNode {
     
     func applyRadialGradient(centerX: CGFloat, centerY: CGFloat, radius: CGFloat, colors: [CIColor]) {
             // Wrap the node in an SKEffectNode if not already
