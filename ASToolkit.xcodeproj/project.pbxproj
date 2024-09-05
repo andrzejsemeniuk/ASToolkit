@@ -84,6 +84,9 @@
 		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
+		57E5865E2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E5865D2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift */; };
+		57E586622C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E586612C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift */; };
+		57E586642C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E586632C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift */; };
 		57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */; };
 		57F0A0CB1F564EE30015169D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CA1F564EE30015169D /* AppDelegate.swift */; };
 		57F0A0CD1F564EE30015169D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CC1F564EE30015169D /* ViewController.swift */; };
@@ -250,6 +253,9 @@
 		57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolForVariable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 		57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUI.swift; sourceTree = "<group>"; };
+		57E5865D2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSpriteKit+SKEffectNode.swift"; sourceTree = "<group>"; };
+		57E586612C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSpriteKit+SKAction.swift"; sourceTree = "<group>"; };
+		57E586632C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSpriteKit+SKNode.swift"; sourceTree = "<group>"; };
 		57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShaderKitExtensions.swift; path = ../ShaderKit/ShaderKitExtensions.swift; sourceTree = "<group>"; };
 		57F0A0C81F564EE30015169D /* ASTookitShowcase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASTookitShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0A0CA1F564EE30015169D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -382,6 +388,9 @@
 				57743A8C20A8DD9C00995F17 /* ExtensionForNSLayoutConstraint.swift */,
 				570FC27E1F1124A300FEAC03 /* ExtensionForOperators.swift */,
 				570FC27F1F1124A300FEAC03 /* ExtensionForSpriteKit.swift */,
+				57E586612C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift */,
+				57E5865D2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift */,
+				57E586632C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift */,
 				57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */,
 				570FC2801F1124A300FEAC03 /* ExtensionForSwiftArray.swift */,
 				57590E3E242423780028BDE2 /* ExtensionForSwiftArraySlice.swift */,
@@ -719,8 +728,10 @@
 				57FBB10A1F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift in Sources */,
 				579346582540649E004D0344 /* ExtensionForSwiftComparable.swift in Sources */,
 				778C9D9A22B16D8E005631C1 /* ExtensionForSwiftSubstring.swift in Sources */,
+				57E586622C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift in Sources */,
 				5732AC332C750A7500EE8620 /* ExtensionForUIFont.swift in Sources */,
 				57760E0927E275E600114F3D /* ExtensionForSwiftData.swift in Sources */,
+				57E5865E2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift in Sources */,
 				57590E3F242423780028BDE2 /* ExtensionForSwiftArraySlice.swift in Sources */,
 				77FB445520C05715002CE0BB /* TokenizedCollection.swift in Sources */,
 				570FC2C01F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift in Sources */,
@@ -754,6 +765,7 @@
 				777B9F3F2088E56800D3FBBD /* FiniteState.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,
 				570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */,
+				57E586642C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift in Sources */,
 				5778C7E91F5743BE00C5F6E6 /* ProtocolKeyable.swift in Sources */,
 				5732AC3D2C750FE600EE8620 /* ExtensionsForSwiftUI.swift in Sources */,
 				57723068251FEAFB0054D12B /* ExtensionForSwiftUI.swift in Sources */,
