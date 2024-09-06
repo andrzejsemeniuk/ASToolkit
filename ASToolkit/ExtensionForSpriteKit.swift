@@ -1360,64 +1360,72 @@ extension SKSpriteNode
 
 
 
-extension SKNode
+public extension SKNode
 {
-    public func run(_ action: SKAction, delay:TimeInterval) {
+    func run(_ action: SKAction, delay:TimeInterval) {
         self.run(aDelayed(delay:delay, action: action))
     }
     
-    public func run(_ action: SKAction, delay:TimeInterval, completion block: @escaping () -> Swift.Void) {
+    func run(_ action: SKAction, delay:TimeInterval, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: action), completion: block)
     }
     
-    public func run(_ action: SKAction, withKey key: String, delay:TimeInterval) {
+    func run(_ action: SKAction, withKey key: String, delay:TimeInterval) {
         self.run(aDelayed(delay:delay, action: action), withKey: key)
     }
     
 
-    public func run(sequence: [SKAction], delay:TimeInterval = 0) {
+    func run(sequence: [SKAction], delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)))
     }
     
-    public func run(sequence: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
+    func run(sequence: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)), completion: block)
     }
     
-    public func run(sequence: [SKAction], withKey key: String, delay:TimeInterval = 0) {
+    func run(sequence: [SKAction], withKey key: String, delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aSequence(sequence)), withKey: key)
     }
     
 
-    public func run(group: [SKAction], delay:TimeInterval = 0) {
+    func run(group: [SKAction], delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aGroup(group)))
     }
     
-    public func run(group: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
+    func run(group: [SKAction], delay:TimeInterval = 0, completion block: @escaping () -> Swift.Void) {
         self.run(aDelayed(delay:delay, action: aGroup(group)), completion: block)
     }
     
-    public func run(group: [SKAction], withKey key: String, delay:TimeInterval = 0) {
+    func run(group: [SKAction], withKey key: String, delay:TimeInterval = 0) {
         self.run(aDelayed(delay:delay, action: aGroup(group)), withKey: key)
     }
     
+    func runAndRemoveFromParent(_ action: SKAction, withKey key: String? = nil, delay:TimeInterval = 0) {
+        if let key {
+            self.run(aDelayed(delay:delay, action: aSequence([action,aRemoveFromParent()])), withKey: key)
+        } else {
+            self.run(aDelayed(delay:delay, action: aSequence([action,aRemoveFromParent()])))
+        }
+    }
     
-    public convenience init(named: String) {
+    
+    convenience init(named: String) {
         self.init()
         self.name = named
     }
     
-    public func pointFromCenter(rx: CGFloat, ry: CGFloat) -> CGPoint {
+    func pointFromCenter(rx: CGFloat, ry: CGFloat) -> CGPoint {
         return CGPoint.init(x: rx * self.frame.size.width + self.frame.size.width/2,
                             y: ry * self.frame.size.height + self.frame.size.height/2)
     }
     
-    public func pointFromFrameOrigin(rx: CGFloat, ry: CGFloat) -> CGPoint {
+    func pointFromFrameOrigin(rx: CGFloat, ry: CGFloat) -> CGPoint {
         return self.frame.origin + CGPoint.init(x: rx * self.frame.size.width, y: ry * self.frame.size.height)
     }
 
 
     @discardableResult
-    public func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
+    func debugAddX(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1460,7 +1468,7 @@ extension SKNode
     }
     
     @discardableResult
-    public func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
+    func debugAddCross(lineWidth:CGFloat = 1, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1503,7 +1511,7 @@ extension SKNode
     }
     
     @discardableResult
-    public func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 0, color:UIColor = .white) -> SKNode
+    func debugAddBorder(lineWidth:CGFloat = 1, corner:CGFloat = 0, color:UIColor = .white) -> SKNode
     {
         if true
         {
@@ -1521,7 +1529,7 @@ extension SKNode
     }
     
     
-    public func children(at: CGPoint, in radius: CGFloat) -> [SKNode] {
+    func children(at: CGPoint, in radius: CGFloat) -> [SKNode] {
         children.filter {
             let r = $0.frame.size.maxSide/2
             let d = $0.position - at
@@ -1536,345 +1544,6 @@ extension SKNode
 
 
 
-
-
-extension SKAction {
-    
-    public func runOn(node:SKNode,delay sec:TimeInterval = 0) -> SKAction {
-        let _ = aRun(on:node,action:self,delay:sec)
-        return self
-    }
-    
-    public func with(timingMode: SKActionTimingMode) -> Self {
-        self.timingMode = timingMode
-        return self
-    }
-
-    public func with(timingFunction: @escaping SKActionTimingFunction) -> Self {
-        self.timingFunction = timingFunction
-        return self
-    }
-    
-    public func configured(timingMode: SKActionTimingMode? = nil, timingFunction: SKActionTimingFunction? = nil) -> Self {
-        self.timingMode ?= timingMode
-        self.timingFunction ?= timingFunction
-        return self
-    }
-
-    public static func wait(_ duration: TimeInterval) -> SKAction {
-        return SKAction.wait(forDuration: duration)
-    }
-    
-    public static func block(_ block: @escaping Block) -> SKAction {
-        return SKAction.run(block)
-    }
-    
-    public static func customAction(withDuration duration: TimeInterval, _ block: @escaping (SKNode, _ elapsedTime: CGFloat, _ elapsedTimeRatio: CGFloat)->Void) -> SKAction {
-        return SKAction.customAction(withDuration: duration) { n,t in
-            block(n,t,CGFloat(t/duration))
-        }
-    }
-    
-    
-    public static func instant(_ block: @escaping Block) -> SKAction {
-        .run(block)
-    }
-
-    public static func instant(_ block: @escaping (SKNode) -> Void) -> SKAction {
-        .customAction(withDuration: 0) { n,_,_ in
-            block(n)
-        }
-    }
-
-    public static func block(_ duration: TimeInterval, _ block: @escaping Block) -> SKAction {
-        .customAction(withDuration: duration, actionBlock: { _,_ in block() })
-    }
-
-    public static func block(_ duration: TimeInterval, _ block: @escaping (CGFloat)->Void) -> SKAction {
-        .customAction(withDuration: duration, { _,_,f in block(f) })
-    }
-
-    public static func block(duration: TimeInterval, _ block: @escaping Block) -> SKAction {
-        .customAction(withDuration: duration, actionBlock: { _,_ in block() })
-    }
-
-    public static func block(duration: TimeInterval, _ block: @escaping (CGFloat)->Void) -> SKAction {
-        .customAction(withDuration: duration, { _,_,f in block(f) })
-    }
-
-}
-
-public extension SKAction {
-    
-    static func test(duration: TimeInterval, timing: SKActionTimingFunction) -> SKAction {
-        .customAction(withDuration: duration) { node,t,T in
-            print("t=\(t), T=\(T), node: \(node)")
-        }
-        //                n.run(.test(duration: 0, timing: { v in v}))
-        //                t=0.0, T=nan, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -79.718399047851562} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:0.70
-        //                n.run(.test(duration: 1, timing: { v in v}))
-        //                t=0.0, T=0.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
-        //                t=0.06002183258533478, T=0.06002183258533478, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
-        //                    ...
-        //                t=0.9854282140731812, T=0.9854282140731812, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
-        //                t=1.0, T=1.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, 130.65599060058594} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.13
-        //                n.run(.test(duration: 0.01, timing: { v in v}))
-        //                t=0.0, T=0.0, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -478.01278686523438} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.11
-        //                t=0.009999999776482582, T=0.9999999776482582, node: <SKSpriteNode> name:'(null)' texture:[<SKTexture> 'image-ui-text-z-capital.png' (124 x 158)] position:{32, -478.01278686523438} scale:{0.10, 0.10} size:{12.40000057220459, 15.800000190734863} anchor:{0.5, 0.5} rotation:-0.11
-    }
-
-    static func transform(_ path: WritableKeyPath<SKNode, CGFloat>, to: CGFloat, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
-        return .customAction(withDuration: duration) { n,d,l in
-            var n = n
-            if l.isNaN || l == 1 {
-                n[keyPath: path] = to
-                n.userDataClear(key)
-            } else if l == 0 {
-                n.userDataSet(key, n[keyPath: path])
-            } else {
-                let from = n.userDataGet(key) as! CGFloat
-                let p = timing(Float(l)).asCGFloat
-                n[keyPath: path] = p.lerp(from: from, to: to)
-            }
-        }
-    }
-
-    static func transform(_ path: WritableKeyPath<SKNode, CGPoint>, to: CGPoint, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
-        return .customAction(withDuration: duration) { n,d,l in
-            var n = n
-            if l.isNaN || l == 1 {
-                n[keyPath: path] = to
-                n.userDataClear(key)
-            } else if l == 0 {
-                n.userDataSet(key, n[keyPath: path])
-            } else {
-                let from = n.userDataGet(key) as! CGPoint
-                let p = timing(Float(l)).asCGFloat
-                n[keyPath: path] = CGPoint.init(p.lerp(from: from.x, to: to.x),p.lerp(from: from.y, to: to.y))
-            }
-        }
-    }
-
-    static func transform(_ path: WritableKeyPath<SKNode, CGFloat>, by: CGFloat, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
-        return .customAction(withDuration: duration) { n,d,l in
-            var n = n
-            if l.isNaN || l == 1 {
-                let from = n.userDataGet(key) as! CGFloat
-                n[keyPath: path] = from + by
-                n.userDataClear(key)
-            } else if l == 0 {
-                n.userDataSet(key, n[keyPath: path])
-            } else {
-                let from = n.userDataGet(key) as! CGFloat
-                let p = timing(Float(l)).asCGFloat
-                n[keyPath: path] = from + p.lerp(0, by)
-            }
-        }
-    }
-
-    static func transform(_ path: WritableKeyPath<SKNode, CGPoint>, by: CGPoint, with key: String, duration: TimeInterval, timing: @escaping SKActionTimingFunction) -> SKAction {
-        return .customAction(withDuration: duration) { n,d,l in
-            var n = n
-            if l.isNaN || l == 1 {
-                let from = n.userDataGet(key) as! CGPoint
-                n[keyPath: path] = from + by
-                n.userDataClear(key)
-            } else if l == 0 {
-                n.userDataSet(key, n[keyPath: path])
-            } else {
-                let from = n.userDataGet(key) as! CGPoint
-                let p = timing(Float(l)).asCGFloat
-                n[keyPath: path] = from + .init(p.lerp(0, by.x), p.lerp(0, by.y))
-            }
-        }
-    }
-
-    static func move(to: CGPoint, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .move(to: to, duration: duration)
-        }
-        return transform(\SKNode.position, to: to, with: "mt", duration: duration, timing: timing)
-    }
-
-    static func moveX(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .moveTo(x: to, duration: duration)
-        }
-        return transform(\SKNode.position.x, to: to, with: "mxt", duration: duration, timing: timing)
-    }
-
-    static func moveY(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .moveTo(y: to, duration: duration)
-        }
-        return transform(\SKNode.position.y, to: to, with: "myt", duration: duration, timing: timing)
-    }
-
-    static func alignX(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction? {
-        guard on.parent != nil else { return nil }
-        let x = on.x(forAlignmentX: to)
-        guard let timing = timing else {
-            return .moveTo(x: x, duration: duration)
-        }
-        return transform(\SKNode.position.x, to: x, with: "pxt", duration: duration, timing: timing)
-    }
-
-    static func alignY(to: CGFloat, on: SKNode, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction? {
-        guard on.parent != nil else { return nil }
-        let y = on.y(forAlignmentY: to)
-        guard let timing = timing else {
-            return .moveTo(y: y, duration: duration)
-        }
-        return transform(\SKNode.position.y, to: y, with: "pyt", duration: duration, timing: timing)
-    }
-
-    static func scaleX(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .scaleX(to: to, duration: duration)
-        }
-        return transform(\SKNode.xScale, to: to, with: "sxt", duration: duration, timing: timing)
-    }
-
-    static func scaleY(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .scaleY(to: to, duration: duration)
-        }
-        return transform(\SKNode.yScale, to: to, with: "syt", duration: duration, timing: timing)
-    }
-
-    static func scale(to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .scale(to: to, duration: duration)
-        }
-        return .group([
-            transform(\SKNode.xScale, to: to, with: "sxt", duration: duration, timing: timing),
-            transform(\SKNode.yScale, to: to, with: "syt", duration: duration, timing: timing)
-        ])
-    }
-
-    static func rotate(toAngle to: CGFloat, duration: TimeInterval, timing: SKActionTimingFunction?) -> SKAction {
-        guard let timing = timing else {
-            return .rotate(toAngle: to, duration: duration)
-        }
-        return transform(\SKNode.zRotation, to: to, with: "zrt", duration: duration, timing: timing)
-    }
-
-
-}
-
-public extension SKAction {
-    
-    // no easing, no acceleration
-    static let timingFunctionForEaseLinear: SKActionTimingFunction = {
-        let t: Float = $0
-        return t
-    }
-    
-    // accelerating from zero velocity
-    static let timingFunctionForEaseInQuad: SKActionTimingFunction = {
-        let t: Float = $0
-        return t*t
-    }
-    
-    // decelerating to zero velocity
-    static let timingFunctionForEaseOutQuad: SKActionTimingFunction = {
-        let t: Float = $0
-        return t*(2-t)
-    }
-    
-    // acceleration until halfway, then deceleration
-    static let timingFunctionForEaseInOutQuad: SKActionTimingFunction = {
-        let t: Float = $0
-        return t<0.5 ? 2*t*t : -1+(4-2*t)*t
-    }
-    
-    // accelerating from zero velocity
-    static let timingFunctionForEaseInCubic: SKActionTimingFunction = {
-        let t: Float = $0
-        return t*t*t
-    }
-    
-    // decelerating to zero velocity
-    static let timingFunctionForEaseOutCubic: SKActionTimingFunction = {
-        let t: Float = $0
-        return (t - 1)*t*t+1
-    }
-    
-    // acceleration until halfway, then deceleration
-    static let timingFunctionForEaseInOutCubic: SKActionTimingFunction = {
-        let t: Float = $0
-        return t<0.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1
-    }
-    
-    // accelerating from zero velocity
-    static let timingFunctionForEaseInQuart: SKActionTimingFunction = {
-        let t: Float = $0
-        return t*t*t*t
-    }
-    
-    // decelerating to zero velocity
-    static let timingFunctionForEaseOutQuart: SKActionTimingFunction = {
-        let t: Float = $0
-        return 1-(t-1)*t*t*t
-    }
-    
-    // acceleration until halfway, then deceleration
-    static let timingFunctionForEaseInOutQuart: SKActionTimingFunction = {
-        let t: Float = $0
-        return t<0.5 ? 8*t*t*t*t : 1-8*(t-1)*t*t*t
-    }
-    
-    // accelerating from zero velocity
-    static let timingFunctionForEaseInQuint: SKActionTimingFunction = {
-        let t: Float = $0
-        return t*t*t*t*t
-    }
-    
-    // decelerating to zero velocity
-    static let timingFunctionForEaseOutQuint: SKActionTimingFunction = {
-        let t: Float = $0
-        return 1+(t-1)*t*t*t*t
-    }
-    
-    // acceleration until halfway, then deceleration
-    static let timingFunctionForEaseInOutQuint: SKActionTimingFunction = {
-        let t: Float = $0
-        return t<0.5 ? 16*t*t*t*t*t : 1+16*(t-1)*t*t*t*t
-    }
-    
-    static let timingFunctionForEaseInSin: SKActionTimingFunction = {
-        let t: Float = $0
-        return 1 + sin(Float.pi / 2 * t - Float.pi / 2)
-    }
-    
-    static let timingFunctionForEaseOutSin : SKActionTimingFunction = {
-        let t: Float = $0
-        return sin(Float.pi / 2 * t)
-    }
-    
-    static let timingFunctionForEaseInOutSin: SKActionTimingFunction = {
-        let t: Float = $0
-        return (1 + sin(Float.pi * t - Float.pi / 2)) / 2
-    }
-    
-    // elastic bounce effect at the beginning
-    static let timingFunctionForEaseInElastic: SKActionTimingFunction = {
-        let t: Float = $0
-        return (0.04 - 0.04 / t) * sin(25 * t) + 1
-    }
-    
-    // elastic bounce effect at the end
-    static let timingFunctionForEaseOutElastic: SKActionTimingFunction = {
-        let t: Float = $0
-        return 0.04 * t / (t - 1) * sin(25 * t)
-    }
-    
-    // elastic bounce effect at the beginning and end
-    static let timingFunctionForEaseInOutElastic: SKActionTimingFunction = {
-        let t: Float = $0
-        return (t < 0.5) ? (0.01 + 0.01 / t) * sin(50 * t) : (0.02 - 0.01 / t) * sin(50 * t) + 1
-    }
-}
 
 
 
