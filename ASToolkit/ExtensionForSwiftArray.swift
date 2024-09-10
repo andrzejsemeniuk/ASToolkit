@@ -1011,6 +1011,20 @@ public extension Array {
             !less(a,b) && !less(b,a)
         }
     }
+    
+    mutating func rotate(amount: Int = 1, until check: (Self)->Bool) {
+        while !check(self) {
+            self.rotate(amount)
+        }
+    }
+    
+    func rotated(amount: Int = 1, until check: (Self)->Bool) -> Self {
+        var R = self
+        while !check(R) {
+            R.rotate(amount)
+        }
+        return R
+    }
 }
 
 public extension Array {
