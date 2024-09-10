@@ -901,7 +901,7 @@ public extension Int
     var isOdd:Bool {
         return self % 2 == 1
     }
-
+    
     func loop(_ block: ()->()) {
         if self > 0 {
             let limit = self
@@ -910,7 +910,7 @@ public extension Int
             }
         }
     }
-
+    
     func loop(_ block: (Int)->()) {
         if self > 0 {
             let limit = self
@@ -919,7 +919,7 @@ public extension Int
             }
         }
     }
-
+    
     func counter(_ block: (Int)->()) {
         let limit = self
         for index in 0..<limit {
@@ -932,15 +932,31 @@ public extension Int
             try transform(i)
         }
     }
-
-    func fractionOfCount(n: Int, _ fallback: Double = 0) -> Double {
-        self > 1 ? n.asDouble / (self - 1).asDouble : fallback
+    
+        //    func fractionOfCount(n: Int, _ fallback: Double = 0) -> Double {
+        //        self > 1 ? n.asDouble / (self - 1).asDouble : fallback
+        //    }
+        //    func fractionOf(n: Int, _ fallback: Double = 0) -> Double {
+        //        self > 0 ? n.asDouble / self.asDouble : fallback
+        //    }
+        //    func fractionOf1(_ fallback: Double = 0) -> Double {
+        //        fractionOf(n: 1, fallback)
+        //    }
+    
+    func fraction(of: Int) -> Double {
+        self.asDouble / of.asDouble
     }
-    func fractionOf(n: Int, _ fallback: Double = 0) -> Double {
-        self > 0 ? n.asDouble / self.asDouble : fallback
+    
+    func fraction(modulo: Int) -> Double {
+        self.modulo(modulo).asDouble / (modulo - 1).asDouble
     }
-    func fractionOf1(_ fallback: Double = 0) -> Double {
-        fractionOf(n: 1, fallback)
+    
+    func fraction(modulo: Int, into: (l: Double, u: Double)) -> Double {
+        into.l + (self.modulo(modulo).asDouble / (modulo - 1).asDouble) * (into.u - into.l)
+    }
+    
+    func modulo(_ n: Int) -> Int {
+        self % n
     }
     
     var asEnumerationArray : [Int] {
