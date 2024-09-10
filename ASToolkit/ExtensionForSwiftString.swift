@@ -1293,3 +1293,9 @@ public extension String {
 }
 
 
+extension String {
+    
+    var asURL : URL? {
+        URL.init(string: self)
+    }
+}
