@@ -69,27 +69,126 @@ public extension SKEffectNode {
 //        }
 //    }
     
-    func filterFor(hue: CGFloat) -> CIFilter {
+    @discardableResult
+    func chained(with: SKEffectNode) -> SKEffectNode {
+        let C = children
+        with.reparent(to: self)
+        C.forEach {
+            $0.reparent(to: with)
+        }
+        return with
+    }
+    
+    @discardableResult
+    func chained(with filter: CIFilter) -> SKEffectNode {
+        chained(with: SKEffectNode.with(filter: filter))
+    }
+    
+    static func with(filter: CIFilter) -> SKEffectNode {
+        let R = SKEffectNode.init()
+        R.filter = filter
+        return R
+    }
+
+    
+    
+        /// @blur in (0,...]
+    static func filterFor(blur: CGFloat) -> CIFilter {
+        let blurFilter = CIFilter(name: "CIGaussianBlur")!
+        blurFilter.setValue(blur, forKey: kCIInputRadiusKey)
+        return blurFilter
+    }
+    
+        /// @hue in [0,1]
+    static func filterFor(hue: CGFloat) -> CIFilter {
         let hueFilter = CIFilter(name: "CIHueAdjust")!
         hueFilter.setValue(hue * .pi * 2, forKey: kCIInputAngleKey) // Scale to [0, 2π] range
         return hueFilter
     }
     
-    func filterFor(saturation: CGFloat) -> CIFilter {
+        /// @saturation in [0,1], 0.5 is unchanging
+    static func filterFor(saturation: CGFloat) -> CIFilter {
         let colorFilter = CIFilter(name: "CIColorControls")!
         colorFilter.setValue(saturation * 2.0, forKey: kCIInputSaturationKey) // Scale to [0,2] range
         return colorFilter
     }
     
-    func filterFor(brightness: CGFloat) -> CIFilter {
+        /// @brightness in [0,1], 0.5 is no change, 0 is completely dark/black, 1 is completely bright/white
+    static func filterFor(brightness: CGFloat) -> CIFilter {
         let colorFilter = CIFilter(name: "CIColorControls")!
         colorFilter.setValue(brightness * 2.0 - 1.0, forKey: kCIInputBrightnessKey) // Scale to [-1,1] range
         return colorFilter
     }
     
+        /// @posterize in (0,n]
+    static func filterFor(posterize level: Int) -> CIFilter {
+        initialized(CIFilter(name: "CIColorPosterize")!) {
+            $0.setValue(level, forKey: "inputLevels")
+        }
+    }
+    
+    static var filterForColorInvert : CIFilter {
+        CIFilter(name: "CIColorInvert")!
+    }
+    
+    static var filterForPhotoEffectChrome : CIFilter {
+        CIFilter(name: "CIPhotoEffectChrome")!
+    }
+    
+    static var filterForPhotoEffectFade : CIFilter {
+        CIFilter(name: "CIPhotoEffectFade")!
+    }
+    
+    static var filterForPhotoEffectInstant : CIFilter {
+        CIFilter(name: "CIPhotoEffectInstant")!
+    }
+    
+    static var filterForPhotoEffectMono : CIFilter {
+        CIFilter(name: "CIPhotoEffectMono")!
+    }
+    
+    static var filterForPhotoEffectNoir : CIFilter {
+        CIFilter(name: "CIPhotoEffectNoir")!
+    }
+    
+    static var filterForPhotoEffectProcess : CIFilter {
+        CIFilter(name: "CIPhotoEffectProcess")!
+    }
+    
+    static var filterForPhotoEffectTonal : CIFilter {
+        CIFilter(name: "CIPhotoEffectTonal")!
+    }
+    
+    static var filterForPhotoEffectTransfer : CIFilter {
+        CIFilter(name: "CIPhotoEffectTransfer")!
+    }
+    
+    static func filterFor(sepiaTone intensity: CGFloat) -> CIFilter {
+        initialized(CIFilter(name: "CISepiaTone")!) {
+            $0.setValue(intensity, forKey: "inputIntensity")
+        }
+    }
+
+    static func filterFor(vignette intensity: CGFloat /* 0.0 */, radius: CGFloat = 1.0) -> CIFilter {
+        initialized(CIFilter(name: "CIVignette")!) {
+            $0.setValue(intensity, forKey: "inputIntensity")
+            $0.setValue(radius, forKey: "inputRadius")
+        }
+    }
+
+    static func filterFor(vignetteEffect intensity: CGFloat /* 0.0 */, radius: CGFloat = 1.0, center: CGPoint) -> CIFilter {
+        initialized(CIFilter(name: "CIVignetteEffect")!) {
+            $0.setValue(intensity, forKey: "inputIntensity")
+            $0.setValue(radius, forKey: "inputRadius")
+            $0.setValue(center, forKey: "inputCenter")
+        }
+    }
+
+    
+    
+    
     @discardableResult
-    func filterFor(hue h: CGFloat? = nil, saturation s: CGFloat? = nil, brightness b: CGFloat? = nil) -> CIFilter? {
-            // Wrap the node in an SKEffectNode if not already
+    static func filterForHSB(hue h: CGFloat? = nil, saturation s: CGFloat? = nil, brightness b: CGFloat? = nil) -> CIFilter? {
         guard h != nil || s != nil || b != nil else {
             return nil
         }
@@ -108,6 +207,7 @@ public extension SKEffectNode {
                 colorFilter.setValue(s * 2.0, forKey: kCIInputSaturationKey) // Scale to [0,2] range
             }
             if let b {
+//                colorFilter.setValue(b, forKey: kCIInputBrightnessKey) // Scale to [-1,1] range
                 colorFilter.setValue(b * 2.0 - 1.0, forKey: kCIInputBrightnessKey) // Scale to [-1,1] range
             }
             compositeFilter.setValue(colorFilter.outputImage, forKey: kCIInputBackgroundImageKey)
@@ -117,26 +217,88 @@ public extension SKEffectNode {
     }
 
     /// Chains a new CIFilter onto the existing filter of the SKEffectNode
-    func add(filter newFilter: CIFilter) {
-        // If there's no existing filter, simply set the new filter
-        if filter == nil {
-            self.filter = newFilter
-        } else if let existingFilter = self.filter {
-            // Create a compositing filter to combine the existing filter and the new one
-            let compositeFilter = CIFilter(name: "CISourceOverCompositing")
-            
-            // Get the output image of the existing filter and the new filter
-            if let existingOutputImage = existingFilter.outputImage, let newOutputImage = newFilter.outputImage {
-                // Set the existing filter's output as the background image in the composite filter
-                compositeFilter?.setValue(existingOutputImage, forKey: kCIInputBackgroundImageKey)
-                
-                // Set the new filter's output as the input image in the composite filter
-                compositeFilter?.setValue(newOutputImage, forKey: kCIInputImageKey)
-                
-                // Set the composite filter as the new filter for the effect node
-                self.filter = compositeFilter
-            }
+    @discardableResult
+    func add(filter newFilter: CIFilter?) -> Bool {
+        guard let newFilter else {
+            return false
         }
+        if let existingFilter = self.filter {
+            guard let compositeFilter = CIFilter(name: "CISourceOverCompositing") else {
+                return false
+            }
+            compositeFilter.setValue(filter?.outputImage, forKey: kCIInputBackgroundImageKey)
+            compositeFilter.setValue(newFilter.outputImage, forKey: kCIInputImageKey)
+            self.filter = compositeFilter
+        } else {
+            self.filter = newFilter
+        }
+        return true
+    }
+
+    @discardableResult
+    static func chainFilters(_ filters: [CIFilter]) -> CIFilter? {
+        guard !filters.isEmpty else { return nil }
+        
+        let compositeFilter = CIFilter(name: "CISourceOverCompositing")!
+        var currentImage: CIImage? = nil
+        
+        for filter in filters {
+            if let currentImage = currentImage {
+                filter.setValue(currentImage, forKey: kCIInputImageKey) // Use previous filter's output
+            }
+            
+            // Update the current image to the new filter's output
+            currentImage = filter.outputImage
+        }
+        
+        // Set the final image on the composite filter
+        compositeFilter.setValue(currentImage, forKey: kCIInputImageKey)
+        
+        return compositeFilter
+    }
+
+    enum ColorAdjustment {
+        case hue(CGFloat)        // [0, 1]
+        case saturation(CGFloat) // [0, 1]
+        case brightness(CGFloat) // [-1, 1]
+    }
+
+    @discardableResult
+    static func filterForColorAdjustments(_ adjustments: [ColorAdjustment]) -> CIFilter? {
+        guard !adjustments.isEmpty else {
+            return nil
+        }
+        
+        // Start with a composite filter
+        let compositeFilter = CIFilter(name: "CISourceOverCompositing")!
+        var currentImage: CIImage? = nil
+        
+        for adjustment in adjustments {
+            let filter: CIFilter
+            switch adjustment {
+            case .hue(let h):
+                filter = CIFilter(name: "CIHueAdjust")!
+                filter.setValue(h * .pi * 2, forKey: kCIInputAngleKey) // Scale to [0, 2π] range
+            case .saturation(let s):
+                filter = CIFilter(name: "CIColorControls")!
+                filter.setValue(s * 2.0, forKey: kCIInputSaturationKey) // Scale to [0, 2] range
+            case .brightness(let b):
+                filter = CIFilter(name: "CIColorControls")!
+                filter.setValue(b * 2.0 - 1.0, forKey: kCIInputBrightnessKey) // Scale to [-1, 1] range
+            }
+            
+            if let currentImage = currentImage {
+                filter.setValue(currentImage, forKey: kCIInputImageKey) // Use previous filter's output
+            }
+            
+            // Update the current image to the new filter's output
+            currentImage = filter.outputImage
+        }
+        
+        // Set the final image on the composite filter
+        compositeFilter.setValue(currentImage, forKey: kCIInputImageKey)
+        
+        return compositeFilter
     }
 
 }
