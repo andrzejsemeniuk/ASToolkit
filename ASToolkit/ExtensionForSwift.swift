@@ -89,6 +89,17 @@ public func assign<T>(value: T?, or block: () throws -> T) throws -> T {
     return try block()
 }
 
+
+@discardableResult
+public func initialized<T>(_ r: T, _ f: (T)->Void) -> T {
+    f(r)
+    return r
+}
+
+
+
+
+
 //public protocol JSONCodable : Codable {
 //    
 //    var encoded : Data! { get }
