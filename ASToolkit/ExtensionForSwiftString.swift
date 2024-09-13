@@ -1092,6 +1092,27 @@ public extension String {
     func padded(by: String) -> String {
         "\(by)\(self)\(by)"
     }
+    func padded(with string: String, front: Bool, length: Int) -> String {
+        var R = self
+        while R.count < length {
+            if front {
+                let NEW = string + R
+                if NEW.count > length {
+                    R = string[0..<(NEW.count - length)] + R
+                } else {
+                    R = string + R
+                }
+            } else {
+                let NEW = string + R
+                if NEW.count > length {
+                    R = R + string[0..<(NEW.count - length)]
+                } else {
+                    R = R + string
+                }
+            }
+        }
+        return R
+    }
     func suffixed(_ with: String, separator: String = "") -> String {
         self + separator + with
     }
