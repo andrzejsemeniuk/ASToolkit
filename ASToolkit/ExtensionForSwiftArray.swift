@@ -494,6 +494,32 @@ extension Array {
 
 public extension Array where Element : Equatable {
     
+    func previousLooped(_ element: Element) -> Element {
+        guard count > 0 else {
+            return element
+        }
+        if let INDEX = firstIndex(of: element) {
+            if INDEX > 0 {
+                return self[INDEX-1]
+            }
+            return last!
+        }
+        return element
+    }
+
+    func nextLooped(_ element: Element) -> Element {
+        guard count > 0 else {
+            return element
+        }
+        if let INDEX = firstIndex(of: element) {
+            if INDEX < count-1 {
+                return self[INDEX+1]
+            }
+            return first!
+        }
+        return element
+    }
+
     func next(after:Element, wrap: Bool = true) -> Element? {
         if let index = self.index(where: { $0 == after }) {
             if index < (count-1) {
@@ -1177,19 +1203,19 @@ public extension Array where Element : Equatable {
     }
     
     
-    func previousLooped(_ e: Element) -> Element! {
-        if let index = firstIndex(of: e) {
-            return index > 0 ? self[index-1] : self.last
-        }
-        return nil //e
-    }
-    
-    func nextLooped(_ e: Element) -> Element! {
-        if let index = firstIndex(of: e) {
-            return index < count-1 ? self[index+1] : self.first
-        }
-        return nil //e
-    }
+//    func previousLooped(_ e: Element) -> Element! {
+//        if let index = firstIndex(of: e) {
+//            return index > 0 ? self[index-1] : self.last
+//        }
+//        return nil //e
+//    }
+//    
+//    func nextLooped(_ e: Element) -> Element! {
+//        if let index = firstIndex(of: e) {
+//            return index < count-1 ? self[index+1] : self.first
+//        }
+//        return nil //e
+//    }
 }
 
 public extension Array where Element : Hashable {

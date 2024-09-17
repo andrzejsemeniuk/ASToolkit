@@ -2492,6 +2492,6 @@ extension CIColor {
         #endif
         
         // Convert UIColor/NSColor to CIColor
-        self.init(color: uiColor)
+        self.init(color: uiColor)!
     }
 }
