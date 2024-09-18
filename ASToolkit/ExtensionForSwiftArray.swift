@@ -168,6 +168,13 @@ public extension Array
         trimmed(to: from)
     }
     
+    func kept(last: Int) -> Array {
+        guard count > last else {
+            return self
+        }
+        return self[count-last..<count].asArray
+    }
+    
     func subarray(from:Int, to:Int) -> Array {
         let to = Swift.min(to,count)
         var result = [Element]()

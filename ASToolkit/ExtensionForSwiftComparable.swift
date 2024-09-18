@@ -97,3 +97,21 @@ func comparingUsingPaths<TYPE,FIRST: Comparable, SECOND: Comparable, THIRD: Comp
     return false
 }
 
+func minimum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
+    if let A {
+        if let B {
+            return Swift.min(A,B)
+        }
+        return A
+    }
+    return B
+}
+func maximum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
+    if let A {
+        if let B {
+            return Swift.max(A,B)
+        }
+        return A
+    }
+    return B
+}

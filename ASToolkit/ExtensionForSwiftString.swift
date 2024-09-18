@@ -657,6 +657,9 @@ public extension String {
     var splitBySlash : [String] {
         split("/")
     }
+    var splitByHash : [String] {
+        split("#")
+    }
     var splitByNewline : [String] {
         split("\n")
     }
