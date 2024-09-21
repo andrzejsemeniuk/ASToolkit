@@ -341,6 +341,14 @@ public extension Date {
         }
     }
     
+    var normalizedToMonth : Date {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: self)
+        components.day = 1
+        return calendar.date(from: components)!
+    }
+    
+    
     var utc : Date {
         self.convertToUTC() ?? self
     }
