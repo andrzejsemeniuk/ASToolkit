@@ -1227,7 +1227,7 @@ public extension Array where Element : Equatable {
 
 public extension Array where Element : Hashable {
     func uniqued() -> Self {
-        Set<Element>.init(self).map { $0 }
+        self.uniqued(on: { $0 })
     }
     func uniquedInOrderKeepingFirst() -> Self {
         var T = Set<Element>.init(self)
