@@ -2483,7 +2483,7 @@ extension SKLabelNode {
 // 8< ----------------------------------------------------------------------------------
 
 extension CIColor {
-    convenience init(swiftUIColor: Color) {
+    convenience init?(swiftUIColor: Color) {
         // Convert SwiftUI Color to UIColor
         #if canImport(UIKit)
         let uiColor = UIColor(swiftUIColor)
@@ -2492,6 +2492,6 @@ extension CIColor {
         #endif
         
         // Convert UIColor/NSColor to CIColor
-        self.init(color: uiColor)!
+        self.init(color: uiColor)
     }
 }
