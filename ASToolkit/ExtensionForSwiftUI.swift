@@ -1710,7 +1710,7 @@ extension View {
 
 
 
-@available(iOS 16,*)
+@available(iOS 16,tvOS 16,*)
 struct FlowLayout: Layout {
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
@@ -1768,5 +1768,51 @@ struct FlowLayout: Layout {
             
             p.x += subSize.width
         }
+    }
+}
+
+func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
+    var R : [String : [String : String]] = [:]
+    
+    for NAME in names {
+        let LETTER0     : String = NAME.at(0)
+        let LETTER1     : String = NAME.count > 1 ? NAME.at(1) : ""
+        let LETTERS01   : String = LETTER0 + LETTER1
+        
+        R[LETTER0, default: [:]][LETTERS01, default: .init()].append(mapper(NAME))
+    }
+    
+    return R
+}
+
+//@available(macOS 14,*)
+//func menuBuilder(from COLLECTION: [String : [String : String]], generator: (_ entry: String) -> some View) -> AnyView {
+//    Group {
+//        let LETTERS0 = COLLECTION.keys.sorted()
+//        ForEach(LETTERS0.range, id: \.self) { i in
+//            let LETTER0 = LETTERS0[i]
+//            let D0 = COLLECTION[LETTER0]!
+//            let SUM = D0.values.asArray.sum {
+//                $0.count
+//            }
+//            Menu(LETTER0 + " /\(SUM)") {
+//                let LETTERS1 = D0.keys.sorted()
+//                ForEach(LETTERS1.range, id: \.self) { ii in
+//                    let LETTER1 = LETTERS1[ii]
+//                    let ENTRYS = D0[LETTER1]!
+//                    Menu(LETTER1 + " /\(ENTRYS.count)") {
+//                        ForEach(ENTRYS.range, id: \.self) { i in
+//                            generator(ENTRYS[i])
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }.asAnyView
+//}
+
+func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some View {
+    VStack(alignment: .leading) {
+        content()
     }
 }
