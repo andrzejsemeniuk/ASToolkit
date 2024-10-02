@@ -1001,7 +1001,7 @@ public struct CGScreen
 	public static var scale                                                    :CGFloat    { return UIScreen.main.scale }
 
 
-	public static func diagonal                (fraction:CGFloat = 1.0)        -> CGFloat  { return Environment.Screen.diagonal(fraction) }
+//	public static func diagonal                (fraction:CGFloat = 1.0)        -> CGFloat  { return Environment.Screen.diagonal(fraction) }
 
     public static func pointFromRatio          (x:CGFloat, y:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,y:y) }
 //	public static func pointFromRatio          (x:CGFloat, mappingVToY:CGFloat)          -> CGPoint  { return bounds.pointFromRatio(x:x,mappingVToY:mappingVToY) }
