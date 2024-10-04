@@ -184,6 +184,14 @@ extension SKNode
         return sprite
     }
     
+    @discardableResult
+    public func addChild <T: SKNode>    (node: T, name: String? = nil)          -> T
+    {
+        addChild(node)
+        node.name ?= name
+        return node
+    }
+    
 //    public func addChildSprite         (imageNamed:String, suffix:String = ".png")                  -> SKSpriteNode
 //    {
 //        let name = SKNode.resolveResourceImageName(name:imageNamed,suffix:suffix)

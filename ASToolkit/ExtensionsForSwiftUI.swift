@@ -1271,3 +1271,12 @@ extension View {
                 .stroke(borderColor, lineWidth: lineWidth))
     }
 }
+
+func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, action: @escaping Block) -> some View {
+    Button(action: {
+        action()
+    }, label: {
+        Icon(name + (selected ? ".fill" : "" ))
+            .foregroundColor(tint ?? .accentColor)
+    })
+}
