@@ -185,10 +185,11 @@ extension SKNode
     }
     
     @discardableResult
-    public func addChild <T: SKNode>    (node: T, name: String? = nil)          -> T
+    public func addChild <T: SKNode>    (node: T, name: String? = nil, initialization: ((T)->Void)? = nil)          -> T
     {
         addChild(node)
         node.name ?= name
+        initialization?(node)
         return node
     }
     

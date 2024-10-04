@@ -1077,6 +1077,28 @@ public extension Int {
     var abs             : Int           { Swift.abs(self) }
 }
 
+public extension UInt8 {
+
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt           : Int           { Int(self) }
+
+    func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    
+}
+
+public extension UInt16 {
+
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt           : Int           { Int(self) }
+
+    func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    
+}
+
 public extension UInt {
 
     var asFloat         : Float         { Float(self) }
