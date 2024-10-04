@@ -69,6 +69,11 @@ public extension SKEffectNode {
 //        }
 //    }
     
+    convenience init(filter: CIFilter) {
+        self.init()
+        self.filter = filter
+    }
+    
     @discardableResult
     func chained(with: SKEffectNode) -> SKEffectNode {
         let C = children
@@ -82,6 +87,12 @@ public extension SKEffectNode {
     @discardableResult
     func chained(with filter: CIFilter) -> SKEffectNode {
         chained(with: SKEffectNode.with(filter: filter))
+    }
+    
+    @discardableResult
+    func with(filter: CIFilter) -> Self {
+        self.filter = filter
+        return self
     }
     
     static func with(filter: CIFilter) -> SKEffectNode {

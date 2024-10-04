@@ -227,6 +227,8 @@ public extension Double {
 
     var asInt           : Int { Int(self) }
     var asInt64         : Int64 { Int64(self) }
+    var asUInt8         : UInt8 { UInt8(self) }
+    var asUInt16        : UInt16 { UInt16(self) }
     var asUInt64        : UInt64 { UInt64(self) }
 //    var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
 //    var asInt64Rounded  : Int64 { self < 0.5 ? Int64(self) : Int64(self) + 1 }
@@ -730,6 +732,8 @@ extension CGFloat : RawRepresentable {
 
 public extension CGFloat {
     var asInt           : Int { Int(self) }
+    var asUInt8         : UInt8 { UInt8(self) }
+    var asUInt16        : UInt16 { UInt16(self) }
     var asIntRounded    : Int { self < 0.5 ? Int(self) : Int(self) + 1 }
     var asFloat         : Float { Float(self) }
     var asDouble        : Double { Double(self) }
@@ -1075,6 +1079,28 @@ public extension Int {
     var formatp         : String        { NSString(format: "%+d", self) as String }
 
     var abs             : Int           { Swift.abs(self) }
+}
+
+public extension UInt8 {
+
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt           : Int           { Int(self) }
+
+    func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    
+}
+
+public extension UInt16 {
+
+    var asFloat         : Float         { Float(self) }
+    var asCGFloat       : CGFloat       { CGFloat(self) }
+    var asDouble        : Double        { Double(self) }
+    var asInt           : Int           { Int(self) }
+
+    func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
+    
 }
 
 public extension UInt {
