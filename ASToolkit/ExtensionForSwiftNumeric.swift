@@ -18,6 +18,7 @@ public extension Numeric where Self : Comparable {
     func         clamped         (_ min: Self, _ max: Self) -> Self       { Swift.max(min,Swift.min(max,self)) }
     var          clamped01       : Self                                   { Swift.max(0,Swift.min(1,self)) }
 
+    var          squared         : Self                                   { self * self }
 }
 
 
