@@ -1252,6 +1252,7 @@ extension View {
 
 
 
+#if os(iOS)
 // https://stackoverflow.com/questions/71744888/view-with-rounded-corners-and-border
 
 struct RoundedCorner: Shape {
@@ -1271,6 +1272,7 @@ extension View {
                 .stroke(borderColor, lineWidth: lineWidth))
     }
 }
+#endif
 
 func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, action: @escaping Block) -> some View {
     Button(action: {
