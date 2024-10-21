@@ -8,11 +8,11 @@
 import Foundation
 
 public enum AnError : Swift.Error {
-    case invalidParameter(String)
-    case isInvalidState(String)
-    case isNil(String)
-    case etc(String)
-    case missing(String)
+    case invalidParameter(any StringProtocol)
+    case isInvalidState(any StringProtocol)
+    case isNil(any StringProtocol)
+    case etc(any StringProtocol)
+    case missing(any StringProtocol)
     
     case valueIsNil
     case decoding, encoding
