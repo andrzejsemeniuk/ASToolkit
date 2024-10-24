@@ -1322,4 +1322,9 @@ extension String {
     var asURL : URL? {
         URL.init(string: self)
     }
+    
+    static func from(_ value: Any?) -> String? {
+        value == nil ? nil : "\(value!)"
+    }
+
 }
