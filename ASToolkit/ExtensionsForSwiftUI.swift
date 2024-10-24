@@ -1282,3 +1282,14 @@ func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, 
             .foregroundColor(tint ?? .accentColor)
     })
 }
+
+
+extension Array {
+    func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
+        Group {
+            ForEach(self.range, id: \.self) { i in
+                f(i,self[i])
+            }
+        }
+    }
+}

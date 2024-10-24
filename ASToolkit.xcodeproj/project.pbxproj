@@ -40,6 +40,7 @@
 		571C6DB621E91F7800E326CC /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C6DB421E91F7800E326CC /* SWXMLHash.swift */; };
 		571C6DB721E91F7800E326CC /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */; };
 		571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */; };
+		572544582CCAC42300AF152A /* ExtensionForCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572544572CCAC42300AF152A /* ExtensionForCoreData.swift */; };
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
 		5732AC302C75006600EE8620 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2E2C75006600EE8620 /* Color.swift */; };
 		5732AC312C75006600EE8620 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2F2C75006600EE8620 /* Error.swift */; };
@@ -198,6 +199,7 @@
 		571C6DB421E91F7800E326CC /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		571C6DB521E91F7800E326CC /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
 		571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationFormatter.swift; sourceTree = "<group>"; };
+		572544572CCAC42300AF152A /* ExtensionForCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForCoreData.swift; sourceTree = "<group>"; };
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
 		5732AC2E2C75006600EE8620 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		5732AC2F2C75006600EE8620 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 				5732AC2F2C75006600EE8620 /* Error.swift */,
 				5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */,
 				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
+				572544572CCAC42300AF152A /* ExtensionForCoreData.swift */,
 				570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */,
 				571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */,
 				570FC2781F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift */,
@@ -767,6 +770,7 @@
 				5756CA3325FD2FDE007719C5 /* ASToolkit.swift in Sources */,
 				579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */,
 				777B9F3F2088E56800D3FBBD /* FiniteState.swift in Sources */,
+				572544582CCAC42300AF152A /* ExtensionForCoreData.swift in Sources */,
 				570FC2B71F1124A300FEAC03 /* ExtensionForSpriteKit.swift in Sources */,
 				570FC2C11F1124A300FEAC03 /* ExtensionForSwiftString.swift in Sources */,
 				57E586642C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift in Sources */,

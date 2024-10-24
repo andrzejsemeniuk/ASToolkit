@@ -642,62 +642,74 @@ extension Array where Element: Collection {
 
 public extension Array where Element: Equatable {
 
-	func index(of:Element) -> Int? {
+    func index(of:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Int? {
 		return self.index(where: { element in
-			return of == element
+			equals(of,element)
 		})
 	}
 
-	func contains(_ element:Element) -> Bool {
-		return self.index(of:element) != nil
+    func contains(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+		return firstIndex(where: { equals(element,$0) }) != nil
 	}
 
-    func missing(_ element:Element) -> Bool {
-        return !contains(element)
+    func missing(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        return !contains(element, equals)
     }
 
-	@discardableResult mutating func remove(_ element:Element) -> Bool {
-		if let index = self.index(of: element) {
+    @discardableResult mutating func remove(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        if let index = self.index(of: element, equals) {
 			_ = self.remove(at: index)
 			return true
 		}
 		return false
 	}
     
-    mutating func toggle(append element: Element) {
-        if contains(element) {
+    mutating func toggle(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if contains(element, equals) {
             remove(element)
         } else {
             append(element)
         }
     }
     
-    mutating func toggle(prepend element: Element) {
-        if contains(element) {
+    mutating func toggle(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if contains(element, equals) {
             remove(element)
         } else {
             prepend(element)
         }
     }
 
-    mutating func enlist(append element: Element) {
-        if missing(element) {
+    mutating func enlist(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if missing(element, equals) {
             append(element)
         }
     }
 
-    mutating func enlist(prepend element: Element) {
-        if missing(element) {
+    mutating func enlist(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if missing(element, equals) {
             prepend(element)
         }
     }
     
+    mutating func append(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        enlist(append: missing, equals)
+    }
+    
+    mutating func prepend(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        enlist(prepend: missing, equals)
+    }
+
+}
+
+public extension Array where Element: Identifiable & Equatable {
+
     mutating func append(missing: Element) {
-        enlist(append: missing)
+        enlist(append: missing, { a,b in a.id == b.id })
     }
     
     mutating func prepend(missing: Element) {
-        enlist(prepend: missing)
+        enlist(prepend: missing, { a,b in a.id == b.id })
     }
 
 }
