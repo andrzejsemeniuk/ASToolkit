@@ -26,6 +26,17 @@ public extension CaseIterable where Self: Equatable, Self.AllCases: Bidirectiona
         return Self.allCases[index]
     }
     
+    func nextLooped(in array: [Self]) -> Self {
+        var NEXT = nextLooped
+        while array.missing(NEXT) {
+            guard NEXT != self else {
+                break
+            }
+            NEXT = NEXT.nextLooped
+        }
+        return NEXT
+    }
+    
     var previousRemaining : [Self] {
         var r : [Self] = []
         var e = self

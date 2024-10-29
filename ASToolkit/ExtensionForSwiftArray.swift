@@ -700,6 +700,43 @@ public extension Array where Element: Equatable {
         enlist(prepend: missing, equals)
     }
 
+    mutating func append(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        missing.forEach {
+            self.append(missing: $0, equals)
+        }
+    }
+    
+    mutating func prepend(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        missing.reversed().forEach {
+            self.prepend(missing: $0, equals)
+        }
+    }
+
+    mutating func distinct() {
+        self.distinct { a,b in
+            a == b
+        }
+    }
+    
+}
+
+public extension Array  {
+    
+    mutating func distinct(_ equals: (Element,Element)->Bool) {
+        var i0 = 0
+        while i0 < count {
+            var i1 = i0 + 1
+            while i1 < count {
+                if equals(self[i1], self[i0]) {
+                    remove(at: i1)
+                } else {
+                    i1 += 1
+                }
+            }
+            i0 += 1
+        }
+    }
+    
 }
 
 public extension Array where Element: Identifiable & Equatable {
