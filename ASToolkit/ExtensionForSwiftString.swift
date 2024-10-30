@@ -603,6 +603,9 @@ public extension Array where Element == String {
     var joinedByPipe : String {
         self.joined(separator: "|")
     }
+    var joinedBy3Pipe : String {
+        self.joined(separator: "|||")
+    }
     var joinedByNewline : String {
         self.joined(separator: "\n")
     }
@@ -653,6 +656,9 @@ public extension String {
     }
     var splitByPipe : [String] {
         split("|")
+    }
+    var splitBy3Pipe : [String] {
+        split("|||")
     }
     var splitBySlash : [String] {
         split("/")
@@ -1312,7 +1318,7 @@ public extension String {
     }
     
     var asSymbolsArray : [String] {
-        self.splitBySpace.map { $0.trimmed() }.filteredOutEmpty().uppercased()
+        self.splitBySpace.map { $0.trimmed() }.filteredOutEmpty.uppercased()
     }
 }
 

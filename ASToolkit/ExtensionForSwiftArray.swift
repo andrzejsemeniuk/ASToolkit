@@ -411,7 +411,7 @@ public extension Array where Element == String {
         map { $0.lowercased() }
     }
     
-    func filteredOutEmpty() -> Self {
+    var filteredOutEmpty : Self {
         filter { $0.isNotEmpty }
     }
     
@@ -698,6 +698,28 @@ public extension Array where Element: Equatable {
     
     mutating func prepend(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
         enlist(prepend: missing, equals)
+    }
+
+    mutating func append(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        removeAll(where: { equals($0,removing) })
+        enlist(append: removing, equals)
+    }
+    
+    mutating func prepend(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        removeAll(where: { equals($0,removing) })
+        enlist(prepend: removing, equals)
+    }
+
+    func appended(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.append(removing: removing, equals)
+        return R
+    }
+    
+    func prepended(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.prepend(removing: removing, equals)
+        return R
     }
 
     mutating func append(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
@@ -1969,7 +1991,7 @@ extension Array : RawRepresentable where Element == Bool {
 public extension Array where Element == String {
     
     var asSymbolsString : String {
-        self.filteredOutEmpty().joinedBySpace
+        self.filteredOutEmpty.joinedBySpace
     }
     
 }

@@ -425,6 +425,20 @@ func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ 
     }
 }
 
+@available(tvOS 17.0, *)
+func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+    Menu(title) {
+        let INCREMENTS = increments.sorted(by: { a,b in b < a })
+        let DECREMENTS = decrements.sorted()
+        INCREMENTS.views { i,V in
+            MenuItemForIncrease(on, increment: V, animate: animate, increase: increase + " by \(V)", after: after).disabled(on.wrappedValue > max)
+        }
+        DECREMENTS.views { i,V in
+            MenuItemForDecrease(on, decrement: V, animate: animate, decrease: decrease + " by \(V)", after: after).disabled(on.wrappedValue < min)
+        }
+    }
+}
+
 
 
 
