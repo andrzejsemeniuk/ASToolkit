@@ -426,16 +426,36 @@ func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ 
 }
 
 @available(tvOS 17.0, *)
-func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
-    Menu(title) {
-        let INCREMENTS = increments.sorted(by: { a,b in b < a })
-        let DECREMENTS = decrements.sorted()
-        INCREMENTS.views { i,V in
+func MenuItemsForIncreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", after: ((T)->Void)? = nil) -> some View {
+    Group {
+        increments.views { i,V in
             MenuItemForIncrease(on, increment: V, animate: animate, increase: increase + " by \(V)", after: after).disabled(on.wrappedValue > max)
         }
-        DECREMENTS.views { i,V in
+    }
+}
+
+@available(tvOS 17.0, *)
+func MenuItemsForDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, decrements: [T], min: T, max: T, animate: Bool = true, decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+    Group {
+        decrements.views { i,V in
             MenuItemForDecrease(on, decrement: V, animate: animate, decrease: decrease + " by \(V)", after: after).disabled(on.wrappedValue < min)
         }
+    }
+}
+
+@available(tvOS 17.0, *)
+func MenuItemsForIncreasesAndDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+    Group {
+        MenuItemsForIncreases(on, increments: increments.sorted(by: { a,b in a > b }), min: min, max: max, animate: animate, increase: increase, after: after)
+        MenuItemsForDecreases(on, decrements: decrements.sorted(by: { a,b in a < b }), min: min, max: max, animate: animate, decrease: decrease, after: after)
+    }
+}
+
+@available(tvOS 17.0, *)
+func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+    Menu(title) {
+        MenuItemsForIncreases(on, increments: increments.sorted(by: { a,b in a > b }), min: min, max: max, animate: animate, increase: increase, after: after)
+        MenuItemsForDecreases(on, decrements: decrements.sorted(by: { a,b in a < b }), min: min, max: max, animate: animate, decrease: decrease, after: after)
     }
 }
 

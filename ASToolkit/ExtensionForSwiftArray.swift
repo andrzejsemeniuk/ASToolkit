@@ -1191,23 +1191,15 @@ public extension Array {
             return d
         })
     }
-    
+ 
+    func asDictionary<K,V>() -> [K:V] where Iterator.Element == (K,V) {
+        self.reduce([:]) {
+            var dict:[K:V] = $0
+            dict[$1.0] = $1.1
+            return dict
+        }
+    }
 }
-
-//public extension Array where Element == (K,V), K: Hashable & Equatable {
-////public extension Array where Element == <K: Hashable & Equatable, V>(K,V) {
-//
-//    func asDictionary<K: Hashable & Equatable,V>() -> [K:V] {
-//        self.map {
-//            f($0.0,$0.1)
-//        }.reduce([:], {
-//            var d = $0
-//            let (k,v) = $1
-//            d[k] = v
-//            return d
-//        })
-//    }
-//}
 
 public extension Array {
     
@@ -1818,6 +1810,15 @@ public extension Array {
         })
     }
 
+//    var firstNonNil<T> : T? where Element == T? {
+    func firstNonNil<T>() -> T? where Element == T? {
+        for e in self {
+            if e != nil {
+                return e
+            }
+        }
+        return nil
+    }
 }
 
 public extension Array {
