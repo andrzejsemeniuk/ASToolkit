@@ -2024,6 +2024,25 @@ public extension Array {
     
 }
 
+public extension Array where Element == Double {
+    
+    func weighted01(transformedFrom01: (Double)->Double = { $0 }) -> [Element : Double] {
+        guard let MINMAX = self.minAndMax else {
+            return [:]
+        }
+        let DELTA = MINMAX.max - MINMAX.min
+        guard DELTA > 0.0 else {
+            return [:]
+        }
+        var R : [Element : Double] = [:]
+        self.forEach {
+            R[$0] = transformedFrom01(($0 - MINMAX.min) / DELTA)
+        }
+        return R
+    }
+    
+}
+
 public extension Array {
     
     func crossed<T>(with other: [T]) -> [(Element,T)] {
