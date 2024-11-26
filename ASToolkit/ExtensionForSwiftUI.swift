@@ -1561,7 +1561,7 @@ public extension Alignment {
 }
 
 
-extension View {
+public extension View {
     func onAppearStartTimer(_ seconds: TimeInterval, _ block: @escaping Block) -> some View {
         self
             .onAppear {
@@ -1586,7 +1586,7 @@ fileprivate var cancellables = Set<AnyCancellable>()
 
 //extension View {
     
-    struct ViewSize : Equatable, Codable {
+public struct ViewSize : Equatable, Codable {
         
         struct Length : Equatable, Codable {
             
@@ -1659,7 +1659,7 @@ fileprivate var cancellables = Set<AnyCancellable>()
     }
     
 
-extension View {
+public extension View {
     
     func frame(size: ViewSize, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
         size.frame(on: self, hfactor: hfactor, vfactor: vfactor)
@@ -1684,11 +1684,11 @@ extension EdgeInsets : RawRepresentable {
 
 // https://stackoverflow.com/questions/57577462/get-width-of-a-view-using-in-swiftui
 
-struct SizeCalculator: ViewModifier {
+public struct SizeCalculator: ViewModifier {
     
     @Binding var size: CGSize
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .background(
                 GeometryReader { proxy in
@@ -1701,7 +1701,7 @@ struct SizeCalculator: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func save(size: Binding<CGSize>) -> some View {
         modifier(SizeCalculator(size: size))
     }
@@ -1711,8 +1711,8 @@ extension View {
 
 
 @available(iOS 16,tvOS 16,*)
-struct FlowLayout: Layout {
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+public struct FlowLayout: Layout {
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
         
         let proposedWidth = proposal.width ?? .infinity
@@ -1743,7 +1743,7 @@ struct FlowLayout: Layout {
         )
     }
     
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
         let rowHeight = subSizes.lazy.map { $0.height }.max() ?? 0
         let proposedWidth = proposal.width ?? .infinity
@@ -1771,7 +1771,7 @@ struct FlowLayout: Layout {
     }
 }
 
-func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
+public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
     var R : [String : [String : String]] = [:]
     
     for NAME in names {
@@ -1811,7 +1811,7 @@ func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String
 //    }.asAnyView
 //}
 
-func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some View {
+public func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some View {
     VStack(alignment: .leading) {
         content()
     }

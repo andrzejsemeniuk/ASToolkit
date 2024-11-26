@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 //import AppKit
 
-func Icon(_ name: String) -> Image {
+public func Icon(_ name: String) -> Image {
     Image(systemName: name)
 }
 
-func Icon(_ name: String, tint: Color) -> some View {
+public func Icon(_ name: String, tint: Color) -> some View {
     Image(systemName: name)
         .foregroundColor(tint)
 }
 
-extension View {
+public extension View {
         //    func navigationTitleInline(_ title: String) -> some View {
         //        self
         //            .navigationTitle(title)
@@ -98,7 +98,7 @@ extension View {
     
 }
 
-extension Text {
+public extension Text {
     
     func fontSize(_ size: CGFloat) -> Text {
         self.font(.system(size: size))
@@ -109,11 +109,11 @@ extension Text {
 // https://stackoverflow.com/questions/63309407/finding-click-location-in-swiftui-on-macos
 
 #if os(iOS) || os(macOS)
-struct ClickGesture: Gesture {
+public struct ClickGesture: Gesture {
     let count: Int
     let coordinateSpace: CoordinateSpace
     
-    typealias Value = SimultaneousGesture<TapGesture, DragGesture>.Value
+    public typealias Value = SimultaneousGesture<TapGesture, DragGesture>.Value
     
     init(count: Int = 1, coordinateSpace: CoordinateSpace = .local) {
         precondition(count > 0, "Count must be greater than or equal to 1.")
@@ -121,7 +121,7 @@ struct ClickGesture: Gesture {
         self.coordinateSpace = coordinateSpace
     }
     
-    var body: SimultaneousGesture<TapGesture, DragGesture> {
+    public var body: SimultaneousGesture<TapGesture, DragGesture> {
         SimultaneousGesture(
             TapGesture(count: count),
             DragGesture(minimumDistance: 0, coordinateSpace: coordinateSpace)
@@ -144,7 +144,7 @@ struct ClickGesture: Gesture {
     }
 }
 
-extension View {
+public extension View {
     func onClickGesture(
         count: Int,
         coordinateSpace: CoordinateSpace = .local,
@@ -195,7 +195,7 @@ extension View {
 //
 //}
 
-extension View {
+public extension View {
     @ViewBuilder var viewInTopLeft : some View {
         VStack {
             HStack {
@@ -279,7 +279,7 @@ extension View {
 }
 
 //func MenuItem(_ text: String, size: FontSize = .m, design: FontDesign = .monospaced, _ action: @escaping Block) -> some View {
-func MenuItemDisabled(_ text: String, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
+public func MenuItemDisabled(_ text: String, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
     Button {
     } label: {
         if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
@@ -291,7 +291,7 @@ func MenuItemDisabled(_ text: String, bold: Bool = false, italic: Bool = false, 
     }.disabled(true)
 }
 
-func RichTextMenuItemDisabled(_ text: LocalizedStringKey, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
+public func RichTextMenuItemDisabled(_ text: LocalizedStringKey, bold: Bool = false, italic: Bool = false, underline: Bool = false) -> some View {
     Button {
     } label: {
         if #available(iOS 16.0, *), #available(tvOS 16.0, *) {
@@ -307,7 +307,7 @@ func RichTextMenuItemDisabled(_ text: LocalizedStringKey, bold: Bool = false, it
 
 
 //func MenuItem(_ text: String, size: FontSize = .m, design: FontDesign = .monospaced, _ action: @escaping Block) -> some View {
-func MenuItem(_ text: String, bold: Bool = false, italic: Bool = false, underline: Bool = false, _ action: @escaping Block) -> some View {
+public func MenuItem(_ text: String, bold: Bool = false, italic: Bool = false, underline: Bool = false, _ action: @escaping Block) -> some View {
     Button {
         action()
     } label: {
@@ -320,7 +320,7 @@ func MenuItem(_ text: String, bold: Bool = false, italic: Bool = false, underlin
     }
 }
 
-func RichTextMenuItem(_ text: LocalizedStringKey, bold: Bool = false, italic: Bool = false, underline: Bool = false, _ action: @escaping Block) -> some View {
+public func RichTextMenuItem(_ text: LocalizedStringKey, bold: Bool = false, italic: Bool = false, underline: Bool = false, _ action: @escaping Block) -> some View {
     Button {
         action()
     } label: {
@@ -333,7 +333,7 @@ func RichTextMenuItem(_ text: LocalizedStringKey, bold: Bool = false, italic: Bo
     }
 }
 
-func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, _ action: @escaping Block) -> some View {
+public func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, _ action: @escaping Block) -> some View {
     Button {
         action()
     } label: {
@@ -343,7 +343,7 @@ func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, _ action: @esc
     }
 }
 
-func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, fill: Bool, _ action: @escaping Block) -> some View {
+public func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, fill: Bool, _ action: @escaping Block) -> some View {
     Button {
         action()
     } label: {
@@ -353,7 +353,7 @@ func RichTextMenuItem(_ text: LocalizedStringKey, _ icon: String, fill: Bool, _ 
     }
 }
 
-func MenuItemCheckmark(on: Binding<Bool>, title: String) -> some View {
+public func MenuItemCheckmark(on: Binding<Bool>, title: String) -> some View {
 //    Picker("", selection: on) {
 //        Text(title).tag(on.wrappedValue)
 //    }
@@ -362,14 +362,14 @@ func MenuItemCheckmark(on: Binding<Bool>, title: String) -> some View {
     }
 }
 
-func MenuItemCheckmark(_ title: String, _ on: Binding<Bool>) -> some View {
+public func MenuItemCheckmark(_ title: String, _ on: Binding<Bool>) -> some View {
 //    MenuItemCheckmark(on: on, title: title)
     MenuItem("\(title) \(on.wrappedValue ? "\u{2611}" : "\u{2610}")") {
         on.wrappedValue.flip()
     }
 }
 
-func MenuItemCheckmark(_ on: Binding<Bool>, _ title: String, _ action: Block? = nil) -> some View {
+public func MenuItemCheckmark(_ on: Binding<Bool>, _ title: String, _ action: Block? = nil) -> some View {
 //    MenuItemCheckmark(on: on, title: title)
     MenuItem("\(on.wrappedValue ? "\u{2611}" : "\u{2610}") \(title)") {
         on.wrappedValue.flip()
@@ -378,14 +378,14 @@ func MenuItemCheckmark(_ on: Binding<Bool>, _ title: String, _ action: Block? = 
 }
 
 
-func MenuItemCheckmark(_ on: Bool, _ title: String, _ action: @escaping (Bool)->Void) -> some View {
+public func MenuItemCheckmark(_ on: Bool, _ title: String, _ action: @escaping (Bool)->Void) -> some View {
 //    MenuItemCheckmark(on: on, title: title)
     MenuItem("\(on ? "\u{2611}" : "\u{2610}") \(title)") {
         action(on.flipped())
     }
 }
 
-func MenuItemForVisibility(title: String = "", _ on: Binding<Bool>, animate: Bool = true, hide: String = "Hide", show: String = "Show", after: ((Bool)->Void)? = nil) -> some View {
+public func MenuItemForVisibility(title: String = "", _ on: Binding<Bool>, animate: Bool = true, hide: String = "Hide", show: String = "Show", after: ((Bool)->Void)? = nil) -> some View {
     MenuItem("\(on.wrappedValue ? hide : show) \(title)") {
         if animate {
             withAnimation {
@@ -399,7 +399,7 @@ func MenuItemForVisibility(title: String = "", _ on: Binding<Bool>, animate: Boo
     }
 }
 
-func MenuItemForIncrease<T: SignedNumeric>(title: String = "", _ on: Binding<T>, increment: T, animate: Bool = true, increase: String = "Increase", after: ((T)->Void)? = nil) -> some View {
+public func MenuItemForIncrease<T: SignedNumeric>(title: String = "", _ on: Binding<T>, increment: T, animate: Bool = true, increase: String = "Increase", after: ((T)->Void)? = nil) -> some View {
     MenuItem("\(increase) \(title)") {
         if animate {
             withAnimation {
@@ -413,12 +413,12 @@ func MenuItemForIncrease<T: SignedNumeric>(title: String = "", _ on: Binding<T>,
     }
 }
 
-func MenuItemForDecrease<T: SignedNumeric & Comparable>(title: String = "", _ on: Binding<T>, decrement: T, animate: Bool = true, decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+public func MenuItemForDecrease<T: SignedNumeric & Comparable>(title: String = "", _ on: Binding<T>, decrement: T, animate: Bool = true, decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     MenuItemForIncrease(title: title, on, increment: -abs(decrement), animate: animate, increase: decrease, after: after)
 }
 
 @available(tvOS 17.0, *)
-func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increment: T, decrement: T, min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+public func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increment: T, decrement: T, min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     Menu(title) {
         MenuItemForIncrease(on, increment: increment, animate: animate, increase: increase, after: after).disabled(on.wrappedValue > max)
         MenuItemForDecrease(on, decrement: decrement, animate: animate, decrease: decrease, after: after).disabled(on.wrappedValue < min)
@@ -426,7 +426,7 @@ func MenuForIncreaseAndDecrease<T: SignedNumeric & Comparable>(title: String, _ 
 }
 
 @available(tvOS 17.0, *)
-func MenuItemsForIncreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", after: ((T)->Void)? = nil) -> some View {
+public func MenuItemsForIncreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", after: ((T)->Void)? = nil) -> some View {
     Group {
         increments.views { i,V in
             MenuItemForIncrease(on, increment: V, animate: animate, increase: increase + " by \(V)", after: after).disabled(on.wrappedValue > max)
@@ -435,7 +435,7 @@ func MenuItemsForIncreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, incr
 }
 
 @available(tvOS 17.0, *)
-func MenuItemsForDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, decrements: [T], min: T, max: T, animate: Bool = true, decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+public func MenuItemsForDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, decrements: [T], min: T, max: T, animate: Bool = true, decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     Group {
         decrements.views { i,V in
             MenuItemForDecrease(on, decrement: V, animate: animate, decrease: decrease + " by \(V)", after: after).disabled(on.wrappedValue < min)
@@ -444,7 +444,7 @@ func MenuItemsForDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, decr
 }
 
 @available(tvOS 17.0, *)
-func MenuItemsForIncreasesAndDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+public func MenuItemsForIncreasesAndDecreases<T: SignedNumeric & Comparable>(_ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     Group {
         MenuItemsForIncreases(on, increments: increments.sorted(by: { a,b in a > b }), min: min, max: max, animate: animate, increase: increase, after: after)
         MenuItemsForDecreases(on, decrements: decrements.sorted(by: { a,b in a < b }), min: min, max: max, animate: animate, decrease: decrease, after: after)
@@ -452,7 +452,7 @@ func MenuItemsForIncreasesAndDecreases<T: SignedNumeric & Comparable>(_ on: Bind
 }
 
 @available(tvOS 17.0, *)
-func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
+public func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, _ on: Binding<T>, increments: [T], decrements: [T], min: T, max: T, animate: Bool = true, increase: String = "Increase", decrease: String = "Decrease", after: ((T)->Void)? = nil) -> some View {
     Menu(title) {
         MenuItemsForIncreases(on, increments: increments.sorted(by: { a,b in a > b }), min: min, max: max, animate: animate, increase: increase, after: after)
         MenuItemsForDecreases(on, decrements: decrements.sorted(by: { a,b in a < b }), min: min, max: max, animate: animate, decrease: decrease, after: after)
@@ -469,7 +469,7 @@ func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, 
 
 
 
-@ViewBuilder func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, spacing: CGFloat, dash: [CGFloat] = []) -> some View {
+@ViewBuilder public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, spacing: CGFloat, dash: [CGFloat] = []) -> some View {
     GeometryReader { geometry in
         Path { path in
             let t2 = thickness/2
@@ -495,11 +495,11 @@ func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: String, 
     .foregroundColor(color)
 }
 
-@ViewBuilder func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
+@ViewBuilder public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
     stripes(vertical: vertical, color: color, thickness: thickness, spacing: thickness * 2, dash: dash)
 }
 
-@ViewBuilder func dots(color: Color = .white, thickness: CGFloat, spacing: CGFloat) -> some View {
+@ViewBuilder public func dots(color: Color = .white, thickness: CGFloat, spacing: CGFloat) -> some View {
     GeometryReader { geometry in
         Path { path in
             let t2 = thickness/2
@@ -600,7 +600,7 @@ extension Binding where Value : RawRepresentable<String> {
 }
 
 
-func layoutAsLines<T>(line limit: Int, _ count: (T)->Int, values: [T]) -> [[T]] {
+public func layoutAsLines<T>(line limit: Int, _ count: (T)->Int, values: [T]) -> [[T]] {
     var r : [[T]] = []
     var length = 0
     var line : [T] = []
@@ -973,15 +973,15 @@ public extension String {
 //    }
 //}
 
-func forEachElements(from E: [any ExpressibleByStringInterpolation]) -> [String] {
+public func forEachElements(from E: [any ExpressibleByStringInterpolation]) -> [String] {
     E.enumerated().map { i,e in "\(i)|\(e)" }
 }
 
-func forEachElements(from E: [CustomStringConvertible]) -> [String] {
+public func forEachElements(from E: [CustomStringConvertible]) -> [String] {
     E.enumerated().map { i,e in "\(i)|\(e)" }
 }
 
-func forEachElementsIndex(from E: String) -> Int {
+public func forEachElementsIndex(from E: String) -> Int {
     E.splitByPipe[0].asInt!
 }
 
@@ -1000,7 +1000,7 @@ func forEachElementsIndex(from E: String) -> Int {
 
 // from https://swiftui-lab.com/a-powerful-combo/
 @available(macOS 13.0, *)
-extension View {
+public extension View {
     func trackingMouse(onMove: @escaping (NSPoint) -> Void) -> some View {
         TrackinAreaView(onMove: onMove) { self }
     }
@@ -1061,11 +1061,11 @@ struct TrackingAreaRepresentable<Content>: NSViewRepresentable where Content: Vi
     let onMove: (NSPoint) -> Void
     let content: Content
     
-    func makeNSView(context: Context) -> NSHostingView<Content> {
+    public func makeNSView(context: Context) -> NSHostingView<Content> {
         return TrackingNSHostingView(onMove: onMove, rootView: self.content)
     }
     
-    func updateNSView(_ nsView: NSHostingView<Content>, context: Context) {
+    public func updateNSView(_ nsView: NSHostingView<Content>, context: Context) {
         
     }
 }
@@ -1090,19 +1090,19 @@ class TrackingNSHostingView<Content>: NSHostingView<Content> where Content : Vie
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupTrackingArea() {
+    public func setupTrackingArea() {
         let options: NSTrackingArea.Options = [.mouseMoved, .activeAlways, .inVisibleRect]
         self.addTrackingArea(NSTrackingArea.init(rect: .zero, options: options, owner: self, userInfo: nil))
     }
         
-    override func mouseMoved(with event: NSEvent) {
+    override public func mouseMoved(with event: NSEvent) {
         self.onMove(self.convert(event.locationInWindow, from: nil))
     }
 }
 
 extension View {
 
-    func onMouseWheel(_ action: @escaping (NSEvent)->Void) -> some View {
+    public func onMouseWheel(_ action: @escaping (NSEvent)->Void) -> some View {
         let KEY = String.random(length: 16)
         return self
             .onAppear {
@@ -1125,7 +1125,7 @@ var globalStorage : [String : Any] = [:]
 #if os(iOS) || os(macOS)
 extension View {
     
-    func onDragGesture(minimumDistance: CGFloat = 0, changed: @escaping (DragGesture.Value)->Void, ended: @escaping (DragGesture.Value)->Void) -> some View {
+    public func onDragGesture(minimumDistance: CGFloat = 0, changed: @escaping (DragGesture.Value)->Void, ended: @escaping (DragGesture.Value)->Void) -> some View {
         self.gesture(DragGesture.init(minimumDistance: minimumDistance)
             .onChanged { value in
                 changed(value)
@@ -1185,13 +1185,13 @@ extension View {
 struct ScrollOffsetPreferenceKey: PreferenceKey {
     static var defaultValue: CGPoint = .zero
     
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
+    static public func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
     }
 }
 
 extension View {
     
-    func viewInScrollViewTrackingPosition(_ axes: Axis.Set, showsIndicators: Bool = false, position: Binding<CGPoint>) -> some View {
+    public func viewInScrollViewTrackingPosition(_ axes: Axis.Set, showsIndicators: Bool = false, position: Binding<CGPoint>) -> some View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             self
                 .background(GeometryReader { geometry in
@@ -1205,11 +1205,11 @@ extension View {
         .coordinateSpace(name: "scroll-view")
     }
     
-    func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
+    public func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
         viewInScrollViewTrackingPosition(.horizontal, showsIndicators: showsIndicators, position: position)
     }
     
-    func viewInScrollViewVerticalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
+    public func viewInScrollViewVerticalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
         viewInScrollViewTrackingPosition(.vertical, showsIndicators: showsIndicators, position: position)
     }
     
@@ -1219,20 +1219,20 @@ extension View {
 struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+    static public func reduce(value: inout CGSize, nextValue: () -> CGSize) {
     }
 }
 
 struct FramePreferenceKey: PreferenceKey {
     static var defaultValue: CGRect = .init()
     
-    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
+    static public func reduce(value: inout CGRect, nextValue: () -> CGRect) {
     }
 }
 
 extension View {
     
-    func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
+    public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             self
                 .background(GeometryReader { geometry in
@@ -1246,18 +1246,18 @@ extension View {
         .coordinateSpace(name: "scroll-view")
     }
     
-    func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
+    public func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
         viewInScrollViewTrackingFrame(.horizontal, showsIndicators: showsIndicators, frame: frame)
     }
     
-    func viewInScrollViewVerticalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
+    public func viewInScrollViewVerticalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
         viewInScrollViewTrackingFrame(.vertical, showsIndicators: showsIndicators, frame: frame)
     }
     
 }
 
 extension View {
-    func viewTrackingSize(size: Binding<CGSize>) -> some View {
+    public func viewTrackingSize(size: Binding<CGSize>) -> some View {
         self
             .background(GeometryReader { geometry in
                 Color.clear
@@ -1270,7 +1270,7 @@ extension View {
 }
 
 //extension View {
-//    func viewTrackingFrame(frame: Binding<CGRect>) -> some View {
+//    public func viewTrackingFrame(frame: Binding<CGRect>) -> some View {
 //        let NAME = Date.now.asString
 //        return self
 //            .coordinateSpace(name: NAME)
@@ -1293,14 +1293,14 @@ struct RoundedCorner: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
     
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
         return Path(path.cgPath)
     }
 }
 
 extension View {
-    func borderWithRoundedCorner(lineWidth: CGFloat, borderColor: Color, radius: CGFloat, corners: UIRectCorner) -> some View {
+    public func borderWithRoundedCorner(lineWidth: CGFloat, borderColor: Color, radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners) )
             .overlay(RoundedCorner(radius: radius, corners: corners)
                 .stroke(borderColor, lineWidth: lineWidth))
@@ -1308,7 +1308,7 @@ extension View {
 }
 #endif
 
-func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, action: @escaping Block) -> some View {
+public func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, action: @escaping Block) -> some View {
     Button(action: {
         action()
     }, label: {
@@ -1318,8 +1318,8 @@ func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? = nil, 
 }
 
 
-extension Array {
-    func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
+public extension Array {
+    public func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
         Group {
             ForEach(self.range, id: \.self) { i in
                 f(i,self[i])

@@ -402,7 +402,7 @@ public func positionFromScreenRatio          (x:CGFloat,mappingVToY:CGFloat)
     
     public func reparent(to: SKNode, preservingGlobalPositioning: Bool) {
         if preservingGlobalPositioning, let SCENE = scene {
-            let POSITION1 = self.convert(.zero, to: SCENE)
+            let POSITION1 = self.convert(CGPoint.zero, to: SCENE)
             move(toParent: to)
             position ?= parent?.convert(POSITION1, from: SCENE)
         } else {

@@ -1177,6 +1177,8 @@ public extension String {
     }
     
     static let ABCDEFGHIJKLMNOPQRSTUVWXYZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    static let AEIOUY = "AEIOUY"
+    static let BCDFGHJKLMNPQRSTVWXZ = "BCDFGHJKLMNPQRSTVWXZ"
     
     func cased(uppercased: Bool) -> Self {
         uppercased ? self.uppercased() : self.lowercased()

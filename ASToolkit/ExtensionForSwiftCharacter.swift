@@ -18,6 +18,10 @@ extension Character
         
         return scalars[scalars.startIndex].value
     }
+    
+    public var asString : String {
+        String(self)
+    }
 }
 
 extension Array where Element == Character {
