@@ -1196,7 +1196,7 @@ public extension Array {
 
 public extension Array {
     
-    func asDictionary<K: Hashable & Equatable,V>(_ f: (Element)->(K,V)) -> [K:V] {
+    func asDictionary<K: Hashable,V>(_ f: (Element)->(K,V)) -> [K:V] {
         self.map {
             f($0)
         }.reduce([:], {
@@ -1736,6 +1736,15 @@ public extension Array where Element : Hashable {
             indices[e] ?? fallback
         }
     }
+    
+    var counts : [Element : Int] {
+        var R : [Element : Int] = [:]
+        self.forEach { e in
+            R[e, default: 0] += 1
+        }
+        return R
+    }
+
 }
 
 
