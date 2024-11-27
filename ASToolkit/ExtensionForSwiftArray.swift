@@ -907,13 +907,13 @@ extension Array {
 public extension Array {
     
     var random : Element {
-        return self[ randomIndex ]
+        self[ randomIndex ]
     }
 
     var pick : Element {
-        return random
+        random
     }
-
+    
     var randomIndex : Int {
         return Int.random(n: UInt32(count))
     }
@@ -926,6 +926,21 @@ public extension Array {
     func element(some: Int) -> Element {
         self[some % count]
     }
+    
+    
+    func pick(using g: inout RandomNumberGenerator) -> Element {
+        self[ randomIndex(using: &g) ]
+    }
+
+    func picked(using g: inout RandomNumberGenerator) -> Self {
+        self.shuffled(using: &g).kept(to: count)
+    }
+
+    func randomIndex(using g: inout RandomNumberGenerator) -> Int {
+        g.next(upperBound: count.asUInt32).asInt
+    }
+    
+
 }
 
 

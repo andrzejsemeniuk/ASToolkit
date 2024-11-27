@@ -1,19 +1,19 @@
-//
-//  ExtensionForSwiftUI.swift
-//  ASToolkit
-//
-//  Created by andrzej semeniuk on 11/14/19.
-//  Copyright © 2019 Andrzej Semeniuk. All rights reserved.
-//
+    //
+    //  ExtensionForSwiftUI.swift
+    //  ASToolkit
+    //
+    //  Created by andrzej semeniuk on 11/14/19.
+    //  Copyright © 2019 Andrzej Semeniuk. All rights reserved.
+    //
 
 import SwiftUI
-//import UIKit
+    //import UIKit
 import SpriteKit
 import Combine
 
 @available(iOS 13, *)
 public extension View {
-   
+    
     var inZStack : some View {
         ZStack {
             self
@@ -27,7 +27,7 @@ public extension View {
     var _av : AnyView {
         AnyView.init(self)
     }
-
+    
     func padding(top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat) -> some View {
         self.padding(EdgeInsets.init(top: top, leading: leading, bottom: bottom, trailing: trailing))
     }
@@ -80,24 +80,24 @@ public extension View {
 
 @available(iOS 13, *)
 public extension Text {
-    //    public func fontSize(_ size: CGFloat?) -> Text {
-    //        if let size = size {
-    //            self.font()
-    //        }
-    //        return self
-    //    }
+        //    public func fontSize(_ size: CGFloat?) -> Text {
+        //        if let size = size {
+        //            self.font()
+        //        }
+        //        return self
+        //    }
 }
 
 @available(iOS 13, *)
 public extension View {
-
+    
     func fxBlur(radius: CGFloat) -> some View {
         self.blur(radius: radius)
     }
     func fxBlur(radius: CGFloat, opaque: Bool) -> some View {
         self.blur(radius: radius, opaque: opaque)
     }
-
+    
 }
 
 @available(iOS 13, *)
@@ -112,18 +112,18 @@ public extension View {
         miterLimit  : CGFloat = 10,
         dash        : [CGFloat] = [CGFloat](),
         dashPhase   : CGFloat = 0) -> some View {
-        
-        self.overlay(RoundedRectangle.init(cornerRadius: corner)
-            .strokeBorder(style: StrokeStyle.init(lineWidth     : lineWidth,
-                                                  lineCap       : lineCap,
-                                                  lineJoin      : lineJoin,
-                                                  miterLimit    : miterLimit,
-                                                  dash          : dash,
-                                                  dashPhase     : dashPhase))
-            .foregroundColor(lineColor)
-        )
-        
-    }
+            
+            self.overlay(RoundedRectangle.init(cornerRadius: corner)
+                .strokeBorder(style: StrokeStyle.init(lineWidth     : lineWidth,
+                                                      lineCap       : lineCap,
+                                                      lineJoin      : lineJoin,
+                                                      miterLimit    : miterLimit,
+                                                      dash          : dash,
+                                                      dashPhase     : dashPhase))
+                    .foregroundColor(lineColor)
+            )
+            
+        }
     
     func border(
         corner      : CGFloat = 0,
@@ -134,17 +134,17 @@ public extension View {
         miterLimit  : CGFloat = 10,
         dash        : [CGFloat] = [CGFloat](),
         dashPhase   : CGFloat = 0) -> some View {
-        
-        self.overlay(RoundedRectangle.init(cornerRadius: corner)
-            .stroke(lineColor, style: StrokeStyle.init(lineWidth     : lineWidth,
-                                                       lineCap       : lineCap,
-                                                       lineJoin      : lineJoin,
-                                                       miterLimit    : miterLimit,
-                                                       dash          : dash,
-                                                       dashPhase     : dashPhase))
-        )
-        
-    }
+            
+            self.overlay(RoundedRectangle.init(cornerRadius: corner)
+                .stroke(lineColor, style: StrokeStyle.init(lineWidth     : lineWidth,
+                                                           lineCap       : lineCap,
+                                                           lineJoin      : lineJoin,
+                                                           miterLimit    : miterLimit,
+                                                           dash          : dash,
+                                                           dashPhase     : dashPhase))
+            )
+            
+        }
     
     func border(
         color       : Color,
@@ -154,20 +154,20 @@ public extension View {
     ) -> some View {
         self.borderRectangle(corner: 0, lineColor: color, lineWidth: thickness, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: dash, dashPhase: phase)
     }
-
+    
     func frameUnbounded() -> some View {
-        //        return self.edgesIgnoringSafeArea(.all)
-        //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            //        return self.edgesIgnoringSafeArea(.all)
+            //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     func frame(_ w: CGFloat, _ h: CGFloat) -> some View {
         frame(width: w, height: h)
     }
-
+    
 }
 
-//@available(iOS 13, *)
+    //@available(iOS 13, *)
 public extension Color {
     
     init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
@@ -181,7 +181,7 @@ public extension Color {
     init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(RGBA rgba: [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
     init(RGB rgb  : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
-
+    
     static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
     static func hsba    (_ h: Double, _ s: Double, _ b: Double, _ a: Double)            -> Color { Color.init(hsba: [h,s,b,a]) }
     static func hsb     (_ hsb      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsb: hsb, opacity: opacity) }
@@ -191,9 +191,9 @@ public extension Color {
     static func hue     (_ hue      : Double, opacity: Double = 1)                      -> Color { Color.init(hue: hue, opacity: opacity) }
     static func rgba    (_ rgba     : [Double])                                         -> Color { Color.init(rgba: rgba) }
     static func rgb     (_ rgb      : [Double], opacity: Double = 1)                    -> Color { Color.init(rgb: rgb, opacity: opacity) }
-
+    
     init(white: Double, alpha: Double)                              { self.init(rgba: [white,white,white,alpha]) }
-
+    
     static let whites : [Color] = [
         .init(white: 1, alpha: 0.05),
         .init(white: 1, alpha: 0.1),
@@ -270,16 +270,16 @@ public extension Color {
     
     var name : String { self.description }
     
-    #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
     func uiColor(_ c: UIColor = .white) -> UIKit.UIColor {
         UIColor(self)
-//        if let rgba = name.rgba {
-//            return UIKit.UIColor.init(r: CGFloat(rgba.r) / CGFloat(255.0) , g: CGFloat(rgba.g) / CGFloat(255.0) , b: CGFloat(rgba.b) / CGFloat(255.0) , a: CGFloat(rgba.a) / CGFloat(255.0) )
-//        } else {
-//            return c
-//        }
+            //        if let rgba = name.rgba {
+            //            return UIKit.UIColor.init(r: CGFloat(rgba.r) / CGFloat(255.0) , g: CGFloat(rgba.g) / CGFloat(255.0) , b: CGFloat(rgba.b) / CGFloat(255.0) , a: CGFloat(rgba.a) / CGFloat(255.0) )
+            //        } else {
+            //            return c
+            //        }
     }
-
+    
     func asUIColor(_ c: UIColor = .white) -> UIKit.UIColor {
         uiColor(c)
     }
@@ -287,27 +287,27 @@ public extension Color {
     var hsva : [Double] {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
-
+    
     var hsba : [Double] {
         self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
     }
-    #endif
+#endif
     
     var asSKColor : SKColor {
         SKColor.init(hsba: self.hsba.asArrayOfCGFloat)
     }
     
-    #if os(macOS)
+#if os(macOS)
     func nsColor() -> NSColor {
         NSColor(self)
     }
-
+    
     var asNSColor : NSColor {
-//        NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self).usingColorSpace(.extendedSRGB) ?? NSColor(self).usingColorSpace(.genericRGB) ?? NSColor(self)
-//        NSColor(self) // crash during getHue() for some colors ... requires setting colorspace
+            //        NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self).usingColorSpace(.extendedSRGB) ?? NSColor(self).usingColorSpace(.genericRGB) ?? NSColor(self)
+            //        NSColor(self) // crash during getHue() for some colors ... requires setting colorspace
         NSColor(self).usingColorSpace(.deviceRGB)!
-//        NSColor(self).usingColorSpace(.extendedSRGB)!
-//        NSColor(self).usingColorSpace(.genericRGB)!
+            //        NSColor(self).usingColorSpace(.extendedSRGB)!
+            //        NSColor(self).usingColorSpace(.genericRGB)!
     }
     
     var hsva : [Double] {
@@ -317,17 +317,17 @@ public extension Color {
         var a : CGFloat = 1
         asNSColor.getHue(&h, saturation: &s, brightness: &v, alpha: &a) // crash if NSColor has not set colorspace
         
-//        https://stackoverflow.com/questions/15682923/convert-nscolor-to-rgb
-//        NSColor *testColor = [[NSColor colorWithCalibratedWhite:0.65 alpha:1.0] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+            //        https://stackoverflow.com/questions/15682923/convert-nscolor-to-rgb
+            //        NSColor *testColor = [[NSColor colorWithCalibratedWhite:0.65 alpha:1.0] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
         
         return [h,s,v,a]
     }
-
+    
     var hsba : [Double] {
         hsva
     }
-    #endif
-
+#endif
+    
     var isBlack : Bool {
         name == "black"
     }
@@ -358,7 +358,7 @@ public extension Color {
         public var asArrayOfDouble      : [Double]      { [h,s,b,a].asArrayOfDouble }
         public var asArrayOfCGFloat     : [CGFloat]     { [h,s,b,a] }
         public var asString             : String        { "\(h),\(s),\(b),\(a)" }
-
+        
         public init(h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1) {
             self.h = h
             self.s = s
@@ -386,14 +386,14 @@ public extension Color {
         }
         
         public init(hsba: [Double]) {
-//            print("0 Color.HSBA.init(hsba: \(hsba))")
+                //            print("0 Color.HSBA.init(hsba: \(hsba))")
             h = hsba[0].asCGFloat.clampedTo01
             s = hsba[1].asCGFloat.clampedTo01
             b = hsba[2].asCGFloat.clampedTo01
             a = hsba[3].asCGFloat.clampedTo01
-//            print("1 Color.HSBA.init(hsba: \(hsba)), hsba=\(h),\(s),\(b),\(a)")
+                //            print("1 Color.HSBA.init(hsba: \(hsba)), hsba=\(h),\(s),\(b),\(a)")
         }
-
+        
         public init(hsb: [Double], a alpha: CGFloat = 1) {
             print("0 Color.HSBA.init(hsb: \(hsb))")
             h = hsb[0].asCGFloat.clampedTo01
@@ -402,18 +402,18 @@ public extension Color {
             a = alpha.clampedTo01
             print("1 Color.HSBA.init(hsb: \(hsb)), hsba=\(h),\(s),\(b),\(a)")
         }
-
+        
         public static let clear     : HSBA = .init(white: 1, alpha: 0)
         public static let black     : HSBA = .init(white: 0, alpha: 0)
         public static let white     : HSBA = .init(white: 1, alpha: 1)
-
+        
         public static func white(_ value: CGFloat, opacity: CGFloat) -> HSBA {
             .init(white: value, alpha: opacity)
         }
         public static func white(_ value: CGFloat, alpha: CGFloat) -> HSBA {
             .init(white: value, alpha: alpha)
         }
-
+        
         public var isClear          : Bool { a <= 0 }
         public var isTransparent    : Bool { a <= 0 }
         public var isOpaque         : Bool { a > 0 }
@@ -436,9 +436,9 @@ public extension Color {
                 case .alpha         : a = v
             }
         }
-
+        
     }
-
+    
 }
 
 public extension Array where Element == Double {
@@ -479,13 +479,13 @@ public extension ViewDimensions {
 @available(iOS 13, *)
 public extension ForEach where Content : View {
     
-    //    public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content)
+        //    public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content)
     
-    //    public init(array: Array<Data.Element>, @ViewBuilder content: @escaping (Data.Element) -> Content) {
-    //        self.init(0..<array.count, id: \.self, content: { index in
-    //            content(array[index])
-    //        })
-    //    }
+        //    public init(array: Array<Data.Element>, @ViewBuilder content: @escaping (Data.Element) -> Content) {
+        //        self.init(0..<array.count, id: \.self, content: { index in
+        //            content(array[index])
+        //        })
+        //    }
     
 }
 
@@ -642,7 +642,7 @@ public struct Lines : View {
             .strokedPath(self.style)
         }
             //        .frame(width: nil, height: self.horizontal && self.ratios.isEmpty && self.offsets.count == 1 && self.offsets.first! == 0 ? self.lineWidth : nil) //proxy.size.height)
-            .foregroundColor(self.color)
+        .foregroundColor(self.color)
     }
     
 }
@@ -661,9 +661,9 @@ public extension EdgeInsets {
     init(h: CGFloat) { self.init(top: 0, leading: h, bottom: 0, trailing: h) }
     init(v: CGFloat) { self.init(top: v, leading: 0, bottom: v, trailing: 0) }
     init(h: CGFloat, v:CGFloat) { self.init(top: v, leading: h, bottom: v, trailing: h) }
-
+    
     init(t: CGFloat, b: CGFloat, l: CGFloat, r: CGFloat) { self.init(top: t, leading: l, bottom: b, trailing: r) }
-
+    
     static let zero : EdgeInsets = .init()
     
 }
@@ -699,7 +699,7 @@ public struct LayeredSystemImage : View {
             .scaleEffect(CGSize.init(width: foregroundScale, height: foregroundScale))
             .foregroundColor(foregroundColor)
             .background(Image(systemName: backgroundSystemName)
-                //                .scaleEffect(CGSize.init(side: 1.0/foregroundScale))
+                        //                .scaleEffect(CGSize.init(side: 1.0/foregroundScale))
                 .foregroundColor(backgroundColor))
         
     }
@@ -714,7 +714,7 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
     }
     
     public func hash(into hasher: inout Hasher) {
-        //        hasher.combine(element)
+            //        hasher.combine(element)
         hasher.combine("\(index)\(element)")
     }
     
@@ -739,61 +739,61 @@ public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Ide
 
 //@available(iOS 13, *)
 //public extension View {
-    
-    func hline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
-        hline(color, thickness, discrete.asArrayOfCGFloat)
-    }
 
-    func hline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
-        GeometryReader { geometry in
-            Path { path in
-                path.move(to: .init(x: 0, y: thickness/2))
-                path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
-            }
-            .strokedPath(.init(lineWidth: thickness, dash: dash))
+public func hline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+    hline(color, thickness, discrete.asArrayOfCGFloat)
+}
+
+public func hline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: 0, y: thickness/2))
+            path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
         }
-        .frame(height:thickness)
-        .foregroundColor(color)
+        .strokedPath(.init(lineWidth: thickness, dash: dash))
     }
-    
-    func hline(color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
-        GeometryReader { geometry in
-            Path { path in
-                path.move(to: .init(x: 0, y: thickness/2))
-                path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
-            }
-            .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
+    .frame(height:thickness)
+    .foregroundColor(color)
+}
+
+public func hline(color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: 0, y: thickness/2))
+            path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
         }
-        .frame(height:thickness)
-        .foregroundColor(color)
+        .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
     }
+    .frame(height:thickness)
+    .foregroundColor(color)
+}
 
 
-    func vline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
-        vline(color, thickness, discrete.asArrayOfCGFloat)
-    }
+public func vline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+    vline(color, thickness, discrete.asArrayOfCGFloat)
+}
 
-    func vline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
-        GeometryReader { geometry in
-            Path { path in
-                path.move(to: .init(x: thickness/2, y: 0))
-                path.addLine(to: .init(x: thickness/2, y: geometry.size.height))
-            }
-            .strokedPath(.init(lineWidth: thickness, dash: dash))
+public func vline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: thickness/2, y: 0))
+            path.addLine(to: .init(x: thickness/2, y: geometry.size.height))
         }
-        .frame(width:thickness)
-        .foregroundColor(color)
+        .strokedPath(.init(lineWidth: thickness, dash: dash))
     }
-    
-    func separator(color: Color = Color.gray7, thickness: CGFloat = 1, dash: [CGFloat] = []) -> some View {
-        hline(color, thickness, dash)
-//        Lines.create(horizontal: true, color: Color.gray7, style: StrokeStyle.init(lineWidth: 1, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: [], dashPhase: 0))
-//            .frame(height:1)
-    }
+    .frame(width:thickness)
+    .foregroundColor(color)
+}
+
+public func separator(color: Color = Color.gray7, thickness: CGFloat = 1, dash: [CGFloat] = []) -> some View {
+    hline(color, thickness, dash)
+        //        Lines.create(horizontal: true, color: Color.gray7, style: StrokeStyle.init(lineWidth: 1, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: [], dashPhase: 0))
+        //            .frame(height:1)
+}
 
 
 
-func zigzag(points: [CGPoint], color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+public func zigzag(points: [CGPoint], color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
     GeometryReader { geometry in
         Path { path in
             guard points.isNotEmpty else { return }
@@ -801,11 +801,11 @@ func zigzag(points: [CGPoint], color: Color, width thickness: CGFloat, cap: CGLi
             for i in points.range {
                 if i > 0 {
                     path.addLine(to: points[i])
+                    }
                 }
             }
-        }
         .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
-    }
+        }
     .foregroundColor(color)
 }
 
@@ -825,9 +825,9 @@ public extension View {
     
     func frame(side: CGFloat, alignment: Alignment = .center) -> some View {
         self.frame(width: side, height: side, alignment: alignment)
-    }
-
-//    static var neomorphicFillColorDefault = Color.offWhite
+        }
+    
+        //    static var neomorphicFillColorDefault = Color.offWhite
     
     func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
         return self
@@ -836,7 +836,7 @@ public extension View {
                     .fill(fill)
                     .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
                     .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
-        )
+            )
     }
     
     func neomorphicCapsule(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
@@ -846,7 +846,7 @@ public extension View {
                     .fill(fill)
                     .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
                     .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
-        )
+            )
     }
     
     func neomorphicCircle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
@@ -860,7 +860,7 @@ public extension View {
                     .fill(fill)
                     .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
                     .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
-        )
+            )
     }
     
     func neomorphicRoundedRectangle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
@@ -870,9 +870,9 @@ public extension View {
                     .fill(fill)
                     .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
                     .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
-        )
+            )
     }
-
+    
 }
 
 @available(iOS 13, *)
@@ -885,7 +885,7 @@ public extension Circle {
             .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
             .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
     }
-        
+    
 }
 
 @available(iOS 13, *)
@@ -911,12 +911,12 @@ public extension View {
             //            .font(Font.custom("Gill Sans", size: 10))
             .font(font)
             .font(.caption)
-//            .foregroundColor(disabled ? Color.gray4.opacity(0.4) : Color.gray4)
+            //            .foregroundColor(disabled ? Color.gray4.opacity(0.4) : Color.gray4)
             .foregroundColor(disabled ? Color.blue.opacity(0.3) : Color.blue)
             .shadow(color: .white, radius: 4, x: 0, y: 0)
             .padding(6)
-//            .neomorphicHint()
-        //            .background(disabled ? Color.gray4 : Color.clear)
+            //            .neomorphicHint()
+            //            .background(disabled ? Color.gray4 : Color.clear)
     }
     
     func styleForHintForPicks(_ font: Font) -> some View {
@@ -941,15 +941,15 @@ public extension View {
 
 @available(iOS 13, *)
 public extension HorizontalAlignment {
-
+    
     private enum HCenterAlignment: AlignmentID {
-
+        
         static func defaultValue(in dimensions: ViewDimensions) -> CGFloat {
             return dimensions[HorizontalAlignment.center]
         }
-
+        
     }
-
+    
     static let hCentered = HorizontalAlignment(HCenterAlignment.self)
 }
 
@@ -975,11 +975,11 @@ public struct CorrectedScrollView<Content> : View where Content : View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             
             content()
-                .background(geometryReader)
-                .offset(x: offset.x, y: offset.y)
+            .background(geometryReader)
+            .offset(x: offset.x, y: offset.y)
             
+            }
         }
-    }
     
     
     private var geometryReader : some View {
@@ -989,19 +989,19 @@ public struct CorrectedScrollView<Content> : View where Content : View {
             AsyncBlockView {
                 
                 let offset : CGPoint = CGPoint.init(
-                    x: -geometry.frame(in: .global).minX,
-                    y: -geometry.frame(in: .global).minY
+                x: -geometry.frame(in: .global).minX,
+                y: -geometry.frame(in: .global).minY
                 )
                 
                 if self.offset == .zero {
                     self.offset = offset
-                }
+                    }
                 
-            }
+                }
             
-        }
+            }
         
-    }
+        }
     
     
 }
@@ -1012,7 +1012,7 @@ public struct AsyncBlockView : View {
     
     @State var view     : ()->AnyView = {
         AnyView(Rectangle().fill(Color.clear))
-    }
+        }
     
     var block           : ()->()
     
@@ -1020,10 +1020,10 @@ public struct AsyncBlockView : View {
         
         DispatchQueue.main.async {
             self.block()
-        }
+            }
         
         return view()
-    }
+        }
     
 }
 
@@ -1040,7 +1040,7 @@ public struct HalfCapsule : Shape {
         self.offset     = offset
         self.padding    = padding
         self.mirrored   = mirrored
-    }
+        }
     
     public func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -1063,10 +1063,10 @@ public struct HalfCapsule : Shape {
             path = path.applying(.init(translationX: -rect.midX, y: -rect.midY))
             path = path.applying(.init(scaleX: -1, y: -1))
             path = path.applying(.init(translationX: rect.midX, y: rect.midY))
-        }
+            }
         
         return path
-    }
+        }
     
 }
 
@@ -1090,7 +1090,7 @@ public struct Pie : Shape {
         self.offset     = offset
         self.padding    = padding
         self.mirrored   = mirrored
-    }
+        }
     
     
     public func path(in rect: CGRect) -> Path {
@@ -1116,15 +1116,15 @@ public struct Pie : Shape {
         if mirrored {
             let angle = Angle.init(degrees: start.degrees - (value.wrappedValue*360.0))
             path.addArc(center: rect.center, radius: r, startAngle: start, endAngle: angle, clockwise: true)
-        } else {
-            let angle = Angle.init(degrees: (value.wrappedValue*360.0)-start.degrees)
+            } else {
+                let angle = Angle.init(degrees: (value.wrappedValue*360.0)-start.degrees)
             path.addArc(center: rect.center, radius: r, startAngle: start, endAngle: angle, clockwise: false)
-        }
+                }
         
         
         return path
-    }
-    
+        }
+
 }
 
 #if os(iOS)
@@ -1136,15 +1136,15 @@ public struct ActivityIndicator: UIViewRepresentable {
         self.style = style
     }
     
-
+    
     var isAnimating: Binding<Bool>
     
     let style: UIActivityIndicatorView.Style
-
+    
     public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
         return UIActivityIndicatorView(style: style)
     }
-
+    
     public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
         isAnimating.wrappedValue ? uiView.startAnimating() : uiView.stopAnimating()
     }
@@ -1167,12 +1167,12 @@ public extension View {
 public extension String {
     
     func color(_ default: Color = .red) -> Color {
-//        counter += 1
+            //        counter += 1
         if let rgba = self.rgba {
-//            print("[\(counter)] color name recognized: \(self) = \(rgba)")
+                //            print("[\(counter)] color name recognized: \(self) = \(rgba)")
             return Color.init(red: Double(rgba.r) / 255.0, green: Double(rgba.g) / 255.0, blue: Double(rgba.b) / 255.0, opacity: Double(rgba.a) / 255.0)
         } else {
-//            print("[\(counter)] color name unrecognized: \(self)")
+                //            print("[\(counter)] color name unrecognized: \(self)")
             switch self {
                 case "accent"       : return .accentColor
                 case "accentColor"  : return .accentColor
@@ -1189,7 +1189,7 @@ public extension String {
                 case "secondary"    : return .secondary
                 case "white"        : return .white
                 case "yellow"       : return .yellow
-                
+                    
                 default             : return `default`
             }
         }
@@ -1197,14 +1197,14 @@ public extension String {
     
     var rgba : (r: UInt8, g: UInt8, b: UInt8, a: UInt8)? {
         
-        // "#AB0C4DFF
+            // "#AB0C4DFF
         let trimmed = self.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         guard trimmed.length == 8 && self[0] == "#" else {
             return nil
         }
         let scanner = Scanner(string: trimmed)
         var hexNumber: UInt64 = 0
-        //        var r: CGFloat = 0.0, g: CGFloat = 0.0, b: CGFloat = 0.0, a: CGFloat = 0.0
+            //        var r: CGFloat = 0.0, g: CGFloat = 0.0, b: CGFloat = 0.0, a: CGFloat = 0.0
         var r: UInt8 = 0
         var g: UInt8 = 0
         var b: UInt8 = 0
@@ -1220,15 +1220,15 @@ public extension String {
         }
         return nil
     }
-        
+    
 }
 
-//@available(iOS 13, *)
-//public struct TestStruct : View {
-//    public init(lines: [String], v: String = "v") {
-//        self._lines = State.init(initialValue: lines)
-//        self.v = v
-//    }
+    //@available(iOS 13, *)
+    //public struct TestStruct : View {
+    //    public init(lines: [String], v: String = "v") {
+    //        self._lines = State.init(initialValue: lines)
+    //        self.v = v
+    //    }
 //
 //
 //    @State private var lines: [String]
@@ -1249,31 +1249,31 @@ public struct LinesOfStringsStack<Content> : View where Content : View {
         self._hspacing = State.init(initialValue: hspacing)
         self._alignment = State.init(initialValue: alignment)
         self.builder = builder
-    }
+        }
     
-
+    
     @State public var lines : [[String]]
-
+    
     @State var vspacing : CGFloat
     @State var hspacing : CGFloat
     @State var alignment : HorizontalAlignment
-
+    
     let builder : (String) -> Content
-
+    
     public var body : some View {
-//        HStack {
-//            Spacer()
+            //        HStack {
+            //            Spacer()
         VStack(alignment: self.alignment, spacing: vspacing) {
-                ForEach(lines, id: \.self) { line in
-                    HStack(spacing: hspacing) {
-                        ForEach(line, id: \.self) { word in
-                            self.builder(word)
-                        }
+            ForEach(lines, id: \.self) { line in
+                HStack(spacing: hspacing) {
+                    ForEach(line, id: \.self) { word in
+                        self.builder(word)
                     }
                 }
             }
-//            Spacer()
-//        }
+        }
+            //            Spacer()
+            //        }
     }
 }
 
@@ -1301,13 +1301,13 @@ public extension View {
 @available(iOS 13, *)
 public struct OrEmptyView<VIEW> : View where VIEW : View {
     
-//    condition: Binding<SharkeeApp.Model.LoadState>.init(get: { self.model.loadState(for: name) }, set: { _ in }),
-
+        //    condition: Binding<SharkeeApp.Model.LoadState>.init(get: { self.model.loadState(for: name) }, set: { _ in }),
+    
     public init(condition: Binding<Bool>, view: VIEW) {
         self.condition = condition
         self._view = State.init(initialValue: view)
     }
-
+    
     var condition  : Binding<Bool>
     
     @State var view         : VIEW
@@ -1322,15 +1322,15 @@ public struct OrEmptyView<VIEW> : View where VIEW : View {
 }
 
 public extension Binding {
-
+    
     init(get: @escaping () -> Value) {
         self.init(get: get, set: { _ in })
     }
-
+    
     static func get(_ get: @escaping () -> Value) -> Binding<Value> {
         Binding<Value>.init(get: get, set: { _ in })
     }
-
+    
     static func constant(_ value: Value) -> Binding<Value> {
         Binding<Value>.init(get: { value }, set: { _ in })
     }
@@ -1388,19 +1388,19 @@ public extension Color {
 public struct Blur: UIViewRepresentable {
     
     public var style: UIBlurEffect.Style = .systemMaterial
-
+    
     public init(style: UIBlurEffect.Style = .systemMaterial) {
         self.style = style
     }
     
-    // create UIView
+        // create UIView
     public func makeUIView(context: Context) -> UIVisualEffectView {
         var r = UIVisualEffectView(effect: UIBlurEffect(style: style))
-//        r.alpha = 0.5 // does not blur when alpha/opacity is < 1
+            //        r.alpha = 0.5 // does not blur when alpha/opacity is < 1
         return r
     }
-
-    // update UIView
+    
+        // update UIView
     public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
         uiView.effect = UIBlurEffect(style: style)
     }
@@ -1439,7 +1439,7 @@ public struct TapGestureWithLocation : UIViewRepresentable {
     public typealias Callback = (CGPoint) -> Void
     
     var tappedCallback: Callback
-
+    
     public init(_ callback: @escaping Callback) {
         self.tappedCallback = callback
     }
@@ -1451,10 +1451,10 @@ public struct TapGestureWithLocation : UIViewRepresentable {
         mappingYToV.addGestureRecognizer(gesture)
         return mappingYToV
     }
-
+    
     public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
     }
-
+    
     public class Coordinator: NSObject {
         var tappedCallback: ((CGPoint) -> Void)
         init(tappedCallback: @escaping ((CGPoint) -> Void)) {
@@ -1465,7 +1465,7 @@ public struct TapGestureWithLocation : UIViewRepresentable {
             self.tappedCallback(point)
         }
     }
-
+    
     public func makeCoordinator() -> TapGestureWithLocation.Coordinator {
         Coordinator(tappedCallback:self.tappedCallback)
     }
@@ -1474,30 +1474,30 @@ public struct TapGestureWithLocation : UIViewRepresentable {
 
 
 
-extension UIView {
+public extension UIView {
     var screenshot : UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
         drawHierarchy(in: self.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
+        
         if (image != nil) {
             UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil);
         }
-
+        
         return image
     }
 }
 
-struct SaveScreenshotView: UIViewRepresentable {
+public struct SaveScreenshotView: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> UIView {
+    public func makeUIView(context: Context) -> UIView {
         let someView = UIView(frame: UIScreen.main.bounds)
         _ = someView.screenshot
         return someView
     }
-
-    func updateUIView(_ viewForChartMonthly10years: UIView, context: Context) {
+    
+    public func updateUIView(_ viewForChartMonthly10years: UIView, context: Context) {
     }
 }
 
@@ -1518,8 +1518,8 @@ public extension View {
     
     func defaultSizeFullscreen(size: CGSize = .init(1024, 768)) -> some View {
         self.frame(NSScreen.main!.frame.size.width,NSScreen.main!.frame.size.height)
-//        self.frame(size: NSScreen.main!.frame.size)
-//        return self.frame(size: NSScreen.main?.frame.size ?? size)
+            //        self.frame(size: NSScreen.main!.frame.size)
+            //        return self.frame(size: NSScreen.main?.frame.size ?? size)
     }
     
 }
@@ -1548,7 +1548,7 @@ public extension Alignment {
             case .bottom                    : return .init(x: 0, y: -1)
             case .leading                   : return .init(x: -1, y: 0)
             case .trailing                  : return .init(x: +1, y: 0)
-
+                
             case .topLeading                : return .init(x: -1, y: +1)
             case .topTrailing               : return .init(x: +1, y: +1)
             case .bottomLeading             : return .init(x: -1, y: -1)
@@ -1585,79 +1585,79 @@ fileprivate var cancellables = Set<AnyCancellable>()
 
 
 //extension View {
-    
+
 public struct ViewSize : Equatable, Codable {
+    
+    struct Length : Equatable, Codable {
         
-        struct Length : Equatable, Codable {
-            
-            enum Kind : Equatable, Codable {
-                case unbound, unspecified, fixed, min, max, infinity
-                
-                var usesPixels : Bool {
-                    switch self {
-                        case .unbound, .unspecified, .infinity:
-                            return false
-                        case .min, .fixed, .max:
-                            return true
-                    }
-                }
-            }
-            
-            var kind : Kind = .unbound
-            var pixels : CGFloat = 256
+        enum Kind : Equatable, Codable {
+            case unbound, unspecified, fixed, min, max, infinity
             
             var usesPixels : Bool {
-                kind.usesPixels
-            }
-        }
-        
-        var width  : Length
-        var height : Length
-        
-        func frame(width on: some View, proportion: CGFloat = 1) -> some View {
-            Group {
-                switch width.kind {
-                    case .unspecified:
-                        on
-                    case .unbound:
-                        on.frame(maxWidth: nil)
-                    case .infinity:
-                        on.frame(maxWidth: .infinity)
-                    case .fixed:
-                        on.frame(width: width.pixels * proportion)
-                    case .min:
-                        on.frame(minWidth: width.pixels * proportion)
-                    case .max:
-                        on.frame(maxWidth: width.pixels * proportion)
+                switch self {
+                    case .unbound, .unspecified, .infinity:
+                        return false
+                    case .min, .fixed, .max:
+                        return true
                 }
             }
         }
         
-        func frame(height on: some View, proportion: CGFloat = 1) -> some View {
-            Group {
-                switch height.kind {
-                    case .unspecified:
-                        on
-                    case .unbound:
-                        on.frame(maxHeight: nil)
-                    case .infinity:
-                        on.frame(maxHeight: .infinity)
-                    case .fixed:
-                        on.frame(height: height.pixels * proportion)
-                    case .min:
-                        on.frame(minHeight: height.pixels * proportion)
-                    case .max:
-                        on.frame(maxHeight: height.pixels * proportion)
-                }
-            }
-        }
+        var kind : Kind = .unbound
+        var pixels : CGFloat = 256
         
-        func frame(on: some View, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
-            frame(width: frame(height: on, proportion: vfactor), proportion: hfactor)
+        var usesPixels : Bool {
+            kind.usesPixels
         }
-        
     }
     
+    var width  : Length
+    var height : Length
+    
+    public func frame(width on: some View, proportion: CGFloat = 1) -> some View {
+        Group {
+            switch width.kind {
+                case .unspecified:
+                    on
+                case .unbound:
+                    on.frame(maxWidth: nil)
+                case .infinity:
+                    on.frame(maxWidth: .infinity)
+                case .fixed:
+                    on.frame(width: width.pixels * proportion)
+                case .min:
+                    on.frame(minWidth: width.pixels * proportion)
+                case .max:
+                    on.frame(maxWidth: width.pixels * proportion)
+            }
+        }
+    }
+    
+    public func frame(height on: some View, proportion: CGFloat = 1) -> some View {
+        Group {
+            switch height.kind {
+                case .unspecified:
+                    on
+                case .unbound:
+                    on.frame(maxHeight: nil)
+                case .infinity:
+                    on.frame(maxHeight: .infinity)
+                case .fixed:
+                    on.frame(height: height.pixels * proportion)
+                case .min:
+                    on.frame(minHeight: height.pixels * proportion)
+                case .max:
+                    on.frame(maxHeight: height.pixels * proportion)
+            }
+        }
+    }
+    
+    public func frame(on: some View, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
+        frame(width: frame(height: on, proportion: vfactor), proportion: hfactor)
+    }
+    
+}
+
 
 public extension View {
     
@@ -1670,7 +1670,7 @@ public extension View {
 extension EdgeInsets : RawRepresentable {
     
     public typealias RawValue = String
-
+    
     public init?(rawValue: String) {
         let SPLIT = rawValue.splitByComma
         self.init(top: SPLIT[safe: 0]?.asCGFloat ?? 0, leading: SPLIT[safe: 1]?.asCGFloat ?? 0, bottom: SPLIT[safe: 2]?.asCGFloat ?? 0, trailing: SPLIT[safe: 3]?.asCGFloat ?? 0)
@@ -1682,7 +1682,7 @@ extension EdgeInsets : RawRepresentable {
 }
 
 
-// https://stackoverflow.com/questions/57577462/get-width-of-a-view-using-in-swiftui
+    // https://stackoverflow.com/questions/57577462/get-width-of-a-view-using-in-swiftui
 
 public struct SizeCalculator: ViewModifier {
     
@@ -1720,28 +1720,28 @@ public struct FlowLayout: Layout {
         var rowCount = CGFloat.zero
         var x = CGFloat.zero
         for subSize in subSizes {
-                // This prevents empty rows if any subviews are wider than proposedWidth.
+            // This prevents empty rows if any subviews are wider than proposedWidth.
             let lineBreakAllowed = x > 0
             
             if lineBreakAllowed, x + subSize.width > proposedWidth {
                 rowCount += 1
                 x = 0
-            }
+                }
             
             x += subSize.width
             maxRowWidth = max(maxRowWidth, x)
-        }
+            }
         
         if x > 0 {
             rowCount += 1
-        }
+            }
         
         let rowHeight = subSizes.lazy.map { $0.height }.max() ?? 0
         return CGSize(
-            width: proposal.width ?? maxRowWidth,
-            height: rowCount * rowHeight
+        width: proposal.width ?? maxRowWidth,
+        height: rowCount * rowHeight
         )
-    }
+        }
     
     public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
@@ -1750,25 +1750,25 @@ public struct FlowLayout: Layout {
         
         var p = CGPoint.zero
         for (subview, subSize) in zip(subviews, subSizes) {
-                // This prevents empty rows if any subviews are wider than proposedWidth.
+            // This prevents empty rows if any subviews are wider than proposedWidth.
             let lineBreakAllowed = p.x > 0
             
             if lineBreakAllowed, p.x + subSize.width > proposedWidth {
                 p.x = 0
                 p.y += rowHeight
-            }
+                }
             
             subview.place(
-                at: CGPoint(
-                    x: bounds.origin.x + p.x,
-                    y: bounds.origin.y + p.y + 0.5 * (rowHeight - subSize.height)
-                ),
-                proposal: proposal
+            at: CGPoint(
+            x: bounds.origin.x + p.x,
+            y: bounds.origin.y + p.y + 0.5 * (rowHeight - subSize.height)
+            ),
+            proposal: proposal
             )
             
             p.x += subSize.width
+            }
         }
-    }
 }
 
 public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
@@ -1780,7 +1780,7 @@ public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)-
         let LETTERS01   : String = LETTER0 + LETTER1
         
         R[LETTER0, default: [:]][LETTERS01, default: .init()].append(mapper(NAME))
-    }
+        }
     
     return R
 }
@@ -1791,7 +1791,7 @@ public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)-
 //        let LETTERS0 = COLLECTION.keys.sorted()
 //        ForEach(LETTERS0.range, id: \.self) { i in
 //            let LETTER0 = LETTERS0[i]
-//            let D0 = COLLECTION[LETTER0]!
+    //            let D0 = COLLECTION[LETTER0]!
 //            let SUM = D0.values.asArray.sum {
 //                $0.count
 //            }
@@ -1814,5 +1814,5 @@ public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)-
 public func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some View {
     VStack(alignment: .leading) {
         content()
-    }
+        }
 }

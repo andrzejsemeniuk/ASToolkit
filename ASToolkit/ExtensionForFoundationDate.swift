@@ -101,6 +101,56 @@ extension Date {
     public var GMTHour          : Int? { asString[11...12].asInt }
     public var GMTMinute        : Int? { asString[14...15].asInt }
     public var GMTSecond        : Int? { asString[17...18].asInt }
+    
+    static public func GMTCreateDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date? {
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = day
+        dateComponents.hour = hour
+        dateComponents.minute = minute
+        dateComponents.second = second
+        
+        // Set the time zone to GMT
+        dateComponents.timeZone = TimeZone(abbreviation: "GMT")
+        
+        // Create the date using the calendar
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(from: dateComponents)
+    }
+    
+    static public func GMTCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
+            // Extract components from the UInt64 argument
+        let year = Int(compactDate / 10000000000)
+        let month = Int((compactDate / 100000000) % 100)
+        let day = Int((compactDate / 1000000) % 100)
+        let hour = Int((compactDate / 10000) % 100)
+        let minute = Int((compactDate / 100) % 100)
+        let second = Int(compactDate % 100)
+        
+            // Ensure components are within valid ranges
+        guard (1...12).contains(month),
+              (1...31).contains(day),
+              (0...23).contains(hour),
+              (0...59).contains(minute),
+              (0...59).contains(second) else {
+            return nil
+        }
+        
+            // Call the original function
+        return GMTCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+    }
+    
+    static public var GMTnow : Date {
+        let now = Date.now
+        let gmtTimeZone = TimeZone(abbreviation: "GMT")!
+        let gmtCalendar = Calendar(identifier: .gregorian)
+        var dateComponents = gmtCalendar.dateComponents(in: gmtTimeZone, from: now)
+        
+        dateComponents.timeZone = gmtTimeZone
+        return gmtCalendar.date(from: dateComponents)!
+    }
+    
 
 }
 

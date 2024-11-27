@@ -964,6 +964,10 @@ public extension Int
         self % n
     }
     
+    func modulo(added: Int, _ n: Int) -> Int {
+        (self + added) % n
+    }
+    
     var asEnumerationArray : [Int] {
         self > 0 ? .init(0..<self) : []
     }
