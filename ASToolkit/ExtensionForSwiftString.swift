@@ -1325,8 +1325,8 @@ public extension String {
 }
 
 
-extension String {
-    
+public extension String {
+
     var asURL : URL? {
         URL.init(string: self)
     }
@@ -1335,4 +1335,35 @@ extension String {
         value == nil ? nil : "\(value!)"
     }
 
+    /// Returns a dictionary containing the counts of each character in the string.
+    var countsOfCharacters : [Character: Int] {
+        var counts: [Character: Int] = [:]
+        for char in self where char.isLetter {
+            counts[char, default: 0] += 1
+        }
+        return counts
+    }
+    
+    /// Checks whether the string (`self`) contains all the letters of another string.
+    func containsAllLetters(of other: String) -> Bool {
+        let selfCounts = self.countsOfCharacters
+        let otherCounts = other.countsOfCharacters
+        
+        for (char, count) in otherCounts {
+            if selfCounts[char, default: 0] < count {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func missing(characters characterSet: CharacterSet) -> Bool {
+        rangeOfCharacter(from: characterSet) == nil
+    }
+    
+    func missing(characters: String) -> Bool {
+        missing(characters: CharacterSet(charactersIn: characters))
+    }
+    
 }

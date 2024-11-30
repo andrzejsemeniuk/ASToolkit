@@ -32,31 +32,31 @@ public typealias Q = DispatchQueue
 
 public extension DispatchQueue {
     
-    func asyncAfter(_ seconds: TimeInterval, block: @escaping ()->Void) {
+    @inlinable func asyncAfter(_ seconds: TimeInterval, block: @escaping ()->Void) {
         self.asyncAfter(deadline: .now() + seconds, execute: block)
     }
     
 }
 
-public func wait(_ block: @escaping Block) {
+@inlinable public func wait(_ block: @escaping Block) {
     DispatchQueue.main.async {
         block()
     }
 }
 
-public func now(_ block: @escaping Block) {
+@inlinable public func now(_ block: @escaping Block) {
     DispatchQueue.main.sync {
         block()
     }
 }
 
-public func now(_ block: @escaping () throws -> Void) rethrows {
+@inlinable public func now(_ block: @escaping () throws -> Void) rethrows {
     try DispatchQueue.main.sync {
         try block()
     }
 }
 
-public func later(_ block: @escaping Block) {
+@inlinable public func later(_ block: @escaping Block) {
     DispatchQueue.main.async {
         block()
     }
@@ -68,7 +68,7 @@ public func later2(_ block: @escaping Block) {
     }
 }
 
-public func after(_ seconds: TimeInterval, _ block: @escaping Block) {
+@inlinable public func after(_ seconds: TimeInterval, _ block: @escaping Block) {
     DispatchQueue.main.asyncAfter(seconds) {
         block()
     }

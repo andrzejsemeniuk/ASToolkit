@@ -740,6 +740,12 @@ public extension Array where Element: Equatable {
         }
     }
     
+    func indexes(where f: (Element)->Bool) -> [Int] {
+        self.enumerated().compactMap { (i,e) in
+            f(e) ? i : nil
+        }
+    }
+    
 }
 
 public extension Array  {
