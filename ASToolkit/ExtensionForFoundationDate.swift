@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Date {
+public extension Date {
     
     public func componentDelta(to other:Date, units:[Calendar.Component] = [
         Calendar.Component.year,
@@ -141,17 +141,26 @@ extension Date {
         return GMTCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
     }
     
-    static public var GMTnow : Date {
-        let now = Date.now
-        let gmtTimeZone = TimeZone(abbreviation: "GMT")!
-        let gmtCalendar = Calendar(identifier: .gregorian)
-        var dateComponents = gmtCalendar.dateComponents(in: gmtTimeZone, from: now)
-        
-        dateComponents.timeZone = gmtTimeZone
-        return gmtCalendar.date(from: dateComponents)!
+//    static public var GMTnow : Date {
+//        let now = Date.now
+//        let gmtTimeZone = TimeZone(abbreviation: "GMT")!
+//        let gmtCalendar = Calendar(identifier: .gregorian)
+//        var dateComponents = gmtCalendar.dateComponents(in: gmtTimeZone, from: now)
+//        
+//        dateComponents.timeZone = gmtTimeZone
+//        return gmtCalendar.date(from: dateComponents)!
+//    }
+    
+    static var GMTnow: Date {
+        let now = Date()
+        return now.convertToGMT()
     }
     
-
+    func convertToGMT() -> Date {
+        let timezone = TimeZone.current
+        let seconds = TimeInterval(timezone.secondsFromGMT())
+        return self.addingTimeInterval(-seconds)
+    }
 }
 
 extension Date {
