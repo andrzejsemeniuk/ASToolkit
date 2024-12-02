@@ -11,6 +11,7 @@ import SwiftUI
 import SpriteKit
 
 public struct RGBAInfo : Codable, Equatable {
+    
     init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
         self.red = red
         self.green = green
@@ -88,24 +89,6 @@ public struct RGBAInfo : Codable, Equatable {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     
     public static func < (lhs: HSBAInfo, rhs: HSBAInfo) -> Bool {
@@ -134,32 +117,32 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     
     
     
-    init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
+    public init(hue: Double, saturation: Double, brightness: Double, alpha: Double = 1) {
         self.hue = hue
         self.saturation = saturation
         self.brightness = brightness
         self.alpha = alpha
     }
     
-    init(h hue: Double, s saturation: Double, b brightness: Double, a alpha: Double = 1) {
+    public init(h hue: Double, s saturation: Double, b brightness: Double, a alpha: Double = 1) {
         self.hue = hue
         self.saturation = saturation
         self.brightness = brightness
         self.alpha = alpha
     }
     
-    init(_ hue: Double, _ saturation: Double, _ brightness: Double, _ alpha: Double = 1) {
+    public init(_ hue: Double, _ saturation: Double, _ brightness: Double, _ alpha: Double = 1) {
         self.hue = hue
         self.saturation = saturation
         self.brightness = brightness
         self.alpha = alpha
     }
     
-    init(_ array: [Double], fallback: Double = 1) {
+    public init(_ array: [Double], fallback: Double = 1) {
         self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
     }
 
-    init(_ array: [CGFloat], fallback: CGFloat = 1) {
+    public init(_ array: [CGFloat], fallback: CGFloat = 1) {
         self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
     }
     
@@ -171,10 +154,10 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         self.init(string.split(",").map { Double($0) ?? 1.0 }.padded(with: 1.0, till: 4).replaced(alpha, at: 3))
     }
     
-    var hue                 : Double
-    var saturation          : Double
-    var brightness          : Double
-    var alpha               : Double
+    public var hue                 : Double
+    public var saturation          : Double
+    public var brightness          : Double
+    public var alpha               : Double
     
     enum CodingKeys : String, CodingKey {
         case hue            = "h"
@@ -183,56 +166,56 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         case alpha          = "a"
     }
     
-    var h                   : Double { get { hue } set { hue = newValue }}
-    var s                   : Double { get { saturation } set { saturation = newValue }}
-    var b                   : Double { get { brightness } set { brightness = newValue }}
-    var a                   : Double { get { alpha } set { alpha = newValue }}
+    public var h                   : Double { get { hue } set { hue = newValue }}
+    public var s                   : Double { get { saturation } set { saturation = newValue }}
+    public var b                   : Double { get { brightness } set { brightness = newValue }}
+    public var a                   : Double { get { alpha } set { alpha = newValue }}
     
-    func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
+    public func with(h: Double? = nil, s: Double? = nil, b: Double? = nil, a: Double? = nil) -> Self {
         .init(h: h ?? self.h, s: s ?? self.s, b: b ?? self.b, a: a ?? self.a)
     }
 
-    var isHSB : Bool { a >= 1 }
-    var asHSB : HSBAInfo { with(a: 1) }
+    public var isHSB : Bool { a >= 1 }
+    public var asHSB : HSBAInfo { with(a: 1) }
     
-    var asArrayOfHSB                : [Double] { [h,s,b] }
-    var asArrayOfHSBA               : [Double] { [h,s,b,a] }
+    public var asArrayOfHSB                : [Double] { [h,s,b] }
+    public var asArrayOfHSBA               : [Double] { [h,s,b,a] }
     
-    var asStringOfHSB               : String { asArrayOfHSB.map { $0.format4 }.joinedByComma }
-    var asStringOfHSBA              : String { asArrayOfHSBA.map { $0.format4 }.joinedByComma }
+    public var asStringOfHSB               : String { asArrayOfHSB.map { $0.format4 }.joinedByComma }
+    public var asStringOfHSBA              : String { asArrayOfHSBA.map { $0.format4 }.joinedByComma }
     
-    func asStringOfHSBA(withAlpha: Bool) -> String {
+    public func asStringOfHSBA(withAlpha: Bool) -> String {
         withAlpha ? asStringOfHSBA : asStringOfHSB
     }
 
-    var asDescriptiveStringOfHSB    : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)" }
-    var asDescriptiveStringOfHSBA   : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)  A \(a.format4)" }
+    public var asDescriptiveStringOfHSB    : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)" }
+    public var asDescriptiveStringOfHSBA   : String { "H \(h.format4)  S \(s.format4)  B \(b.format4)  A \(a.format4)" }
 
-    var asSKColor                   : SKColor { .init(HSBA: self) }
-    var asSwiftUIColor              : SwiftUI.Color { .init(HSBA: asArrayOfHSBA) }
+    public var asSKColor                   : SKColor { .init(HSBA: self) }
+    public var asSwiftUIColor              : SwiftUI.Color { .init(HSBA: asArrayOfHSBA) }
 
-    func extreme(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
+    public func extreme(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
         .init(hue < threshold ? l : u, saturation < threshold ? l : u, brightness < threshold ? l : u)
     }
-    func opposite(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
+    public func opposite(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
         .init(hue < threshold ? u : l, saturation < threshold ? u : l, brightness < threshold ? u : l)
     }
-    func brighter(by delta: Double = 0.1) -> Self {
+    public func brighter(by delta: Double = 0.1) -> Self {
         .init((hue + delta).clampedTo01, (saturation + delta).clampedTo01, (brightness + delta).clampedTo01)
     }
-    func lighter(by delta: Double = 0.1) -> Self {
+    public func lighter(by delta: Double = 0.1) -> Self {
         .init((hue - delta).clampedTo01, (saturation - delta).clampedTo01, (brightness - delta).clampedTo01)
     }
 
-    static let black    : Self = .init(0,0,0,1)
-    static let gray     : Self = .init(0,0,0.5,1)
-    static let red      : Self = .init(0,1,1,1)
-    static let orange   : Self = .init(0.1,1,1,1)
-    static let yellow   : Self = .init(0.13,1,1,1)
-    static let white    : Self = .init(0,0,1,1)
-    static let clear    : Self = .init(1,1,1,0)
+    public static let black    : Self = .init(0,0,0,1)
+    public static let gray     : Self = .init(0,0,0.5,1)
+    public static let red      : Self = .init(0,1,1,1)
+    public static let orange   : Self = .init(0.1,1,1,1)
+    public static let yellow   : Self = .init(0.13,1,1,1)
+    public static let white    : Self = .init(0,0,1,1)
+    public static let clear    : Self = .init(1,1,1,0)
     
-    static func generate(count: Int, from: HSBAInfo, to: HSBAInfo) -> [HSBAInfo] {
+    public static func generate(count: Int, from: HSBAInfo, to: HSBAInfo) -> [HSBAInfo] {
         let divisor : Double = max(1, count-1).asDouble
         let delta = HSBAInfo.init(h: (to.h - from.h)/divisor, s: (to.s - from.s)/divisor, b: (to.b - from.b)/divisor, a: (to.a - from.a)/divisor)
         var from = from
@@ -247,15 +230,15 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         return r
     }
     
-    static func generate(count: Int, h0: CGFloat, h1: CGFloat? = nil, s0: CGFloat, s1: CGFloat? = nil, b0: CGFloat, b1: CGFloat? = nil, a0: CGFloat = 1, a1: CGFloat? = nil) -> [HSBAInfo] {
+    public static func generate(count: Int, h0: CGFloat, h1: CGFloat? = nil, s0: CGFloat, s1: CGFloat? = nil, b0: CGFloat, b1: CGFloat? = nil, a0: CGFloat = 1, a1: CGFloat? = nil) -> [HSBAInfo] {
         generate(count: count, from: .init(h: h0, s: s0, b: b0, a: a0), to: .init(h: h1 ?? h0, s: s1 ?? s0, b: b1 ?? b0, a: a1 ?? a0))
     }
     
-    static func generate(count: Int, h: CGFloat, H: CGFloat? = nil, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil, a: CGFloat = 1, A: CGFloat? = nil) -> [HSBAInfo] {
+    public static func generate(count: Int, h: CGFloat, H: CGFloat? = nil, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil, a: CGFloat = 1, A: CGFloat? = nil) -> [HSBAInfo] {
         generate(count: count, from: .init(h: h, s: s, b: b, a: a), to: .init(h: H ?? h, s: S ?? s, b: B ?? b, a: A ?? a))
     }
     
-    static func paletteDefault(columns count: Int) -> Palette {
+    public static func paletteDefault(columns count: Int) -> Palette {
         [
             Self.generate(grayscale: count),
             Self.generate(pale: count),
@@ -264,47 +247,47 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         ].asPalette
     }
             
-    static func paletteDefaultFaded(columns count: Int) -> Palette {
+    public static func paletteDefaultFaded(columns count: Int) -> Palette {
         [
             Self.generate(faded: count)
         ].asPalette
     }
             
-    static func paletteDefaultBright(columns count: Int) -> Palette {
+    public static func paletteDefaultBright(columns count: Int) -> Palette {
         [
             Self.generate(bright: count)
         ].asPalette
     }
             
-    static func paletteDefaultPale(columns count: Int) -> Palette {
+    public static func paletteDefaultPale(columns count: Int) -> Palette {
         [
             Self.generate(pale: count)
         ].asPalette
     }
             
-    static func paletteDefaultVivid(columns count: Int) -> Palette {
+    public static func paletteDefaultVivid(columns count: Int) -> Palette {
         [
             Self.generate(vivid: count),
         ].asPalette
     }
             
-    static func paletteDefaultDark(columns count: Int) -> Palette {
+    public static func paletteDefaultDark(columns count: Int) -> Palette {
         [
             Self.generate(dark: count)
         ].asPalette
     }
             
-    static func paletteDefaultGrayscale(columns count: Int) -> Palette {
+    public static func paletteDefaultGrayscale(columns count: Int) -> Palette {
         [
             Self.generate(grayscale: count)
         ].asPalette
     }
             
-    static func generate(grayscale count: Int) -> [HSBAInfo] {
+    public static func generate(grayscale count: Int) -> [HSBAInfo] {
         Self.generate(count: count, h: 0, s: 0, b: 0, B: 1)
     }
     
-    static func generate(vivid count: Int) -> [HSBAInfo] {
+    public static func generate(vivid count: Int) -> [HSBAInfo] {
 //        Self.generate(common: count, s: 1, S: 0.65)
         var r : [HSBAInfo] = []
         var h : CGFloat = 0
@@ -317,32 +300,32 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         return r
     }
     
-    static func generate(dark count: Int) -> [HSBAInfo] {
+    public static func generate(dark count: Int) -> [HSBAInfo] {
         Self.generate(common: count, S: 0.7, b: 0.55, B: 0.8)
     }
 
-    static func generate(bright count: Int) -> [HSBAInfo] {
+    public static func generate(bright count: Int) -> [HSBAInfo] {
         Self.generate(common: count, s: 0.7, S: 0.4)
     }
     
-    static func generate(pale count: Int) -> [HSBAInfo] {
+    public static func generate(pale count: Int) -> [HSBAInfo] {
         Self.generate(common: count, s: 0.5, S: 0.2)
     }
     
-    static func generate(faded count: Int) -> [HSBAInfo] {
+    public static func generate(faded count: Int) -> [HSBAInfo] {
         Self.generate(common: count, s: 0.4, S: 0.3, b: 0.6, B: 0.8)
     }
     
 
-    static let defaultHues : [CGFloat] = [0,0.08,0.12,0.27,0.45,0.55,0.6,0.7,0.8,0.9]
+    public static let defaultHues : [CGFloat] = [0,0.08,0.12,0.27,0.45,0.55,0.6,0.7,0.8,0.9]
 //    static let defaultHues : [CGFloat] = [0,0.08,0.115,0.14,0.24,0.33,0.48,0.55,0.6,0.67,0.74,0.82,0.9]
 //    static let defaultHues : [CGFloat] = [0,0.08,0.11,0.12,0.13,0.24,0.3,0.45,0.5,0.55,0.62,0.7,0.8,0.9]
     
-    static func generate(common count: Int, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil) -> [HSBAInfo] {
+    public static func generate(common count: Int, s: CGFloat = 1, S: CGFloat? = nil, b: CGFloat = 1, B: CGFloat? = nil) -> [HSBAInfo] {
         Self.generate(count: count, hues: Self.defaultHues, s: s, S: S, b: b, B: B)
     }
     
-    static func generate(count: Int, hues: [CGFloat], s: CGFloat, S: CGFloat? = nil, b: CGFloat, B: CGFloat? = nil) -> [HSBAInfo] {
+    public static func generate(count: Int, hues: [CGFloat], s: CGFloat, S: CGFloat? = nil, b: CGFloat, B: CGFloat? = nil) -> [HSBAInfo] {
         hues.map { Self.generate(count: count, h: $0, H: nil, s: s, S: S, b: b, B: B, a: 1, A: nil) }.reduce([], { $0 + $1 })
     }
             
@@ -459,25 +442,25 @@ public extension HSBAInfo {
 }
 
 
-extension HSBAInfo {
+public extension HSBAInfo {
 
     struct GradientInfo : Codable, RawRepresentable, Equatable {
 
-        typealias RawValue = String
+        public typealias RawValue = String
 
-        init?(rawValue: String) {
+        public init?(rawValue: String) {
             let split = rawValue.split("/")
             guard split.count == 2, split[0].contains(","), split[1].contains(",") else { return nil }
             color0 = .init(split[0])
             color1 = .init(split[1])
         }
         
-        var rawValue: String {
+        public var rawValue: String {
             "\(color0.asStringOfHSBA)/\(color1.asStringOfHSBA)"
         }
 
         
-        static func == (lhs: Self, rhs: Self) -> Bool {
+        public static func == (lhs: Self, rhs: Self) -> Bool {
             (lhs.color0.asStringOfHSBA == rhs.color0.asStringOfHSBA &&
             lhs.color1.asStringOfHSBA == rhs.color1.asStringOfHSBA)
             ||
@@ -499,40 +482,40 @@ extension HSBAInfo {
     
     struct GradientPalette : Codable, RawRepresentable, Equatable {
         
-        typealias RawValue = String
+        public typealias RawValue = String
 
-        init?(rawValue: String) {
+        public init?(rawValue: String) {
             self.entries = rawValue.split("|").filter { $0.contains("/") }.map { .init(rawValue: $0) }.compactMap { $0 }
         }
         
-        var rawValue: String {
+        public var rawValue: String {
             entries.map {
                 $0.rawValue
             }.joined(separator: "|")
         }
 
         
-        init(entries: [GradientInfo] = []) {
+        public init(entries: [GradientInfo] = []) {
             self.entries = entries
         }
         
         
-        var entries : [GradientInfo] = []
+        public var entries : [GradientInfo] = []
         
-        var entriesFilteredAsHSB : [GradientInfo] { entries.filter { $0.isHSB } }
+        public var entriesFilteredAsHSB : [GradientInfo] { entries.filter { $0.isHSB } }
         
     }
     
     
 }
 
-extension Array where Element == HSBAInfo {
+public extension Array where Element == HSBAInfo {
     var asPalette : HSBAInfo.Palette {
         .init(entries: self)
     }
 }
 
-extension Array where Element == [HSBAInfo] {
+public extension Array where Element == [HSBAInfo] {
     var asPalette : HSBAInfo.Palette {
         flatMap { $0 }.asPalette
     }
@@ -540,7 +523,7 @@ extension Array where Element == [HSBAInfo] {
 
 
 
-extension SKColor {
+public extension SKColor {
     var asHSBAInfo : HSBAInfo {
         .init(self.arrayOfHSBA)
     }
@@ -560,13 +543,13 @@ extension SKColor {
 
 }
 
-extension String {
+public extension String {
     var asHSBAInfo : HSBAInfo {
         .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, till: 4), fallback: 1)
     }
 }
 
-extension Color {
+public extension Color {
     var asBWExtreme : Color {
         .init(white: self.hsba[2] < 0.5 ? 0 : 1)
     }
