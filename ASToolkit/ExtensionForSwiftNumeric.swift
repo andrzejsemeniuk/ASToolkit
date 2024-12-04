@@ -623,6 +623,24 @@ public extension Double {
     var from11ToRadians         : Self { self * .twopi }
     var from11ToDegrees         : Self { self * 360 }
 
+    
+    static func rangeIn01CenteredOn(value: Double, span: Double) -> (min: Double, max: Double) {
+        let halfLength: CGFloat = span / 2.0
+        var minValue = value - halfLength
+        var maxValue = value + halfLength
+
+        // Adjust the range if it exceeds bounds
+        if minValue < 0 {
+            maxValue += minValue.abs
+            minValue = 0
+        } else if maxValue > 1 {
+            minValue -= (maxValue - 1)
+            maxValue = 1
+        }
+
+        return (min: minValue, max: maxValue)
+    }
+
 }
 
 
@@ -772,6 +790,23 @@ public extension CGFloat {
 
     var from11ToRadians : Self { self * .twopi }
     var from11ToDegrees : Self { self * 360 }
+
+    static func rangeIn01CenteredOn(value: CGFloat, span: CGFloat) -> (min: CGFloat, max: CGFloat) {
+        let halfLength: CGFloat = span / 2.0
+        var minValue = value - halfLength
+        var maxValue = value + halfLength
+
+        // Adjust the range if it exceeds bounds
+        if minValue < 0 {
+            maxValue += abs(minValue)
+            minValue = 0
+        } else if maxValue > 1 {
+            minValue -= (maxValue - 1)
+            maxValue = 1
+        }
+
+        return (min: minValue, max: maxValue)
+    }
 
 }
 

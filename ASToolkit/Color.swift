@@ -178,6 +178,10 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     public var isHSB : Bool { a >= 1 }
     public var asHSB : HSBAInfo { with(a: 1) }
     
+    public var isBright : Bool {
+        s < 0.4 && b > 0.8
+    }
+    
     public var asArrayOfHSB                : [Double] { [h,s,b] }
     public var asArrayOfHSBA               : [Double] { [h,s,b,a] }
     

@@ -720,7 +720,7 @@ struct OnHoverWithAnyView : ViewModifier {
 }
 #endif
 
-extension View {
+public extension View {
     
     var backgroundAlmostTransparent : some View {
         self.background(Color.almostTransparent)
@@ -740,7 +740,7 @@ extension View {
 }
 
 
-extension Progress {
+public extension Progress {
     
     static func percent(completed: Int) -> Progress {
         let r = Progress.init(totalUnitCount: 100)
@@ -763,25 +763,25 @@ extension Progress {
 
 
 #if os(macOS)
-func eventHandlerRegister(matching: NSEvent.EventTypeMask, handler: @escaping (NSEvent)->Void) -> Any? {
+public func eventHandlerRegister(matching: NSEvent.EventTypeMask, handler: @escaping (NSEvent)->Void) -> Any? {
     NSEvent.addLocalMonitorForEvents(matching: matching) { e in
         handler(e)
         return e
     }
 }
 
-func eventHandlerUnregister(_ monitor: Any?) {
+public func eventHandlerUnregister(_ monitor: Any?) {
     if let monitor = monitor {
         NSEvent.removeMonitor(monitor)
     }
 }
 
-let NSEventKeyCodeForEsc = 53 // 55?
-let NSEventKeyCodeForTab = 48
-let NSEventKeyCodeForSpace = 49
-let NSEventKeyCodeForShift = 44
+public let NSEventKeyCodeForEsc = 53 // 55?
+public let NSEventKeyCodeForTab = 48
+public let NSEventKeyCodeForSpace = 49
+public let NSEventKeyCodeForShift = 44
 
-func eventHandlerForKeyDownRegister(_ keyCode: UInt16, handler: @escaping (NSEvent)->Void) -> Any? {
+public func eventHandlerForKeyDownRegister(_ keyCode: UInt16, handler: @escaping (NSEvent)->Void) -> Any? {
     NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { e in
         if e.keyCode == keyCode {
             handler(e)
@@ -814,14 +814,14 @@ func eventHandlerForKeyDownRegister(_ keyCode: UInt16, handler: @escaping (NSEve
         //    }
 }
 
-enum KeyCode : UInt16 {
+public enum KeyCode : UInt16 {
     case esc = 53
     case tab = 48
     case space = 32
 }
 
 
-extension View {
+public extension View {
     
     func onKeyPress(_ keyCode: UInt16, handler: @escaping Block) -> some View {
         onAppear {
@@ -1057,9 +1057,9 @@ struct TrackinAreaView<Content>: View where Content : View {
 }
 
 @available(macOS 13.0, *)
-struct TrackingAreaRepresentable<Content>: NSViewRepresentable where Content: View {
-    let onMove: (NSPoint) -> Void
-    let content: Content
+public struct TrackingAreaRepresentable<Content>: NSViewRepresentable where Content: View {
+    public let onMove: (NSPoint) -> Void
+    public let content: Content
     
     public func makeNSView(context: Context) -> NSHostingView<Content> {
         return TrackingNSHostingView(onMove: onMove, rootView: self.content)
@@ -1071,10 +1071,10 @@ struct TrackingAreaRepresentable<Content>: NSViewRepresentable where Content: Vi
 }
 
 @available(macOS 13.0, *)
-class TrackingNSHostingView<Content>: NSHostingView<Content> where Content : View {
-    let onMove: (NSPoint) -> Void
+public class TrackingNSHostingView<Content>: NSHostingView<Content> where Content : View {
+    public let onMove: (NSPoint) -> Void
     
-    init(onMove: @escaping (NSPoint) -> Void, rootView: Content) {
+    public init(onMove: @escaping (NSPoint) -> Void, rootView: Content) {
         self.onMove = onMove
         
         super.init(rootView: rootView)
@@ -1082,7 +1082,7 @@ class TrackingNSHostingView<Content>: NSHostingView<Content> where Content : Vie
         setupTrackingArea()
     }
     
-    required init(rootView: Content) {
+    public required init(rootView: Content) {
         fatalError("init(rootView:) has not been implemented")
     }
     
@@ -1182,8 +1182,8 @@ extension View {
 
 // https://saeedrz.medium.com/detect-scroll-position-in-swiftui-3d6e0d81fc6b
 
-struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGPoint = .zero
+public struct ScrollOffsetPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGPoint = .zero
     
     static public func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
     }

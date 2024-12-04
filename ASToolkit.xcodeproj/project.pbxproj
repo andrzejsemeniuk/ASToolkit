@@ -90,6 +90,7 @@
 		57E586622C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E586612C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift */; };
 		57E586642C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E586632C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift */; };
 		57E691F825C5DDE30098B535 /* ShaderKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */; };
+		57ECCDB72CFF769E00144915 /* AViewForSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ECCDB62CFF768B00144915 /* AViewForSlider.swift */; };
 		57F0A0CB1F564EE30015169D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CA1F564EE30015169D /* AppDelegate.swift */; };
 		57F0A0CD1F564EE30015169D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0A0CC1F564EE30015169D /* ViewController.swift */; };
 		57F0A0D01F564EE30015169D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F0A0CE1F564EE30015169D /* Main.storyboard */; };
@@ -261,6 +262,7 @@
 		57E586612C8A15AD00E93C96 /* ExtensionForSpriteKit+SKAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSpriteKit+SKAction.swift"; sourceTree = "<group>"; };
 		57E586632C8A164500E93C96 /* ExtensionForSpriteKit+SKNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSpriteKit+SKNode.swift"; sourceTree = "<group>"; };
 		57E691F725C5DDE30098B535 /* ShaderKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShaderKitExtensions.swift; path = ../ShaderKit/ShaderKitExtensions.swift; sourceTree = "<group>"; };
+		57ECCDB62CFF768B00144915 /* AViewForSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AViewForSlider.swift; sourceTree = "<group>"; };
 		57F0A0C81F564EE30015169D /* ASTookitShowcase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASTookitShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0A0CA1F564EE30015169D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57F0A0CC1F564EE30015169D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 				570FC2011F111E0E00FEAC03 /* Info.plist */,
 				5756CA3225FD2FDE007719C5 /* ASToolkit.swift */,
 				573C94CA256D7B340027AD39 /* Attributes.swift */,
+				57ECCDB62CFF768B00144915 /* AViewForSlider.swift */,
 				576B29AB1F868F960001DC97 /* BindingValue.swift */,
 				572A8E031F71DC28008CC1C6 /* Bit.swift */,
 				570FC2A51F1124A300FEAC03 /* Block.swift */,
@@ -377,8 +380,8 @@
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
 				5732AC2F2C75006600EE8620 /* Error.swift */,
 				5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */,
-				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
 				572544572CCAC42300AF152A /* ExtensionForCoreData.swift */,
+				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
 				570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */,
 				571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */,
 				570FC2781F1124A300FEAC03 /* ExtensionForFoundationNSAttributedString.swift */,
@@ -804,6 +807,7 @@
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
 				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
 				772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */,
+				57ECCDB72CFF769E00144915 /* AViewForSlider.swift in Sources */,
 				5732AC312C75006600EE8620 /* Error.swift in Sources */,
 				77FD704221A95DCA00F6636B /* ExtensionForSwiftDictionary.swift in Sources */,
 			);
