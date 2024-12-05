@@ -37,6 +37,17 @@ public extension CaseIterable where Self: Equatable, Self.AllCases: Bidirectiona
         return NEXT
     }
     
+    func next(in array: [Self], fallback: Self? = nil) -> Self {
+        if let INDEX = array.firstIndex(of: self) {
+            return array[safe: INDEX + 1] ?? fallback ?? self
+        }
+        return fallback ?? self
+    }
+
+    func nextOrFirst(in array: [Self]) -> Self {
+        next(in: array, fallback: array.first ?? self)
+    }
+
     var previousRemaining : [Self] {
         var r : [Self] = []
         var e = self
@@ -92,6 +103,7 @@ public extension CaseIterable where Self: Equatable, Self.AllCases: Bidirectiona
 }
 
 public extension CaseIterable where Self : Equatable {
+    
     var previous : Self? {
         var r : Self?
         for e in Self.allCases {
@@ -102,6 +114,7 @@ public extension CaseIterable where Self : Equatable {
         }
         return r
     }
+    
     var previousLooped : Self {
         if let previous = previous {
             return previous
@@ -110,5 +123,13 @@ public extension CaseIterable where Self : Equatable {
         Self.allCases.formIndex(&index, offsetBy: -1)
         return Self.allCases[index]
     }
+    
+    func previous(in array: [Self], fallback: Self? = nil) -> Self {
+        if let INDEX = array.firstIndex(of: self) {
+            return INDEX > 0 ? array[INDEX - 1] : fallback ?? self
+        }
+        return fallback ?? self
+    }
+    
 }
 

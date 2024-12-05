@@ -17,7 +17,11 @@ public extension Collection {
     var isNotEmpty : Bool {
         !isEmpty
     }
-    
+ 
+    func transformed(_ f: (Self)->Self) -> Self {
+        f(self)
+    }
+
 }
 
 public enum OrderedCollectionSearchDirection {
