@@ -1241,11 +1241,15 @@ public extension String {
             self = elements.joined(separator: delimiter)
         }
     }
-    mutating func asSet(toggle element: String, delimiter: String = ",") {
-        if asSet(contains: element) {
-            asSet(remove: element)
+    mutating func asSet(toggle element: String, prepend: Bool = false, delimiter: String = ",") {
+        if asSet(contains: element, delimiter: delimiter) {
+            asSet(remove: element, delimiter: delimiter)
         } else {
-            asSet(append: element)
+            if prepend {
+                asSet(prepend: element, delimiter: delimiter)
+            } else {
+                asSet(append: element, delimiter: delimiter)
+            }
         }
     }
     func asSet(contains element: String, delimiter: String = ",") -> Bool {
