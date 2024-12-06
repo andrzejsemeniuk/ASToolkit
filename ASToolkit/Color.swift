@@ -210,7 +210,10 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     public func lighter(by delta: Double = 0.1) -> Self {
         .init((hue - delta).clampedTo01, (saturation - delta).clampedTo01, (brightness - delta).clampedTo01)
     }
-
+    public func inverted(h: Bool = false, s: Bool = false, b: Bool = false, a: Bool = false) -> Self {
+        .init(h ? 1 - hue : hue, s ? 1 - saturation : saturation, b ? 1 - brightness : brightness, a ? 1 - alpha : alpha)
+    }
+    
     public static let black    : Self = .init(0,0,0,1)
     public static let gray     : Self = .init(0,0,0.5,1)
     public static let red      : Self = .init(0,1,1,1)

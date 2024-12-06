@@ -1327,3 +1327,10 @@ public extension Array {
         }
     }
 }
+
+public extension View {
+    func scaleEffect(_ s: Double) -> some View {
+        self
+            .scaleEffect(x: s, y: s, anchor: .center)
+    }
+}
