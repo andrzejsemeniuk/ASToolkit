@@ -127,6 +127,10 @@ public extension String {
         return self[0 ..< max(0, min(to, length))]
     }
     
+    func substring(from: Int, to: Int) -> Substring {
+        return self[min(from, length) ..< min(to, length)]
+    }
+
     func substring(from: UInt, to: UInt) -> Substring {
         return self[min(Int(from), length) ..< min(Int(to), length)]
     }

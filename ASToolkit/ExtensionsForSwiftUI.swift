@@ -1319,7 +1319,7 @@ public func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? 
 
 
 public extension Array {
-    public func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
+    func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
         Group {
             ForEach(self.range, id: \.self) { i in
                 f(i,self[i])
@@ -1334,3 +1334,26 @@ public extension View {
             .scaleEffect(x: s, y: s, anchor: .center)
     }
 }
+
+public extension View {
+    func modify(if condition: Bool, mod: @escaping (AnyView)->some View) -> some View {
+        Group {
+            if condition {
+                mod(self.asAnyView)
+            } else {
+                self
+            }
+        }
+    }
+}
+
+public extension View {
+    @ViewBuilder func optional(_ flag: Bool, content: (Self) -> some View) -> some View {
+        if flag {
+            content(self)
+        } else {
+            self
+        }
+    }
+}
+
