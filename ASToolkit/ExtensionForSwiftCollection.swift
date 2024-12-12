@@ -126,4 +126,9 @@ public extension Set where Element : Equatable {
     }
 }
 
+public extension Set {
+    mutating func clear() {
+        removeAll()
+    }
+}
 

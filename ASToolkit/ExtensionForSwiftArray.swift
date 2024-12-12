@@ -415,6 +415,12 @@ public extension Array where Element == String {
         filter { $0.isNotEmpty }
     }
     
+    var sortedByDescendingLength : Self {
+        sorted {
+            $0.length > $1.length || ($0.length == $1.length && $0 < $1)
+        }
+    }
+
 }
 
 public extension Array {

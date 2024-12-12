@@ -67,6 +67,36 @@ public extension Dictionary {
         }
     }
     
+    func filtered(where f: (_ key: Key, _ value: Value)->Bool) -> Self {
+        var R : Self = [:]
+        self.forEach { (K,V) in
+            if f(K,V) {
+                R[K] = V
+            }
+        }
+        return R
+    }
+    
+    mutating func filter(where f: (_ key: Key, _ value: Value)->Bool) {
+        self.forEach { (K,V) in
+            if !f(K,V) {
+                self.removeValue(forKey: K)
+            }
+        }
+    }
+    
+    mutating func removeAll(where f: (_ key: Key, _ value: Value)->Bool) {
+        filter(where: { K,V in !f(K,V) })
+    }
+    
+    func removedAll(where f: (_ key: Key, _ value: Value)->Bool) -> Self {
+        filtered(where: { K,V in !f(K,V) })
+    }
+    
+    mutating func clear() {
+        self = [:]
+    }
+    
 }
 
 public func += <K,V>(lhs: inout Dictionary<K,V>, rhs: Dictionary<K,V>) {

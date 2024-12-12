@@ -144,6 +144,14 @@ public extension String {
         return self[from..<max(from,from+length)]
     }
     
+    var containsVowel: Bool {
+        firstMatch(of: /[aeiouyAEIOUY]/) != nil
+    }
+    
+    var containsConsonant: Bool {
+        firstMatch(of: /[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]/) != nil
+    }
+    
 }
 
 public extension StringProtocol {
