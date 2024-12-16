@@ -2009,7 +2009,7 @@ extension Array where Element : Comparable & Numeric {
     
 }
 
-extension Array : RawRepresentable where Element == Bool {
+extension Array : @retroactive RawRepresentable where Element == Bool {
     
     public init?(rawValue: String) {
         self = rawValue.splitByComma.map { $0 == "T" }

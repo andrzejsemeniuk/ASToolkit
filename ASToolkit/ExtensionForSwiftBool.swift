@@ -25,6 +25,14 @@ public extension Bool
     func flipped(_ invert: Bool = true) -> Bool {
         inverted(invert)
     }
+
+    func value<V>(on: V, off: V) -> V {
+        self ? on : off
+    }
+    
+    func value<V>(_ on: V, _ off: V) -> V {
+        self ? on : off
+    }
     
     static func compare(_ a: Bool, _ b: Bool) -> ComparisonResult {
         if !a && b { return .orderedAscending }
@@ -51,7 +59,7 @@ public extension Bool
 
 }
 
-extension Bool : Comparable {
+extension Bool : @retroactive Comparable {
     public static func < (lhs: Bool, rhs: Bool) -> Bool {
         !lhs && rhs
     }

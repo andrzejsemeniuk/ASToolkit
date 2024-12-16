@@ -12,32 +12,43 @@ import SpriteKit
 
 public struct RGBAInfo : Codable, Equatable {
     
-    init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
+    public init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
         self.red = red
         self.green = green
         self.blue = blue
         self.alpha = alpha
     }
     
-    init(r red: Double, g green: Double, b blue: Double, a alpha: Double = 1) {
+    public init(r red: Double, g green: Double, b blue: Double, a alpha: Double = 1) {
         self.red = red
         self.green = green
         self.blue = blue
         self.alpha = alpha
     }
     
-    init(_ red: Double, _ green: Double, _ blue: Double, _ alpha: Double = 1) {
+    public init(_ red: Double, _ green: Double, _ blue: Double, _ alpha: Double = 1) {
         self.red = red
         self.green = green
         self.blue = blue
         self.alpha = alpha
     }
     
-    init(_ array: [Double], fallback: Double = 1) {
+    public init(gray: Double, alpha: Double = 1) {
+        self.red = gray
+        self.green = gray
+        self.blue = gray
+        self.alpha = alpha
+    }
+    
+    public init(g: Double, a: Double = 1) {
+        self.init(gray: g, alpha: a)
+    }
+    
+    public init(_ array: [Double], fallback: Double = 1) {
         self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
     }
 
-    init(_ array: [CGFloat], fallback: CGFloat = 1) {
+    public init(_ array: [CGFloat], fallback: CGFloat = 1) {
         self.init(array[safe: 0] ?? fallback, array[safe: 1] ?? fallback, array[safe: 2] ?? fallback, array[safe: 3] ?? fallback)
     }
     
@@ -136,6 +147,20 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         self.saturation = saturation
         self.brightness = brightness
         self.alpha = alpha
+    }
+    
+    public init(gray: Double, alpha: Double = 1) {
+        self.hue = 0
+        self.saturation = 0
+        self.brightness = gray
+        self.alpha = alpha
+    }
+    
+    public init(g: Double, a: Double = 1) {
+        self.hue = 0
+        self.saturation = 0
+        self.brightness = g
+        self.alpha = a
     }
     
     public init(_ array: [Double], fallback: Double = 1) {
