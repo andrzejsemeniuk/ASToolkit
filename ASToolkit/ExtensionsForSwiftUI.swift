@@ -92,6 +92,10 @@ public extension View {
             .opacity(condition ? 1 : 0)
     }
     
+    func hide(_ condition: Bool) -> some View {
+        show(!condition)
+    }
+    
     func fontSize(_ size: CGFloat) -> some View {
         self.font(.system(size: size))
     }

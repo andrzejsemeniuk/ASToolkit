@@ -728,6 +728,34 @@ public extension Array where Element: Equatable {
         return R
     }
 
+    func appended(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.append(missing: missing, equals)
+        return R
+    }
+    
+    func prepended(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.prepend(missing: missing, equals)
+        return R
+    }
+
+    func appended(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        for e in missing {
+            R.append(missing: e, equals)
+        }
+        return R
+    }
+    
+    func prepended(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        for e in missing {
+            R.prepend(missing: e, equals)
+        }
+        return R
+    }
+
     mutating func append(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
         missing.forEach {
             self.append(missing: $0, equals)
