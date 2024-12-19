@@ -341,6 +341,13 @@ extension String
         return Substring(self)
     }
     
+    public func trimmedFromEnd(_ count: Int) -> Substring {
+        if count <= length {
+            return substring(from:0,length:length - count)
+        }
+        return Substring(self)
+    }
+    
 }
 
 extension String {
