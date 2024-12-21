@@ -172,15 +172,16 @@ public extension Color {
     
     init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
-    init(HSBA hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
-    init(HSB hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(HSBA hsba   : [Double], alpha: Double = 1)                 { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
+    init(HSB hsb    : [Double], opacity: Double = 1)                { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(hsva   : [Double], alpha: Double = 1)                      { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[safe: 3]?.clampedTo01 ?? alpha) }
     init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0].clampedTo01, saturation: hsv[1].clampedTo01, brightness: hsv[2].clampedTo01, opacity: opacity.clampedTo01) }
     init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue.clampedTo01, saturation: 1, brightness: 1, opacity: opacity.clampedTo01) }
     init(rgba   : [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
     init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
-    init(RGBA rgba: [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
-    init(RGB rgb  : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(RGBA rgba: [Double])                                       { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
+    init(RGB rgb  : [Double], opacity: Double = 1)                  { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    
     
     static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
     static func hsba    (_ h: Double, _ s: Double, _ b: Double, _ a: Double)            -> Color { Color.init(hsba: [h,s,b,a]) }
@@ -267,6 +268,49 @@ public extension Color {
     static let almostTransparent = Color.init(white: 1, alpha: 0.001)
     
     static var offWhite = Color.init(hsba: [0, 0, 0.94, 1])
+    
+    
+    
+    static func rgbaFrom(hex: String) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        guard Scanner(string: hex).scanHexInt64(&int) else { return nil }
+        
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            return nil // Invalid hex format
+        }
+        
+        return (
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            alpha: Double(a) / 255
+        )
+    }
+    
+    init(hex: String, fallback: Color = .white) {
+        if let RGBA = Self.rgbaFrom(hex: hex) {
+            self.init(
+                .sRGB,
+                red     : RGBA.red,
+                green   : RGBA.green,
+                blue    : RGBA.blue,
+                opacity : RGBA.alpha
+            )
+        } else {
+            self = fallback
+        }
+    }
+    
+    
     
     var name : String { self.description }
     
@@ -830,7 +874,7 @@ public extension View {
         //    static var neomorphicFillColorDefault = Color.offWhite
     
     func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        return self
+        self
             .background(
                 RoundedRectangle.init(cornerRadius: radius)
                     .fill(fill)
@@ -840,21 +884,38 @@ public extension View {
     }
     
     func neomorphicCapsule(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        return self
+        self
             .background(
                 Capsule.init()
                     .fill(fill)
-                    .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
-                    .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
-            )
+                    .shadow(color: Color.black.opacity(opacity), radius: depth.abs, x: depth, y: depth)
+                    .shadow(color: Color.white.opacity(1.0-opacity), radius: radius.abs/2, x: -radius/2, y: -radius/2)
+        )
     }
     
+//    func neomorphicCapsuleView(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+//        self
+//            .background(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: depth, radius: radius)
+//            )
+//            .overlay(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: -depth, radius: radius)
+//            )
+//    }
+    
+//    func neomorphicCapsuleBackground(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+//        self
+//            .background(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: depth, radius: radius)
+//            )
+//    }
+    
     func neomorphicCircle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        return self.background(Circle().neomorphic(fill: fill, opacity: opacity, depth: depth, radius: radius))
+        self.background(Circle().neomorphic(fill: fill, opacity: opacity, depth: depth, radius: radius))
     }
     
     func neomorphicRectangle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        return self
+        self
             .background(
                 Rectangle.init()
                     .fill(fill)
@@ -864,7 +925,7 @@ public extension View {
     }
     
     func neomorphicRoundedRectangle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        return self
+        self
             .background(
                 RoundedRectangle.init(cornerRadius: radius)
                     .fill(fill)
@@ -873,7 +934,59 @@ public extension View {
             )
     }
     
+    
 }
+
+public extension View {
+    func neomorphicCapsuleBackground(
+        lightColor: Color = Color.white, //.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8,
+        padding: CGFloat = 8
+    ) -> some View {
+        self.padding(padding)
+            .background(
+                ZStack {
+                    Capsule()
+                        .fill(lightColor)
+                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                }
+            )
+//            .clipShape(Capsule())
+    }
+    
+    func neomorphicShadow(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+    }
+    
+}
+
+public extension Shape {
+    
+    func neomorphic(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .fill(lightColor)
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+    }
+    
+}
+
+
 
 @available(iOS 13, *)
 public extension Circle {

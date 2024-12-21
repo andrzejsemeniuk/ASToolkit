@@ -699,6 +699,10 @@ public extension CGFloat {
     
     static let   zero            : Self   = 0
     static let   one             : Self   = 1
+    
+    var abs             : Self { Swift.abs(self) }
+    var floor           : Self { Darwin.floor(self) }
+    var ceil            : Self { Darwin.ceil(self) }
 }
 
 public extension CGFloat {
@@ -730,7 +734,7 @@ public extension CGFloat {
 
 }
 
-extension CGFloat : RawRepresentable {
+extension CGFloat : @retroactive RawRepresentable {
     
     public init?(rawValue: String) {
         if let v = CGFloat(rawValue) {
@@ -798,7 +802,7 @@ public extension CGFloat {
 
         // Adjust the range if it exceeds bounds
         if minValue < 0 {
-            maxValue += abs(minValue)
+            maxValue += minValue.abs
             minValue = 0
         } else if maxValue > 1 {
             minValue -= (maxValue - 1)
