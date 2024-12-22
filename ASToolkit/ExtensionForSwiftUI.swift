@@ -385,6 +385,41 @@ public extension Color {
         return Color.init(HSBA: [hsva0[0],0,hsva0[2] < mid ? max : min,hsva0[3]])
     }
     
+    
+    func brighten(by amount: CGFloat) -> Color {
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        if UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+            brightness = (brightness + amount).clampedTo01
+            return Color(hue: hue, saturation: saturation, brightness: brightness, opacity: alpha)
+        }
+        return self
+    }
+    
+    func saturate(by amount: CGFloat) -> Color {
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        if UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+            saturation = (saturation + amount).clampedTo01
+            return Color(hue: hue, saturation: saturation, brightness: brightness, opacity: alpha)
+        }
+        return self
+    }
+    
+    func opacity(by amount: Double) -> Color {
+        let uiColor = UIColor(self)
+        guard let components = uiColor.cgColor.components else { return self }
+        let alpha = (components.last! + amount).clampedTo01
+        return Color(uiColor.withAlphaComponent(alpha))
+    }
+    
+    
     struct HSBA : Codable, Equatable {
         
         public enum Component : CaseIterable {
@@ -938,6 +973,7 @@ public extension View {
 }
 
 public extension View {
+    
     func neomorphicCapsuleBackground(
         lightColor: Color = Color.white, //.opacity(0.7),
         darkColor: Color = Color.gray.opacity(0.2),
@@ -957,6 +993,26 @@ public extension View {
 //            .clipShape(Capsule())
     }
     
+    func neomorphicRoundedRectangleBackground(
+        radius: CGFloat,
+        lightColor: Color = Color.white, //.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8,
+        padding: CGFloat = 8
+    ) -> some View {
+        self.padding(padding)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: radius)
+                        .fill(lightColor)
+                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                }
+            )
+//            .clipShape(Capsule())
+    }
+    
     func neomorphicShadow(
         lightColor: Color = Color.white.opacity(0.7),
         darkColor: Color = Color.gray.opacity(0.2),
@@ -966,6 +1022,17 @@ public extension View {
         self
             .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
             .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+    }
+    
+    func neomorphicOverlay(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: shadowOffset)
     }
     
 }
@@ -1508,7 +1575,7 @@ public struct Blur: UIViewRepresentable {
     
         // create UIView
     public func makeUIView(context: Context) -> UIVisualEffectView {
-        var r = UIVisualEffectView(effect: UIBlurEffect(style: style))
+        let r = UIVisualEffectView(effect: UIBlurEffect(style: style))
             //        r.alpha = 0.5 // does not blur when alpha/opacity is < 1
         return r
     }
