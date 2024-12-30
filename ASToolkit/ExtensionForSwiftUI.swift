@@ -986,8 +986,9 @@ public extension View {
                 ZStack {
                     Capsule()
                         .fill(lightColor)
-                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
-                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                        .neomorphicShadow(lightColor: lightColor, darkColor: darkColor, blur: blur, shadowOffset: shadowOffset)
+//                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+//                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
                 }
             )
 //            .clipShape(Capsule())
@@ -1006,8 +1007,9 @@ public extension View {
                 ZStack {
                     RoundedRectangle(cornerRadius: radius)
                         .fill(lightColor)
-                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
-                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                        .neomorphicShadow(lightColor: lightColor, darkColor: darkColor, blur: blur, shadowOffset: shadowOffset)
+//                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+//                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
                 }
             )
 //            .clipShape(Capsule())
