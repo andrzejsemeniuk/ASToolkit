@@ -1824,6 +1824,28 @@ enum ColorGradientDirection : String, Codable, CaseIterable, Equatable {
     case north,east,south,west
 }
 
+public extension Color {
+    /// Returns a new `Color` with its alpha (opacity) multiplied by a given factor.
+    /// - Parameter factor: The multiplier for the alpha value (between 0 and 1).
+    /// - Returns: A new `Color` with the modified alpha.
+    func multipliedAlpha(by factor: CGFloat) -> Color {
+        // Extract the RGBA components of the original color
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+
+        if UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            // Multiply the alpha value
+            let newAlpha = max(0, min(alpha * factor, 1)) // Ensure alpha is within 0...1
+            return Color(.sRGB, red: red, green: green, blue: blue, opacity: newAlpha)
+        }
+
+        // If color components couldn't be extracted, return the original color
+        return self
+    }
+}
+
 #if os(macOS)
 public extension SKColor {
     func withAlphaAdded(_ v: CGFloat) -> SKColor {
