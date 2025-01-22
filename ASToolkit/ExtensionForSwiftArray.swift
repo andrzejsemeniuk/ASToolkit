@@ -1914,9 +1914,9 @@ public extension Array {
 
 public extension Array {
     
-    @inlinable func minElement(where predicate: (Element) throws -> Double?) rethrows -> (Element,Double)? {
+    @inlinable func minElement<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (Element,T)? {
         var R : Element!
-        var V : Double!
+        var V : T!
         for e in self {
             if let D = try predicate(e) {
                 if V != nil {
@@ -1933,9 +1933,9 @@ public extension Array {
         return R == nil ? nil : (R!,V!)
     }
 
-    @inlinable func maxElement(where predicate: (Element) throws -> Double?) rethrows -> (Element,Double)? {
+    @inlinable func maxElement<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (Element,T)? {
         var R : Element!
-        var V : Double!
+        var V : T!
         for e in self {
             if let D = try predicate(e) {
                 if V != nil {
@@ -1952,9 +1952,9 @@ public extension Array {
         return R == nil ? nil : (R!,V!)
     }
 
-    @inlinable func minIndex(where predicate: (Element) throws -> Double?) rethrows -> (Int,Double)? {
+    @inlinable func minIndex<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (Int,T)? {
         var R : Int!
-        var V : Double!
+        var V : T!
         for i in self.range {
             let e = self[i]
             if let D = try predicate(e) {
@@ -1972,9 +1972,9 @@ public extension Array {
         return R == nil ? nil : (R!,V!)
     }
 
-    @inlinable func maxIndex(where predicate: (Element) throws -> Double?) rethrows -> (Int,Double)? {
+    @inlinable func maxIndex<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (Int,T)? {
         var R : Int!
-        var V : Double!
+        var V : T!
         for i in self.range {
             let e = self[i]
             if let D = try predicate(e) {
