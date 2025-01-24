@@ -119,7 +119,7 @@ public extension Date {
         return calendar.date(from: dateComponents)
     }
     
-    static public func GMTCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
+    static func GMTCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
             // Extract components from the UInt64 argument
         let year = Int(compactDate / 10000000000)
         let month = Int((compactDate / 100000000) % 100)
@@ -160,6 +160,22 @@ public extension Date {
         let timezone = TimeZone.current
         let seconds = TimeInterval(timezone.secondsFromGMT())
         return self.addingTimeInterval(-seconds)
+    }
+}
+
+public extension Date {
+    
+    /// Calculates the difference in seconds between two dates, accounting for different time zones
+    /// - Parameter other: The date to compare against
+    /// - Returns: TimeInterval representing the number of seconds between the dates
+    func secondsFrom(_ other: Date) -> TimeInterval {
+            // Convert both dates to UTC/GMT to ensure accurate time difference calculation
+        let calendar = Calendar.current
+        let thisUTC = calendar.date(byAdding: .second, value: TimeZone.current.secondsFromGMT(), to: self)!
+        let otherUTC = calendar.date(byAdding: .second, value: TimeZone.current.secondsFromGMT(), to: other)!
+        
+            // Calculate difference using timeIntervalSince which returns seconds
+        return thisUTC.timeIntervalSince(otherUTC)
     }
 }
 
