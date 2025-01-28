@@ -412,10 +412,23 @@ public extension Color {
         return self
     }
     
-    func opacity(by amount: Double) -> Color {
+    func opacity(add amount: Double?) -> Color {
+        guard let amount else {
+            return self
+        }
         let uiColor = UIColor(self)
         guard let components = uiColor.cgColor.components else { return self }
         let alpha = (components.last! + amount).clampedTo01
+        return Color(uiColor.withAlphaComponent(alpha))
+    }
+    
+    func opacity(multiply amount: Double?) -> Color {
+        guard let amount else {
+            return self
+        }
+        let uiColor = UIColor(self)
+        guard let components = uiColor.cgColor.components else { return self }
+        let alpha = (components.last! * amount).clampedTo01
         return Color(uiColor.withAlphaComponent(alpha))
     }
     
