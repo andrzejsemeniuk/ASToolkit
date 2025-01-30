@@ -741,6 +741,19 @@ public extension View {
             self
         }
     }
+    
+    var backgroundWithTapGestureConsumed : some View {
+        background(Color.almostTransparent.onTapGesture {
+        })
+    }
+    
+    func backgroundWithTapGesture(_ f: @escaping Block) -> some View {
+        background(Color.almostTransparent.onTapGesture {
+            f()
+        })
+    }
+    
+
 }
 
 
