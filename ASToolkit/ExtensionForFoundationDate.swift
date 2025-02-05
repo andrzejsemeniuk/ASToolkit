@@ -10,7 +10,7 @@ import Foundation
 
 public extension Date {
     
-    public func componentDelta(to other:Date, units:[Calendar.Component] = [
+    func componentDelta(to other:Date, units:[Calendar.Component] = [
         Calendar.Component.year,
         Calendar.Component.month,
         Calendar.Component.weekOfYear,
@@ -30,7 +30,7 @@ public extension Date {
         return nil
     }
     
-    public func componentDeltas(to other:Date, units:[Calendar.Component] = [
+    func componentDeltas(to other:Date, units:[Calendar.Component] = [
         Calendar.Component.year,
         Calendar.Component.month,
         Calendar.Component.weekOfYear,
@@ -52,7 +52,7 @@ public extension Date {
         return r
     }
     
-    public func adding  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), years:Int = 0, quarter:Int = 0, months:Int = 0, days:Int = 0, hours:Int = 0, minutes:Int = 0, seconds:Int = 0) -> Date? {
+    func adding  (withCalendar calendar:Calendar = Calendar(identifier: .iso8601), years:Int = 0, quarter:Int = 0, months:Int = 0, days:Int = 0, hours:Int = 0, minutes:Int = 0, seconds:Int = 0) -> Date? {
         var components      = DateComponents()
         
         components.year     = years
@@ -66,43 +66,45 @@ public extension Date {
         return calendar.date(byAdding: components, to: self)
     }
     
-    public  func  year         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.year,                        from:    self)  }
-    public  func  month        (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.month,                       from:    self)  }
-    public  func  week         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.weekOfYear,                  from:    self)  }
-    public  func  day          (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.day,                         from:    self)  }
-    public  func  dayOfYear    (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForDayOfYear.string(from:  self))!  }
-    public  func  weekOfYear   (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForWeekOfYear.string(from:  self))!  }
-    public  func  monthOfYear  (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForMonthOfYear.string(from:  self))!  }
-    public  func  hour         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.hour,                        from:    self)  }
-    public  func  minute       (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.minute,                      from:    self)  }
-    public  func  second       (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.second,                      from:    self)  }
-    public  func  millisecond  (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {
+    func  year         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.year,                        from:    self)  }
+    func  month        (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.month,                       from:    self)  }
+    func  week         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.weekOfYear,                  from:    self)  }
+    func  day          (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.day,                         from:    self)  }
+    func  dayOfYear    (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForDayOfYear.string(from:  self))!  }
+    func  weekOfYear   (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForWeekOfYear.string(from:  self))!  }
+    func  monthOfYear  (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  Int(Date.dateFormatterForMonthOfYear.string(from:  self))!  }
+    func  hour         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.hour,                        from:    self)  }
+    func  minute       (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.minute,                      from:    self)  }
+    func  second       (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.second,                      from:    self)  }
+    func  millisecond  (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {
         return Int(Int64(timeIntervalSinceReferenceDate * 1000) % 1000)
     }
     
-    public  static  let  dateFormatterForDayOfYear    :  DateFormatter  =  .init(withFormat:  "DDD")
-    public  static  let  dateFormatterForWeekOfYear   :  DateFormatter  =  .init(withFormat:  "w")
-    public  static  let  dateFormatterForMonthOfYear  :  DateFormatter  =  .init(withFormat:  "MM")
+    static  let  dateFormatterForDayOfYear    :  DateFormatter  =  .init(withFormat:  "DDD")
+    static  let  dateFormatterForWeekOfYear   :  DateFormatter  =  .init(withFormat:  "w")
+    static  let  dateFormatterForMonthOfYear  :  DateFormatter  =  .init(withFormat:  "MM")
     
-    public var monthLetter : String {
+    var monthLetter : String {
         month3Letters[0].string
     }
-    public var month3Letters : String {
+    var month3Letters : String {
         ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][month()-1]
     }
-    public var monthName : String {
+    var monthName : String {
         ["January","February","March","April","May","June","July","August","September","October","November","December"][month()-1]
     }
     
     // "2018-06-01 00:00:00 +0000"
-    public var GMTYear          : Int? { asString[0...3].asInt }
-    public var GMTMonth         : Int? { asString[5...6].asInt }
-    public var GMTDay           : Int? { asString[8...9].asInt }
-    public var GMTHour          : Int? { asString[11...12].asInt }
-    public var GMTMinute        : Int? { asString[14...15].asInt }
-    public var GMTSecond        : Int? { asString[17...18].asInt }
+    var GMTYear          : Int? { asString[0...3].asInt }
+    var GMTMonth         : Int? { asString[5...6].asInt }
+    var GMTDay           : Int? { asString[8...9].asInt }
+    var GMTHour          : Int? { asString[11...12].asInt }
+    var GMTMinute        : Int? { asString[14...15].asInt }
+    var GMTSecond        : Int? { asString[17...18].asInt }
     
-    static public func GMTCreateDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date? {
+    static let zero : Date = .init(timeIntervalSince1970: 0)
+    
+    static func GMTCreateDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date? {
         var dateComponents = DateComponents()
         dateComponents.year = year
         dateComponents.month = month
