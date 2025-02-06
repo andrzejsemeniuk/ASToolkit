@@ -94,7 +94,7 @@ public extension Date {
         ["January","February","March","April","May","June","July","August","September","October","November","December"][month()-1]
     }
     
-    // "2018-06-01 00:00:00 +0000"
+        // "2018-06-01 00:00:00 +0000"
     var GMTYear          : Int? { asString[0...3].asInt }
     var GMTMonth         : Int? { asString[5...6].asInt }
     var GMTDay           : Int? { asString[8...9].asInt }
@@ -113,10 +113,10 @@ public extension Date {
         dateComponents.minute = minute
         dateComponents.second = second
         
-        // Set the time zone to GMT
+            // Set the time zone to GMT
         dateComponents.timeZone = TimeZone(abbreviation: "GMT")
         
-        // Create the date using the calendar
+            // Create the date using the calendar
         let calendar = Calendar(identifier: .gregorian)
         return calendar.date(from: dateComponents)
     }
@@ -143,18 +143,18 @@ public extension Date {
         return GMTCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
     }
     
-//    static public var GMTnow : Date {
-//        let now = Date.now
-//        let gmtTimeZone = TimeZone(abbreviation: "GMT")!
-//        let gmtCalendar = Calendar(identifier: .gregorian)
-//        var dateComponents = gmtCalendar.dateComponents(in: gmtTimeZone, from: now)
-//        
-//        dateComponents.timeZone = gmtTimeZone
-//        return gmtCalendar.date(from: dateComponents)!
-//    }
+        //    static public var GMTnow : Date {
+        //        let now = Date.now
+        //        let gmtTimeZone = TimeZone(abbreviation: "GMT")!
+        //        let gmtCalendar = Calendar(identifier: .gregorian)
+        //        var dateComponents = gmtCalendar.dateComponents(in: gmtTimeZone, from: now)
+        //
+        //        dateComponents.timeZone = gmtTimeZone
+        //        return gmtCalendar.date(from: dateComponents)!
+        //    }
     
     static var GMTnow: Date {
-        let now = Date()
+        let now = Date.now
         return now.convertToGMT()
     }
     
@@ -162,6 +162,107 @@ public extension Date {
         let timezone = TimeZone.current
         let seconds = TimeInterval(timezone.secondsFromGMT())
         return self.addingTimeInterval(-seconds)
+    }
+    
+    
+    var GMTtoYYYYMMDDHHMMSS: UInt64 {
+        toYYYYMMDDHHMMSS(timeZone: TimeZone(abbreviation: "GMT")!)
+    }
+
+}
+
+public extension Date {
+    
+    static func UTCCreateDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) -> Date? {
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = day
+        dateComponents.hour = hour
+        dateComponents.minute = minute
+        dateComponents.second = second
+        
+        // Set the time zone to UTC
+        dateComponents.timeZone = TimeZone(abbreviation: "UTC")
+        
+        // Create the date using the calendar
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(from: dateComponents)
+    }
+
+    static func UTCCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
+        // Extract components from the UInt64 argument
+        let year = Int(compactDate / 10000000000)
+        let month = Int((compactDate / 100000000) % 100)
+        let day = Int((compactDate / 1000000) % 100)
+        let hour = Int((compactDate / 10000) % 100)
+        let minute = Int((compactDate / 100) % 100)
+        let second = Int(compactDate % 100)
+        
+        // Ensure components are within valid ranges
+        guard (1...12).contains(month),
+              (1...31).contains(day),
+              (0...23).contains(hour),
+              (0...59).contains(minute),
+              (0...59).contains(second) else {
+            return nil
+        }
+        
+        // Call the original function
+        return UTCCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+    }
+    
+    static var UTCnow: Date {
+        let now = Date.now
+        if true {
+            return now.convertToUTC()! // ?? now
+        } else {
+            let timezone = TimeZone.current
+            let seconds = TimeInterval(timezone.secondsFromGMT())
+            return now.addingTimeInterval(-seconds)
+        }
+    }
+    
+    func toYYYYMMDDHHMMSS(timeZone: TimeZone) -> UInt64 {
+            // Create a calendar with the specified timezone
+        let calendar = Calendar(identifier: .gregorian)
+        var zoneCalendar = calendar
+        zoneCalendar.timeZone = timeZone
+        
+            // Get components in the specified timezone
+        let components = zoneCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+        
+        let yyyy = UInt64(components.year!)    * 10000000000
+        let mm = UInt64(components.month!)     * 100000000
+        let dd = UInt64(components.day!)       * 1000000
+        let hh = UInt64(components.hour!)      * 10000
+        let mi = UInt64(components.minute!)    * 100
+        let ss = UInt64(components.second!)
+        
+        return yyyy + mm + dd + hh + mi + ss
+    }
+        
+        // Convert to computed properties
+    var UTCtoYYYYMMDDHHMMSS: UInt64 {
+        toYYYYMMDDHHMMSS(timeZone: TimeZone(abbreviation: "UTC")!)
+    }
+     
+    var toLocal2: Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents(in: TimeZone.current, from: self)
+        return calendar.date(from: components) ?? self
+    }
+    var toLocal: Date {
+        let timezone = TimeZone.current
+        let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
+        return Date(timeInterval: seconds, since: self)
+    }
+    var toLocal3: Date {
+        let timeZoneOffset = TimeZone.current.secondsFromGMT()
+        guard let localDate = Calendar.current.date(byAdding: .second, value: timeZoneOffset, to: self) else {
+            return self
+        }
+        return localDate
     }
 }
 
@@ -211,7 +312,8 @@ extension Date {
     }
     
     public func formattedYYYYMMddHHmmss() -> String {
-        formatted("YYYY-MM-dd HH:mm:ss")
+        formatted("yyyy-MM-dd HH:mm:ss")
+//        formatted("YYYY-MM-dd HH:mm:ss")
     }
     
 	public static func formatter(withFormat format:String) -> DateFormatter {
@@ -357,6 +459,14 @@ public extension Date {
     var toComponents : Components {
         .init(self)
     }
+    
+    
+    var asStringYYYYMMDDHHMMSS: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        return formatter.string(from: self)
+    }
+    
 }
 
 extension Date {

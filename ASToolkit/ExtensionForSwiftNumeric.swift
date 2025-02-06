@@ -1011,6 +1011,12 @@ public extension Int
         self > 0 ? .init(0..<self) : []
     }
     
+    func padded(toLength length: Int) -> Int {
+        let string = String(self)
+        guard string.count < length else { return self }
+        return Int(String(repeating: "0", count: length - string.count) + string)!
+    }
+
 }
 
 public extension Int
