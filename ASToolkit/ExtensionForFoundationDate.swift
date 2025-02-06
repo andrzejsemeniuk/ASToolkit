@@ -66,6 +66,20 @@ public extension Date {
         return calendar.date(byAdding: components, to: self)
     }
     
+    var componentsOfYYYYMMDDHHMMSS: [String] {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+        
+        return [
+            String(format: "%04d", components.year ?? 0),
+            String(format: "%02d", components.month ?? 0),
+            String(format: "%02d", components.day ?? 0),
+            String(format: "%02d", components.hour ?? 0),
+            String(format: "%02d", components.minute ?? 0),
+            String(format: "%02d", components.second ?? 0)
+        ]
+    }
+    
     func  year         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.year,                        from:    self)  }
     func  month        (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.month,                       from:    self)  }
     func  week         (withCalendar  calendar:Calendar  =  Calendar(identifier:  .iso8601))  ->  Int  {  return  calendar.component(.weekOfYear,                  from:    self)  }
@@ -279,6 +293,16 @@ public extension Date {
         
             // Calculate difference using timeIntervalSince which returns seconds
         return thisUTC.timeIntervalSince(otherUTC)
+    }
+    
+    
+    var timeZoneAbbreviation: String {
+        timeZoneAbbreviation(in: .current, fallback: "")
+    }
+        
+        // If you want more control, you can also specify the timezone:
+    func timeZoneAbbreviation(in timeZone: TimeZone, fallback: String = "") -> String {
+        timeZone.abbreviation(for: self) ?? fallback
     }
 }
 

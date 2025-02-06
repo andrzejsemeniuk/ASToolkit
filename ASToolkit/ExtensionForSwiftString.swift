@@ -1120,6 +1120,28 @@ public extension String {
     func padded(by: String) -> String {
         "\(by)\(self)\(by)"
     }
+    func padded(by: String, count: Int) -> String {
+        "\(by.multiple(count))\(self)\(by.multiple(count))"
+    }
+    func padded(by character: Character, length K: Int) -> String {
+        let currentLength = self.count
+        guard currentLength < K else {
+//            let excess = currentLength - K
+//            let leftTrim = excess / 2
+//            let rightTrim = excess - leftTrim
+//            return String(self.dropFirst(leftTrim).dropLast(rightTrim))
+            return self
+        }
+        
+        let totalPadding = K - currentLength
+        let leftPadding = totalPadding / 2
+        let rightPadding = totalPadding - leftPadding
+        
+        let leftPad = String(repeating: character, count: leftPadding)
+        let rightPad = String(repeating: character, count: rightPadding)
+        
+        return leftPad + self + rightPad
+    }
     func padded(with string: String, front: Bool, length: Int) -> String {
         var R = self
         while R.count < length {
