@@ -49,18 +49,10 @@ public extension Array
     }
 
     mutating func discardFromFront(keeping: Int) {
-//        let range = startIndex.advanced(by: from)..<endIndex
-//        self.removeSubrange(range)
-        while count > keeping {
-            popFirst()
-        }
+        self = prefix(keeping).asArray
     }
     mutating func discardFromBack(keeping: Int) {
-//        let range = startIndex.advanced(by: from)..<endIndex
-//        self.removeSubrange(range)
-        while count > keeping {
-            popLast()
-        }
+        self = suffix(keeping)
     }
     
     func discardedFromFront(keeping: Int) -> Self {
