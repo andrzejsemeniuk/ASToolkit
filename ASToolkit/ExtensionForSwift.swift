@@ -67,6 +67,9 @@ public extension Equatable {
         }
         return false
     }
+    mutating func assignDifferent(_ a: Self, _ b: Self) {
+        self = self == a ? b : a
+    }
 }
 
 public extension Optional where Wrapped : Equatable {
