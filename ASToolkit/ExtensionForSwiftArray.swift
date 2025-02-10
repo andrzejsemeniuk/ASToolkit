@@ -49,10 +49,10 @@ public extension Array
     }
 
     mutating func discardFromFront(keeping: Int) {
-        self = prefix(keeping).asArray
+        self = suffix(keeping)
     }
     mutating func discardFromBack(keeping: Int) {
-        self = suffix(keeping)
+        self = prefix(keeping).asArray
     }
     
     func discardedFromFront(keeping: Int) -> Self {
