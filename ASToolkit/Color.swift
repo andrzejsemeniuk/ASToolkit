@@ -239,6 +239,20 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
         .init(h ? 1 - hue : hue, s ? 1 - saturation : saturation, b ? 1 - brightness : brightness, a ? 1 - alpha : alpha)
     }
     
+    public func gradient(to: HSBAInfo, ratio: CGFloat) -> HSBAInfo {
+        var from = self
+        let ratio = ratio.clampedTo01
+        return .init(h: ratio.lerp(from.h, to.h), s: ratio.lerp(from.s, to.s), b: ratio.lerp(from.b, to.b), a: ratio.lerp(from.a, to.a))
+    }
+    
+    public func gradient(to: HSBAInfo, index: Int, count: Int) -> HSBAInfo {
+        guard count > 0 else {
+            return self
+        }
+        return gradient(to: to, ratio: index.abs.asCGFloat / count.asCGFloat)
+    }
+    
+    
     public static let black    : Self = .init(0,0,0,1)
     public static let gray     : Self = .init(0,0,0.5,1)
     public static let red      : Self = .init(0,1,1,1)

@@ -1220,6 +1220,9 @@ public extension String {
     static let ABCDEFGHIJKLMNOPQRSTUVWXYZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     static let AEIOUY = "AEIOUY"
     static let BCDFGHJKLMNPQRSTVWXZ = "BCDFGHJKLMNPQRSTVWXZ"
+    static let VOWELS = AEIOUY
+    static let CONSONANTS = BCDFGHJKLMNPQRSTVWXZ
+    static let ALPHABET = ABCDEFGHIJKLMNOPQRSTUVWXYZ
     
     func cased(uppercased: Bool) -> Self {
         uppercased ? self.uppercased() : self.lowercased()
