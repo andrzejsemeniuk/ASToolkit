@@ -255,7 +255,9 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     
     public static let black    : Self = .init(0,0,0,1)
     public static let gray     : Self = .init(0,0,0.5,1)
+    public static let aqua     : Self = .init(0.50,0.90,1,1)
     public static let red      : Self = .init(0,1,1,1)
+    public static let brown    : Self = .init(0.1,1,0.5,1)
     public static let orange   : Self = .init(0.1,1,1,1)
     public static let yellow   : Self = .init(0.13,1,1,1)
     public static let white    : Self = .init(0,0,1,1)
