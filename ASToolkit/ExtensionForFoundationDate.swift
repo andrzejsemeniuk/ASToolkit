@@ -675,11 +675,11 @@ public extension TimeInterval {
         Date().timeIntervalSince1970
     }
     
-    static var secondsInHour : TimeInterval { 60 * 60 }
-    static var secondsInDay  : TimeInterval { 60 * 60 * 24 }
-    static var secondsInWeek : TimeInterval { 60 * 60 * 24 * 7 }
-    static var secondsInMonth : TimeInterval { 60 * 60 * 24 * 30 }
-    static var secondsInYear : TimeInterval { 60 * 60 * 24 * 365 }
+    static let secondsInHour    : TimeInterval = 60 * 60
+    static let secondsInDay     : TimeInterval = 60 * 60 * 24
+    static let secondsInWeek    : TimeInterval = 60 * 60 * 24 * 7
+    static let secondsInMonth   : TimeInterval = 60 * 60 * 24 * 31
+    static let secondsInYear    : TimeInterval = 60 * 60 * 24 * 365
 
 
 }
@@ -747,6 +747,28 @@ public extension Date {
         return R
     }
     
+    func remainingDaysHoursMinutes(until endDate: Date) -> (days: Int, hours: Int, minutes: Int) {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day, .hour, .minute], from: self, to: endDate)
+        
+        return (
+            days: components.day ?? 0,
+            hours: components.hour ?? 0,
+            minutes: components.minute ?? 0
+        )
+    }
+    
+    func remainingDaysHoursMinutesFormatted(until endDate: Date) -> (days: String?, hours: String?, minutes: String?) {
+        let remaining = self.remainingDaysHoursMinutes(until: endDate)
+        
+        if remaining.days > 0 {
+            return ("\(remaining.days) day" + (remaining.days > 1 ? "s" : ""), nil, nil)
+        } else if remaining.hours > 0 {
+            return (nil, "\(remaining.hours) hour" + (remaining.hours > 1 ? "s" : ""), nil)
+        } else {
+            return (nil, nil, "\(remaining.minutes) minute" + (remaining.minutes != 0 ? "s" : ""))
+        }
+    }
 }
 
 public extension Int {
