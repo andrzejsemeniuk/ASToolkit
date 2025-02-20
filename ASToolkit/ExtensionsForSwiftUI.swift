@@ -1343,6 +1343,13 @@ public extension Array {
             }
         }
     }
+    func views(@ViewBuilder f: @escaping (_ index: Int, _ last: Bool, _ element: Element) -> some View) -> some View {
+        Group {
+            ForEach(self.range, id: \.self) { i in
+                f(i,i == count-1, self[i])
+            }
+        }
+    }
 }
 
 public extension View {
