@@ -1119,6 +1119,7 @@ public extension Int {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asUInt          : UInt          { UInt(self) }
     var asUInt32        : UInt32        { UInt32(self) }
     var asUInt64        : UInt64        { UInt64(self) }
@@ -1136,6 +1137,7 @@ public extension UInt8 {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asInt           : Int           { Int(self) }
 
     func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
@@ -1147,6 +1149,7 @@ public extension UInt16 {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asInt           : Int           { Int(self) }
 
     func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
@@ -1158,6 +1161,7 @@ public extension UInt {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asInt           : Int           { Int(self) }
 
     func isInInterval   (_ l:UInt, _ u:UInt) -> Bool { return l <= self && self < u }
@@ -1169,6 +1173,7 @@ public extension UInt32 {
     var asFloat         : Float         { Float(self) }
     var asCGFloat       : CGFloat       { CGFloat(self) }
     var asDouble        : Double        { Double(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asInt           : Int           { Int(self) }
 
     func isInInterval   (_ l: UInt32, _ u:UInt32) -> Bool { return l <= self && self < u }
@@ -1179,6 +1184,7 @@ public extension UInt64 {
     var asDouble        : Double        { Double(self) }
     var asInt64         : Int64         { Int64(self) }
     var asInt           : Int           { Int(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asUInt          : UInt          { UInt(self) }
 
     func isInInterval(_ l:UInt64, _ u:UInt64) -> Bool { return l <= self && self < u }
@@ -1196,6 +1202,7 @@ public extension Int64 {
     }
     
     var asFloat         : Float         { Float(self) }
+    var asTimeInterval  : TimeInterval  { TimeInterval(self) }
     var asDouble        : Double        { Double(self) }
     var asUInt64        : UInt64        { UInt64(self) }
     var asInt           : Int           { Int(self) }

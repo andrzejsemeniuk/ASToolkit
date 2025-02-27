@@ -594,7 +594,7 @@ public extension Date {
     }
     
     static var timestamp : TimeInterval {
-        Date().timeIntervalSince1970
+        Date.now.timeIntervalSince1970
     }
     
     static var yesterday : Date {
