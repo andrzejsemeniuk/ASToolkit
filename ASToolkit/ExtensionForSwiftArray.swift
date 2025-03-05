@@ -2116,3 +2116,27 @@ public extension Array {
     }
     
 }
+
+public extension Array {
+    // Existing closure-based implementation
+    func ranked<T: Comparable>(by getValue: (Element) -> T) -> [Int] {
+        guard !isEmpty else { return [] }
+        
+        var R : [Int] = .init(repeating: 1, count: count)
+        
+        for i in 1..<count {
+            if getValue(self[i]) == getValue(self[i-1]) {
+                R[i] = R[i-1]
+            } else {
+                R[i] = i + 1
+            }
+        }
+        
+        return R
+    }
+    
+    // New KeyPath-based implementation
+    func ranked<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Int] {
+        ranked { $0[keyPath: keyPath] }
+    }
+}
