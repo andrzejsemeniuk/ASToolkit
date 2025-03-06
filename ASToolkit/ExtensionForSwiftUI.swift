@@ -372,6 +372,53 @@ public extension Color {
     }
 #endif
     
+    
+    
+    var rgba: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+            
+            #if os(iOS)
+            UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            #elseif os(macOS)
+            NSColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            #endif
+            
+            return (red, green, blue, alpha)
+        }
+        
+        // Convenience accessors
+        var red: CGFloat { rgba.r }
+        var green: CGFloat { rgba.g }
+        var blue: CGFloat { rgba.b }
+        var alpha: CGFloat { rgba.a }
+    
+//    var hsba: (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
+//            var hue: CGFloat = 0
+//            var saturation: CGFloat = 0
+//            var brightness: CGFloat = 0
+//            var alpha: CGFloat = 0
+//            
+//            #if os(iOS)
+//            UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+//            #elseif os(macOS)
+//            NSColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+//            #endif
+//            
+//            return (hue, saturation, brightness, alpha)
+//        }
+//        
+//        // Convenience accessors
+//        var hue: CGFloat { hsba.hue }
+//        var saturation: CGFloat { hsba.saturation }
+//        var brightness: CGFloat { hsba.brightness }
+//        // Note: alpha is already defined in the RGBA extension
+    
+    
+    
+    
     var isBlack : Bool {
         name == "black"
     }
@@ -387,49 +434,49 @@ public extension Color {
     
     
     func brighten(by amount: CGFloat) -> Color {
-        var hue: CGFloat = 0
-        var saturation: CGFloat = 0
-        var brightness: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        if UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
-            brightness = (brightness + amount).clampedTo01
-            return Color(hue: hue, saturation: saturation, brightness: brightness, opacity: alpha)
-        }
-        return self
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            (Double(hsba[2]) + Double(amount)).clampedTo01,
+            hsba[3]
+        ])
     }
     
     func saturate(by amount: CGFloat) -> Color {
-        var hue: CGFloat = 0
-        var saturation: CGFloat = 0
-        var brightness: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        if UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
-            saturation = (saturation + amount).clampedTo01
-            return Color(hue: hue, saturation: saturation, brightness: brightness, opacity: alpha)
-        }
-        return self
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            (Double(hsba[1]) + Double(amount)).clampedTo01,
+            hsba[2],
+            hsba[3]
+        ])
     }
     
     func opacity(add amount: Double?) -> Color {
         guard let amount else {
             return self
         }
-        let uiColor = UIColor(self)
-        guard let components = uiColor.cgColor.components else { return self }
-        let alpha = (components.last! + amount).clampedTo01
-        return Color(uiColor.withAlphaComponent(alpha))
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            hsba[2],
+            (Double(hsba[3]) + amount).clampedTo01
+        ])
     }
     
     func opacity(multiply amount: Double?) -> Color {
         guard let amount else {
             return self
         }
-        let uiColor = UIColor(self)
-        guard let components = uiColor.cgColor.components else { return self }
-        let alpha = (components.last! * amount).clampedTo01
-        return Color(uiColor.withAlphaComponent(alpha))
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            hsba[2],
+            (Double(hsba[3]) * amount).clampedTo01
+        ])
     }
     
     

@@ -413,6 +413,13 @@ public extension Array where Element == String {
         }
     }
 
+    var longestLength: Int {
+        self.map { $0.count }.max() ?? 0
+    }
+    
+    var longest: String? {
+        self.max(by: { $0.count < $1.count })
+    }
 }
 
 public extension Array {
