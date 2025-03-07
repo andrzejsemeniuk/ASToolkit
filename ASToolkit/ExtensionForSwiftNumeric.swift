@@ -184,6 +184,19 @@ public extension Double
     mutating func addedAround01(_ add: Double) -> Self {
         addedAround(0,1,add: add)
     }
+    
+    func inIntervalClosedClosed(_ from: Double, _ to: Double) -> Bool {
+        from <= self && self <= to
+    }
+    func inIntervalClosedOpen(_ from: Double, _ to: Double) -> Bool {
+        from <= self && self < to
+    }
+    func inIntervalOpenClosed(_ from: Double, _ to: Double) -> Bool {
+        from < self && self <= to
+    }
+    func inIntervalOpenOpen(_ from: Double, _ to: Double) -> Bool {
+        from < self && self < to
+    }
 }
 
 public extension Double {
