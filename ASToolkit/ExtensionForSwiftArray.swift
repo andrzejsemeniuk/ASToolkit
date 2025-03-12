@@ -2147,3 +2147,7 @@ public extension Array {
         ranked { $0[keyPath: keyPath] }
     }
 }
+
+public func union<T: Hashable>(_ lhs: [T], _ rhs: [T]) -> [T] {
+    Array(Set(lhs).union(Set(rhs)))
+}
