@@ -197,7 +197,7 @@ public extension Array
 	}
 
 	var indexForSafeLastElement : Int {
-		count-1
+        count > 0 ? count-1 : 0
 	}
 
 	var indexForSafePreLastElement : Int {
