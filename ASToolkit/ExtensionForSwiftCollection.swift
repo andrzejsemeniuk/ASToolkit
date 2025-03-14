@@ -18,6 +18,10 @@ public extension Collection {
         !isEmpty
     }
  
+    mutating func transform(_ f: (Self)->Self) {
+        self = f(self)
+    }
+
     func transformed(_ f: (Self)->Self) -> Self {
         f(self)
     }

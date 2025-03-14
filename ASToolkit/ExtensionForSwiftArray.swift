@@ -677,12 +677,24 @@ public extension Array where Element: Equatable {
         }
     }
     
+    func toggled(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.toggle(append: element, equals)
+        return R
+    }
+    
     mutating func toggle(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
         if contains(element, equals) {
             remove(element)
         } else {
             prepend(element)
         }
+    }
+
+    func toggled(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.toggle(prepend: element, equals)
+        return R
     }
 
     mutating func enlist(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
