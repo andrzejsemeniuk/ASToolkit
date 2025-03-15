@@ -185,18 +185,15 @@ public extension Double
         addedAround(0,1,add: add)
     }
     
-    func inIntervalClosedClosed(_ from: Double, _ to: Double) -> Bool {
-        from <= self && self <= to
-    }
-    func inIntervalClosedOpen(_ from: Double, _ to: Double) -> Bool {
-        from <= self && self < to
-    }
-    func inIntervalOpenClosed(_ from: Double, _ to: Double) -> Bool {
-        from < self && self <= to
-    }
-    func inIntervalOpenOpen(_ from: Double, _ to: Double) -> Bool {
-        from < self && self < to
-    }
+    func inIntervalClosedClosed(_ from: Double, _ to: Double) -> Bool { from <= self && self <= to }
+    func inIntervalClosedOpen(_ from: Double, _ to: Double) -> Bool { from <= self && self < to }
+    func inIntervalOpenClosed(_ from: Double, _ to: Double) -> Bool { from < self && self <= to }
+    func inIntervalOpenOpen(_ from: Double, _ to: Double) -> Bool { from < self && self < to }
+    
+    func inInterval(closed from: Double, closed to: Double) -> Bool { from <= self && self <= to }
+    func inInterval(closed from: Double, open to: Double) -> Bool { from <= self && self < to }
+    func inInterval(open from: Double, closed to: Double) -> Bool { from < self && self <= to }
+    func inInterval(open from: Double, open to: Double) -> Bool { from < self && self < to }
 }
 
 public extension Double {

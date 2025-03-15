@@ -136,25 +136,12 @@ public extension Date {
     }
     
     static func GMTCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
-            // Extract components from the UInt64 argument
-        let year = Int(compactDate / 10000000000)
-        let month = Int((compactDate / 100000000) % 100)
-        let day = Int((compactDate / 1000000) % 100)
-        let hour = Int((compactDate / 10000) % 100)
-        let minute = Int((compactDate / 100) % 100)
-        let second = Int(compactDate % 100)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        formatter.timeZone = TimeZone(identifier: "GMT")
         
-            // Ensure components are within valid ranges
-        guard (1...12).contains(month),
-              (1...31).contains(day),
-              (0...23).contains(hour),
-              (0...59).contains(minute),
-              (0...59).contains(second) else {
-            return nil
-        }
-        
-            // Call the original function
-        return GMTCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+        let dateString = String(format: "%014llu", compactDate)
+        return formatter.date(from: dateString)
     }
     
         //    static public var GMTnow : Date {
@@ -205,58 +192,28 @@ public extension Date {
     }
 
     static func UTCCreateDate(YYYYMMDDHHMMSS compactDate: UInt64) -> Date? {
-        // Extract components from the UInt64 argument
-        let year = Int(compactDate / 10000000000)
-        let month = Int((compactDate / 100000000) % 100)
-        let day = Int((compactDate / 1000000) % 100)
-        let hour = Int((compactDate / 10000) % 100)
-        let minute = Int((compactDate / 100) % 100)
-        let second = Int(compactDate % 100)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        formatter.timeZone = TimeZone(identifier: "UTC")
         
-        // Ensure components are within valid ranges
-        guard (1...12).contains(month),
-              (1...31).contains(day),
-              (0...23).contains(hour),
-              (0...59).contains(minute),
-              (0...59).contains(second) else {
-            return nil
-        }
-        
-        // Call the original function
-        return UTCCreateDate(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
+        let dateString = String(format: "%014llu", compactDate)
+        return formatter.date(from: dateString)
     }
     
     static var UTCnow: Date {
-        let now = Date.now
-        if true {
-            return now.convertToUTC()! // ?? now
-        } else {
-            let timezone = TimeZone.current
-            let seconds = TimeInterval(timezone.secondsFromGMT())
-            return now.addingTimeInterval(-seconds)
-        }
+        // Date objects are already in UTC internally
+        return Date()
     }
     
-    func toYYYYMMDDHHMMSS(timeZone: TimeZone) -> UInt64 {
-            // Create a calendar with the specified timezone
-        let calendar = Calendar(identifier: .gregorian)
-        var zoneCalendar = calendar
-        zoneCalendar.timeZone = timeZone
+    func toYYYYMMDDHHMMSS(timeZone: TimeZone = .UTC) -> UInt64 {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        formatter.timeZone = timeZone
         
-            // Get components in the specified timezone
-        let components = zoneCalendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
-        
-        let yyyy = UInt64(components.year!)    * 10000000000
-        let mm = UInt64(components.month!)     * 100000000
-        let dd = UInt64(components.day!)       * 1000000
-        let hh = UInt64(components.hour!)      * 10000
-        let mi = UInt64(components.minute!)    * 100
-        let ss = UInt64(components.second!)
-        
-        return yyyy + mm + dd + hh + mi + ss
+        let dateString = formatter.string(from: self)
+        return UInt64(dateString) ?? 0
     }
-        
-        // Convert to computed properties
+
     var UTCtoYYYYMMDDHHMMSS: UInt64 {
         toYYYYMMDDHHMMSS(timeZone: TimeZone(abbreviation: "UTC")!)
     }
@@ -278,6 +235,11 @@ public extension Date {
         }
         return localDate
     }
+}
+
+public extension TimeZone {
+    static let GMT = TimeZone(abbreviation: "GMT")!
+    static let UTC = TimeZone(abbreviation: "UTC")!
 }
 
 public extension Date {
@@ -400,11 +362,11 @@ public extension Date {
         (self.timeIntervalSince1970 * 1000000000.0).asUInt64 - (self.timeIntervalSince1970.asUInt64 * 1000000000)
     }
     
-    var toYYYYMMDDHHMMSSMSNS : String {
-        toYYYYMMDDHHMMSS.asString + nanoseconds.asString.prefixed(upToLength: 9, with: "0")
+    var toYYYYMMDDHHMMSSMSNSLocalTime : String {
+        toYYYYMMDDHHMMSSLocalTime.asString + nanoseconds.asString.prefixed(upToLength: 9, with: "0")
     }
 
-    var toYYYYMMDDHHMMSSMS : UInt64 {
+    var toYYYYMMDDHHMMSSMSLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 10000000000000
         let   mm = UInt64(month())  *   100000000000
         let   dd = UInt64(day())    *     1000000000
@@ -415,7 +377,7 @@ public extension Date {
         return yyyy + mm + dd + hh + mi + ss + ms
     }
 
-    var toYYYYMMDDHHMMSS : UInt64 {
+    var toYYYYMMDDHHMMSSLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 10000000000
         let   mm = UInt64(month())  *   100000000
         let   dd = UInt64(day())    *     1000000
@@ -425,7 +387,7 @@ public extension Date {
         return yyyy + mm + dd + hh + mi + ss
     }
 
-    var toYYYYMMDDHHMM : UInt64 {
+    var toYYYYMMDDHHMMLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 100000000
         let   mm = UInt64(month())  *   1000000
         let   dd = UInt64(day())    *     10000
@@ -434,7 +396,7 @@ public extension Date {
         return yyyy + mm + dd + hh + mi
     }
 
-    var toYYYYMMDDHH : UInt64 {
+    var toYYYYMMDDHHLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 1000000
         let   mm = UInt64(month())  *   10000
         let   dd = UInt64(day())    *     100
@@ -442,14 +404,14 @@ public extension Date {
         return yyyy + mm + dd + hh
     }
 
-    var toYYYYMMDD : UInt64 {
+    var toYYYYMMDDLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 10000
         let   mm = UInt64(month())  *   100
         let   dd = UInt64(day())
         return yyyy + mm + dd
     }
 
-    var toYYYYMM : UInt64 {
+    var toYYYYMMLocalTime : UInt64 {
         let yyyy = UInt64(year())   * 100
         let   mm = UInt64(month())
         return yyyy + mm
@@ -594,7 +556,7 @@ public extension Date {
     }
     
     static var timestamp : TimeInterval {
-        Date.now.timeIntervalSince1970
+        Date().timeIntervalSince1970
     }
     
     static var yesterday : Date {
