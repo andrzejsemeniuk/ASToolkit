@@ -1142,7 +1142,7 @@ var globalStorage : [String : Any] = [:]
 #if os(iOS) || os(macOS)
 extension View {
     
-    public func onDragGesture(minimumDistance: CGFloat = 0, changed: @escaping (DragGesture.Value)->Void, ended: @escaping (DragGesture.Value)->Void) -> some View {
+    public func onDragGesture(minimumDistance: CGFloat = 0, changed: @escaping (DragGesture.Value)->Void = { _ in }, ended: @escaping (DragGesture.Value)->Void) -> some View {
         self.gesture(DragGesture.init(minimumDistance: minimumDistance)
             .onChanged { value in
                 changed(value)
