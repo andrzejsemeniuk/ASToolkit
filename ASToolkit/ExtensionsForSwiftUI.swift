@@ -280,6 +280,16 @@ public extension View {
         }
     }
 
+    func hidden(when: Bool) -> some View {
+        Group {
+            if when {
+                self.hidden()
+            } else {
+                self
+            }
+        }
+    }
+    
 }
 
 //func MenuItem(_ text: String, size: FontSize = .m, design: FontDesign = .monospaced, _ action: @escaping Block) -> some View {
