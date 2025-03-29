@@ -1570,11 +1570,11 @@ public extension Binding {
     }
     
     static func get(_ get: @escaping () -> Value) -> Binding<Value> {
-        Binding<Value>.init(get: get, set: { _ in })
+        .init(get: get, set: { _ in })
     }
     
     static func constant(_ value: Value) -> Binding<Value> {
-        Binding<Value>.init(get: { value }, set: { _ in })
+        .init(get: { value }, set: { _ in })
     }
 }
 

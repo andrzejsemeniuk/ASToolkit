@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import Combine
 import SwiftUI
 #if os(iOS)
 import UIKit

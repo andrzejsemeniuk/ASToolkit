@@ -1370,6 +1370,9 @@ public extension View {
 }
 
 public extension View {
+    func modify(_ mod: @escaping (AnyView)->some View) -> some View {
+        mod(self.asAnyView)
+    }
     func modify(if condition: Bool, mod: @escaping (AnyView)->some View) -> some View {
         Group {
             if condition {
@@ -1391,3 +1394,11 @@ public extension View {
     }
 }
 
+
+public extension Binding where Value == Bool {
+    static let alwaysTrue = Binding.constant(true)
+    static let alwaysFalse = Binding.constant(false)
+    static func value(_ v: Bool) -> Self {
+        Binding.constant(v)
+    }
+}

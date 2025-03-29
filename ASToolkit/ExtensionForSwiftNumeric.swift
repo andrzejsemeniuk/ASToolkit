@@ -19,6 +19,9 @@ public extension Numeric where Self : Comparable {
     var          clamped01       : Self                                   { Swift.max(0,Swift.min(1,self)) }
 
     var          squared         : Self                                   { self * self }
+    
+    var plus1 : Self { self + 1 }
+    var minus1 : Self { self - 1 }
 }
 
 
@@ -37,6 +40,12 @@ public extension BinaryInteger {
     func added(_ value: Self, min: Self, max: Self) -> Self {
         Swift.max(min, Swift.min(max, self + value))
     }
+    
+    var plus1 : Self { self + 1 }
+    var minus1 : Self { self - 1 }
+    var quarter : Self { self / 4 }
+    var third : Self { self / 3 }
+    var half : Self { self / 2 }
 }
 
 public extension FloatingPoint {
