@@ -190,4 +190,16 @@ public extension Dictionary {
         }
         return R
     }
+    
+}
+
+
+public extension Dictionary where Key: Comparable {
+    
+    @discardableResult
+    mutating func removeMinKey() -> Value? {
+        guard let minKey = keys.min() else { return nil }
+        return removeValue(forKey: minKey)
+    }
+    
 }

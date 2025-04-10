@@ -585,7 +585,7 @@ public extension Array where Element : Equatable {
         return count0 - count
     }
     
-    mutating func removedEvery(_ element: Element) -> Self {
+    func removedEvery(_ element: Element) -> Self {
         var r = self
         r.removeEvery(element)
         return r
@@ -603,6 +603,12 @@ public extension Array where Element : Equatable {
         })
     }
     
+    mutating func removedAll(where c: (Element)->Bool) -> Self {
+        var R = self
+        R.removeAll(where: c)
+        return R
+    }
+
 }
 
 public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
@@ -2070,6 +2076,34 @@ public extension Array where Element == String {
         self.filteredOutEmpty.joinedBySpace
     }
     
+    @discardableResult
+    mutating func joinElements(at index: Int, with: String = "") -> Bool {
+        guard index >= 0 && index < count - 1 else { return false }
+        
+        let firstElement = self[index]
+        let secondElement = self[index + 1]
+        self[index] = firstElement + with + secondElement
+        remove(at: index + 1)
+        return true
+    }
+    
+    func indexForNextCharacter(after position: Int, in joinedString: String) -> Int? {
+        guard position >= 0 && position < joinedString.count - 1 else { return nil }
+        
+        let nextPosition = position + 1
+        var currentLength = 0
+        
+        for (index, element) in self.enumerated() {
+            let nextLength = currentLength + element.count
+            if nextPosition <= nextLength {
+                return index
+            }
+            currentLength = nextLength
+        }
+        
+        return nil
+    }
+    
 }
 
 
@@ -2133,6 +2167,7 @@ public extension Array {
     func joined<T>(with other: [T]) -> [(Element,T)] {
         crossed(with: other)
     }
+    
     
 }
 
