@@ -244,6 +244,7 @@ public extension Array {
 			self.append(creating())
 		}
 	}
+    
 }
 
 public extension Array {

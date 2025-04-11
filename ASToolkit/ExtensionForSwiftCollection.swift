@@ -17,21 +17,39 @@ public extension Collection {
     var isNotEmpty : Bool {
         !isEmpty
     }
- 
+    
     @discardableResult
     mutating func transform(_ f: (Self)->Self) -> Self {
         self = f(self)
         return self
     }
-
+    
     func transformed(_ f: (Self)->Self) -> Self {
         f(self)
     }
-
+    
     @discardableResult
     mutating func transform(_ f: (inout Self)->Void) -> Self {
         f(&self)
         return self
+    }
+    
+    
+    
+    func filterUpTo(_ limit: Int, _ predicate: (Element) -> Bool) -> [Element] {
+        var result: [Element] = []
+        result.reserveCapacity(Swift.min(count, limit)) // Pre-allocate space for efficiency
+        
+        for element in self {
+            if result.count >= limit {
+                break
+            }
+            if predicate(element) {
+                result.append(element)
+            }
+        }
+        
+        return result
     }
     
 }
