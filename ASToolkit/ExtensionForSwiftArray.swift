@@ -1157,6 +1157,21 @@ public extension Array where Element == Int {
     var asArrayOfString : [String] {
         map { "\($0)"}
     }
+    
+    var asStringJoinedByComma : String {
+        asArrayOfString.joinedByComma
+    }
+    
+    var asStringRange : String {
+        guard count > 0 else {
+            return "[]"
+        }
+        guard count > 1 else {
+            return "[\(self[0])]"
+        }
+        return "[\(min!)-\(max!)]"
+    }
+    
 }
 
 public extension Array {
