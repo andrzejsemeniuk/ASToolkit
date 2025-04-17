@@ -652,7 +652,7 @@ func pasteboardCopy(string: String) {
 }
 #endif
 
-extension View {
+public extension View {
     @ViewBuilder func hiddenIf(_ flag: Bool) -> some View {
         if flag {
             EmptyView()

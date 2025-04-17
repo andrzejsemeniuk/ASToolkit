@@ -604,7 +604,7 @@ public extension Array where Element : Equatable {
         })
     }
     
-    mutating func removedAll(where c: (Element)->Bool) -> Self {
+    func removedAll(where c: (Element)->Bool) -> Self {
         var R = self
         R.removeAll(where: c)
         return R
