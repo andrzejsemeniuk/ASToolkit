@@ -1943,6 +1943,14 @@ public extension Array {
     mutating func swapRight(_ i: Int, _ loop: Bool = true) {
         swapRight(at: i, loop: loop)
     }
+    
+    func swappedRight(_ i: Int, _ loop: Bool = true) -> Self {
+        var R = self
+        R.swapRight(at: i, loop: loop)
+        return R
+    }
+    
+    
 }
 
 public extension Array {

@@ -761,4 +761,30 @@ public extension Int {
         return r
     }
 
+    var asStringOfElapsedTimeFromSeconds : String {
+        let seconds = self
+        
+        // Convert to various time units
+        let years = seconds / (365 * 24 * 3600)
+        let months = seconds / (30 * 24 * 3600)
+        let days = seconds / (24 * 3600)
+        let hours = seconds / 3600
+        let minutes = seconds / 60
+        
+        // Return the most significant non-zero unit
+        if years > 0 {
+            return "Over \(years)year\(String.s(years)) ago"
+        } else if months > 0 {
+            return "Over \(months)month\(String.s(months)) ago"
+        } else if days > 0 {
+            return "Over \(days)day\(String.s(days)) ago"
+        } else if hours > 0 {
+            return "Over \(hours)hour\(String.s(hours)) ago"
+        } else if minutes > 0 {
+            return "Over \(minutes)minute\(String.s(minutes)) ago"
+        } else {
+            return "\(Swift.max(seconds, 0))second\(String.s(seconds)) ago"
+        }
+    }
+
 }

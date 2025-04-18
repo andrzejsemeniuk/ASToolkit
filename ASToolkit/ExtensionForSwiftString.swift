@@ -1418,3 +1418,41 @@ public extension String {
     }
     
 }
+
+
+public extension String {
+    
+    func with(s: Int) -> String {
+        s == 1 ? self : self + "s"
+    }
+    
+    func with(es: Int) -> String {
+        es == 1 ? self : self + "es"
+    }
+    
+    static func s(_ count: Int) -> String {
+        count == 1 ? "" : "s"
+    }
+    
+    static func es(_ count: Int) -> String {
+        count == 1 ? "" : "es"
+    }
+    
+    
+    func with(s: UInt) -> String {
+        s == 1 ? self : self + "s"
+    }
+    
+    func with(es: UInt) -> String {
+        es == 1 ? self : self + "es"
+    }
+    
+    static func s(_ count: UInt) -> String {
+        count == 1 ? "" : "s"
+    }
+    
+    static func es(_ count: UInt) -> String {
+        count == 1 ? "" : "es"
+    }
+    
+}
