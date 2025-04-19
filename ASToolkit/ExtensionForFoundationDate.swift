@@ -773,17 +773,17 @@ public extension Int {
         
         // Return the most significant non-zero unit
         if years > 0 {
-            return "Over \(years)year\(String.s(years)) ago"
+            return "Over \(years) year\(String.s(years)) ago"
         } else if months > 0 {
-            return "Over \(months)month\(String.s(months)) ago"
+            return "Over \(months) month\(String.s(months)) ago"
         } else if days > 0 {
-            return "Over \(days)day\(String.s(days)) ago"
+            return "Over \(days) day\(String.s(days)) ago"
         } else if hours > 0 {
-            return "Over \(hours)hour\(String.s(hours)) ago"
+            return "Over \(hours) hour\(String.s(hours)) ago"
         } else if minutes > 0 {
-            return "Over \(minutes)minute\(String.s(minutes)) ago"
+            return "Over \(minutes) minute\(String.s(minutes)) ago"
         } else {
-            return "\(Swift.max(seconds, 0))second\(String.s(seconds)) ago"
+            return "\(Swift.max(seconds, 0)) second\(String.s(seconds)) ago"
         }
     }
 
