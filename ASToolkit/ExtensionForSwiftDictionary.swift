@@ -207,13 +207,30 @@ public extension Dictionary where Key: Comparable {
 public extension Dictionary where Key == Int {
     
     mutating func incrementInPlace(keysHigherThan index: Int, by: Int) {
+        // First, collect all keys to adjust and their values
         let keysToAdjust = self.keys.filter { $0 > index }
+        var valuesToReadd: [(Int, Value)] = []
+        
+        // Remove all keys and store their values
         for key in keysToAdjust {
             if let value = self.removeValue(forKey: key) {
-                self[key + by] = value
+                valuesToReadd.append((key + by, value))
             }
+        }
+        
+        // Now add them back with adjusted keys
+        for (newKey, value) in valuesToReadd {
+            self[newKey] = value
         }
     }
     
+    func firstKey(in range: ClosedRange<Int>) -> Int? {
+        return keys.first { range.contains($0) }
+    }
 }
 
+public extension Dictionary {
+    var entries: [(Key, Value)] {
+        return map { ($0.key, $0.value) }
+    }
+}

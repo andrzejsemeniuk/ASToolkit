@@ -144,6 +144,27 @@ public extension String {
         return self[from..<max(from,from+length)]
     }
     
+    
+    func runRange(at index: Int) -> ClosedRange<Int> {
+        let char = self[self.index(self.startIndex, offsetBy: index)]
+        var start = index
+        var end = index
+        
+        // Find start of run
+        while start > 0 && self[self.index(self.startIndex, offsetBy: start - 1)] == char {
+            start -= 1
+        }
+        
+        // Find end of run
+        while end < self.count - 1 && self[self.index(self.startIndex, offsetBy: end + 1)] == char {
+            end += 1
+        }
+        
+        return start...end
+    }
+
+    
+    
     var containsVowel: Bool {
         firstMatch(of: /[aeiouyAEIOUY]/) != nil
     }
