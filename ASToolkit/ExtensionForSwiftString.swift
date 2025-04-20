@@ -871,6 +871,10 @@ public extension String {
     func missing(_ string: String) -> Bool {
         contains(string).not
     }
+    
+    mutating func remove(at index: Int) {
+        self = characters.removed(at: index).asString
+    }
 }
 
 public extension String {
@@ -1456,3 +1460,5 @@ public extension String {
     }
     
 }
+
+

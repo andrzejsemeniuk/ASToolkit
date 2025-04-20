@@ -203,3 +203,17 @@ public extension Dictionary where Key: Comparable {
     }
     
 }
+
+public extension Dictionary where Key == Int {
+    
+    mutating func incrementInPlace(keysHigherThan index: Int, by: Int) {
+        let keysToAdjust = self.keys.filter { $0 > index }
+        for key in keysToAdjust {
+            if let value = self.removeValue(forKey: key) {
+                self[key + by] = value
+            }
+        }
+    }
+    
+}
+
