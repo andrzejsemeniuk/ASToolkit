@@ -896,6 +896,20 @@ public extension String {
     mutating func remove(at index: Int) {
         self = characters.removed(at: index).asString
     }
+    
+    mutating func assign(at index: Int, character: String) {
+        if character.isNotEmpty {
+            assign(at: index, character: character.first!)
+        }
+    }
+    
+    mutating func assign(at index: Int, character: Character) {
+        if index < count {
+            var C = characters
+            C[index] = character
+            self = C.asString
+        }
+    }
 }
 
 public extension String {
