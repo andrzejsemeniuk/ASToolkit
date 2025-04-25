@@ -897,6 +897,21 @@ public extension String {
         self = characters.removed(at: index).asString
     }
     
+    mutating func assign(at index: String.Index, character: String) {
+        if character.isNotEmpty {
+            assign(at: index, character: character.first!)
+        }
+    }
+    
+    mutating func assign(at index: String.Index, character: Character) {
+        let index = self.distance(from: self.startIndex, to: index)
+        if index < count {
+            var C = characters
+            C[index] = character
+            self = C.asString
+        }
+    }
+    
     mutating func assign(at index: Int, character: String) {
         if character.isNotEmpty {
             assign(at: index, character: character.first!)
