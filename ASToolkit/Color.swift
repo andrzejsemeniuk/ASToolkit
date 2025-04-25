@@ -240,7 +240,7 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
     }
     
     public func gradient(to: HSBAInfo, ratio: CGFloat) -> HSBAInfo {
-        var from = self
+        let from = self
         let ratio = ratio.clampedTo01
         return .init(h: ratio.lerp(from.h, to.h), s: ratio.lerp(from.s, to.s), b: ratio.lerp(from.b, to.b), a: ratio.lerp(from.a, to.a))
     }

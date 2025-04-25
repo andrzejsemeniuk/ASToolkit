@@ -213,7 +213,7 @@ public extension CGPoint {
     
 }
 
-extension CGPoint : Hashable {
+extension CGPoint : @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(x)
         hasher.combine(y)
@@ -1575,7 +1575,7 @@ public extension CGMutablePath {
         let ARROWHEAD = arrowHead(side: length, angle: angle, opposite: opposite)
         let P1 = to-from
         let ANGLE = P1.angle
-        let LINE = CGMutablePath.init().moved(to: -P1).addedLine(to: .zero, transform: .identity.rotated(by: -ANGLE.radians).translatedBy(x: 0, y: -P1.length - opposite/2.0))
+//        let LINE = CGMutablePath.init().moved(to: -P1).addedLine(to: .zero, transform: .identity.rotated(by: -ANGLE.radians).translatedBy(x: 0, y: -P1.length - opposite/2.0))
         r.addPath(ARROWHEAD)
 //        r.addPath(LINE.copy(strokingWithWidth: thickness, lineCap: lineCap, lineJoin: lineJoin, miterLimit: lineMiterLimit))
         return CGMutablePath.init().addedPath(r) //, transform: .identity.rotated(by: ANGLE.radians))
