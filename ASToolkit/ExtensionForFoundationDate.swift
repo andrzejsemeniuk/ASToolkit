@@ -732,7 +732,7 @@ public extension Date {
         } else if remaining.hours > 0 {
             return (nil, "\(remaining.hours) hour" + (remaining.hours > 1 ? "s" : ""), nil)
         } else {
-            return (nil, nil, "\(remaining.minutes) minute" + (remaining.minutes != 0 ? "s" : ""))
+            return (nil, nil, "\(remaining.minutes) minute" + (remaining.minutes != 1 ? "s" : ""))
         }
     }
 }
