@@ -2128,6 +2128,9 @@ public extension Array where Element == String {
         return nil
     }
     
+    var countOfLetters : Int {
+        map { $0.count }.sum
+    }
 }
 
 
