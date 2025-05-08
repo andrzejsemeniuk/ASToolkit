@@ -1512,3 +1512,40 @@ public extension String {
 }
 
 
+public extension String {
+    
+        // Generic method to replace characters at specific indices
+    mutating func replace(at indices: [String.Index], with characters: [Character]) {
+        guard indices.count == characters.count else { return }
+        var chars = Array(self)
+        for (index, char) in zip(indices, characters) {
+            let intIndex = self.distance(from: startIndex, to: index)
+            if intIndex < chars.count {
+                chars[intIndex] = char
+            }
+        }
+        self = String(chars)
+    }
+    
+        // Generic method to get characters at specific indices
+    func characters(at indices: [String.Index]) -> [Character] {
+        indices.compactMap { index in
+            guard index < endIndex else { return nil }
+            return self[index]
+        }
+    }
+    
+        // Helper method to convert Int indices to String.Index
+    func indices(where predicate: (Character) -> Bool) -> [String.Index] {
+        var result: [String.Index] = []
+        var index = startIndex
+        while index < endIndex {
+            if predicate(self[index]) {
+                result.append(index)
+            }
+            index = self.index(after: index)
+        }
+        return result
+    }
+    
+}

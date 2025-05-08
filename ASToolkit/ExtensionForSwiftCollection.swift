@@ -52,6 +52,12 @@ public extension Collection {
         return result
     }
     
+    
+    func indices(of element: Element) -> [Index] where Element: Equatable {
+        indices.filter { self[$0] == element }
+    }
+
+    
 }
 
 public enum OrderedCollectionSearchDirection {

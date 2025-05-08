@@ -2225,3 +2225,48 @@ public extension Array {
 public func union<T: Hashable>(_ lhs: [T], _ rhs: [T]) -> [T] {
     Array(Set(lhs).union(Set(rhs)))
 }
+
+public extension Array {
+    
+    func permutations() -> [[Element]] {
+        if count <= 1 {
+            return [self]
+        }
+        
+        var result: [[Element]] = []
+        
+        for i in 0..<count {
+            var subArray = self
+            let element = subArray.remove(at: i)
+            
+            let subPermutations = subArray.permutations()
+            
+            for permutation in subPermutations {
+                var newPermutation = [element]
+                newPermutation.append(contentsOf: permutation)
+                result.append(newPermutation)
+            }
+        }
+        
+        return result
+    }
+    
+    // Generic method to find indices of elements matching a condition
+    func indices(where predicate: (Element) -> Bool) -> [Int] {
+        enumerated().compactMap { index, element in
+            predicate(element) ? index : nil
+        }
+    }
+    
+    // Generic method to replace elements at specific indices
+    mutating func replace(at indices: [Int], with elements: [Element]) {
+        guard indices.count == elements.count else { return }
+        for (index, element) in zip(indices, elements) {
+            if index < count {
+                self[index] = element
+            }
+        }
+    }
+
+}
+
