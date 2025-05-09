@@ -1514,6 +1514,10 @@ public extension Array where Element == Bool {
     static func allPermutations(n: Int) -> [[Bool]] {
         return [false,true].generate(n)
     }
+    
+    func count(_ value: Bool) -> Int {
+        self.count(where: { $0 == value })
+    }
 }
 
 public extension Array where Element : Comparable {
