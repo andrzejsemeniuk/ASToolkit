@@ -507,9 +507,9 @@ extension Array {
 
 public extension Array where Element : Equatable {
     
-    func previousLooped(_ element: Element) -> Element {
+    func previousLooped(_ element: Element, missing: Element? = nil) -> Element {
         guard count > 0 else {
-            return element
+            return missing ?? element
         }
         if let INDEX = firstIndex(of: element) {
             if INDEX > 0 {
@@ -517,7 +517,7 @@ public extension Array where Element : Equatable {
             }
             return last!
         }
-        return element
+        return missing ?? element
     }
 
     func nextLooped(_ element: Element, missing: Element? = nil) -> Element {

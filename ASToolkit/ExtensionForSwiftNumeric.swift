@@ -1075,8 +1075,8 @@ public extension Int {
         return self
     }
 
-    func incremented(by increment: Int = 1, modulo: Int) -> Int {
-        let r = (self + increment) % modulo
+    func incremented(by increment: Int = 1, modulo: Int = 0) -> Int {
+        let r = modulo != 0 ? (self + increment) % modulo : (self + increment)
         return r < 0 ? r + modulo : r
     }
 
