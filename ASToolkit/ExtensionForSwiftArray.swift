@@ -505,6 +505,37 @@ extension Array {
     }
 }
 
+public extension Array {
+    
+    func previousLooped(_ element: Element, missing: Element? = nil, check: (Element) -> Bool) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = firstIndex(where: check) {
+            if INDEX > 0 {
+                return self[INDEX-1]
+            }
+            return last!
+        }
+        return missing ?? element
+    }
+    
+    func nextLooped(_ element: Element, missing: Element? = nil, check: (Element) -> Bool) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = firstIndex(where: check) {
+            if INDEX < count-1 {
+                return self[INDEX+1]
+            }
+            return first!
+        }
+        return missing ?? element
+    }
+
+}
+
+
 public extension Array where Element : Equatable {
     
     func previousLooped(_ element: Element, missing: Element? = nil) -> Element {
@@ -621,10 +652,33 @@ public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
     return r
 }
 
-extension Array {
+public extension Array {
     
-    public func zipped<B>(with:[B]) -> [(Element,B)] {
+    func zipped<B>(with:[B]) -> [(Element,B)] {
         return zippy(self,with)
+    }
+    
+    var enumeratedWithExcelStyle : [String] {
+        guard count > 0 else { return [] }
+        
+        var result: [String] = []
+        var current = 0
+        
+        while current < count {
+            var value = current
+            var column = ""
+            
+            while value >= 0 {
+                let remainder = value % 26
+                column = String(UnicodeScalar(65 + remainder)!) + column
+                value = (value / 26) - 1
+            }
+            
+            result.append(column)
+            current += 1
+        }
+        
+        return result
     }
 }
 
