@@ -709,6 +709,29 @@ public extension String {
         let SPLIT = splitBySlash
         return (r: SPLIT[0].asUInt8 ?? r ?? 0, g: SPLIT[safe: 1]?.asUInt8 ?? g ?? 0, b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0)
     }
+    
+    func toRGBA8(r: UInt8? = nil, g: UInt8? = nil, b: UInt8? = nil, a: UInt8? = nil) -> Color.RGBA8 {
+        let SPLIT = splitBySlash
+        return (r: SPLIT[0].asUInt8 ?? r ?? 0, 
+                g: SPLIT[safe: 1]?.asUInt8 ?? g ?? 0, 
+                b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0,
+                a: SPLIT[safe: 3]?.asUInt8 ?? a ?? 0)
+    }
+    
+    func toHSB8(h: UInt8? = nil, s: UInt8? = nil, b: UInt8? = nil) -> Color.HSB8 {
+        let SPLIT = splitBySlash
+        return (h: SPLIT[0].asUInt8 ?? h ?? 0, 
+                s: SPLIT[safe: 1]?.asUInt8 ?? s ?? 0, 
+                b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0)
+    }
+    
+    func toHSBA8(h: UInt8? = nil, s: UInt8? = nil, b: UInt8? = nil, a: UInt8? = nil) -> Color.HSBA8 {
+        let SPLIT = splitBySlash
+        return (h: SPLIT[0].asUInt8 ?? h ?? 0, 
+                s: SPLIT[safe: 1]?.asUInt8 ?? s ?? 0, 
+                b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0,
+                a: SPLIT[safe: 3]?.asUInt8 ?? a ?? 0)
+    }
 }
 
 public extension String {
