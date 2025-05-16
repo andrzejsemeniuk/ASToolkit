@@ -605,3 +605,112 @@ public extension Color {
         .init(white: self.hsba[2] > 0.5 ? 0 : 1)
     }
 }
+
+
+public extension Color {
+    
+    typealias RGB8  = (r: UInt8, g: UInt8, b: UInt8)
+    typealias RGBA8 = (r: UInt8, g: UInt8, b: UInt8, a: UInt8)
+    typealias HSB8  = (h: UInt8, s: UInt8, b: UInt8)
+    typealias HSBA8 = (h: UInt8, s: UInt8, b: UInt8, a: UInt8)
+    
+    // MARK: - RGB8 Properties
+    
+    var asRGB8: RGB8 {
+        let components = UIColor(self).cgColor.components ?? [0, 0, 0]
+        return (
+            r: UInt8(components[0] * 255),
+            g: UInt8(components[1] * 255),
+            b: UInt8(components[2] * 255)
+        )
+    }
+    
+    var asRGBA8: RGBA8 {
+        let components = UIColor(self).cgColor.components ?? [0, 0, 0, 1]
+        return (
+            r: UInt8(components[0] * 255),
+            g: UInt8(components[1] * 255),
+            b: UInt8(components[2] * 255),
+            a: UInt8(components[3] * 255)
+        )
+    }
+    
+    var asHSB8: HSB8 {
+        var h: CGFloat = 0
+        var s: CGFloat = 0
+        var b: CGFloat = 0
+        UIColor(self).getHue(&h, saturation: &s, brightness: &b, alpha: nil)
+        return (
+            h: UInt8(h * 255),
+            s: UInt8(s * 255),
+            b: UInt8(b * 255)
+        )
+    }
+    
+    var asHSBA8: HSBA8 {
+        var h: CGFloat = 0
+        var s: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        UIColor(self).getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        return (
+            h: UInt8(h * 255),
+            s: UInt8(s * 255),
+            b: UInt8(b * 255),
+            a: UInt8(a * 255)
+        )
+    }
+    
+    // MARK: - Static Factory Methods
+    
+    static func fromRGB8(_ rgb: RGB8) -> Color {
+        Color(
+            red: Double(rgb.r) / 255,
+            green: Double(rgb.g) / 255,
+            blue: Double(rgb.b) / 255
+        )
+    }
+    
+    static func fromRGBA8(_ rgba: RGBA8) -> Color {
+        Color(
+            red: Double(rgba.r) / 255,
+            green: Double(rgba.g) / 255,
+            blue: Double(rgba.b) / 255,
+            opacity: Double(rgba.a) / 255
+        )
+    }
+    
+    static func fromHSB8(_ hsb: HSB8) -> Color {
+        Color(
+            hue: Double(hsb.h) / 255,
+            saturation: Double(hsb.s) / 255,
+            brightness: Double(hsb.b) / 255
+        )
+    }
+    
+    static func fromHSBA8(_ hsba: HSBA8) -> Color {
+        Color(
+            hue: Double(hsba.h) / 255,
+            saturation: Double(hsba.s) / 255,
+            brightness: Double(hsba.b) / 255,
+            opacity: Double(hsba.a) / 255
+        )
+    }
+}
+
+public extension String {
+    
+    static func fromRGB8    (_ c: Color.RGB8)   -> String { "\(c.r)/\(c.g)/\(c.b)" }
+    static func fromRGBA8   (_ c: Color.RGBA8)  -> String { "\(c.r)/\(c.g)/\(c.b)/\(c.a)" }
+    static func fromHSB8    (_ c: Color.HSB8)   -> String { "\(c.h)/\(c.s)/\(c.b)" }
+    static func fromHSBA8   (_ c: Color.HSBA8)  -> String { "\(c.h)/\(c.s)/\(c.b)/\(c.a)" }
+    
+    func toRGB8(r: UInt8? = nil, g: UInt8? = nil, b: UInt8? = nil) -> Color.RGB8 {
+        let SPLIT = splitBySlash
+        return (r: SPLIT[0].asUInt8 ?? r ?? 0, g: SPLIT[safe: 1]?.asUInt8 ?? g ?? 0, b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0)
+    }
+}
+
+public extension String {
+    var asUInt8 : UInt8? { UInt8(self) }
+}
