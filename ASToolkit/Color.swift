@@ -696,6 +696,43 @@ public extension Color {
             opacity: Double(hsba.a) / 255
         )
     }
+
+    
+    // MARK: - String Initialization
+    
+    static func fromRGB8String(_ string: String) -> Color {
+        fromRGB8(string.toRGB8())
+    }
+    
+    static func fromRGBA8String(_ string: String) -> Color {
+        fromRGBA8(string.toRGBA8())
+    }
+    
+    static func fromHSB8String(_ string: String) -> Color {
+        fromHSB8(string.toHSB8())
+    }
+    
+    static func fromHSBA8String(_ string: String) -> Color {
+        fromHSBA8(string.toHSBA8())
+    }
+    
+    // MARK: - String Conversion Properties
+    
+    var asRGB8String: String {
+        String.fromRGB8(self.asRGB8)
+    }
+    
+    var asRGBA8String: String {
+        String.fromRGBA8(self.asRGBA8)
+    }
+    
+    var asHSB8String: String {
+        String.fromHSB8(self.asHSB8)
+    }
+    
+    var asHSBA8String: String {
+        String.fromHSBA8(self.asHSBA8)
+    }
 }
 
 public extension String {
@@ -731,6 +768,22 @@ public extension String {
                 s: SPLIT[safe: 1]?.asUInt8 ?? s ?? 0, 
                 b: SPLIT[safe: 2]?.asUInt8 ?? b ?? 0,
                 a: SPLIT[safe: 3]?.asUInt8 ?? a ?? 0)
+    }
+    
+    func asColorFromRGB8(r: UInt8? = nil, g: UInt8? = nil, b: UInt8? = nil) -> Color {
+        Color.fromRGB8(toRGB8(r: r, g: g, b: b))
+    }
+    
+    func asColorFromRGBA8(r: UInt8? = nil, g: UInt8? = nil, b: UInt8? = nil, a: UInt8? = nil) -> Color {
+        Color.fromRGBA8(toRGBA8(r: r, g: g, b: b, a: a))
+    }
+    
+    func asColorFromHSB8(h: UInt8? = nil, s: UInt8? = nil, b: UInt8? = nil) -> Color {
+        Color.fromHSB8(toHSB8(h: h, s: s, b: b))
+    }
+    
+    func asColorFromHSBA8(h: UInt8? = nil, s: UInt8? = nil, b: UInt8? = nil, a: UInt8? = nil) -> Color {
+        Color.fromHSBA8(toHSBA8(h: h, s: s, b: b, a: a))
     }
 }
 
