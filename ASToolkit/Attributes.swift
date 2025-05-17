@@ -444,16 +444,16 @@ public class Attributes : Codable, Equatable, ObservableObject {
 
     static public func stringForColor(from color: SKColor) -> String {
         let hsba = color.HSBA
-        return "\(hsba.hue),\(hsba.saturation),\(hsba.brightness),\(hsba.alpha)"
+        return "\(hsba.hue.format4),\(hsba.saturation.format4),\(hsba.brightness.format4),\(hsba.alpha.format4)"
     }
     
     static public func stringForColor(from color: Color) -> String {
         let hsba = color.hsba
-        return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
+        return "\(hsba[0].format4),\(hsba[1].format4),\(hsba[2].format4),\(hsba[3].format4)"
     }
     
     static public func stringForColor(from hsba: [Double]) -> String {
-        return "\(hsba[0]),\(hsba[1]),\(hsba[2]),\(hsba[3])"
+        return "\(hsba[0].format4),\(hsba[1].format4),\(hsba[2].format4),\(hsba[3].format4)"
     }
         
 

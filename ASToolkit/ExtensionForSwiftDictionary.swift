@@ -230,7 +230,15 @@ public extension Dictionary where Key == Int {
 }
 
 public extension Dictionary {
-    var entries: [(Key, Value)] {
+    var entries: [(key: Key, value: Value)] {
         return map { ($0.key, $0.value) }
+    }
+}
+
+public extension Dictionary where Key == String, Value == String {
+    var print: String {
+        "[" + entries.map { (k,v) in
+            "\n \(k.qq) : \(v.qq),"
+        }.sorted().joinedByNothing + "\n]"
     }
 }

@@ -1373,10 +1373,10 @@ public extension View {
     func modify(_ mod: @escaping (AnyView)->some View) -> some View {
         mod(self.asAnyView)
     }
-    func modify(if condition: Bool, mod: @escaping (AnyView)->some View) -> some View {
+    func modify(if condition: Bool, then: @escaping (AnyView)->some View) -> some View {
         Group {
             if condition {
-                mod(self.asAnyView)
+                then(self.asAnyView)
             } else {
                 self
             }
