@@ -31,6 +31,10 @@ extension String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)!
     }
     
+    public var urlDecoded: String {
+        return removingPercentEncoding ?? self
+    }
+    
     public var base64Encoded: String {
         let step1:NSString      = self as NSString
         let step2:Data          = step1.data(using: String.Encoding.utf8.rawValue)!
@@ -73,6 +77,11 @@ public extension String {
         self = Self.FALSE
         return self
     }
+    
+    func transformed<T>(to: (String)->T?) -> T? {
+        to(self)
+    }
+
 }
 
 public extension String {
