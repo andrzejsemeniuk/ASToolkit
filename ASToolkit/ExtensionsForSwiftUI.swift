@@ -1402,3 +1402,24 @@ public extension Binding where Value == Bool {
         Binding.constant(v)
     }
 }
+
+public extension Binding<Bool> {
+    static func onEmptyString(_ value: Binding<String>) -> Binding<Bool> {
+        .init(get: {
+            value.wrappedValue.isNotEmpty
+        }, set: { v in
+            if !v {
+                value.wrappedValue = ""
+            }
+        })
+    }
+    static func onOptionalString(_ value: Binding<String?>) -> Binding<Bool> {
+        .init(get: {
+            value.wrappedValue != nil
+        }, set: { v in
+            if !v {
+                value.wrappedValue = nil
+            }
+        })
+    }
+}
