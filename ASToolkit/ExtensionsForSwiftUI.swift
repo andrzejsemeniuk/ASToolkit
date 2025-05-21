@@ -1218,12 +1218,12 @@ public struct ScrollOffsetPreferenceKey: PreferenceKey {
 
 extension View {
     
-    public func viewInScrollViewTrackingPosition(_ axes: Axis.Set, showsIndicators: Bool = false, position: Binding<CGPoint>) -> some View {
+    public func viewInScrollViewTrackingPosition(_ axes: Axis.Set, showsIndicators: Bool = false, position: Binding<CGPoint>, named: String) -> some View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             self
                 .background(GeometryReader { geometry in
                     Color.clear
-                        .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("scroll-view")).origin)
+                        .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named(named)).origin)
                 })
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                     position.wrappedValue = value
@@ -1232,12 +1232,12 @@ extension View {
         .coordinateSpace(name: "scroll-view")
     }
     
-    public func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
-        viewInScrollViewTrackingPosition(.horizontal, showsIndicators: showsIndicators, position: position)
+    public func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>, named: String) -> some View {
+        viewInScrollViewTrackingPosition(.horizontal, showsIndicators: showsIndicators, position: position, named: named)
     }
     
-    public func viewInScrollViewVerticalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>) -> some View {
-        viewInScrollViewTrackingPosition(.vertical, showsIndicators: showsIndicators, position: position)
+    public func viewInScrollViewVerticalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>, named: String) -> some View {
+        viewInScrollViewTrackingPosition(.vertical, showsIndicators: showsIndicators, position: position, named: named)
     }
     
 }
