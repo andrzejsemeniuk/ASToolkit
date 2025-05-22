@@ -571,6 +571,7 @@ public extension Array where Element == [HSBAInfo] {
 
 
 
+
 public extension SKColor {
     var asHSBAInfo : HSBAInfo {
         .init(self.arrayOfHSBA)
@@ -592,10 +593,77 @@ public extension SKColor {
 }
 
 public extension String {
+    
     var asHSBAInfo : HSBAInfo {
         .init(self.asArrayOfDouble(delimiter: ",").padded(with: 1, till: 4), fallback: 1)
     }
+    
+        //    static func ^ (lhs: String, rhs: Bool) -> String {
+        //        return rhs ? lhs : ""
+        //    }
+    
 }
+
+public extension String {
+
+    static let pipe = "|"
+
+    var colorPaletteGet : [HSBAInfo] {
+        isEmpty ? [] : splitByPipe.filteredOutEmpty.map {
+            HSBAInfo.init($0)
+        }
+    }
+    
+    static func asColorPalette(_ c: any Collection<HSBAInfo>) -> String {
+        asSet(create: c.map {
+            $0.asStringOfHSBA
+        }, delimiter: .pipe)
+    }
+    
+    mutating func colorPaletteToggle(_ c: HSBAInfo, add: Bool, append: Bool) {
+        if add {
+            colorPaletteAdd(c, append: append)
+        } else {
+            colorPaletteRemove(c)
+        }
+    }
+
+    mutating func colorPaletteRemove(_ c: HSBAInfo) {
+        asSet(remove: c.asStringOfHSBA, delimiter: .pipe)
+    }
+
+    mutating func colorPaletteAdd(_ c: HSBAInfo, append: Bool) {
+        if append {
+            asSetInsert(append: c.asStringOfHSBA, delimiter: .pipe)
+        } else {
+            asSetInsert(prepend: c.asStringOfHSBA, delimiter: .pipe)
+        }
+    }
+    
+    mutating func colorPaletteStuff(_ color: HSBAInfo, append: Bool, keeping: Int) {
+        var C = colorPaletteGet
+        C.removeAll(where: { $0 == color })
+        if append {
+            C.discardFromFront(keeping: keeping - 1)
+            C.append(color)
+        } else {
+            C.discardFromBack(keeping: keeping - 1)
+            C.prepend(color)
+        }
+        self = .asColorPalette(C)
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
 public extension Color {
     var asBWExtreme : Color {
