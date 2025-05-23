@@ -224,6 +224,11 @@ public extension Color {
     static let brown    = Color.init(hsb: [0.07, 0.8, 0.8])
     static let beige    = Color.init(hsb: [0.10, 0.6, 0.8])
     
+    static let yellow1  = Color.init(hsb: [0.121, 1.0, 1.0])
+    static let yellow2  = Color.init(hsb: [0.131, 1.0, 1.0])
+    static let yellow3  = Color.init(hsb: [0.135, 1.0, 1.0])
+    static let yellow4  = Color.init(hsb: [0.140, 1.0, 1.0])
+    
     static let gray1    = Color.init(white: 0.1)
     static let gray2    = Color.init(white: 0.2)
     static let gray25   = Color.init(white: 0.25)
@@ -1083,7 +1088,7 @@ public extension View {
     ) -> some View {
         self
             .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
-            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: -shadowOffset/2)
     }
     
     func neomorphicOverlay(
@@ -1094,7 +1099,7 @@ public extension View {
     ) -> some View {
         self
             .shadow(color: darkColor, radius: blur, x: shadowOffset, y: -shadowOffset)
-            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: shadowOffset/2)
     }
     
 }
@@ -1110,7 +1115,7 @@ public extension Shape {
         self
             .fill(lightColor)
             .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
-            .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: -shadowOffset/2)
     }
     
 }

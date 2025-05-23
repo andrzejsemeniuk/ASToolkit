@@ -22,6 +22,9 @@ public extension Numeric where Self : Comparable {
     
     var plus1 : Self { self + 1 }
     var minus1 : Self { self - 1 }
+    
+    
+    
 }
 
 
@@ -46,6 +49,13 @@ public extension BinaryInteger {
     var quarter : Self { self / 4 }
     var third : Self { self / 3 }
     var half : Self { self / 2 }
+    
+    
+    func added(_ v: Self) -> Self { self + v }
+    func subtracted(_ v: Self) -> Self { self - v }
+    func divided(by v: Self) -> Self { self / v }
+    func multiplied(by v: Self) -> Self { self * v }
+
 }
 
 public extension FloatingPoint {
@@ -83,6 +93,12 @@ public extension FloatingPoint {
         return self
     }
     
+    func added(_ v: Self) -> Self { self + v }
+    func subtracted(_ v: Self) -> Self { self - v }
+    func divided(by v: Self) -> Self { self / v }
+    func multiplied(by v: Self) -> Self { self * v }
+    func negated() -> Self { -self }
+
 }
 
 public extension FloatingPoint {

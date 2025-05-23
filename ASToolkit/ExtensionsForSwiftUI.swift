@@ -1344,6 +1344,17 @@ public func ButtonWithIcon(_ name: String, selected: Bool = false, tint: Color? 
     })
 }
 
+public func ButtonWithIconAndAnimation(_ name: String, selected: Bool = false, tint: Color? = nil, action: @escaping Block) -> some View {
+    Button(action: {
+        withAnimation {
+            action()
+        }
+    }, label: {
+        Icon(name + (selected ? ".fill" : "" ))
+            .foregroundColor(tint ?? .accentColor)
+    })
+}
+
 
 public extension Array {
     func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
