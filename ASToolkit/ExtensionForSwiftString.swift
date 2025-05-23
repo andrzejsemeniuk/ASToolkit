@@ -1302,6 +1302,12 @@ public extension String {
         self ?= String.encoded(value)
     }
     
+    static func LETTER(_ i: Int, _ fallback: String = "?") -> String {
+        ABCDEFGHIJKLMNOPQRSTUVWXYZ.characters[safe: i]?.asString ?? fallback
+    }
+    static func letter(_ i: Int, _ fallback: String = "?") -> String {
+        LETTER(i,fallback).lowercased()
+    }
 }
 
 public extension String {

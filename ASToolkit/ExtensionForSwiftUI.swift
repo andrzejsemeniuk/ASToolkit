@@ -346,6 +346,10 @@ public extension Color {
         SKColor.init(hsba: self.hsba.asArrayOfCGFloat)
     }
     
+    var asHSBAInfo : HSBAInfo {
+        .init(self.hsba)
+    }
+    
 #if os(macOS)
     func nsColor() -> NSColor {
         NSColor(self)
