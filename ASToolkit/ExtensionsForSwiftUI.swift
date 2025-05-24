@@ -42,6 +42,11 @@ public extension View {
             .opacity(flag ? opacity : 1)
     }
     
+    func enabled4(_ flag: Bool) -> some View { enabled(flag, opacity: 0.4) }
+    func enabled5(_ flag: Bool) -> some View { enabled(flag, opacity: 0.5) }
+    func disabled4(_ flag: Bool) -> some View { disabled(flag, opacity: 0.4) }
+    func disabled5(_ flag: Bool) -> some View { disabled(flag, opacity: 0.5) }
+    
     var separator : some View {
         hline(Color.init(white: 1, alpha: 0.5))
     }
