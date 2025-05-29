@@ -858,3 +858,55 @@ public extension String {
 public extension String {
     var asUInt8 : UInt8? { UInt8(self) }
 }
+
+public extension HSBAInfo {
+    var asHSBA8: Color.HSBA8 {
+        (
+            h: UInt8(hue * 255),
+            s: UInt8(saturation * 255),
+            b: UInt8(brightness * 255),
+            a: UInt8(alpha * 255)
+        )
+    }
+    
+    var asRGBA8: Color.RGBA8 {
+        let color = asSKColor
+        let components = color.cgColor.components ?? [0, 0, 0, 1]
+        return (
+            r: UInt8(components[0] * 255),
+            g: UInt8(components[1] * 255),
+            b: UInt8(components[2] * 255),
+            a: UInt8(components[3] * 255)
+        )
+    }
+    
+    static func fromRGBA8(_ rgba: Color.RGBA8) -> HSBAInfo {
+        let color = Color.fromRGBA8(rgba)
+        return color.asHSBAInfo
+    }
+    
+    static func fromHSBA8(_ hsba: Color.HSBA8) -> HSBAInfo {
+        HSBAInfo(
+            hue: Double(hsba.h) / 255,
+            saturation: Double(hsba.s) / 255,
+            brightness: Double(hsba.b) / 255,
+            alpha: Double(hsba.a) / 255
+        )
+    }
+    
+    static func fromRGBA8String(_ string: String) -> HSBAInfo {
+        fromRGBA8(string.toRGBA8())
+    }
+    
+    static func fromHSBA8String(_ string: String) -> HSBAInfo {
+        fromHSBA8(string.toHSBA8())
+    }
+    
+    var asRGBA8String: String {
+        String.fromRGBA8(self.asRGBA8)
+    }
+    
+    var asHSBA8String: String {
+        String.fromHSBA8(self.asHSBA8)
+    }
+}
