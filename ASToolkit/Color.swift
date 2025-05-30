@@ -894,19 +894,33 @@ public extension HSBAInfo {
         )
     }
     
-    static func fromRGBA8String(_ string: String) -> HSBAInfo {
-        fromRGBA8(string.toRGBA8())
-    }
-    
-    static func fromHSBA8String(_ string: String) -> HSBAInfo {
-        fromHSBA8(string.toHSBA8())
-    }
-    
     var asRGBA8String: String {
         String.fromRGBA8(self.asRGBA8)
     }
     
     var asHSBA8String: String {
         String.fromHSBA8(self.asHSBA8)
+    }
+}
+
+public extension String {
+    func asHSBAInfoFromHSBA8(h: UInt8 = 0, s: UInt8 = 0, b: UInt8 = 0, a: UInt8 = 0) -> HSBAInfo {
+        let components = self.split(separator: "/").compactMap { UInt8($0) }
+        return HSBAInfo.fromHSBA8((
+            h: components[safe: 0] ?? h,
+            s: components[safe: 1] ?? s,
+            b: components[safe: 2] ?? b,
+            a: components[safe: 3] ?? a
+        ))
+    }
+    
+    func asHSBAInfoFromRGBA8(r: UInt8 = 0, g: UInt8 = 0, b: UInt8 = 0, a: UInt8 = 0) -> HSBAInfo {
+        let components = self.split(separator: "/").compactMap { UInt8($0) }
+        return HSBAInfo.fromRGBA8((
+            r: components[safe: 0] ?? r,
+            g: components[safe: 1] ?? g,
+            b: components[safe: 2] ?? b,
+            a: components[safe: 3] ?? a
+        ))
     }
 }
