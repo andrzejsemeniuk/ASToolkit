@@ -1095,6 +1095,18 @@ public extension View {
             .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: -shadowOffset/2)
     }
     
+    func neomorphicIllumination(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: shadowOffset/2, y: shadowOffset/2)
+    }
+    
+    
     func neomorphicOverlay(
         lightColor: Color = Color.white.opacity(0.7),
         darkColor: Color = Color.gray.opacity(0.2),
