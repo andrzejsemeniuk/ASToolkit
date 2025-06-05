@@ -1272,6 +1272,24 @@ extension View {
         }
     }
     
+    public func viewInScrollViewReader(proxy: Binding<ScrollViewProxy?>) -> some View {
+        ScrollViewReader { PROXY in
+            self
+                .onAppear {
+                    proxy.wrappedValue = PROXY
+                }
+        }
+    }
+    
+    public func viewInScrollViewReader(proxy: @escaping (ScrollViewProxy)->Void) -> some View {
+        ScrollViewReader { PROXY in
+            self
+                .onAppear {
+                    proxy(PROXY)
+                }
+        }
+    }
+    
 //    public func viewInScrollViewTrackingIdentifiers(_ axes: Axis.Set, named: String, showsIndicators: Bool = false, identifier: Binding<String>, anchor: UnitPoint? = nil,  onChangedIdentifier: ((ScrollViewProxy,String)->Void)? = nil) -> some View {
 //        ScrollView(axes, showsIndicators: showsIndicators) {
 //            self
