@@ -940,7 +940,7 @@ public extension View {
             .onAppear {
                 vv.wrappedValue = to.wrappedValue
             }
-            .onChange(of: vv.wrappedValue) { v in
+            .onChange(of: vv.wrappedValue) { _,v in
                 to.wrappedValue = v
             }
     }
@@ -949,7 +949,7 @@ public extension View {
             .onAppear {
                 vv.wrappedValue = get()
             }
-            .onChange(of: vv.wrappedValue) { v in
+            .onChange(of: vv.wrappedValue) { _,v in
                 set(v)
             }
     }
@@ -1234,7 +1234,7 @@ extension View {
                     position.wrappedValue = value
                 }
         }
-        .coordinateSpace(name: "scroll-view")
+        .coordinateSpace(name: named)
     }
     
     public func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>, named: String) -> some View {
@@ -1244,7 +1244,41 @@ extension View {
     public func viewInScrollViewVerticalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>, named: String) -> some View {
         viewInScrollViewTrackingPosition(.vertical, showsIndicators: showsIndicators, position: position, named: named)
     }
+
     
+    public func viewInScrollViewReaderTrackingIdentifiers(identifier: Binding<String>, anchor: UnitPoint? = nil,  onChangedIdentifier: ((ScrollViewProxy,String)->Void)? = nil) -> some View {
+        ScrollViewReader { proxy in
+            self
+                .onChange(of: identifier.wrappedValue) { _,v in
+                if let onChangedIdentifier {
+                    onChangedIdentifier(proxy,v)
+                } else {
+                    proxy.scrollTo(v, anchor: anchor)
+                }
+            }
+        }
+    }
+    
+    public func viewInScrollViewReaderTrackingIdentifiers(identifier: Binding<Int>, anchor: UnitPoint? = nil,  onChangedIdentifier: ((ScrollViewProxy,Int)->Void)? = nil) -> some View {
+        ScrollViewReader { proxy in
+            self
+                .onChange(of: identifier.wrappedValue) { _,v in
+                if let onChangedIdentifier {
+                    onChangedIdentifier(proxy,v)
+                } else {
+                    proxy.scrollTo(v, anchor: anchor)
+                }
+            }
+        }
+    }
+    
+//    public func viewInScrollViewTrackingIdentifiers(_ axes: Axis.Set, named: String, showsIndicators: Bool = false, identifier: Binding<String>, anchor: UnitPoint? = nil,  onChangedIdentifier: ((ScrollViewProxy,String)->Void)? = nil) -> some View {
+//        ScrollView(axes, showsIndicators: showsIndicators) {
+//            self
+//        }
+//        .viewInScrollViewReaderTrackingIdentifiers(identifier: identifier, anchor: anchor, onChangedIdentifier: onChangedIdentifier)
+//    }
+
 }
 
 
