@@ -536,6 +536,68 @@ public extension String {
 		}
 		return r
 	}
+    
+    var asEscapedCString : String {
+        var result = ""
+        for char in self {
+            switch char {
+            case "\"":
+                result += "\\\""
+            case "\\":
+                result += "\\\\"
+            case "\n":
+                result += "\\n"
+            case "\r":
+                result += "\\r"
+            case "\t":
+                result += "\\t"
+            case "\0":
+                result += "\\0"
+            default:
+                result.append(char)
+            }
+        }
+        return result
+    }
+    
+    static func fromEscapedCString(_ escaped: String) -> String {
+        var result = ""
+        var i = escaped.startIndex
+        
+        while i < escaped.endIndex {
+            if escaped[i] == "\\" {
+                let nextIndex = escaped.index(after: i)
+                if nextIndex < escaped.endIndex {
+                    switch escaped[nextIndex] {
+                    case "\"":
+                        result.append("\"")
+                    case "\\":
+                        result.append("\\")
+                    case "n":
+                        result.append("\n")
+                    case "r":
+                        result.append("\r")
+                    case "t":
+                        result.append("\t")
+                    case "0":
+                        result.append("\0")
+                    default:
+                        result.append(escaped[i])
+                        result.append(escaped[nextIndex])
+                    }
+                    i = escaped.index(after: nextIndex)
+                } else {
+                    result.append(escaped[i])
+                    i = nextIndex
+                }
+            } else {
+                result.append(escaped[i])
+                i = escaped.index(after: i)
+            }
+        }
+        return result
+    }
+
 }
 
 //extension String {
@@ -1564,3 +1626,4 @@ public extension String {
     }
     
 }
+
