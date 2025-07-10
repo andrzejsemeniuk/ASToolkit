@@ -28,6 +28,10 @@ public extension Collection {
         f(self)
     }
     
+    func transformedOptionally(_ f: (Self)->Self?) -> Self? {
+        f(self)
+    }
+    
     @discardableResult
     mutating func transform(_ f: (inout Self)->Void) -> Self {
         f(&self)
