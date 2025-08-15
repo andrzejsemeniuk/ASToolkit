@@ -1974,6 +1974,15 @@ public extension Array {
         }
         return nil
     }
+    
+    func firstNonNil<T>(_ converter: (Element)->T?) -> T? {
+        for e in self {
+            if let R = converter(e) {
+                return R
+            }
+        }
+        return nil
+    }
 }
 
 public extension Array {
