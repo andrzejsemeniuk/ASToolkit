@@ -10,6 +10,39 @@ import Foundation
 import SwiftUI
 import SpriteKit
 
+
+extension Color : Codable {
+
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.singleValueContainer()
+        try c.encode(self.hsba.map { $0.format4 }.joinedByComma)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.singleValueContainer()
+        let hsba : [Double] = try c.decode(String.self).splitByComma.map { Double($0) ?? 0 }
+        self.init(hsba: hsba)
+    }
+
+}
+
+extension Color : @retroactive RawRepresentable {
+    public typealias RawValue = String
+    
+    public init?(rawValue: RawValue) {
+        let hsba : [Double] = rawValue.splitByComma.map { Double($0) ?? 0 }.ensured(count: 4, fill: 0)
+        self.init(hsba: hsba)
+    }
+    
+    public var rawValue: RawValue {
+        self.hsba.map { $0.format4 }.joinedByComma
+    }
+    
+}
+
+
+
+
 public struct RGBAInfo : Codable, Equatable {
     
     public init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
@@ -924,3 +957,5 @@ public extension String {
         ))
     }
 }
+
+
