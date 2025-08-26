@@ -14,7 +14,7 @@ extension GraphicsContext {
 
     @discardableResult
     func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, size: CGSize) -> Self {
-//        let TEXT        = Text(T.title).font(kit.font(gain: -1)).foregroundColor(TEXTcolor)
+//        let TEXT        = Text(T.title).font(ui.font(gain: -1)).foregroundColor(TEXTcolor)
         let TEXTsize    = resolve(TEXT).measure(in: size)
         let TEXTbgPATH  = Path.init(CGRect.init(center: at, size: .init(TEXTsize.width + 4,TEXTsize.height + 2)))
         fill(TEXTbgPATH, with: .color(bg))
@@ -198,7 +198,7 @@ extension GraphicsContext {
                 let V0 = MAPPER.valueFor(y: SEGMENT.from.y)
                 let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
                 let DVALUE = (V1 / V0) * 100.0 - 100.0
-                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(kit.fontName, size: kit.fontSize0ForTextWith - 2)).foregroundColor(.black)
+                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
                 x.drawTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
             }
             

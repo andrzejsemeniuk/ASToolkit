@@ -1314,6 +1314,31 @@ struct FramePreferenceKey: PreferenceKey {
     }
 }
 
+struct ScrollViewWithTrackingFrame<Content: View>: View {
+    let name: String
+    var axes: Axis.Set = [.vertical, .horizontal]
+    var showsIndicators: Bool = false
+    @Binding var frame: CGRect
+    let content: () -> Content
+    
+    var body: some View {
+        ScrollView(axes, showsIndicators: showsIndicators) {
+            content()
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(name)))
+                    }
+                )
+                .onPreferenceChange(FramePreferenceKey.self) { value in
+                    frame = value
+                }
+        }
+        .coordinateSpace(name: name)
+    }
+}
+
+
 extension View {
     
     public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {

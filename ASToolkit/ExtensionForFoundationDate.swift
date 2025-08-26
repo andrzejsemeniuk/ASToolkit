@@ -792,3 +792,15 @@ public extension Int {
     }
 
 }
+
+
+public extension Calendar {
+    func isWeekend(_ date: Date) -> Bool {
+        let weekday = component(.weekday, from: date)
+        return weekday == 1 || weekday == 7 // Sunday or Saturday
+    }
+
+    func isWeekday(_ date: Date) -> Bool {
+        !isWeekend(date)
+    }
+}
