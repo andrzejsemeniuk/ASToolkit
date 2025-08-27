@@ -1341,18 +1341,18 @@ struct ScrollViewWithTrackingFrame<Content: View>: View {
 
 extension View {
     
-    public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
+    public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, name: String = "scroll-view", frame: Binding<CGRect>) -> some View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             self
                 .background(GeometryReader { geometry in
                     Color.clear
-                        .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named("scroll-view")))
+                        .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(name)))
                 })
                 .onPreferenceChange(FramePreferenceKey.self) { value in
                     frame.wrappedValue = value
                 }
         }
-        .coordinateSpace(name: "scroll-view")
+        .coordinateSpace(name: name)
     }
     
     public func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
@@ -1526,5 +1526,12 @@ public extension Binding<Bool> {
                 value.wrappedValue = nil
             }
         })
+    }
+}
+
+
+extension Bool {
+    var asIconCheckmark : String {
+        self ? "checkmark.square.fill" : "square"
     }
 }
