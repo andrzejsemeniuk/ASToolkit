@@ -32,7 +32,7 @@ extension GraphicsContext {
             self.vMIN   = vMIN
             self.vMAX   = vMAX
             self.vRANGE = vMAX - vMIN
-            self.HEIGHT = y1 - y0
+            self.HEIGHT = (y1 - y0).abs
             
             self.dydv = HEIGHT / vRANGE
             self.dvdy = vRANGE / HEIGHT
