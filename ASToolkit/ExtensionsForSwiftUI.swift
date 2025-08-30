@@ -1376,22 +1376,19 @@ extension View {
                 size.wrappedValue = value
             }
     }
+    public func viewTrackingFrame(frame: Binding<CGRect>) -> some View {
+        let NAME = Date.now.asString
+        return self
+            .coordinateSpace(name: NAME)
+            .background(GeometryReader { geometry in
+                Color.clear
+                    .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(NAME)))
+            })
+            .onPreferenceChange(FramePreferenceKey.self) { value in
+                frame.wrappedValue = value
+            }
+    }
 }
-
-//extension View {
-//    public func viewTrackingFrame(frame: Binding<CGRect>) -> some View {
-//        let NAME = Date.now.asString
-//        return self
-//            .coordinateSpace(name: NAME)
-//            .background(GeometryReader { geometry in
-//                Color.clear
-//                    .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(NAME)))
-//            })
-//            .onPreferenceChange(FramePreferenceKey.self) { value in
-//                frame.wrappedValue = value
-//            }
-//    }
-//}
 
 
 
