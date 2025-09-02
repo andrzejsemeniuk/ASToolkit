@@ -24,7 +24,10 @@ extension GraphicsContext {
     }
     
     
-    class PixelMapper {
+    struct PixelMapper : Equatable {
+        
+        static let invalid : Self = .init(y0: 0.1234, y1: 1.1234, vMIN: 0.1234, vMAX: 1.1234)
+        
         internal init(y0: CGFloat, y1: CGFloat, vMIN: Double, vMAX: Double) {
             // NOTE! y0 > y1 !!!
             self.y0     = y0
