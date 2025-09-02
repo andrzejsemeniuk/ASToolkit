@@ -26,14 +26,19 @@ extension GraphicsContext {
     
     struct PixelMapper : Equatable {
         
-        static let invalid : Self = .init(y0: 0.1234, y1: 1.1234, vMIN: 0.1234, vMAX: 1.1234)
+        static let invalid : Self = .init(y0: 1, y1: 0, vMIN: 0.1234, vMAX: 1.12345)
         
         internal init(y0: CGFloat, y1: CGFloat, vMIN: Double, vMAX: Double) {
             // NOTE! y0 > y1 !!!
+            assert(y1 != y0)
             self.y0     = y0
             self.y1     = y1
+            self.Y0     = min(y0,y1)
+            self.Y1     = max(y0,y1)
             self.vMIN   = vMIN
             self.vMAX   = vMAX
+            self.VMIN   = min(vMIN,vMAX)
+            self.VMAX   = max(vMIN,vMAX)
             self.vRANGE = vMAX - vMIN
             self.HEIGHT = (y1 - y0)
             
@@ -43,23 +48,36 @@ extension GraphicsContext {
         
         let y0      : CGFloat
         let y1      : CGFloat
+        let Y0      : CGFloat
+        let Y1      : CGFloat
         let HEIGHT  : CGFloat
+        
 
         let vMIN    : Double
         let vMAX    : Double
+        let VMIN    : Double
+        let VMAX    : Double
         let vRANGE  : Double
         
         let dydv    : Double
         let dvdy    : Double
         
-        func vRATIO(value: Double) -> CGFloat {
+        @inlinable func vRATIO(value: Double) -> CGFloat {
             (value - vMIN) / vRANGE
         }
-        func yFor(value: Double) -> CGFloat {
-            y0 - vRATIO(value: value) * HEIGHT
+        
+        @inlinable func yFor(value: Double) -> CGFloat {
+            y0 + CGFloat((value - vMIN) * dydv)
         }
-        func valueFor(y: CGFloat) -> Double {
-            vMIN + (max(y1, min(y0, y)) - y0) * dvdy
+        @inlinable func valueFor(y: CGFloat) -> Double {
+            vMIN + Double((y - y0)) * dvdy
+        }
+        
+        @inlinable func clamped(value: Double) -> Double {
+            VMAX.min(VMIN.max(value))
+        }
+        @inlinable func clamped(y: CGFloat) -> CGFloat {
+            Y1.min(Y0.max(y))
         }
     }
 
