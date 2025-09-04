@@ -2337,3 +2337,13 @@ public extension Array {
 
 }
 
+extension Array {
+    
+    var stridePerPair: StrideTo<Int> {
+        stride(from: 0, to: count - 1, by: 2)
+    }
+    
+    func stridePer(_ n: Int) -> StrideTo<Int> {
+        stride(from: 0, to: count - 1, by: n)
+    }
+}
