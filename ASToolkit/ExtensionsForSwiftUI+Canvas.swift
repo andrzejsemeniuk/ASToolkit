@@ -225,6 +225,46 @@ extension GraphicsContext {
             
             
         }
+        
+        func draw(segment SEGMENT: CGSegment, color COLOR: Color, style: StrokeStyle, stretch: CGFloat? = nil, arrowSide: CGFloat? = nil, arrowColor: Color? = nil, rayColor : Color? = nil, rayStyle: StrokeStyle? = nil, withFont: Font? = nil, withFontColor : Color = .black) {
+            
+            
+            if let rayColor, let rayStyle, let RAY = SEGMENT.ray(inside: size.asCGRectWithOriginZero) {
+                    //                                        x.fill(Path.init(.line(p0: RAY.from, p1: RAY.to).copy(strokingWithWidth: 1, lineCap: .butt, lineJoin: .miter, miterLimit: 10)), with: .color(.white))
+                x.stroke(Path.init(.segment(RAY)), with: .color(rayColor), style: rayStyle)
+            }
+            
+            if let stretch {
+                let PATH = CGPath.segment(SEGMENT.stretched(to: stretch)) // -11))
+                x.stroke(Path.init(PATH), with: .color(COLOR), style: style)
+            } else {
+                x.stroke(Path.init(.segment(SEGMENT)), with: .color(COLOR), style: style)
+            }
+            
+            if let arrowSide, let arrowColor {
+                let PATH = CGMutablePath.arrowHead(side: /*11*/ arrowSide, angle: .init(degrees: 22)).rotatedBy(SEGMENT.angle - .ninety).translatedBy(SEGMENT.to)
+                x.fill(Path.init(PATH), with: .color(arrowColor))
+            }
+            
+                //                                    do {
+                //                                        let OFFSET : CGFloat = 8
+                //                                        let PATH =
+                //                                            CGPath.line(SEGMENT.from.added(x: OFFSET), SEGMENT.to.with(y: SEGMENT.y0)) +
+                //                                            CGPath.line(SEGMENT.to.added(y: -OFFSET), SEGMENT.to.with(y: SEGMENT.y0)) +
+                //                                        x.stroke(Path.init(PATH), with: .color(COLOR), lineWidth: 1)
+                //                                    }
+            if let FONT = withFont, let MAPPER = mapper {
+                let V0 = MAPPER.valueFor(y: SEGMENT.from.y)
+                let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
+                let DVALUE = (V1 / V0) * 100.0 - 100.0
+                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
+                x.drawTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
+            }
+            
+            
+        }
+        
+        
     }
 
     
