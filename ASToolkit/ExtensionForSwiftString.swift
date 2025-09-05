@@ -828,7 +828,9 @@ public extension String {
     var  asUInt    :  UInt?    { UInt(self.trimmed().erasingCommas) }
     var  asUInt64  :  UInt64?  { UInt64(self.trimmed().erasingCommas) }
     var  asInt64   :  Int64?   { Int64(self.trimmed().erasingCommas) }
-    
+
+    var  asTimeInterval : TimeInterval?  { TimeInterval(self.trimmed().erasingCommas) }
+
     var asPhrase : String {
 //        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
         asWordsFromCamelNotation

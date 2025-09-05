@@ -791,6 +791,32 @@ public extension Int {
         }
     }
 
+    var asBriefStringOfElapsedTimeFromSeconds : String {
+        let seconds = self
+        
+        // Convert to various time units
+        let years = seconds / (365 * 24 * 3600)
+        let months = seconds / (30 * 24 * 3600)
+        let days = seconds / (24 * 3600)
+        let hours = seconds / 3600
+        let minutes = seconds / 60
+        
+        // Return the most significant non-zero unit
+        if years > 0 {
+            return "\(years) a"
+        } else if months > 0 {
+            return "\(months) mo"
+        } else if days > 0 {
+            return "\(days) d"
+        } else if hours > 0 {
+            return "\(hours) h"
+        } else if minutes > 0 {
+            return "\(minutes) m"
+        } else {
+            return "\(Swift.max(seconds, 0)) s"
+        }
+    }
+
 }
 
 
