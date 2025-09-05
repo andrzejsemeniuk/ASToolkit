@@ -26,9 +26,9 @@ extension GraphicsContext {
     
     struct PixelMapper : Equatable {
         
-        static let invalid : Self = .init(y0: 1, y1: 0, vMIN: 0.1234, vMAX: 1.12345)
+        static let invalid : Self = .init(y0: 1, y1: 0, vMIN: 0.1234, vMAX: 1.12345, logarithmic: false)
         
-        internal init(y0: CGFloat, y1: CGFloat, vMIN: Double, vMAX: Double) {
+        internal init(y0: CGFloat, y1: CGFloat, vMIN: Double, vMAX: Double, logarithmic: Bool) {
             // NOTE! y0 > y1 !!!
             assert(y1 != y0)
             self.y0     = y0
@@ -42,8 +42,26 @@ extension GraphicsContext {
             self.vRANGE = vMAX - vMIN
             self.HEIGHT = (y1 - y0)
             
-            self.dydv = HEIGHT / vRANGE
-            self.dvdy = vRANGE / HEIGHT
+            self.logarithmic = logarithmic
+            
+            if logarithmic {
+                precondition(vMIN > 0, "Logarithmic mode requires vMIN > 0")
+                precondition(vMAX > 0, "Logarithmic mode requires vMAX > 0")
+                let logMIN = log(vMIN)
+                let logMAX = log(vMAX)
+                self.logVMIN = logMIN
+                self.logVMAX = logMAX
+                self.logVRANGE = logMAX - logMIN
+                self.dydv = HEIGHT / logVRANGE
+                self.dvdy = logVRANGE / HEIGHT
+            } else {
+                self.logVMIN = 0
+                self.logVMAX = 0
+                self.logVRANGE = 0
+                self.dydv = HEIGHT / vRANGE
+                self.dvdy = vRANGE / HEIGHT
+            }
+            
         }
         
         let y0      : CGFloat
@@ -62,15 +80,32 @@ extension GraphicsContext {
         let dydv    : Double
         let dvdy    : Double
         
+        let logarithmic : Bool
+        let logVMIN : Double
+        let logVMAX : Double
+        let logVRANGE : Double
+        
         @inlinable func vRATIO(value: Double) -> CGFloat {
-            (value - vMIN) / vRANGE
+            if logarithmic {
+                return CGFloat((log(value) - logVMIN) / logVRANGE)
+            } else {
+                return (value - vMIN) / vRANGE
+            }
         }
         
         @inlinable func yFor(value: Double) -> CGFloat {
-            y0 + CGFloat((value - vMIN) * dydv)
+            if logarithmic {
+                return y0 + CGFloat((log(value) - logVMIN) * dydv)
+            } else {
+                return y0 + CGFloat((value - vMIN) * dydv)
+            }
         }
         @inlinable func valueFor(y: CGFloat) -> Double {
-            vMIN + Double((y - y0)) * dvdy
+            if logarithmic {
+                return exp(logVMIN + (Double(y - y0) * dvdy))
+            } else {
+                return vMIN + Double((y - y0)) * dvdy
+            }
         }
         
         @inlinable func clamped(value: Double) -> Double {
@@ -241,9 +276,9 @@ extension GraphicsContext {
                 x.stroke(Path.init(.segment(SEGMENT)), with: .color(COLOR), style: style)
             }
             
-            if let arrowSide, let arrowColor {
+            if let arrowSide {
                 let PATH = CGMutablePath.arrowHead(side: /*11*/ arrowSide, angle: .init(degrees: 22)).rotatedBy(SEGMENT.angle - .ninety).translatedBy(SEGMENT.to)
-                x.fill(Path.init(PATH), with: .color(arrowColor))
+                x.fill(Path.init(PATH), with: .color(arrowColor ?? COLOR))
             }
             
                 //                                    do {
