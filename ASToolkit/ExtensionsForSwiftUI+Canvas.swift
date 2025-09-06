@@ -304,3 +304,14 @@ extension GraphicsContext {
 
     
 }
+
+extension Path {
+    
+    static func line(_ from: CGPoint, _ to: CGPoint) -> Path {
+        var R = Path()
+        R.move(to: from)
+        R.addLine(to: to)
+        return R
+    }
+    
+}

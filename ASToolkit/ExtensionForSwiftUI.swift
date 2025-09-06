@@ -386,13 +386,25 @@ public extension Color {
     }
 #endif
     
+
+    var minimumOfRGB : CGFloat {
+        [
+            self.red,
+            self.green,
+            self.blue,
+        ].min!
+    }
     
+    var colorBlackOrWhite : Color {
+        return minimumOfRGB > 0.6 ? .black : .white
+    }
+
     
     var rgba: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
-            var red: CGFloat = 0
-            var green: CGFloat = 0
-            var blue: CGFloat = 0
-            var alpha: CGFloat = 0
+            var red     : CGFloat = 0
+            var green   : CGFloat = 0
+            var blue    : CGFloat = 0
+            var alpha   : CGFloat = 0
             
             #if os(iOS)
             UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
