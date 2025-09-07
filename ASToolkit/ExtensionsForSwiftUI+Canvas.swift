@@ -15,11 +15,12 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
+    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
         
 //        let TEXT        = Text(T.title).font(ui.font(gain: -1)).foregroundColor(TEXTcolor)
         
-        let TEXTsize        = resolve(TEXT).measure(in: size)
+        let RTEXT           = resolve(TEXT)
+        let TEXTsize        = RTEXT.measure(in: size)
         let SIZE            = CGSize.init(TEXTsize.width + 4,TEXTsize.height + 2)
         
         var AT              = at
@@ -35,17 +36,42 @@ extension GraphicsContext {
         
         let TEXTbgPATH: Path
         let RECT = CGRect(center: AT, size: SIZE)
+        let basePath: Path
         if corner > 0 {
-            TEXTbgPATH = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
+            basePath = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
         } else {
-            TEXTbgPATH = Path(RECT)
+            basePath = Path(RECT)
+        }
+        if false, angle != .zero {
+            let transform = CGAffineTransform(translationX: -AT.x, y: -AT.y)
+                .rotated(by: angle.radians)
+                .translatedBy(x: AT.x, y: AT.y)
+//            let transform = CGAffineTransform(translationX: -RECT.midX, y: -RECT.midY)
+//                .rotated(by: angle.radians)
+//                .translatedBy(x: RECT.midX, y: RECT.midY)
+            TEXTbgPATH = basePath.applying(transform)
+        } else {
+            TEXTbgPATH = basePath
         }
         
         fill(TEXTbgPATH, with: .color(bg))
         
 //                    x.fill(pRECT(0.5,T.point.y,0.5,dV), with: .color(.black)) //TEXTcolor.inverseBlackOrWhite(0.1,0.5,0.9))) // pRECT() doesn't work for some reason
         
-        draw(TEXT, at: AT, anchor: .center)
+        if false, angle != .zero {
+                //            let transform = CGAffineTransform(translationX: -AT.x, y: -AT.y).rotated(by: angle.radians).translatedBy(x: AT.x, y: AT.y)
+                //            draw(TEXT1, at: AT, anchor: .center, style: .init(), transform: transform)
+            withCGContext { cg in
+                cg.saveGState()
+                cg.translateBy(x: -AT.x, y: -AT.y)
+                cg.rotate(by: angle.radians)
+                cg.translateBy(x: AT.x, y: AT.y)
+                draw(RTEXT, at: AT, anchor: .center)
+                cg.restoreGState()
+            }
+        } else {
+            draw(TEXT, at: AT, anchor: .center)
+        }
         
         return self
     }
