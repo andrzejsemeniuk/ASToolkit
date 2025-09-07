@@ -33,44 +33,25 @@ extension GraphicsContext {
             default:
                 break
         }
-        
-        let TEXTbgPATH: Path
-        let RECT = CGRect(center: AT, size: SIZE)
-        let basePath: Path
-        if corner > 0 {
-            basePath = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
-        } else {
-            basePath = Path(RECT)
-        }
-        if false, angle != .zero {
-            let transform = CGAffineTransform(translationX: -AT.x, y: -AT.y)
-                .rotated(by: angle.radians)
-                .translatedBy(x: AT.x, y: AT.y)
-//            let transform = CGAffineTransform(translationX: -RECT.midX, y: -RECT.midY)
-//                .rotated(by: angle.radians)
-//                .translatedBy(x: RECT.midX, y: RECT.midY)
-            TEXTbgPATH = basePath.applying(transform)
-        } else {
-            TEXTbgPATH = basePath
-        }
-        
-        fill(TEXTbgPATH, with: .color(bg))
-        
-//                    x.fill(pRECT(0.5,T.point.y,0.5,dV), with: .color(.black)) //TEXTcolor.inverseBlackOrWhite(0.1,0.5,0.9))) // pRECT() doesn't work for some reason
-        
-        if false, angle != .zero {
-                //            let transform = CGAffineTransform(translationX: -AT.x, y: -AT.y).rotated(by: angle.radians).translatedBy(x: AT.x, y: AT.y)
-                //            draw(TEXT1, at: AT, anchor: .center, style: .init(), transform: transform)
-            withCGContext { cg in
-                cg.saveGState()
-                cg.translateBy(x: -AT.x, y: -AT.y)
-                cg.rotate(by: angle.radians)
-                cg.translateBy(x: AT.x, y: AT.y)
-                draw(RTEXT, at: AT, anchor: .center)
-                cg.restoreGState()
+
+        drawLayer { layer in
+
+            let RECT = CGRect(center: AT, size: SIZE)
+            
+            let basePath: Path
+            if corner > 0 {
+                basePath = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
+            } else {
+                basePath = Path(RECT)
             }
-        } else {
-            draw(TEXT, at: AT, anchor: .center)
+
+            if angle != .zero {
+                layer.rotate(by: angle)
+            }
+            
+            layer.fill(basePath, with: .color(bg))
+            
+            layer.draw(RTEXT, at: AT, anchor: .center)
         }
         
         return self
