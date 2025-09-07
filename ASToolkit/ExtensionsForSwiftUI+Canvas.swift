@@ -15,7 +15,7 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, size: CGSize, anchor: UnitPoint = .center) -> Self {
+    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
         
 //        let TEXT        = Text(T.title).font(ui.font(gain: -1)).foregroundColor(TEXTcolor)
         
@@ -33,7 +33,13 @@ extension GraphicsContext {
                 break
         }
         
-        let TEXTbgPATH      = Path.init(CGRect.init(center: AT, size: SIZE))
+        let TEXTbgPATH: Path
+        let RECT = CGRect(center: AT, size: SIZE)
+        if corner > 0 {
+            TEXTbgPATH = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
+        } else {
+            TEXTbgPATH = Path(RECT)
+        }
         
         fill(TEXTbgPATH, with: .color(bg))
         
