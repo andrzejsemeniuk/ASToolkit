@@ -12,16 +12,38 @@ import SwiftUI
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 extension GraphicsContext {
 
+    
+    
     @discardableResult
-    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, size: CGSize) -> Self {
+    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, bg: Color, size: CGSize, anchor: UnitPoint = .center) -> Self {
+        
 //        let TEXT        = Text(T.title).font(ui.font(gain: -1)).foregroundColor(TEXTcolor)
-        let TEXTsize    = resolve(TEXT).measure(in: size)
-        let TEXTbgPATH  = Path.init(CGRect.init(center: at, size: .init(TEXTsize.width + 4,TEXTsize.height + 2)))
+        
+        let TEXTsize        = resolve(TEXT).measure(in: size)
+        let SIZE            = CGSize.init(TEXTsize.width + 4,TEXTsize.height + 2)
+        
+        var AT              = at
+        switch anchor {
+            case .bottom    : AT = at.added(y: -SIZE.height/2)
+            case .top       : AT = at.added(y:  SIZE.height/2)
+            case .leading   : AT = at.added(x: -SIZE.width/2)
+            case .trailing  : AT = at.added(x:  SIZE.width/2)
+                
+            default:
+                break
+        }
+        
+        let TEXTbgPATH      = Path.init(CGRect.init(center: AT, size: SIZE))
+        
         fill(TEXTbgPATH, with: .color(bg))
+        
 //                    x.fill(pRECT(0.5,T.point.y,0.5,dV), with: .color(.black)) //TEXTcolor.inverseBlackOrWhite(0.1,0.5,0.9))) // pRECT() doesn't work for some reason
-        draw(TEXT, at: at, anchor: .center)
+        
+        draw(TEXT, at: AT, anchor: .center)
+        
         return self
     }
+    
     
     
     struct PixelMapper : Equatable {
