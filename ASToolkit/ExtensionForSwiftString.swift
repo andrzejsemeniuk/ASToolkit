@@ -1629,3 +1629,21 @@ public extension String {
     
 }
 
+
+#if os(iOS)
+
+import UIKit
+
+extension String {
+    
+    @discardableResult
+    func openAsURL() -> Bool {
+        if let url = URL(string: self) {
+            UIApplication.shared.open(url)
+            return true
+        }
+        return false
+    }
+}
+
+#endif
