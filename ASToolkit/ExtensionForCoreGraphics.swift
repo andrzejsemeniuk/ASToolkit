@@ -1218,10 +1218,10 @@ extension CGLineJoin : Codable {
 
 
 
-enum CGTextJustification {
-    case Left
-    case Center
-    case Right
+enum CGTextJustification : Int, Equatable, Codable, RawRepresentable, CaseIterable {
+    case Left       = -1
+    case Center     =  0
+    case Right      =  1
 }
 
 
