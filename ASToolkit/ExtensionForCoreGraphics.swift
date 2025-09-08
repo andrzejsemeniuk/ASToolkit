@@ -1667,3 +1667,84 @@ public extension CGMutablePath {
     }
     
 }
+
+
+
+public extension CGRect {
+    
+    enum ArrowLocation {
+        case top, right, bottom, left
+    }
+
+    func pointsWith(
+           arrows                   : Set<ArrowLocation>,
+           arrowHeight              : CGFloat = 4,
+           arrowWidth               : CGFloat = 8
+    ) -> [CGPoint] {
+
+        var polygon     : [CGPoint] = []
+        
+        let RECT = self
+        
+        polygon += [
+            RECT.pointFromRatio(x: 0, y: 1)
+        ]
+        
+        if arrows.contains(.top) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0.5, y: 1).added(x: -arrowWidth/2),
+                RECT.pointFromRatio(x: 0.5, y: 1).added(y:  arrowHeight),
+                RECT.pointFromRatio(x: 0.5, y: 1).added(x: +arrowWidth/2),
+            ]
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 1, y: 1)
+        ]
+        
+        if arrows.contains(.right) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+            polygon += [
+                RECT.pointFromRatio(x: 1, y: 0.5).added(y: +arrowWidth/2),
+                RECT.pointFromRatio(x: 1, y: 0.5).added(x:  arrowHeight),
+                RECT.pointFromRatio(x: 1, y: 0.5).added(y: -arrowWidth/2),
+            ]
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 1, y: 0),
+        ]
+        
+        if arrows.contains(.bottom) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.width - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0.5, y: 0).added(x: +arrowWidth/2),
+                RECT.pointFromRatio(x: 0.5, y: 0).added(y: -arrowHeight),
+                RECT.pointFromRatio(x: 0.5, y: 0).added(x: -arrowWidth/2),
+            ]
+        }
+        
+        
+        polygon += [
+            RECT.pointFromRatio(x: 0, y: 0),
+        ]
+        
+        if arrows.contains(.left) {
+            let arrowWidth = arrowWidth > 0 ? arrowWidth : RECT.height - 1
+            polygon += [
+                RECT.pointFromRatio(x: 0, y: 0.5).added(y: -arrowWidth/2),
+                RECT.pointFromRatio(x: 0, y: 0.5).added(x: -arrowHeight),
+                RECT.pointFromRatio(x: 0, y: 0.5).added(y: +arrowWidth/2),
+            ]
+        }
+        
+        
+        
+        return polygon
+    }
+    
+    
+}
