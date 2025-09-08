@@ -78,7 +78,7 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawMultilineCenteredText(lines: [String], styling: (Text) -> Text = { $0 }, center: (GraphicsContext,CGSize) -> CGPoint, angle: Angle = .zero, size: CGSize) -> Self {
+    func drawMultilineJustifiedText(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, center: (GraphicsContext,CGSize) -> CGPoint, angle: Angle = .zero, size: CGSize) -> Self {
         
         drawLayer { layer in
 
@@ -86,7 +86,7 @@ extension GraphicsContext {
                 layer.rotate(by: angle)
             }
             
-            layer.drawMultilineCenteredText(lines, in: size, styling: styling, center: center)
+            layer.drawMultilineJustifiedText(lines, justification: justification, in: size, styling: styling, center: center)
             
         }
         
@@ -97,9 +97,9 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawMultilineCenteredTextWithBackgroundRectangle(lines: [String], styling: (Text) -> Text = { $0 }, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
+    func drawMultilineCenteredTextWithBackgroundRectangle(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
 
-        drawMultilineCenteredText(lines: lines, styling: styling, center: { CONTEXT, SIZE0 in
+        drawMultilineJustifiedText(lines: lines, justification: justification, styling: styling, center: { CONTEXT, SIZE0 in
             
             let SIZE            = CGSize.init(SIZE0.width + 4, SIZE0.height + 2)
             
@@ -128,43 +128,9 @@ extension GraphicsContext {
             return AT
 
         }, angle: angle, size: size)
-        
-//        drawLayer { layer in
-//
-//            if angle != .zero {
-//                layer.rotate(by: angle)
-//            }
-//            
-//            drawMultilineCenteredText(lines, in: size, styling: styling, center: { SIZE0 in
-//
-//                let SIZE            = CGSize.init(SIZE0.width + 4, SIZE0.height + 2)
-//                
-//                var AT              = at
-//                switch anchor {
-//                    case .bottom    : AT = at.added(y: -SIZE.height/2)
-//                    case .top       : AT = at.added(y:  SIZE.height/2)
-//                    case .leading   : AT = at.added(x: -SIZE.width/2)
-//                    case .trailing  : AT = at.added(x:  SIZE.width/2)
-//                        
-//                    default:
-//                        break
-//                }
-//
-//                let RECT = CGRect(center: AT, size: SIZE)
-//                
-//                let basePath: Path
-//                if corner > 0 {
-//                    basePath = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
-//                } else {
-//                    basePath = Path(RECT)
-//                }
-//
-//                layer.fill(basePath, with: .color(bg))
-//                
-//                return AT
-//                
-//            })
-            
+
+        return self
+
 //            withCGContext { cg in
 //                    cg.saveGState()
 //                    cg.translateBy(x: AT.x, y: AT.y)
@@ -173,19 +139,15 @@ extension GraphicsContext {
 //                    draw(resolved, at: AT, anchor: .center)
 //                    cg.restoreGState()
         
-//                }
-        
-        return self
     }
     
     
-    
-    
-    func drawMultilineCenteredText(
+    func drawMultilineJustifiedText(
         _ lines: [String],
+        justification: CGTextJustification,
         in size: CGSize,
         styling: (Text) -> Text = { $0 },
-        center: (GraphicsContext,CGSize) -> CGPoint,
+        center: (GraphicsContext, CGSize) -> CGPoint,
     ) {
         // Resolve each line to ResolvedText and measure
         let resolvedLines: [(text: GraphicsContext.ResolvedText, size: CGSize)] = lines.map { line in
@@ -195,26 +157,35 @@ extension GraphicsContext {
         }
 
         let dY = resolvedLines.map { $0.size.height }.max!
-        
+
         // Total height of all lines
         let totalHeight = resolvedLines.count.asCGFloat * dY
         let totalWidth = resolvedLines.map { $0.size.width }.max!
 
-        let CENTER = center(self,.init(totalWidth,totalHeight))
+        let CENTER = center(self, CGSize(totalWidth, totalHeight))
 
         // Starting y-position (top of first line)
         var currentY = CENTER.y - totalHeight / 2
 
-        for (resolved, size) in resolvedLines {
-            let lineCenterX = CENTER.x
-            let lineCenterY = currentY + size.height / 2
+        for (resolved, lineSize) in resolvedLines {
+            let x: CGFloat
+            switch justification {
+                case .Left:
+                    x = CENTER.x - totalWidth / 2 + lineSize.width / 2
+                case .Right:
+                    x = CENTER.x + totalWidth / 2 - lineSize.width / 2
+                case .Center:
+                    x = CENTER.x
+            }
 
-            self.draw(resolved, at: CGPoint(x: lineCenterX, y: lineCenterY), anchor: .center)
+            let y = currentY + dY / 2
+            self.draw(resolved, at: CGPoint(x: x, y: y), anchor: .center)
             currentY += dY
         }
     }
     
     
+
     
     
     struct PixelMapper : Equatable {

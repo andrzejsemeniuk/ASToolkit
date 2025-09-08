@@ -1216,6 +1216,16 @@ extension CGLineJoin : Codable {
     
 }
 
+
+
+enum CGTextJustification {
+    case Left
+    case Center
+    case Right
+}
+
+
+
 // From GitHub: ldesroziers/CGRect+OperatorsAdditions
 
 /**
