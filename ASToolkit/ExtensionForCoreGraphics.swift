@@ -919,6 +919,10 @@ extension CGRect
 	public var bl              :CGPoint        { return pointFromRatio(x:0,y:0) }
 	public var br              :CGPoint        { return pointFromRatio(x:1,y:0) }
 	public var c               :CGPoint        { return midpoint }
+    public var mt              :CGPoint        { return pointFromRatio(x:0.5,y:1) }
+    public var mb              :CGPoint        { return pointFromRatio(x:0.5,y:0) }
+    public var ml              :CGPoint        { return pointFromRatio(x:0,y:0.5) }
+    public var mr              :CGPoint        { return pointFromRatio(x:1,y:0.5) }
 
 	public var center          :CGPoint        { return midpoint }
 
@@ -1672,12 +1676,13 @@ public extension CGMutablePath {
 
 public extension CGRect {
     
-    enum ArrowLocation {
+    
+    enum Side {
         case top, right, bottom, left
     }
 
     func pointsWith(
-           arrows                   : Set<ArrowLocation>,
+           arrows                   : Set<Side>,
            arrowHeight              : CGFloat = 4,
            arrowWidth               : CGFloat = 8
     ) -> [CGPoint] {
@@ -1740,7 +1745,6 @@ public extension CGRect {
                 RECT.pointFromRatio(x: 0, y: 0.5).added(y: +arrowWidth/2),
             ]
         }
-        
         
         
         return polygon

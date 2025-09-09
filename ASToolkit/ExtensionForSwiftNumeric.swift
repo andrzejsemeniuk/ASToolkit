@@ -540,6 +540,26 @@ public extension Double {
     
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
     
+    func format01234(_ zero: Double, _ one: Double, _ two: Double, _ three: Double) -> String {
+        if self.abs > zero {
+            return self.format0
+        }
+        if self.abs > one {
+            return self.format1
+        }
+        if self.abs > two {
+            return self.format2
+        }
+        if self.abs > three {
+            return self.format3
+        }
+        return self.format4
+    }
+    
+    var formatForStockPrice : String {
+        format01234(1000, 1000, 1, 1)
+    }
+    
     var formatDynamic : String {
         let ABS = self.abs
         return ABS.floor == ABS ? self.asInt.asString : ABS > 10 ? self.format2 : ABS > 1 ? self.format3 : self.formatted4

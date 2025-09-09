@@ -15,16 +15,14 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
-//    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
-        
-//        let TEXT        = Text(T.title).font(ui.font(gain: -1)).foregroundColor(TEXTcolor)
+    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> Self {
         
         let RTEXT           = resolve(TEXT)
         let TEXTsize        = RTEXT.measure(in: size)
         let SIZE            = CGSize.init(TEXTsize.width + 4,TEXTsize.height + 2)
         
         var AT              = at
+        
         switch anchor {
             case .bottom    : AT = at.added(y: -SIZE.height/2)
             case .top       : AT = at.added(y:  SIZE.height/2)
@@ -39,7 +37,8 @@ extension GraphicsContext {
 
             let RECT = CGRect(center: AT, size: SIZE)
             
-            let basePath: Path
+            var basePath: Path
+            
             if corner > 0 {
                 basePath = RoundedRectangle(cornerRadius: corner, style: .continuous).path(in: RECT)
             } else {
@@ -48,6 +47,14 @@ extension GraphicsContext {
 
             if angle != .zero {
                 layer.rotate(by: angle)
+            }
+            
+            if arrows.isNotEmpty {
+                let POINTS = RECT.pointsWith(arrows: arrows, arrowHeight: arrowHeight, arrowWidth: arrowWidth)
+                let PATH4 = Path.from(points: POINTS, close: true)
+                
+                layer.fill(PATH4, with: .color(bg))
+//                basePath.addPath(PATH4)
             }
             
             layer.fill(basePath, with: .color(bg))
@@ -475,6 +482,20 @@ extension Path {
         var R = Path()
         R.move(to: from)
         R.addLine(to: to)
+        return R
+    }
+    
+    static func from(points: [CGPoint], close: Bool) -> Path {
+        var R = Path()
+        if points.count > 1 {
+            R.move(to: points[0])
+            for i in 1..<points.count {
+                R.addLine(to: points[i])
+            }
+            if close {
+                R.closeSubpath()
+            }
+        }
         return R
     }
     
