@@ -367,6 +367,15 @@ public class Attributes : Codable, Equatable, ObservableObject {
         return fallback
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public func set<T: Codable>(_ key: String, encodable: T) {
         dictionary[key] = String.encoded(encodable)!
     }
@@ -457,6 +466,15 @@ public class Attributes : Codable, Equatable, ObservableObject {
     }
 
 
+    
+    @discardableResult
+    public func clear(_ key: String) -> String? {
+        dictionary.removeValue(forKey: key)
+    }
+    @discardableResult
+    public func unset(_ key: String) -> String? {
+        dictionary.removeValue(forKey: key)
+    }
 
 
     static public func stringForColor(from color: SKColor) -> String {
