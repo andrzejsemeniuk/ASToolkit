@@ -1114,41 +1114,41 @@ public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
     
     public typealias RawValue = String
     
-    var lineWidth       : CGFloat       = 1
-    var lineCap         : CGLineCap     = .butt
-    var lineJoin        : CGLineJoin    = .miter
-    var miterLimit      : CGFloat       = 10
-    var dashPhase       : CGFloat       = 0
-    var dashPattern     : [CGFloat]     = []
+    public var lineWidth       : CGFloat       = 1
+    public var lineCap         : CGLineCap     = .butt
+    public var lineJoin        : CGLineJoin    = .miter
+    public var miterLimit      : CGFloat       = 10
+    public var dashPhase       : CGFloat       = 0
+    public var dashPattern     : [CGFloat]     = []
     
-    var thickness       : CGFloat {
+    public var thickness       : CGFloat {
         get { lineWidth }
         set { lineWidth = newValue }
     }
     
-    var cap             : CGLineCap {
+    public var cap             : CGLineCap {
         get { lineCap }
         set { lineCap = newValue }
     }
     
-    var join            : CGLineJoin {
+    public var join            : CGLineJoin {
         get { lineJoin }
         set { lineJoin = newValue }
     }
 
-    var pattern         : [CGFloat] {
+    public var pattern         : [CGFloat] {
         get { dashPattern }
         set { dashPattern = newValue }
     }
 
-    var linePattern     : [CGFloat]! {
+    public var linePattern     : [CGFloat]! {
         get { dashPattern }
         set { dashPattern = newValue }
     }
 
     
     
-    func with(thickness: CGFloat? = nil, cap: CGLineCap? = nil, join: CGLineJoin? = nil, pattern: [CGFloat]? = nil) -> Self {
+    public func with(thickness: CGFloat? = nil, cap: CGLineCap? = nil, join: CGLineJoin? = nil, pattern: [CGFloat]? = nil) -> Self {
         var r = self
         r.thickness ?= thickness
         r.cap ?= cap

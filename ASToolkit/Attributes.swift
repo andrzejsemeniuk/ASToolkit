@@ -356,6 +356,23 @@ public class Attributes : Codable, Equatable, ObservableObject {
 
     
     
+    public func asDecoded<T: Codable>(_ key: String) -> T? {
+        self[key]?.decoded()
+    }
+    
+    public func asDecoded<T: Codable>(_ key: String, _ fallback: T) -> T {
+        if let V = self[key] {
+            return V.decoded() ?? fallback
+        }
+        return fallback
+    }
+    
+    public func set<T: Codable>(_ key: String, encodable: T) {
+        dictionary[key] = String.encoded(encodable)!
+    }
+    
+    
+    
     
     public func set(ifMissing key: String, _ value: String?) {
         if dictionary.missing(key: key), let value = value {
@@ -489,6 +506,12 @@ public class Attributes : Codable, Equatable, ObservableObject {
     static public func value(from v: CGLineStyle) -> String {
         .encoded(v)!
     }
+    
+    
+    
+    
+    
+    
 
 }
 
