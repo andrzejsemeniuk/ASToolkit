@@ -35,8 +35,13 @@ public extension Array
     }
 
     mutating func clear() {
-		self = []
-	}
+        self = []
+    }
+
+    var cleared: Self { [] }
+    var new: Self { [] }
+    var emptied: Self { [] }
+    
 
     mutating func dump() -> Array {
 		let result = self
