@@ -1992,33 +1992,33 @@ public extension Array {
 
 public extension Array {
     
-    mutating func swapLeft(at i: Int, loop: Bool) {
+    mutating func swapWithPreviousIndex(at i: Int, loop: Bool) {
         if i > 0 {
             swapAt(i, i-1)
-        } else {
+        } else if loop {
             append(remove(at: 0))
         }
     }
 
-    mutating func swapLeft(_ i: Int, _ loop: Bool = true) {
-        swapLeft(at: i, loop: loop)
+    mutating func swapWithPreviousIndex(_ i: Int, _ loop: Bool = true) {
+        swapWithPreviousIndex(at: i, loop: loop)
     }
 
-    mutating func swapRight(at i: Int, loop: Bool) {
+    mutating func swapWithNextIndex(at i: Int, loop: Bool) {
         if i < count-1 {
             swapAt(i, i+1)
-        } else {
+        } else if loop {
             prepend(remove(at: i))
         }
     }
 
-    mutating func swapRight(_ i: Int, _ loop: Bool = true) {
-        swapRight(at: i, loop: loop)
+    mutating func swapWithNextIndex(_ i: Int, _ loop: Bool = true) {
+        swapWithNextIndex(at: i, loop: loop)
     }
     
     func swappedRight(_ i: Int, _ loop: Bool = true) -> Self {
         var R = self
-        R.swapRight(at: i, loop: loop)
+        R.swapWithNextIndex(at: i, loop: loop)
         return R
     }
     

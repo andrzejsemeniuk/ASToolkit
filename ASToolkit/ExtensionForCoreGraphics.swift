@@ -210,7 +210,19 @@ public extension CGPoint {
     var format3 : String { "(\(x.format3),\(y.format3))" }
     
     var isValid : Bool { !(x.isNaN || y.isNaN) }
+
     
+    func minX(_ P1: CGPoint) -> (CGPoint,CGPoint) { self.x > P1.x ? (P1,self) : (self,P1) }
+    func minY(_ P1: CGPoint) -> (CGPoint,CGPoint) { self.y > P1.y ? (P1,self) : (self,P1) }
+
+}
+
+func minX(_ P0: CGPoint, _ P1: CGPoint) -> (CGPoint,CGPoint) {
+    P0.x > P1.x ? (P1,P0) : (P0,P1)
+}
+
+func minY(_ P0: CGPoint, _ P1: CGPoint) -> (CGPoint,CGPoint) {
+    P0.y > P1.y ? (P1,P0) : (P0,P1)
 }
 
 extension CGPoint : @retroactive Hashable {
