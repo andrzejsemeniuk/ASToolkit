@@ -195,7 +195,7 @@ extension GraphicsContext {
 
     
     
-    struct PixelMapper : Equatable {
+    struct PixelMapper : Equatable, Codable {
         
         static let invalid : Self = .init(y0: 1, y1: 0, vMIN: 0.1234, vMAX: 1.12345, logarithmic: false)
         
