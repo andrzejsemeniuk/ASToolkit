@@ -15,7 +15,7 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> Self {
+    func renderTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> Self {
         
         let RTEXT           = resolve(TEXT)
         let TEXTsize        = RTEXT.measure(in: size)
@@ -24,10 +24,14 @@ extension GraphicsContext {
         var AT              = at
         
         switch anchor {
+//            case .bottom    : AT = at.added(y:  SIZE.height/2)
+//            case .top       : AT = at.added(y: -SIZE.height/2)
             case .bottom    : AT = at.added(y: -SIZE.height/2)
             case .top       : AT = at.added(y:  SIZE.height/2)
-            case .leading   : AT = at.added(x: -SIZE.width/2)
-            case .trailing  : AT = at.added(x:  SIZE.width/2)
+            case .leading   : AT = at.added(x:  SIZE.width/2)
+            case .trailing  : AT = at.added(x: -SIZE.width/2)
+//            case .leading   : AT = at.added(x: -SIZE.width/2)
+//            case .trailing  : AT = at.added(x:  SIZE.width/2)
                 
             default:
                 break
@@ -85,7 +89,7 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawMultilineJustifiedText(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, center: (GraphicsContext,CGSize) -> CGPoint, angle: Angle = .zero, size: CGSize) -> Self {
+    func renderMultilineJustifiedText(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, center: (GraphicsContext,CGSize) -> CGPoint, angle: Angle = .zero, size: CGSize) -> Self {
         
         drawLayer { layer in
 
@@ -93,7 +97,7 @@ extension GraphicsContext {
                 layer.rotate(by: angle)
             }
             
-            layer.drawMultilineJustifiedText(lines, justification: justification, in: size, styling: styling, center: center)
+            layer.renderMultilineJustifiedText(lines, justification: justification, in: size, styling: styling, center: center)
             
         }
         
@@ -104,9 +108,9 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func drawMultilineCenteredTextWithBackgroundRectangle(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
+    func renderMultilineCenteredTextWithBackgroundRectangle(lines: [String], justification: CGTextJustification, styling: (Text) -> Text = { $0 }, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, size: CGSize) -> Self {
 
-        drawMultilineJustifiedText(lines: lines, justification: justification, styling: styling, center: { CONTEXT, SIZE0 in
+        renderMultilineJustifiedText(lines: lines, justification: justification, styling: styling, center: { CONTEXT, SIZE0 in
             
             let SIZE            = CGSize.init(SIZE0.width + 4, SIZE0.height + 2)
             
@@ -149,7 +153,7 @@ extension GraphicsContext {
     }
     
     
-    func drawMultilineJustifiedText(
+    func renderMultilineJustifiedText(
         _ lines: [String],
         justification: CGTextJustification,
         in size: CGSize,
@@ -426,7 +430,7 @@ extension GraphicsContext {
                 let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
                 let DVALUE = (V1 / V0) * 100.0 - 100.0
                 let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
-                x.drawTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
+                x.renderTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
             }
             
             
@@ -464,7 +468,7 @@ extension GraphicsContext {
                 let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
                 let DVALUE = (V1 / V0) * 100.0 - 100.0
                 let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
-                x.drawTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
+                x.renderTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
             }
             
             

@@ -1764,3 +1764,9 @@ public extension CGRect {
     
     
 }
+
+
+public extension CGFloat {
+    func asCGPoint(x: CGFloat) -> CGPoint { .init(x, self) }
+    func asCGPoint(y: CGFloat) -> CGPoint { .init(self, y) }
+}
