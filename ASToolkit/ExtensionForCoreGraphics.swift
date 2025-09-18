@@ -1077,7 +1077,7 @@ public extension Int32 {
 
 
 
-public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable {
+public struct CGLineStyle : Codable, Equatable, Hashable, RawRepresentable, Sendable {
     
     internal init(lineWidth: CGFloat? = 1, lineCap: CGLineCap? = .butt, lineJoin: CGLineJoin? = .miter, miterLimit: CGFloat? = 10, dashPhase: CGFloat? = 0, dashPattern: [CGFloat]? = []) {
         self.lineWidth ?= lineWidth
