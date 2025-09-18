@@ -289,6 +289,10 @@ extension GraphicsContext {
         @inlinable func clamped(y: CGFloat) -> CGFloat {
             Y1.min(Y0.max(y))
         }
+        
+        @inlinable func contains(y: CGFloat) -> Bool {
+            y.inIntervalClosedOpen(Y0, Y1)
+        }
     }
 
 }

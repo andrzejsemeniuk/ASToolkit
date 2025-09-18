@@ -33,14 +33,14 @@ public extension Comparable {
     
 }
 
-func comparing2Optionals<A: Comparable>(_ first: A?, _ second: A?, order: ComparisonResult = .orderedAscending) -> Bool {
+public func comparing2Optionals<A: Comparable>(_ first: A?, _ second: A?, order: ComparisonResult = .orderedAscending) -> Bool {
     if let first, let second {
         return first.compared(to: second) == order
     }
     return false
 }
 
-func less2Optionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
+public func less2Optionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
     if let first {
         if let second {
             return first < second
@@ -53,12 +53,12 @@ func less2Optionals<A: Comparable>(_ first: A?, _ second: A?) -> Bool {
     return false
 }
 
-func comparing2<A: Comparable, B: Comparable>(_ first: (A,A), _ second: (B,B)) -> Bool {
+public func comparing2<A: Comparable, B: Comparable>(_ first: (A,A), _ second: (B,B)) -> Bool {
     if first.0 < first.1 { return true }
     return first.0 == first.1 && second.0 < second.1
 }
 
-func comparing3<A: Comparable, B: Comparable, C: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C)) -> Bool {
+public func comparing3<A: Comparable, B: Comparable, C: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C)) -> Bool {
     if first.0 < first.1 { return true }
     if first.0 == first.1 {
         if second.0 < second.1 { return true }
@@ -67,7 +67,7 @@ func comparing3<A: Comparable, B: Comparable, C: Comparable>(_ first: (A,A), _ s
     return false
 }
 
-func comparing4<A: Comparable, B: Comparable, C: Comparable, D: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C), _ fourth: (D,D)) -> Bool {
+public func comparing4<A: Comparable, B: Comparable, C: Comparable, D: Comparable>(_ first: (A,A), _ second: (B,B), _ third: (C,C), _ fourth: (D,D)) -> Bool {
     if first.0 < first.1 { return true }
     if first.0 == first.1 {
         if second.0 < second.1 { return true }
@@ -79,16 +79,16 @@ func comparing4<A: Comparable, B: Comparable, C: Comparable, D: Comparable>(_ fi
     return false
 }
 
-func comparingUsingPaths<TYPE,FIRST: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>) -> Bool {
+public func comparingUsingPaths<TYPE,FIRST: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>) -> Bool {
     a[keyPath: path1] < b[keyPath: path1]
 }
 
-func comparingUsingPaths<TYPE,FIRST: Comparable,SECOND: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>, _ path2: KeyPath<TYPE,SECOND>) -> Bool {
+public func comparingUsingPaths<TYPE,FIRST: Comparable,SECOND: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>, _ path2: KeyPath<TYPE,SECOND>) -> Bool {
     if a[keyPath: path1] < b[keyPath: path1] { return true }
     return a[keyPath: path1] == b[keyPath: path1] && a[keyPath: path2] < b[keyPath: path2]
 }
 
-func comparingUsingPaths<TYPE,FIRST: Comparable, SECOND: Comparable, THIRD: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>, _ path2: KeyPath<TYPE,SECOND>, _ path3: KeyPath<TYPE,THIRD>) -> Bool {
+public func comparingUsingPaths<TYPE,FIRST: Comparable, SECOND: Comparable, THIRD: Comparable>(_ a: TYPE, _ b: TYPE, _ path1: KeyPath<TYPE,FIRST>, _ path2: KeyPath<TYPE,SECOND>, _ path3: KeyPath<TYPE,THIRD>) -> Bool {
     if a[keyPath: path1] < b[keyPath: path1] { return true }
     if a[keyPath: path1] == b[keyPath: path1] {
         if a[keyPath: path2] < b[keyPath: path2] { return true }
@@ -97,7 +97,7 @@ func comparingUsingPaths<TYPE,FIRST: Comparable, SECOND: Comparable, THIRD: Comp
     return false
 }
 
-func minimum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
+public func minimum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
     if let A {
         if let B {
             return Swift.min(A,B)
@@ -106,7 +106,7 @@ func minimum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
     }
     return B
 }
-func maximum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
+public func maximum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
     if let A {
         if let B {
             return Swift.max(A,B)
@@ -114,4 +114,15 @@ func maximum<T: Comparable>(_ A: T?, _ B: T?) -> T? {
         return A
     }
     return B
+}
+
+//public func minmax<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
+//    a < b ? (a,b) : (b,a)
+//}
+
+public extension Comparable {
+    func inIntervalClosedClosed     (_ a: Self, _ b: Self) -> Bool { a < b ? a <= self && self <= b : b <= self && self <= a }
+    func inIntervalOpenClosed       (_ a: Self, _ b: Self) -> Bool { a < b ? a < self && self <= b : b < self && self <= a }
+    func inIntervalClosedOpen       (_ a: Self, _ b: Self) -> Bool { a < b ? a <= self && self < b : b <= self && self < a }
+    func inIntervalOpenOpen         (_ a: Self, _ b: Self) -> Bool { a < b ? a < self && self < b : b < self && self < a }
 }
