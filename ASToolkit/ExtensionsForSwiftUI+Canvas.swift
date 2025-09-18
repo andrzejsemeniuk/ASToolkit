@@ -489,6 +489,12 @@ extension Path {
         return R
     }
     
+    static func rect(_ r: CGRect) -> Path {
+        var R = Path()
+        R.addRect(r)
+        return R
+    }
+    
     static func from(points: [CGPoint], close: Bool) -> Path {
         var R = Path()
         if points.count > 1 {

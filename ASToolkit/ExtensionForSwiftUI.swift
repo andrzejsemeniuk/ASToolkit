@@ -464,7 +464,7 @@ public extension Color {
         return Color(hsba: [
             hsba[0],
             hsba[1],
-            (Double(hsba[2]) + Double(amount)).clampedTo01,
+            (hsba[2] + amount).clampedTo01,
             hsba[3]
         ])
     }
@@ -473,7 +473,7 @@ public extension Color {
         let hsba = self.hsba
         return Color(hsba: [
             hsba[0],
-            (Double(hsba[1]) + Double(amount)).clampedTo01,
+            (hsba[1] + amount).clampedTo01,
             hsba[2],
             hsba[3]
         ])
@@ -488,7 +488,7 @@ public extension Color {
             hsba[0],
             hsba[1],
             hsba[2],
-            (Double(hsba[3]) + amount).clampedTo01
+            (hsba[3] + amount).clampedTo01
         ])
     }
     
@@ -501,7 +501,7 @@ public extension Color {
             hsba[0],
             hsba[1],
             hsba[2],
-            (Double(hsba[3]) * amount).clampedTo01
+            (hsba[3] * amount).clampedTo01
         ])
     }
     
