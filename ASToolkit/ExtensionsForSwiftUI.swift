@@ -1534,3 +1534,37 @@ extension Bool {
         self ? "checkmark.square.fill" : "square"
     }
 }
+
+
+
+
+
+
+extension View {
+    func longPressSpringAnimation(minimumDuration: Double = 2, scale: Double = 1.3, duration: TimeInterval = 1, onLongPress: @escaping () -> Void) -> some View {
+        modifier(LongPressSpringModifier(minimumDuration: minimumDuration, scale: scale, duration: duration, onLongPress: onLongPress))
+    }
+    
+}
+
+struct LongPressSpringModifier: ViewModifier {
+    let minimumDuration: Double
+    var scale: Double = 1.3
+    var duration: TimeInterval = 1
+    let onLongPress: () -> Void
+
+    @State private var animate = false
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(animate ? scale : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.5), value: animate)
+            .onLongPressGesture(minimumDuration: minimumDuration) {
+                onLongPress()
+                animate = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    animate = false
+                }
+            }
+    }
+}

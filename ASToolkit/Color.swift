@@ -961,3 +961,10 @@ public extension String {
 }
 
 
+extension Color {
+    func mix(with: Color, by: Double) -> Color {
+        self.asHSBAInfo.mix(with: with.asHSBAInfo, by: by).asSwiftUIColor
+    }
+}
+
+
