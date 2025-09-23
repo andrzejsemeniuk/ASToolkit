@@ -161,6 +161,14 @@ public extension View {
         frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
+    func frameUnboundedWidth() -> some View {
+        frame(maxWidth: .infinity)
+    }
+    
+    func frameUnboundedHeight() -> some View {
+        frame(maxHeight: .infinity)
+    }
+    
     func frame(_ w: CGFloat, _ h: CGFloat) -> some View {
         frame(width: w, height: h)
     }

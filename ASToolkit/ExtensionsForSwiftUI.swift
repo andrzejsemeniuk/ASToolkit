@@ -1568,3 +1568,62 @@ struct LongPressSpringModifier: ViewModifier {
             }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+extension CGFloat {
+    
+    static var screenWidth : CGFloat {
+        UIScreen.main.bounds.width
+    }
+    
+    static var screenHeight : CGFloat {
+        UIScreen.main.bounds.height
+    }
+    
+}
+
+
+
+
+
+
+
+struct CenteringHorizontalScroll<Content: View> : View {
+    
+    var width: CGFloat = .screenWidth - 32
+    var indicators = false
+    
+    @ViewBuilder var content : () -> Content
+
+    @State private var size : CGSize = .init()
+
+    var body : some View {
+        content()
+            .fixedSize()
+            .save(size: $size)
+            .modify(if: size.width > width, then: { V in
+                V
+//                    .frame(minWidth: size.width) // width)
+                    .viewInScrollViewHorizontal(showsIndicators: indicators)
+                    .frame(width: width)
+            })
+    }
+}
+
+extension View {
+    func viewInCenteringHorizontalScroll(width: CGFloat = .screenWidth - 32, indicators: Bool = false) -> some View {
+        CenteringHorizontalScroll.init(width: width, indicators: indicators, content: {
+            self
+        })
+    }
+}
+
