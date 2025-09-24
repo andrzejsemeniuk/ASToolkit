@@ -63,8 +63,10 @@ public extension DispatchQueue {
 }
 
 public func later2(_ block: @escaping Block) {
-    later {
-        block()
+    DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            block()
+        }
     }
 }
 
