@@ -433,7 +433,7 @@ extension GraphicsContext {
                 let V0 = MAPPER.valueFor(y: SEGMENT.from.y)
                 let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
                 let DVALUE = (V1 / V0) * 100.0 - 100.0
-                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
+                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0 - 2)).foregroundColor(.black)
                 x.renderTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
             }
             
@@ -471,7 +471,7 @@ extension GraphicsContext {
                 let V0 = MAPPER.valueFor(y: SEGMENT.from.y)
                 let V1 = MAPPER.valueFor(y: SEGMENT.to.y)
                 let DVALUE = (V1 / V0) * 100.0 - 100.0
-                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0ForTextWith - 2)).foregroundColor(.black)
+                let TEXT = Text(" \(DVALUE.asInt)% / \(SEGMENT.point.x.asInt) ").font(FONT).foregroundColor(withFontColor) //.custom(ui.fontName, size: ui.fontSize0 - 2)).foregroundColor(.black)
                 x.renderTextWithBackgroundRectangle(TEXT, at: SEGMENT.midpoint, bg: .white, size: size)
             }
             
