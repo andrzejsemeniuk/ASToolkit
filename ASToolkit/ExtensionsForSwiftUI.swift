@@ -1624,6 +1624,7 @@ extension View {
         CenteringHorizontalScroll.init(width: width, indicators: indicators, content: {
             self
         })
+        .frame(maxWidth: width)
     }
 }
 

@@ -136,6 +136,13 @@ public extension String {
         return self[0 ..< max(0, min(to, length))]
     }
     
+    func prefix(to: String) -> String {
+        self.split(to).first ?? self
+    }
+    func suffix(to: String) -> String {
+        self.split(to).last ?? self
+    }
+    
     func substring(from: Int, to: Int) -> Substring {
         return self[min(from, length) ..< min(to, length)]
     }
@@ -1247,12 +1254,19 @@ public extension String {
     func separated(by: String) -> String {
         self.map { String($0) }.asArray.joined(separator: by)
     }
-    func padded(by: String) -> String {
+    
+    @inlinable var paddedBySpace : String { paddedBySpace1 }
+    @inlinable var paddedBySpace1 : String { " \(self) " }
+    @inlinable var paddedBySpace2 : String { "  \(self)  " }
+    @inlinable var paddedBySpace3 : String { "   \(self)   " }
+    
+    @inlinable func padded(by: String) -> String {
         "\(by)\(self)\(by)"
     }
-    func padded(by: String, count: Int) -> String {
+    @inlinable func padded(by: String, count: Int) -> String {
         "\(by.multiple(count))\(self)\(by.multiple(count))"
     }
+    
     func padded(by character: Character, length K: Int) -> String {
         let currentLength = self.count
         guard currentLength < K else {
@@ -1293,10 +1307,10 @@ public extension String {
         }
         return R
     }
-    func suffixed(_ with: String, separator: String = "") -> String {
+    @inlinable func suffixed(_ with: String, separator: String = "") -> String {
         self + separator + with
     }
-    func prefixed(_ with: String, separator: String = "") -> String {
+    @inlinable func prefixed(_ with: String, separator: String = "") -> String {
         with + separator + self
     }
     func truncated(_ limit: Int, _ suffix: String = "") -> String {
