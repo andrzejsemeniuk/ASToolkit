@@ -1579,7 +1579,7 @@ struct LongPressSpringModifier: ViewModifier {
 
 
 
-extension CGFloat {
+public extension CGFloat {
     
     static var screenWidth : CGFloat {
         UIScreen.main.bounds.width
@@ -1619,7 +1619,7 @@ struct CenteringHorizontalScroll<Content: View> : View {
     }
 }
 
-extension View {
+public extension View {
     func viewInCenteringHorizontalScroll(width: CGFloat = .screenWidth - 32, indicators: Bool = false) -> some View {
         CenteringHorizontalScroll.init(width: width, indicators: indicators, content: {
             self
