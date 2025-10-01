@@ -452,6 +452,10 @@ public extension Color {
     
     
     
+    func opacity(_ a: CGFloat) -> Color {
+        self.opacity(a.asDouble)
+    }
+    
     
     var isBlack : Bool {
         name == "black"
