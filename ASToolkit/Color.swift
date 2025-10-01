@@ -710,6 +710,27 @@ public extension Color {
 }
 
 
+
+
+public func == (_ lhs: Color.RGB8, _ rhs: Color.RGB8) -> Bool {
+    lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b
+}
+
+public func == (_ lhs: Color.RGBA8, _ rhs: Color.RGBA8) -> Bool {
+    lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a
+}
+
+public func == (_ lhs: Color.HSB8, _ rhs: Color.HSB8) -> Bool {
+    lhs.h == rhs.h && lhs.s == rhs.s && lhs.b == rhs.b
+}
+
+public func == (_ lhs: Color.HSBA8, _ rhs: Color.HSBA8) -> Bool {
+    lhs.h == rhs.h && lhs.s == rhs.s && lhs.b == rhs.b && lhs.a == rhs.a
+}
+
+
+
+
 public extension Color {
     
     typealias RGB8  = (r: UInt8, g: UInt8, b: UInt8)

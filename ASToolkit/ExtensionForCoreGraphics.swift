@@ -132,6 +132,13 @@ public extension CGPoint {
         self = angle.point(radius: length)
     }
     
+    static func at(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+        .init(x,y)
+    }
+    static func p(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+        .init(x,y)
+    }
+    
 	var length : CGFloat {
         sqrt(x * x + y * y)
 	}

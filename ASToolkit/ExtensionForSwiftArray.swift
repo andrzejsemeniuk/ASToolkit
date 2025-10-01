@@ -543,11 +543,11 @@ public extension Array {
 
 public extension Array where Element : Equatable {
     
-    func previousLooped(_ element: Element, missing: Element? = nil) -> Element {
+    func previousLooped(_ element: Element, missing: Element? = nil, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element {
         guard count > 0 else {
             return missing ?? element
         }
-        if let INDEX = firstIndex(of: element) {
+        if let INDEX = self.index(where: { equal($0,element) }) {
             if INDEX > 0 {
                 return self[INDEX-1]
             }
@@ -556,11 +556,11 @@ public extension Array where Element : Equatable {
         return missing ?? element
     }
 
-    func nextLooped(_ element: Element, missing: Element? = nil) -> Element {
+    func nextLooped(_ element: Element, missing: Element? = nil, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element {
         guard count > 0 else {
             return missing ?? element
         }
-        if let INDEX = firstIndex(of: element) {
+        if let INDEX = self.index(where: { equal($0,element) }) {
             if INDEX < count-1 {
                 return self[INDEX+1]
             }
