@@ -1514,3 +1514,40 @@ public extension Int {
 
 
 
+public extension Array where Element: BinaryFloatingPoint {
+    
+    /// Creates an array of values descending from `upperBound` down to `lowerBound`,
+    /// with the given number of steps.
+//    init(descendingFrom upperBound: Element, to lowerBound: Element, count: Int) {
+//        precondition(count > 0, "Count must be greater than 0")
+//        precondition(upperBound > lowerBound, "Upper bound must be greater than lower bound")
+//        
+//        var result: [Element] = []
+//        var value = upperBound
+//        let step = (upperBound - lowerBound) / Element(count)
+//        
+//        while value > lowerBound {
+//            result.append(value)
+//            value -= step
+//        }
+//        
+//        self = result
+//    }
+    
+    
+        /// Creates an array of `count` values descending from `upperBound` to `lowerBound`.
+           /// The `lowerBound` may or may not be exactly included, depending on `count`.
+    init(descendingFrom upperBound: Element, to lowerBound: Element, count COUNT: Int) {
+        precondition(COUNT > 0, "Count must be greater than 0")
+        precondition(upperBound >= lowerBound, "Upper bound must be >= lower bound")
+        
+        let step = (upperBound - lowerBound) / Element(COUNT)
+        
+        self = (0..<COUNT).map { i in
+            upperBound - Element(i) * step
+        }
+        
+        print("COUNT: \(COUNT), elements: \(self.count)")
+    }
+    
+}

@@ -2368,7 +2368,7 @@ public extension Array {
 
 }
 
-extension Array {
+public extension Array {
     
     var stridePerPair: StrideTo<Int> {
         stride(from: 0, to: count - 1, by: 2)
@@ -2378,3 +2378,23 @@ extension Array {
         stride(from: 0, to: count - 1, by: n)
     }
 }
+
+
+
+public extension Array {
+    
+    func rotated(rows: Int) -> Self {
+        guard rows > 0, count % rows == 0 else { return self }
+        let cols = count / rows
+        guard !isEmpty else { return Self() }
+        var result: [Element] = .init(repeating: self[0], count: count)
+        for r in 0..<rows {
+            for c in 0..<cols {
+                result[c * rows + r] = self[r * cols + c]
+            }
+        }
+        return result
+    }
+    
+}
+
