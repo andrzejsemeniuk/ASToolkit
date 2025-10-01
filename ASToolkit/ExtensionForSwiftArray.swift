@@ -549,7 +549,7 @@ public extension Array where Element : Equatable {
         }
         if let INDEX = self.index(where: { equal($0,element) }) {
             if INDEX > 0 {
-                return self[INDEX-1]
+                return self[INDEX - 1]
             }
             return last!
         }
@@ -561,12 +561,38 @@ public extension Array where Element : Equatable {
             return missing ?? element
         }
         if let INDEX = self.index(where: { equal($0,element) }) {
-            if INDEX < count-1 {
-                return self[INDEX+1]
+            if INDEX < count - 1 {
+                return self[INDEX + 1]
             }
             return first!
         }
         return missing ?? element
+    }
+
+    func previousLoopedOptional(_ element: Element, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX > 0 {
+                return self[INDEX - 1]
+            }
+            return last!
+        }
+        return nil
+    }
+
+    func nextLoopedOptional(_ element: Element, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX < count - 1 {
+                return self[INDEX + 1]
+            }
+            return first!
+        }
+        return nil
     }
 
     func next(after:Element, wrap: Bool = true) -> Element? {
