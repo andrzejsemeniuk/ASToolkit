@@ -1000,3 +1000,17 @@ public extension Color {
     }
 }
 
+public extension SKColor {
+    var asColor : Color {
+        Color.init(self)
+    }
+    var asCIColor : CIColor {
+        CIColor.init(cgColor: self.cgColor)
+    }
+}
+
+public extension Color {
+    var opacity1 : Color {
+        self.opacity(1.0)
+    }
+}

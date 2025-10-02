@@ -1687,12 +1687,12 @@ public extension SKWarpGeometryGrid {
 
 
 public extension SKColor {
-    var asColor : Color {
-        Color.init(self)
-    }
-    var asCIColor : CIColor {
-        CIColor.init(cgColor: self.cgColor)
-    }
+//    var asColor : Color {
+//        Color.init(self)
+//    }
+//    var asCIColor : CIColor {
+//        CIColor.init(cgColor: self.cgColor)
+//    }
     
 #if os(macOS)
     var asRGBAValues : RGBAInfo {
