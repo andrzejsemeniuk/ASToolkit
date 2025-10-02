@@ -363,6 +363,10 @@ public extension Color {
         .init(self.hsba)
     }
     
+    var asRGBAInfo : RGBAInfo {
+        .init(self.rgba)
+    }
+    
 #if os(macOS)
     func nsColor() -> NSColor {
         NSColor(self)
@@ -408,7 +412,9 @@ public extension Color {
     }
 
     
-    var rgba: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+    typealias RGBATuple = (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat)
+    
+    var rgba: RGBATuple {
             var red     : CGFloat = 0
             var green   : CGFloat = 0
             var blue    : CGFloat = 0
@@ -424,10 +430,50 @@ public extension Color {
         }
         
         // Convenience accessors
-        var red: CGFloat { rgba.r }
-        var green: CGFloat { rgba.g }
-        var blue: CGFloat { rgba.b }
-        var alpha: CGFloat { rgba.a }
+    var red: CGFloat {
+        get {
+            rgba.r
+        }
+        set {
+            var V = self.rgba
+            V.r = newValue
+            self = .init(V)
+        }
+    }
+    var green: CGFloat {
+        get {
+            rgba.g
+        }
+        set {
+            var V = self.rgba
+            V.g = newValue
+            self = .init(V)
+        }
+    }
+    var blue: CGFloat {
+        get {
+            rgba.b
+        }
+        set {
+            var V = self.rgba
+            V.b = newValue
+            self = .init(V)
+        }
+    }
+    var alpha: CGFloat {
+        get {
+            rgba.a
+        }
+        set {
+            var V = self.rgba
+            V.a = newValue
+            self = .init(V)
+        }
+    }
+    
+    init(_ RGBA: RGBATuple) {
+        self = RGBAInfo.init(RGBA).asSwiftUIColor
+    }
     
 //    var hsba: (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
 //            var hue: CGFloat = 0

@@ -1628,3 +1628,93 @@ public extension View {
     }
 }
 
+
+struct AViewForSlider: View {
+
+    @Binding var value : Double
+
+    let min     : Double
+    let max     : Double
+    
+    var minValue    : Double?
+    var maxValue    : Double?
+    
+    var bg      : Color     = .gray9
+    var fg      : Color     = .white
+    
+    let width   : CGFloat
+    var radius  : CGFloat   = 16
+    
+    var userChangedValue : Block?
+    
+    var allowsEditing = false
+    
+    @State var isEditing = false
+    
+    func valueFromLocation(_ x0: CGFloat) -> Double {
+        let x = x0 + width/2 - radius
+        let w = Double(width - radius - radius)
+        let a = Double(x - radius)
+        let b = self.max - self.min
+        print("width: \(width), w=\(w) radius=\(radius) x=\(x) x0=\(x0)")
+        let VMIN = min.max(minValue ?? min)
+        let VMAX = max.min(maxValue ?? max)
+        return Swift.max(min, Swift.min(max, min + a / w * b)).max(VMIN).min(VMAX)
+    }
+    
+//    @State private var offset : CGFloat = 0
+
+    var offsetFromValue : CGFloat {
+        let VMIN = min.max(minValue ?? min)
+        let VMAX = max.min(maxValue ?? max)
+        let VALUE = value.max(VMIN).min(VMAX)
+        return radius + (width - radius - radius) * CGFloat(Swift.max(min,Swift.min(max,VALUE)) - min)/CGFloat(max - min) - width / 2
+    }
+    
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(bg)
+                .frame(minWidth: radius + radius)
+                .frame(width: width, height: radius*2)
+                .onClickGesture { location in
+                    value   = valueFromLocation(location.x - width/2 + radius)
+                    userChangedValue?()
+                }
+            
+            Circle()
+                .fill(fg)
+                .frame(width: radius*2, height: radius*2)
+                .offset(x: offsetFromValue)
+                .gesture(
+                    DragGesture()
+                        .onEnded { gesture in
+                            value   = valueFromLocation(gesture.location.x)
+                            userChangedValue?()
+                        }.onChanged { gesture in
+                            value   = valueFromLocation(gesture.location.x)
+                            userChangedValue?()
+                        })
+                .onTapGesture {
+                    isEditing = allowsEditing && true
+                }
+            
+            if isEditing {
+                TextField.init("", text: .init(get: { value.asString }, set: { v in
+                    if let V = v.asDouble {
+                        value = V
+                        userChangedValue?()
+                    }
+                }), onCommit: {
+                    isEditing = false
+                })
+                .font(.caption)
+                .frame(width: width)
+            }
+        }
+//        .border(Color.black, width: 1)
+//        .onAppear {
+//            offset = offsetFromValue
+//        }
+    }
+}

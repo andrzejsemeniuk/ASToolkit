@@ -45,6 +45,13 @@ extension Color : @retroactive RawRepresentable {
 
 public struct RGBAInfo : Codable, Equatable {
     
+    public init(_ RGBA: Color.RGBATuple) {
+        self.red = RGBA.r
+        self.green = RGBA.g
+        self.blue = RGBA.b
+        self.alpha = RGBA.a
+    }
+    
     public init(red: Double, green: Double, blue: Double, alpha: Double = 1) {
         self.red = red
         self.green = green
