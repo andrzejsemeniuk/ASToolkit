@@ -991,5 +991,12 @@ public extension Color {
     var solid : Color {
         self.asHSBAInfo.with(a: 1).asSwiftUIColor
     }
+    
+    init(grayscale b: CGFloat01, alpha: CGFloat01 = 1) {
+        self.init(hsba: [0,0,b,alpha])
+    }
+    init(brightness b: CGFloat01, alpha: CGFloat01 = 1) {
+        self.init(hsba: [0,0,b,alpha])
+    }
 }
 
