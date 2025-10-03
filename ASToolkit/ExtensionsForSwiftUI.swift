@@ -1541,7 +1541,7 @@ extension Bool {
 
 
 extension View {
-    func longPressSpringAnimation(minimumDuration: Double = 2, scale: Double = 1.3, duration: TimeInterval = 1, onLongPress: @escaping () -> Void) -> some View {
+    func onLongPressPerformSpringAnimation(minimumDuration: Double = 2, scale: Double = 1.3, duration: TimeInterval = 1, onLongPress: @escaping () -> Void) -> some View {
         modifier(LongPressSpringModifier(minimumDuration: minimumDuration, scale: scale, duration: duration, onLongPress: onLongPress))
     }
     
