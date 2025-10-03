@@ -491,22 +491,48 @@ public extension Array {
 
 extension Array {
     
-    public func split(by:Int) -> [[Element]] {
-        var result : [[Element]] = []
-        var row : [Element] = []
+        //    public func split(by: Int) -> [[Element]] {
+        //        var result : [[Element]] = []
+        //        var row : [Element] = []
+        //        for element in self {
+        //            if row.count >= by {
+        //                result.append(row)
+        //                row = []
+        //            }
+        //            row.append(element)
+        //        }
+        //
+        //        if row.isNotEmpty {
+        //            result.append(row)
+        //        }
+        //
+        //        return result
+        //    }
+    
+    public func split0(by n: Int) -> [[Element]] {
+        precondition(n > 0, "split(by:) requires n > 0")
+        var result: [[Element]] = []
+        var row: [Element] = []
+        
         for element in self {
-            if row.count >= by {
+            if row.count >= n {
                 result.append(row)
                 row = []
             }
             row.append(element)
         }
         
-        if row.isNotEmpty {
+        if !row.isEmpty {
             result.append(row)
         }
-        
         return result
+    }
+    
+    public func split(by n: Int) -> [[Element]] {
+        precondition(n > 0, "split(by:) requires n > 0")
+        return stride(from: 0, to: count, by: n).map { i in
+            Array(self[i ..< Swift.min(i + n, count)])
+        }
     }
 }
 

@@ -1516,27 +1516,27 @@ public extension Int {
 
 public extension Array where Element: BinaryFloatingPoint {
     
-    /// Creates an array of values descending from `upperBound` down to `lowerBound`,
-    /// with the given number of steps.
-//    init(descendingFrom upperBound: Element, to lowerBound: Element, count: Int) {
-//        precondition(count > 0, "Count must be greater than 0")
-//        precondition(upperBound > lowerBound, "Upper bound must be greater than lower bound")
-//        
-//        var result: [Element] = []
-//        var value = upperBound
-//        let step = (upperBound - lowerBound) / Element(count)
-//        
-//        while value > lowerBound {
-//            result.append(value)
-//            value -= step
-//        }
-//        
-//        self = result
-//    }
+        /// Creates an array of values descending from `upperBound` down to `lowerBound`,
+        /// with the given number of steps.
+        //    init(descendingFrom upperBound: Element, to lowerBound: Element, count: Int) {
+        //        precondition(count > 0, "Count must be greater than 0")
+        //        precondition(upperBound > lowerBound, "Upper bound must be greater than lower bound")
+        //
+        //        var result: [Element] = []
+        //        var value = upperBound
+        //        let step = (upperBound - lowerBound) / Element(count)
+        //
+        //        while value > lowerBound {
+        //            result.append(value)
+        //            value -= step
+        //        }
+        //
+        //        self = result
+        //    }
     
     
         /// Creates an array of `count` values descending from `upperBound` to `lowerBound`.
-           /// The `lowerBound` may or may not be exactly included, depending on `count`.
+        /// The `lowerBound` may or may not be exactly included, depending on `count`.
     init(descendingFrom upperBound: Element, to lowerBound: Element, count COUNT: Int) {
         precondition(COUNT > 0, "Count must be greater than 0")
         precondition(upperBound >= lowerBound, "Upper bound must be >= lower bound")
@@ -1548,6 +1548,20 @@ public extension Array where Element: BinaryFloatingPoint {
         }
         
         print("COUNT: \(COUNT), elements: \(self.count)")
+    }
+    
+    
+    var withMidpoints: Self {
+        guard count > 1 else { return self }
+        var result: [Element] = []
+        for i in 0..<(count - 1) {
+            let a = self[i]
+            let b = self[i + 1]
+            result.append(a)
+            result.append((a + b) / 2)
+        }
+        result.append(self.last!)
+        return result
     }
     
 }
