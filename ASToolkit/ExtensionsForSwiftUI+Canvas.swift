@@ -15,7 +15,7 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func renderTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> Self {
+    func renderTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> ResolvedText {
         
         let RTEXT           = resolve(TEXT)
         let TEXTsize        = RTEXT.measure(in: size)
@@ -37,6 +37,8 @@ extension GraphicsContext {
                 break
         }
 
+//        var SIZE1 : CGSize = .zero
+        
         drawLayer { layer in
 
             let RECT = CGRect(center: AT, size: SIZE)
@@ -71,6 +73,8 @@ extension GraphicsContext {
             
             layer.draw(RTEXT, at: AT, anchor: .center)
             
+//            SIZE1 = RTEXT.measure(in: .init(width: size.maxSide, height: .infinity))
+            
 //            withCGContext { cg in
 //                    cg.saveGState()
 //                    cg.translateBy(x: AT.x, y: AT.y)
@@ -81,7 +85,7 @@ extension GraphicsContext {
 //                }
         }
         
-        return self
+        return RTEXT
     }
     
     
@@ -499,7 +503,13 @@ extension Path {
         return R
     }
     
-    static func from(points: [CGPoint], close: Bool) -> Path {
+    static func circle(_ r: CGRect) -> Path {
+        var R = Path()
+        R.addEllipse(in: r)
+        return R
+    }
+    
+    static func from(points: [CGPoint], close: Bool = false) -> Path {
         var R = Path()
         if points.count > 1 {
             R.move(to: points[0])
@@ -513,4 +523,10 @@ extension Path {
         return R
     }
     
+}
+
+func + (_ lhs: Path, _ rhs: Path) -> Path {
+    var R = lhs
+    R.addPath(rhs)
+    return R
 }
