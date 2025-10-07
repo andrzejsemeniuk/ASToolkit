@@ -497,6 +497,20 @@ extension Path {
         return R
     }
     
+    static func line(x: CGFloat, y0: CGFloat, y1: CGFloat) -> Path {
+        var R = Path()
+        R.move(to: .init(x: x, y: y0))
+        R.addLine(to: .init(x: x, y: y1))
+        return R
+    }
+    
+    static func line(x0: CGFloat, x1: CGFloat, y: CGFloat) -> Path {
+        var R = Path()
+        R.move(to: .init(x: x0, y: y))
+        R.addLine(to: .init(x: x1, y: y))
+        return R
+    }
+    
     static func rect(_ r: CGRect) -> Path {
         var R = Path()
         R.addRect(r)
