@@ -480,16 +480,16 @@ public extension Color {
 //            var saturation: CGFloat = 0
 //            var brightness: CGFloat = 0
 //            var alpha: CGFloat = 0
-//            
+//
 //            #if os(iOS)
 //            UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
 //            #elseif os(macOS)
 //            NSColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
 //            #endif
-//            
+//
 //            return (hue, saturation, brightness, alpha)
 //        }
-//        
+//
 //        // Convenience accessors
 //        var hue: CGFloat { hsba.hue }
 //        var saturation: CGFloat { hsba.saturation }
@@ -2049,7 +2049,16 @@ public extension View {
 
 
 @available(iOS 16,tvOS 16,*)
+public enum HorizontalAlignmentOption {
+    case left
+    case center
+    case right
+}
+
+@available(iOS 16,tvOS 16,*)
 public struct FlowLayout: Layout {
+    public var alignment: HorizontalAlignmentOption = .left
+    
     public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
         
@@ -2064,49 +2073,71 @@ public struct FlowLayout: Layout {
             if lineBreakAllowed, x + subSize.width > proposedWidth {
                 rowCount += 1
                 x = 0
-                }
+            }
             
             x += subSize.width
             maxRowWidth = max(maxRowWidth, x)
-            }
+        }
         
         if x > 0 {
             rowCount += 1
-            }
+        }
         
         let rowHeight = subSizes.lazy.map { $0.height }.max() ?? 0
         return CGSize(
-        width: proposal.width ?? maxRowWidth,
-        height: rowCount * rowHeight
+            width: proposal.width ?? maxRowWidth,
+            height: rowCount * rowHeight
         )
-        }
+    }
     
     public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }
-        let rowHeight = subSizes.lazy.map { $0.height }.max() ?? 0
         let proposedWidth = proposal.width ?? .infinity
         
-        var p = CGPoint.zero
+        var rows: [[(LayoutSubview, CGSize)]] = []
+        var currentRow: [(LayoutSubview, CGSize)] = []
+        var rowWidth: CGFloat = 0
+        
         for (subview, subSize) in zip(subviews, subSizes) {
-            // This prevents empty rows if any subviews are wider than proposedWidth.
-            let lineBreakAllowed = p.x > 0
-            
-            if lineBreakAllowed, p.x + subSize.width > proposedWidth {
-                p.x = 0
-                p.y += rowHeight
-                }
-            
-            subview.place(
-            at: CGPoint(
-            x: bounds.origin.x + p.x,
-            y: bounds.origin.y + p.y + 0.5 * (rowHeight - subSize.height)
-            ),
-            proposal: proposal
-            )
-            
-            p.x += subSize.width
+            if rowWidth > 0 && rowWidth + subSize.width > proposedWidth {
+                rows.append(currentRow)
+                currentRow = []
+                rowWidth = 0
             }
+            currentRow.append((subview, subSize))
+            rowWidth += subSize.width
         }
+        
+        if !currentRow.isEmpty {
+            rows.append(currentRow)
+        }
+        
+        var y = bounds.origin.y
+        for row in rows {
+            let rowHeight = row.map { $0.1.height }.max() ?? 0
+            let totalRowWidth = row.map { $0.1.width }.reduce(0, +)
+            
+            var x: CGFloat
+            switch alignment {
+                case .left:
+                    x = bounds.origin.x
+                case .center:
+                    x = bounds.origin.x + (proposedWidth - totalRowWidth) / 2
+                case .right:
+                    x = bounds.origin.x + (proposedWidth - totalRowWidth)
+            }
+            
+            for (subview, size) in row {
+                subview.place(
+                    at: CGPoint(x: x, y: y + 0.5 * (rowHeight - size.height)),
+                    proposal: ProposedViewSize(width: size.width, height: size.height)
+                )
+                x += size.width
+            }
+            
+            y += rowHeight
+        }
+    }
 }
 
 public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
@@ -2153,4 +2184,15 @@ public func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some
     VStack(alignment: .leading) {
         content()
         }
+}
+
+
+public func withAnimation(on: Bool, _ block: @escaping Block) {
+    if on {
+        withAnimation {
+            block()
+        }
+    } else {
+        block()
+    }
 }
