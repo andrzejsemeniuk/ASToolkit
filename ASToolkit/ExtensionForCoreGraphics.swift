@@ -312,6 +312,13 @@ public extension CGSize {
         return r
     }
     
+    func added(w: CGFloat = 0, h: CGFloat = 0) -> CGSize {
+        var r = self
+        r.width += w
+        r.height += h
+        return r
+    }
+    
     var inverted : CGSize {
         .init(height, width)
     }

@@ -15,11 +15,11 @@ extension GraphicsContext {
     
     
     @discardableResult
-    func renderTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> ResolvedText {
+    func renderTextWithBackgroundRectangle(_ TEXT: Text, at: CGPoint, angle: Angle = .zero, bg: Color, paddingH : CGFloat = 2, paddingV : CGFloat = 1, corner: CGFloat = 0, anchor: UnitPoint = .center, arrows: Set<CGRect.Side> = [], arrowHeight: CGFloat = 4, arrowWidth: CGFloat = 8, size: CGSize) -> ResolvedText {
         
         let RTEXT           = resolve(TEXT)
         let TEXTsize        = RTEXT.measure(in: size)
-        let SIZE            = CGSize.init(TEXTsize.width + 4,TEXTsize.height + 2)
+        let SIZE            = CGSize.init(TEXTsize.width + paddingH * 2, TEXTsize.height + paddingV * 2)
         
         var AT              = at
         
