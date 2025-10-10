@@ -2424,3 +2424,15 @@ public extension Array {
     
 }
 
+public extension Array where Element : Equatable {
+    
+    subscript(modulo index: Int) -> Element {
+        get {
+            self.at(index % count)
+        }
+        set {
+            self[index % count] = newValue
+        }
+    }
+
+}

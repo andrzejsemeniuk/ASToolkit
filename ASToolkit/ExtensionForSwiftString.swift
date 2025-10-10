@@ -1361,6 +1361,7 @@ public extension String {
         (try? JSONEncoder().encode(from).asString) ?? fallback
     }
     
+    static let abcdefghijklmnopqrstuvwxyz = "abcdefghijklmnopqrstuvwxyz"
     static let ABCDEFGHIJKLMNOPQRSTUVWXYZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     static let AEIOUY = "AEIOUY"
     static let BCDFGHJKLMNPQRSTVWXZ = "BCDFGHJKLMNPQRSTVWXZ"
@@ -1661,3 +1662,15 @@ extension String {
 }
 
 #endif
+
+
+public extension Int {
+    
+    var asUppercasedLetter : String {
+        String.ABCDEFGHIJKLMNOPQRSTUVWXYZ.characters[modulo: self].asString
+    }
+    var asLowercasedLetter : String {
+        String.abcdefghijklmnopqrstuvwxyz.characters[modulo: self].asString
+    }
+    
+}
