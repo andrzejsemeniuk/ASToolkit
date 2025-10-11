@@ -1022,7 +1022,7 @@ public func forEachElementsIndex(from E: String) -> Int {
 
 #if os(macOS)
 
-// NOTE: DON'T USE!!! USE INSTEAD 
+// NOTE: DON'T USE!!! USE INSTEAD
 //    .onContinuousHover { phase in
 //        switch phase {
 //            case .active(let point):
@@ -1165,9 +1165,9 @@ extension View {
                 changed(value)
 //                let p0 = value.startLocation - geometry[proxy.plotAreaFrame].origin
 //                let p1 = value.location - geometry[proxy.plotAreaFrame].origin
-//                
+//
 //                dragRectangle = .init(p0, p1)
-//                
+//
 //                if let v0 = proxy.value(at: p0, as: (Double,Double).self), let v1 = proxy.value(at: p1, as: (Double,Double).self) {
 //                    let V0 = (min(v0.0,v1.0), min(v0.1,v1.1))
 //                    let V1 = (max(v0.0,v1.0), max(v0.1,v1.1))
@@ -1544,7 +1544,6 @@ extension View {
     func onLongPressPerformSpringAnimation(minimumDuration: Double = 2, scale: Double = 1.3, duration: TimeInterval = 1, onLongPress: @escaping () -> Void) -> some View {
         modifier(LongPressSpringModifier(minimumDuration: minimumDuration, scale: scale, duration: duration, onLongPress: onLongPress))
     }
-    
 }
 
 struct LongPressSpringModifier: ViewModifier {
@@ -1561,6 +1560,79 @@ struct LongPressSpringModifier: ViewModifier {
             .animation(.spring(response: 0.3, dampingFraction: 0.5), value: animate)
             .onLongPressGesture(minimumDuration: minimumDuration) {
                 onLongPress()
+                animate = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    animate = false
+                }
+            }
+    }
+}
+
+
+
+
+extension View {
+    func onTapPerformSpringAnimation(
+        scale: Double = 1.2,
+        response: Double = 0.3,
+        dampingFraction: Double = 0.5,
+        duration: TimeInterval = 0.5,
+        onTap: @escaping () -> Void
+    ) -> some View {
+        modifier(TapSpringModifier(scale: scale, duration: duration, response: response, dampingFraction: dampingFraction, onTap: onTap))
+    }
+}
+
+struct TapSpringModifier: ViewModifier {
+    var scale: Double = 1.2
+    var duration: TimeInterval = 0.5
+    var response: Double = 0.3
+    var dampingFraction: Double = 0.5
+    let onTap: () -> Void
+
+    @State private var animate = false
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(animate ? scale : 1.0)
+            .animation(.spring(response: response, dampingFraction: dampingFraction), value: animate)
+            .onTapGesture {
+                onTap()
+                animate = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    animate = false
+                }
+            }
+    }
+}
+
+
+
+
+
+
+extension View {
+    func onTapPerformAnimation(
+        duration: TimeInterval = 0.5,
+        animation: Animation,
+        onTap: @escaping () -> Void
+    ) -> some View {
+        modifier(TapAnimationModifier(duration: duration, animation: animation, onTap: onTap))
+    }
+}
+
+struct TapAnimationModifier: ViewModifier {
+    var duration: TimeInterval = 0.5
+    var animation: Animation
+    let onTap: () -> Void
+
+    @State private var animate = false
+
+    func body(content: Content) -> some View {
+        content
+            .animation(animation, value: animate)
+            .onTapGesture {
+                onTap()
                 animate = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     animate = false
