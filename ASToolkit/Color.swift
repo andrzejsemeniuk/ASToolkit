@@ -262,6 +262,7 @@ public struct HSBAInfo : Codable, Equatable, Hashable, Comparable {
 
     public var asSKColor                   : SKColor { .init(HSBA: self) }
     public var asSwiftUIColor              : SwiftUI.Color { .init(HSBA: asArrayOfHSBA) }
+    public var asColor                     : SwiftUI.Color { asSwiftUIColor }
 
     public func extreme(threshold: Double = 0.5, lowerbound l: Double = 0, upperbound u: Double = 1) -> Self {
         .init(hue < threshold ? l : u, saturation < threshold ? l : u, brightness < threshold ? l : u)
