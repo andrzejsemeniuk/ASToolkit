@@ -172,3 +172,13 @@ public extension Set {
     }
 }
 
+public extension Collection where Element : Equatable {
+    func intersected(with other: any Collection<Element>) -> [Element] {
+        self.filter { other.contains($0) }
+    }
+}
+//public extension Array where Element : Equatable {
+//    func intersection(with other: Self) -> Self {
+//        self.filter { other.contains($0) }
+//    }
+//}
