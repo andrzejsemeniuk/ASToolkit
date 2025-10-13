@@ -1820,3 +1820,21 @@ public extension View {
 
 
 
+
+
+public struct ConstantOpacityModifier: ViewModifier {
+    let opacity: Double
+
+    public func body(content: Content) -> some View {
+        content
+            .compositingGroup()
+            .opacity(opacity)
+            .allowsHitTesting(opacity > 0) // optional, depends on your intent
+    }
+}
+
+public extension View {
+    func constantOpacity(_ opacity: Double = 1.0) -> some View {
+        self.modifier(ConstantOpacityModifier(opacity: opacity))
+    }
+}
