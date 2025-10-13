@@ -1790,3 +1790,33 @@ struct AViewForSlider: View {
 //        }
     }
 }
+
+
+
+
+
+
+public struct PulsingEffect: ViewModifier {
+    let scale: CGFloat
+    let duration: Double
+    @State private var isAnimating = false
+    
+    public func body(content: Content) -> some View {
+        content
+            .scaleEffect(isAnimating ? scale : 1.0)
+            .onAppear {
+                withAnimation(Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
+public extension View {
+    func pulsing(scale: CGFloat = 1.1, duration: Double = 1.0) -> some View {
+        self.modifier(PulsingEffect(scale: scale, duration: duration))
+    }
+}
+
+
+
