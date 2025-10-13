@@ -100,6 +100,21 @@ public func initialized<T>(_ r: T, _ f: (T)->Void) -> T {
 }
 
 
+//public extension Any {
+//    public func modified(_ f: (Self)->Self) -> Self {
+//        return f(self)
+//    }
+//}
+
+@inlinable
+public func with<T>(_ value: T, _ update: (inout T) -> Void) -> T {
+    var copy = value
+    update(&copy)
+    return copy
+}
+
+
+
 
 
 
