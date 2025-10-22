@@ -1838,3 +1838,46 @@ public extension View {
         self.modifier(ConstantOpacityModifier(opacity: opacity))
     }
 }
+
+
+
+
+
+
+
+
+
+public struct ZoomableModifier: ViewModifier {
+    
+    var scale0 : CGFloat = 1.0
+    
+    @State private var scale: CGFloat = 1.0
+    @State private var anchor: UnitPoint = .center
+
+    public func body(content: Content) -> some View {
+        content
+            .scaleEffect(scale, anchor: anchor)
+            .gesture(
+                MagnifyGesture()
+                    .onChanged { value in
+                        anchor = value.startAnchor
+                        scale = value.magnification
+                    }
+                    .onEnded { value in
+                        withAnimation(.spring(duration: 0.2, bounce: 0.5, blendDuration: 0.05)) {
+                            self.scale = scale0
+                        }
+                    }
+            )
+            .onAppear {
+                scale = scale0
+            }
+    }
+}
+
+public extension View {
+    func zoomable() -> some View {
+        self.modifier(ZoomableModifier())
+    }
+}
+

@@ -26,10 +26,17 @@ extension GraphicsContext {
         switch anchor {
 //            case .bottom    : AT = at.added(y:  SIZE.height/2)
 //            case .top       : AT = at.added(y: -SIZE.height/2)
-            case .bottom    : AT = at.added(y: -SIZE.height/2)
-            case .top       : AT = at.added(y:  SIZE.height/2)
-            case .leading   : AT = at.added(x:  SIZE.width/2)
-            case .trailing  : AT = at.added(x: -SIZE.width/2)
+                
+            case .bottom        : AT = at.added(y: -SIZE.height/2)
+            case .top           : AT = at.added(y:  SIZE.height/2)
+            case .leading       : AT = at.added(x:  SIZE.width/2)
+            case .trailing      : AT = at.added(x: -SIZE.width/2)
+                
+            case .topLeading    : AT = at.added(x:  SIZE.width/2, y:  SIZE.height/2)
+            case .bottomLeading : AT = at.added(x:  SIZE.width/2, y: -SIZE.height/2)
+            case .topTrailing   : AT = at.added(x: -SIZE.width/2, y:  SIZE.height/2)
+            case .bottomTrailing: AT = at.added(x: -SIZE.width/2, y: -SIZE.height/2)
+                
 //            case .leading   : AT = at.added(x: -SIZE.width/2)
 //            case .trailing  : AT = at.added(x:  SIZE.width/2)
                 
