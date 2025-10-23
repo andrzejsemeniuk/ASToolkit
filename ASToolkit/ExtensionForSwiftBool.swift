@@ -54,6 +54,7 @@ public extension Bool
     }
 
     var asString : String { self ? "true" : "false" }
+    var asTorF : String { self ? "T" : "F" }
     
     var not : Bool { !self }
 
@@ -63,5 +64,14 @@ extension Bool : @retroactive Comparable {
     public static func < (lhs: Bool, rhs: Bool) -> Bool {
         !lhs && rhs
     }
+}
+
+public extension Bool {
+    
+    @inlinable
+    func choose<V>(_ a: V, _ b: V) -> V {
+        self ? a : b
+    }
+    
 }
 
