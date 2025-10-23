@@ -487,6 +487,10 @@ extension Date {
                 case .saturday  : return "Saturday"
             }
         }
+        
+        var short2 : String {
+            name[0...1].asString
+        }
 	}
 
 	var weekday : WeekDay {
