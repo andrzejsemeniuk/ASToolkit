@@ -33,7 +33,7 @@ public extension Collection {
     }
     
     @discardableResult
-    mutating func transformInPlace(_ f: (inout Self)->Void) -> Self {
+    mutating func transformSelf(_ f: (inout Self)->Void) -> Self {
         f(&self)
         return self
     }

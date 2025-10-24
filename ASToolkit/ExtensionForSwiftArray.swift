@@ -815,60 +815,93 @@ public extension Array where Element: Equatable {
         return R
     }
 
-    mutating func enlist(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+    
+    @discardableResult
+    mutating func enlist(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
         if missing(element, equals) {
             append(element)
+            return true
         }
+        return false
     }
 
-    mutating func enlist(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+    @discardableResult
+    mutating func enlist(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
         if missing(element, equals) {
             prepend(element)
+            return true
+        }
+        return false
+    }
+    
+    
+    mutating func append(_ element: Element, limit: Int, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        self.append(element)
+        discardFromFront(keeping: limit)
+    }
+    
+    mutating func prepend(_ element: Element, limit: Int, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        self.prepend(element)
+        discardFromBack(keeping: limit)
+    }
+
+    
+    mutating func append(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if enlist(append: missing, equals), let limit {
+            discardFromFront(keeping: limit)
         }
     }
     
-    mutating func append(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
-        enlist(append: missing, equals)
-    }
-    
-    mutating func prepend(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
-        enlist(prepend: missing, equals)
+    mutating func prepend(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if enlist(prepend: missing, equals), let limit {
+            discardFromBack(keeping: limit)
+        }
     }
 
-    mutating func append(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+    
+    mutating func append(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
         removeAll(where: { equals($0,removing) })
-        enlist(append: removing, equals)
+        self = self + [removing]
+        if let limit {
+            discardFromFront(keeping: limit)
+        }
     }
     
-    mutating func prepend(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+    mutating func prepend(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
         removeAll(where: { equals($0,removing) })
-        enlist(prepend: removing, equals)
+        self = [removing] + self
+        if let limit {
+            discardFromBack(keeping: limit)
+        }
     }
 
-    func appended(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+    
+    func appended(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
-        R.append(removing: removing, equals)
+        R.append(removing: removing, limit: limit, equals)
         return R
     }
     
-    func prepended(removing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+    func prepended(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
-        R.prepend(removing: removing, equals)
+        R.prepend(removing: removing, limit: limit, equals)
         return R
     }
 
-    func appended(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+    
+    func appended(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
-        R.append(missing: missing, equals)
+        R.append(missing: missing, limit: limit, equals)
         return R
     }
     
-    func prepended(missing: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+    func prepended(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
-        R.prepend(missing: missing, equals)
+        R.prepend(missing: missing, limit: limit, equals)
         return R
     }
 
+    
     func appended(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
         for e in missing {
@@ -910,6 +943,7 @@ public extension Array where Element: Equatable {
     }
     
 }
+
 
 public extension Array  {
     

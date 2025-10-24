@@ -280,13 +280,39 @@ public extension View {
         }
     }
 
-    @ViewBuilder func viewInScrollViewHorizontal(showsIndicators: Bool = false) -> some View {
-        ScrollView.init(.horizontal, showsIndicators: showsIndicators) {
-            self
-//                .frame(alignment: .center)
-        }
-    }
+        //    @ViewBuilder
+        //    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
+        //        showsIndicators: Bool = false,
+        //        scrollTargetBehavior: Behavior = .viewAligned(anchor: .leading)
+        //        scrollTargetBehavior: Behavior = ViewAlignedScrollTargetBehavior(anchor: UnitPoint.center)
+        //        scrollTargetBehavior: Behavior = PagingCenteredScrollTargetBehavior()
+        //        scrollTargetBehavior: Behavior =
+        //    ) -> some View {
 
+//    @ViewBuilder func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: HorizontalAlignment = .leading) -> some View {
+//        ScrollView(.horizontal, showsIndicators: showsIndicators) {
+//            self
+//        }
+//    }
+
+    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
+           showsIndicators: Bool = false,
+           alignment: HorizontalAlignment = .leading,
+           scrollTargetBehavior: Behavior = .viewAligned //PagingCenteredScrollTargetBehavior()
+    ) -> some View {
+        ScrollView(.horizontal, showsIndicators: showsIndicators) {
+            HStack(alignment: .center, spacing: 16) {
+                self
+//                    .scrollTarget(isEnabled: true)
+            }
+            .scrollTargetLayout() // defines scroll target container
+            .frame(maxWidth: .infinity, alignment: alignment.scrollHorizontalAlignment)
+//            .padding(.horizontal, 40)
+        }
+        .scrollTargetBehavior(scrollTargetBehavior)
+    }
+    
+    
     func hidden(when: Bool) -> some View {
         Group {
             if when {
@@ -297,6 +323,19 @@ public extension View {
         }
     }
     
+//    static let scrollingTargetBehaviorViewAlignedCenter = ViewAlignedScrollTargetBehavior.init(anchor: UnitPoint.center)
+    
+}
+
+public extension HorizontalAlignment {
+    var scrollHorizontalAlignment: Alignment {
+        switch self {
+        case .leading: return .leading
+        case .center: return .center
+        case .trailing: return .trailing
+        default: return .center
+        }
+    }
 }
 
 //func MenuItem(_ text: String, size: FontSize = .m, design: FontDesign = .monospaced, _ action: @escaping Block) -> some View {
