@@ -2216,3 +2216,30 @@ public func withAnimation(on: Bool, _ block: @escaping Block) {
         block()
     }
 }
+
+public extension View {
+    
+    func colorInvert(_ flag: Bool) -> some View {
+        Group {
+            if flag {
+                self
+                    .colorInvert()
+            } else {
+                self
+            }
+        }
+    }
+
+    func colorSelected(_ flag: Bool) -> some View {
+        Group {
+            if flag {
+                self
+                    .colorInvert()
+                    .backgroundColor(.primary)
+            } else {
+                self
+            }
+        }
+    }
+
+}
