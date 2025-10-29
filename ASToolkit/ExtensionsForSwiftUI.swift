@@ -289,28 +289,28 @@ public extension View {
         //        scrollTargetBehavior: Behavior =
         //    ) -> some View {
 
-//    @ViewBuilder func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: HorizontalAlignment = .leading) -> some View {
-//        ScrollView(.horizontal, showsIndicators: showsIndicators) {
-//            self
-//        }
-//    }
-
-    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
-           showsIndicators: Bool = false,
-           alignment: HorizontalAlignment = .leading,
-           scrollTargetBehavior: Behavior = .viewAligned //PagingCenteredScrollTargetBehavior()
-    ) -> some View {
+    @ViewBuilder func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: HorizontalAlignment = .leading) -> some View {
         ScrollView(.horizontal, showsIndicators: showsIndicators) {
-            HStack(alignment: .center, spacing: 16) {
-                self
-//                    .scrollTarget(isEnabled: true)
-            }
-            .scrollTargetLayout() // defines scroll target container
-            .frame(maxWidth: .infinity, alignment: alignment.scrollHorizontalAlignment)
-//            .padding(.horizontal, 40)
+            self
         }
-        .scrollTargetBehavior(scrollTargetBehavior)
     }
+
+//    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
+//           showsIndicators: Bool = false,
+//           alignment: HorizontalAlignment = .leading,
+//           scrollTargetBehavior: Behavior = .viewAligned //PagingCenteredScrollTargetBehavior()
+//    ) -> some View {
+//        ScrollView(.horizontal, showsIndicators: showsIndicators) {
+//            ZStack(alignment: alignment.scrollHorizontalAlignment) {
+//                self
+////                    .scrollTarget(isEnabled: true)
+//            }
+//            .scrollTargetLayout() // defines scroll target container
+////            .frame(maxWidth: .infinity, alignment: alignment.scrollHorizontalAlignment)
+////            .padding(.horizontal, 40)
+//        }
+//        .scrollTargetBehavior(scrollTargetBehavior)
+//    }
     
     
     func hidden(when: Bool) -> some View {
