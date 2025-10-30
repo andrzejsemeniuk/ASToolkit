@@ -40,6 +40,28 @@ public extension Collection {
     
     
     
+    @discardableResult
+    mutating func modify(_ f: (Self)->Self) -> Self {
+        self = f(self)
+        return self
+    }
+    
+    func modified(_ f: (Self)->Self) -> Self {
+        f(self)
+    }
+    
+    func modifiedOptionally(_ f: (Self)->Self?) -> Self? {
+        f(self)
+    }
+    
+    @discardableResult
+    mutating func modifySelf(_ f: (inout Self)->Void) -> Self {
+        f(&self)
+        return self
+    }
+    
+    
+    
     func filterUpTo(_ limit: Int, _ predicate: (Element) -> Bool) -> [Element] {
         var result: [Element] = []
         result.reserveCapacity(Swift.min(count, limit)) // Pre-allocate space for efficiency
