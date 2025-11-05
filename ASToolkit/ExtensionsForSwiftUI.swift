@@ -280,69 +280,33 @@ public extension View {
         }
     }
 
-        //    @ViewBuilder
-        //    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
-        //        showsIndicators: Bool = false,
-        //        scrollTargetBehavior: Behavior = .viewAligned(anchor: .leading)
-        //        scrollTargetBehavior: Behavior = ViewAlignedScrollTargetBehavior(anchor: UnitPoint.center)
-        //        scrollTargetBehavior: Behavior = PagingCenteredScrollTargetBehavior()
-        //        scrollTargetBehavior: Behavior =
-        //    ) -> some View {
-
-//    func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: Alignment = .center) -> some View {
-////          ScrollView(.horizontal, showsIndicators: showsIndicators) {
-////              if alignment == .trailing {
-////                  HStack { Spacer(minLength: 0); self }
-////              } else if alignment == .center {
-////                  HStack { Spacer(minLength: 0); self; Spacer(minLength: 0) }
-////              } else {
-////                  HStack { self; Spacer(minLength: 0) }
-////              }
-////          }
-//        
-//            ScrollView(.horizontal, showsIndicators: showsIndicators) {
-//                Group {
-//                    if alignment == .trailing {
-//                        HStack(spacing: 0) { Spacer(minLength: 0); self }
-//                    } else if alignment == .center {
-//                        HStack(spacing: 0) { Spacer(minLength: 0); self; Spacer(minLength: 0) }
-//                    } else {
-//                        HStack(spacing: 0) { self; Spacer(minLength: 0) }
-//                    }
-//                }
-//                .frame(maxWidth: .infinity, minHeight: 0) // This is key
-//            }
-//        
-//      }
-    
     func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: Alignment = .center) -> some View {
         ScrollView(.horizontal, showsIndicators: showsIndicators) {
-//            HStack {
             ZStack(alignment: alignment) {
+                    // iOS 17 solution:
+                Spacer().containerRelativeFrame([.horizontal])
                 self
-//                    .fixedSize()
             }
-            .frameUnboundedWidth()
-            .frame(maxWidth: .infinity, alignment: alignment)
         }
+        
+            // iOS 18 solution:
+            //    ScrollView {
+            //        // Form content
+            //        VStack {
+            //            Text("Form goes here")
+            //        }
+            //        // Set your max width (optional)
+            //        .frame(maxWidth: 400)
+            //        .padding()
+            //        .background(Color.yellow)
+            //    }
+            //    // Center the scroll view's content
+            //    .defaultScrollAnchor(.center, for: .alignment)
+            //    // Disable bounce if the content fits (optional)
+            //    .scrollBounceBehavior(.basedOnSize)
+        
     }
-
-//    func viewInScrollViewHorizontal<Behavior: ScrollTargetBehavior>(
-//           showsIndicators: Bool = false,
-//           alignment: HorizontalAlignment = .leading,
-//           scrollTargetBehavior: Behavior = .viewAligned //PagingCenteredScrollTargetBehavior()
-//    ) -> some View {
-//        ScrollView(.horizontal, showsIndicators: showsIndicators) {
-//            ZStack(alignment: alignment.scrollHorizontalAlignment) {
-//                self
-////                    .scrollTarget(isEnabled: true)
-//            }
-//            .scrollTargetLayout() // defines scroll target container
-////            .frame(maxWidth: .infinity, alignment: alignment.scrollHorizontalAlignment)
-////            .padding(.horizontal, 40)
-//        }
-//        .scrollTargetBehavior(scrollTargetBehavior)
-//    }
+    
     
     
     func hidden(when: Bool) -> some View {
@@ -1957,7 +1921,7 @@ public extension View {
 #Preview {
     
     Color.blue
-        .frame(width: 100, height: 40)
+        .frame(width: 500, height: 40)
         .border(.red)
         .viewInScrollViewHorizontal(showsIndicators: false, alignment: .center)
         .frame(width: 320, height: 60)
@@ -1965,25 +1929,3 @@ public extension View {
         .background(Color.yellow.opacity(0.5))
     
 }
-
-//    struct DemoView: View {
-//        @State private var scrollWidth = CGFloat.zero
-//        var body: some View {
-//            ScrollView(.horizontal) {
-//                HStack {
-//                    Circle()
-//                        .frame(width: 60, height: 60)
-//                }
-//                .frame(minWidth: scrollWidth)    // << here (cetner by default) !!
-//            }
-//            .border(Color.green)            // << for demo
-//            .background(GeometryReader {
-//                // read width of ScrollView on screen
-//                Color.clear
-//                    .preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
-//            })
-//            .onPreferenceChange(ViewWidthKey.self) {
-//                self.scrollWidth = $0      // << store width
-//            }
-//        }
-//    }
