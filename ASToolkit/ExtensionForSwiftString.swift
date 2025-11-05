@@ -1674,3 +1674,33 @@ public extension Int {
     }
     
 }
+
+public extension String {
+    
+    var boolArray : [Bool] {
+        characters.map {
+            $0 == "0" ? false : true
+        }
+    }
+    
+    func boolArray(at: Int) -> Bool {
+        characters[at] != "0"
+    }
+    
+    func boolArray(at: Int, fallback: Bool) -> Bool {
+        guard let R = characters[safe: at] else {
+            return fallback
+        }
+        return R != "0"
+    }
+    
+    func boolArray(set at: Int, _ value: Bool) -> Self {
+        guard at < count else {
+            return self + ("0".repeated(count - at - 1)) + (value ? "1" : "0")
+        }
+        var R = self.characters
+        R[at] = value ? "1" : "0"
+        return R.asString
+    }
+    
+}
