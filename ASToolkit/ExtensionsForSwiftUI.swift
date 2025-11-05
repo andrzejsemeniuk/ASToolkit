@@ -207,7 +207,7 @@ public extension View {
 //}
 
 public extension View {
-    @ViewBuilder var viewInTopLeft : some View {
+    var viewInTopLeft : some View {
         VStack {
             HStack {
                 self
@@ -216,7 +216,7 @@ public extension View {
             Spacer()
         }
     }
-    @ViewBuilder var viewInTopRight : some View {
+    var viewInTopRight : some View {
         VStack {
             HStack {
                 Spacer()
@@ -225,7 +225,7 @@ public extension View {
             Spacer()
         }
     }
-    @ViewBuilder var viewInBottomRight : some View {
+    var viewInBottomRight : some View {
         VStack {
             Spacer()
             HStack {
@@ -234,7 +234,7 @@ public extension View {
             }
         }
     }
-    @ViewBuilder var viewInBottomLeft : some View {
+    var viewInBottomLeft : some View {
         VStack {
             Spacer()
             HStack {
@@ -243,38 +243,38 @@ public extension View {
             }
         }
     }
-    @ViewBuilder var viewOnTop : some View {
+    var viewOnTop : some View {
         VStack {
             self
             Spacer()
         }
     }
-    @ViewBuilder var viewOnBottom : some View {
+    var viewOnBottom : some View {
         VStack {
             Spacer()
             self
         }
     }
-    @ViewBuilder var viewOnLeft : some View {
+    var viewOnLeft : some View {
         HStack {
             self
             Spacer()
         }
     }
-    @ViewBuilder var viewOnRight : some View {
+    var viewOnRight : some View {
         HStack {
             Spacer()
             self
         }
     }
 
-    @ViewBuilder func viewInScrollView(_ axis: Axis.Set = [.horizontal, .vertical], showsIndicators: Bool = false) -> some View {
+    func viewInScrollView(_ axis: Axis.Set = [.horizontal, .vertical], showsIndicators: Bool = false) -> some View {
         ScrollView.init(axis, showsIndicators: showsIndicators) {
             self
         }
     }
 
-    @ViewBuilder func viewInScrollViewVertical(showsIndicators: Bool = false) -> some View {
+    func viewInScrollViewVertical(showsIndicators: Bool = false) -> some View {
         ScrollView.init(.vertical, showsIndicators: showsIndicators) {
             self
         }
@@ -289,9 +289,41 @@ public extension View {
         //        scrollTargetBehavior: Behavior =
         //    ) -> some View {
 
-    @ViewBuilder func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: HorizontalAlignment = .leading) -> some View {
+//    func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: Alignment = .center) -> some View {
+////          ScrollView(.horizontal, showsIndicators: showsIndicators) {
+////              if alignment == .trailing {
+////                  HStack { Spacer(minLength: 0); self }
+////              } else if alignment == .center {
+////                  HStack { Spacer(minLength: 0); self; Spacer(minLength: 0) }
+////              } else {
+////                  HStack { self; Spacer(minLength: 0) }
+////              }
+////          }
+//        
+//            ScrollView(.horizontal, showsIndicators: showsIndicators) {
+//                Group {
+//                    if alignment == .trailing {
+//                        HStack(spacing: 0) { Spacer(minLength: 0); self }
+//                    } else if alignment == .center {
+//                        HStack(spacing: 0) { Spacer(minLength: 0); self; Spacer(minLength: 0) }
+//                    } else {
+//                        HStack(spacing: 0) { self; Spacer(minLength: 0) }
+//                    }
+//                }
+//                .frame(maxWidth: .infinity, minHeight: 0) // This is key
+//            }
+//        
+//      }
+    
+    func viewInScrollViewHorizontal(showsIndicators: Bool = false, alignment: Alignment = .center) -> some View {
         ScrollView(.horizontal, showsIndicators: showsIndicators) {
-            self
+//            HStack {
+            ZStack(alignment: alignment) {
+                self
+//                    .fixedSize()
+            }
+            .frameUnboundedWidth()
+            .frame(maxWidth: .infinity, alignment: alignment)
         }
     }
 
@@ -529,7 +561,7 @@ public func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: S
 
 
 
-@ViewBuilder public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, spacing: CGFloat, dash: [CGFloat] = []) -> some View {
+public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, spacing: CGFloat, dash: [CGFloat] = []) -> some View {
     GeometryReader { geometry in
         Path { path in
             let t2 = thickness/2
@@ -555,11 +587,11 @@ public func MenuForIncreasesAndDecreases<T: SignedNumeric & Comparable>(title: S
     .foregroundColor(color)
 }
 
-@ViewBuilder public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
+public func stripes(vertical: Bool, color: Color = .white, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
     stripes(vertical: vertical, color: color, thickness: thickness, spacing: thickness * 2, dash: dash)
 }
 
-@ViewBuilder public func dots(color: Color = .white, thickness: CGFloat, spacing: CGFloat) -> some View {
+public func dots(color: Color = .white, thickness: CGFloat, spacing: CGFloat) -> some View {
     GeometryReader { geometry in
         Path { path in
             let t2 = thickness/2
@@ -1920,3 +1952,38 @@ public extension View {
     }
 }
 
+
+
+#Preview {
+    
+    Color.blue
+        .frame(width: 100, height: 40)
+        .border(.red)
+        .viewInScrollViewHorizontal(showsIndicators: false, alignment: .center)
+        .frame(width: 320, height: 60)
+        .border(.red)
+        .background(Color.yellow.opacity(0.5))
+    
+}
+
+//    struct DemoView: View {
+//        @State private var scrollWidth = CGFloat.zero
+//        var body: some View {
+//            ScrollView(.horizontal) {
+//                HStack {
+//                    Circle()
+//                        .frame(width: 60, height: 60)
+//                }
+//                .frame(minWidth: scrollWidth)    // << here (cetner by default) !!
+//            }
+//            .border(Color.green)            // << for demo
+//            .background(GeometryReader {
+//                // read width of ScrollView on screen
+//                Color.clear
+//                    .preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
+//            })
+//            .onPreferenceChange(ViewWidthKey.self) {
+//                self.scrollWidth = $0      // << store width
+//            }
+//        }
+//    }
