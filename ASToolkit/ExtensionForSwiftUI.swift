@@ -155,18 +155,18 @@ public extension View {
         self.borderRectangle(corner: 0, lineColor: color, lineWidth: thickness, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: dash, dashPhase: phase)
     }
     
-    func frameUnbounded() -> some View {
+    func frameUnbounded(alignment: Alignment = .center) -> some View {
             //        return self.edgesIgnoringSafeArea(.all)
             //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-        frame(maxWidth: .infinity, maxHeight: .infinity)
+        frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
     }
     
-    func frameUnboundedWidth() -> some View {
-        frame(maxWidth: .infinity)
+    func frameUnboundedWidth(alignment: Alignment = .center) -> some View {
+        frame(maxWidth: .infinity, alignment: alignment)
     }
     
-    func frameUnboundedHeight() -> some View {
-        frame(maxHeight: .infinity)
+    func frameUnboundedHeight(alignment: Alignment = .center) -> some View {
+        frame(maxHeight: .infinity, alignment: alignment)
     }
     
     func frame(_ w: CGFloat, _ h: CGFloat) -> some View {
