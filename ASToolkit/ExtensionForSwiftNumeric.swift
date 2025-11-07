@@ -1320,6 +1320,9 @@ public extension Float {
 public extension Double {
     var asString : String { String(self) }
 }
+public extension CGFloat {
+    var asString : String { Double(self).asString }
+}
 
 public extension Array where Element == Double {
     func asStringTuple(delimiter: String = ",") -> String { self.map { $0.format4 }.joined(separator: delimiter) }
