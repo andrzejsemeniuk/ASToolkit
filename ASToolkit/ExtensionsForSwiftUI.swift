@@ -1918,6 +1918,36 @@ public extension View {
 
 
 
+
+
+
+
+
+
+// Consumes drag gestures so ancestor ScrollViews don't scroll
+public struct DragConsumeModifier: ViewModifier {
+    public func body(content: Content) -> some View {
+        content
+            .highPriorityGesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in /* consume to block ancestor scroll */ }
+                    .onEnded { _ in }
+            )
+    }
+}
+
+public extension View {
+    /// Prevents ancestor ScrollViews from scrolling by consuming drag gestures at this view level.
+    /// Use when you want this view (often a nested scroll view) to handle drags exclusively.
+    func dragGestureConsume() -> some View {
+        modifier(DragConsumeModifier())
+    }
+}
+
+
+
+
+
 #Preview {
     
     Color.blue
