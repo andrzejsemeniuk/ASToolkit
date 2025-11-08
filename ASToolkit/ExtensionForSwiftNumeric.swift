@@ -282,6 +282,48 @@ public extension Double {
 
 public extension Double {
     
+    func rateOfChangeRatio(on denominator: Double) -> Double? {
+        guard denominator != 0 else {
+            return nil
+        }
+        return self / denominator
+    }
+    
+    typealias RateOfChangeResult = (rateOfChangeRatio: Double, rateOfChange: Double)
+
+    func rateOfChange(on denominator: Double) -> RateOfChangeResult? {
+        guard let ROC = rateOfChangeRatio(on: denominator) else {
+            return nil
+        }
+        return (ROC, ROC - 1.0)
+    }
+
+    typealias RateOfChangePercentResult = (rateOfChangeRatio: Double, rateOfChange: Double, rateOfChangePercent: Double)
+
+    func rateOfChangePercent(on denominator: Double) -> RateOfChangePercentResult? {
+        guard let ROC = rateOfChange(on: denominator) else {
+            return nil
+        }
+        return (ROC.rateOfChangeRatio, ROC.rateOfChange, ROC.rateOfChange * 100.0)
+    }
+    
+    typealias RateOfChangePercentOverIntervalResult = (rateOfChangeRatio: Double, rateOfChange: Double, rateOfChangePercent: Double, rateOfChangePercentOverInterval: Double, interval: Int)
+    
+    func rateOfChangePercent(on denominator: Double, over interval: Int) -> RateOfChangePercentOverIntervalResult? {
+        guard interval != 0 else {
+            return nil
+        }
+        guard let ROC = rateOfChangePercent(on: denominator) else {
+            return nil
+        }
+        return (ROC.rateOfChangeRatio, ROC.rateOfChange, ROC.rateOfChangePercent, ROC.rateOfChangePercent / interval.asDouble, interval)
+    }
+    
+    
+}
+
+public extension Double {
+    
     struct LERP01 {
         let MIN         : Double
         let MAX         : Double
