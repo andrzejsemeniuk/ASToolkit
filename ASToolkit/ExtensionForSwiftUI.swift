@@ -243,6 +243,11 @@ public extension Color {
     static let blue4    = Color.init(hsb: [0.62, 1.0, 1.0])
     
     static let green0   = Color.init(hsb: [0.3000,1.0000,0.6000])
+    
+    static let aqua     = Color.init(hsb: [0.5400,1.0000,1.0000])
+    static let aqua0    = Color.init(hsb: [0.5400,1.0000,1.0000])
+    static let aqua1    = Color.init(hsb: [0.5400,0.9000,1.0000])
+    static let aqua2    = Color.init(hsb: [0.5400,0.8000,1.0000])
 
     static let brown0   = Color.init(hsba: [0.1300,1.0000,0.6000,1.0000])
     static let brown1   = Color.init(hsba: [0.0958,0.5389,0.8667,1.0000])
