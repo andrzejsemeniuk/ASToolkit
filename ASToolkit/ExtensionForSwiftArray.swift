@@ -2488,4 +2488,12 @@ extension Array {
             return E
         }
     }
+    
+    func transformedEnumerated(_ f: (_ index: Int, inout Element) -> Void ) -> Self {
+        self.enumerated().map { i,V in
+            var E = V
+            f(i,&E)
+            return E
+        }
+    }
 }
