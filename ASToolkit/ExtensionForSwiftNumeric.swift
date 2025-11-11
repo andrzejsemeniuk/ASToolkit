@@ -1186,17 +1186,17 @@ public extension Int {
     func isInInterval(_ l:Int, _ u:Int) -> Bool { return l <= self && self < u }
     
     @discardableResult
-    mutating func clamp(from: Int, to: Int) -> Int {
+    mutating func clamp(from: Int = 0, to: Int) -> Int {
         if self < from {
             self = from
-        } else if self > to {
+        } else if to < self {
             self = to
         }
         return self
     }
 
     @discardableResult
-    func clamped(from: Int, to: Int) -> Int {
+    func clamped(from: Int = 0, to: Int) -> Int {
         Swift.min(to,Swift.max(from,self))
     }
 
