@@ -244,10 +244,12 @@ public extension Color {
     
     static let green0   = Color.init(hsb: [0.3000,1.0000,0.6000])
     
-    static let aqua     = Color.init(hsb: [0.5400,1.0000,1.0000])
-    static let aqua0    = Color.init(hsb: [0.5400,1.0000,1.0000])
-    static let aqua1    = Color.init(hsb: [0.5400,0.9000,1.0000])
-    static let aqua2    = Color.init(hsb: [0.5400,0.8000,1.0000])
+    static let aqua     = Color.init(hsb: [0.5300,1.0000,1.0000])
+    static let aqua0    = Color.init(hsb: [0.5300,1.0000,1.0000])
+    static let aqua1    = Color.init(hsb: [0.5300,0.9000,1.0000])
+    static let aqua2    = Color.init(hsb: [0.5300,0.8000,1.0000])
+    static let aqua3    = Color.init(hsb: [0.5300,0.7000,1.0000])
+    static let aqua4    = Color.init(hsb: [0.5300,0.6000,1.0000])
 
     static let brown0   = Color.init(hsba: [0.1300,1.0000,0.6000,1.0000])
     static let brown1   = Color.init(hsba: [0.0958,0.5389,0.8667,1.0000])
@@ -258,6 +260,11 @@ public extension Color {
     static let brown6   = Color.init(hsba: [0.1098,0.9765,0.8980,1.0000])
     static let brown7   = Color.init(hsba: [0.1098,0.9804,1.0000,1.0000])
     static let brown8   = Color.init(hsba: [0.1098,0.8471,1.0000,1.0000])
+    
+    static let taupe0   = Color.init(hsba: [0.1098,0.2471,1.0000,1.0000])
+    static let taupe1   = Color.init(hsba: [0.1098,0.2471,0.9000,1.0000])
+    static let taupe2   = Color.init(hsba: [0.1098,0.2471,0.8000,1.0000])
+    static let taupe3   = Color.init(hsba: [0.1098,0.2471,0.7000,1.0000])
     
     static let violet0   = Color.init(hsba: [0.8,0.5,1,1])
     static let violet1   = Color.init(hsba: [0.8,0.6,1,1])
@@ -312,7 +319,8 @@ public extension Color {
     
     static var offWhite = Color.init(hsba: [0, 0, 0.94, 1])
     
-    
+    static let invert = Color.init(hsba: [0,0,0.56789,0])
+
     
     static func rgbaFrom(hex: String) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
