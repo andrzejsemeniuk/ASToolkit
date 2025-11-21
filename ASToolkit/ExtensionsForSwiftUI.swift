@@ -1948,6 +1948,85 @@ public extension View {
 
 
 
+
+
+
+
+// A modifier that reads the current view’s frame in a chosen coordinate space
+public struct FrameReader: ViewModifier {
+    public enum Space {
+        case local
+        case global
+        case named(String)
+
+        var coordinateSpace: CoordinateSpace {
+            switch self {
+            case .local: return .local
+            case .global: return .global
+            case .named(let name): return .named(name)
+            }
+        }
+    }
+
+    let space: Space
+    let onChange: (CGRect) -> Void
+
+    public func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { g in
+                    Color.clear
+                        .preference(key: FramePreferenceKey.self, value: g.frame(in: space.coordinateSpace))
+                }
+            )
+            .onPreferenceChange(FramePreferenceKey.self) { value in
+                onChange(value)
+            }
+    }
+}
+
+// Convenience view extension for closure-based usage
+public extension View {
+    /// Reads this view's frame in the provided coordinate space and reports via closure.
+    /// Example:
+    ///     .readFrame(in: .frameNamed("parent")) { rect in ... }
+    func readFrame(in space: FrameReader.Space, onChange: @escaping (CGRect) -> Void) -> some View {
+        self.modifier(FrameReader(space: space, onChange: onChange))
+    }
+}
+
+// A wrapper view that binds the frame to a Binding<CGRect>
+public struct FrameReaderView<Content: View>: View {
+    let space: FrameReader.Space
+    @Binding var frame: CGRect
+    @ViewBuilder var content: () -> Content
+
+    public init(space: FrameReader.Space = .local, frame: Binding<CGRect>, @ViewBuilder content: @escaping () -> Content) {
+        self.space = space
+        self._frame = frame
+        self.content = content
+    }
+
+    public var body: some View {
+        content()
+            .readFrame(in: space) { rect in
+                frame = rect
+            }
+    }
+}
+
+// Convenience named-space constructor to avoid shadowing
+public extension FrameReader.Space {
+    static func frameNamed(_ name: String) -> FrameReader.Space { .named(name) }
+}
+
+
+
+
+
+
+
+
 #Preview {
     
     Color.blue
