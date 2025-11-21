@@ -2497,3 +2497,23 @@ extension Array {
         }
     }
 }
+
+
+public extension ClosedRange where Element == Int {
+    
+    var asArray : [Int] {
+        Array(self)
+    }
+    
+
+}
+
+public extension ClosedRange {
+    
+    @inlinable func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+        try Array(self).map { element in
+            try transform(element)
+        }
+    }
+
+}
