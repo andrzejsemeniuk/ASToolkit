@@ -1392,12 +1392,12 @@ extension View {
         .coordinateSpace(name: name)
     }
     
-    public func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
-        viewInScrollViewTrackingFrame(.horizontal, showsIndicators: showsIndicators, frame: frame)
+    public func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, name: String, frame: Binding<CGRect>) -> some View {
+        viewInScrollViewTrackingFrame(.horizontal, showsIndicators: showsIndicators, name: name, frame: frame)
     }
     
-    public func viewInScrollViewVerticalTrackingFrame(showsIndicators: Bool = false, frame: Binding<CGRect>) -> some View {
-        viewInScrollViewTrackingFrame(.vertical, showsIndicators: showsIndicators, frame: frame)
+    public func viewInScrollViewVerticalTrackingFrame(showsIndicators: Bool = false, name: String, frame: Binding<CGRect>) -> some View {
+        viewInScrollViewTrackingFrame(.vertical, showsIndicators: showsIndicators, name: name, frame: frame)
     }
     
 }
