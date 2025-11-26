@@ -189,6 +189,13 @@ func PICK<T>(_ condition: Bool, _ first: T, _ second: T) -> T {
 
 
 
+func better<T>(_ current: T?, candidate: T, isBetter: (T, T) -> Bool) -> T {
+    guard let current = current else { return candidate }
+    return isBetter(current, candidate) ? candidate : current
+}
+
+
+
 
 
     // https://forums.swift.org/t/rawrepresentable-conformance-leads-to-crash/51912/4

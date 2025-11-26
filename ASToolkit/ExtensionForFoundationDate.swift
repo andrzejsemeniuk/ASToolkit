@@ -457,6 +457,12 @@ public extension Date {
         return formatter.string(from: self)
     }
     
+    var asStringHHMM: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: self)
+    }
+    
 }
 
 extension Date {
@@ -833,4 +839,16 @@ public extension Calendar {
     func isWeekday(_ date: Date) -> Bool {
         !isWeekend(date)
     }
+}
+
+
+public extension Date {
+    
+    static let referenceDate200001010000: Date = {
+        var comps = DateComponents()
+        comps.year = 2000; comps.month = 1; comps.day = 1;
+        comps.hour = 0; comps.minute = 0;
+        return Calendar.current.date(from: comps)!
+    }()
+
 }
