@@ -278,6 +278,8 @@ public extension Double {
     var floor           : Self { Darwin.floor(self) }
     var ceil            : Self { Darwin.ceil(self) }
 
+    var log2            : Self { Darwin.log2(self) }
+    var log10           : Self { Darwin.log10(self) }
 }
 
 public extension Double {
@@ -1043,6 +1045,9 @@ public extension Int
         return self % 2 == 1
     }
     
+    var log2            : Double { self < 1 ? 0.0 : self.asDouble.log2 }
+    var log10           : Double { self < 1 ? 0.0 : self.asDouble.log10 }
+
     func loop(_ block: ()->()) {
         if self > 0 {
             let limit = self
