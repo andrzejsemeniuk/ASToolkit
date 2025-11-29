@@ -226,6 +226,7 @@ extension GraphicsContext {
             self.VMIN   = min(vMIN,vMAX)
             self.VMAX   = max(vMIN,vMAX)
             self.vRANGE = vMAX - vMIN
+            self.vRATIO = vMIN != 0 ? vMAX / vMIN : 0
             self.HEIGHT = (y1 - y0)
             
             self.logarithmic = logarithmic
@@ -262,6 +263,7 @@ extension GraphicsContext {
         let VMIN    : Double
         let VMAX    : Double
         let vRANGE  : Double
+        let vRATIO  : Double
         
         let dydv    : Double
         let dvdy    : Double
