@@ -170,10 +170,10 @@ public extension Double
 {
     var sign                : Self { self < 0 ? -1 : self > 0 ? 1 : 0 }
     
-    var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
-    var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
-    var clampedTo02         : Self { clamped(minimum:0, maximum:2) }
-    var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
+    var clampedTo01         : Self { clamped(0, 1) }
+    var clampedTo11         : Self { clamped(-1, 1) }
+    var clampedTo02         : Self { clamped(0, 2) }
+    var clampedTo0255       : Self { clamped(0, 255) }
     
     func isInClosedInterval (_ l: Double, _ u: Double) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: Double, _ u: Double) -> Bool { l < self && self < u }
@@ -754,9 +754,9 @@ public extension CGFloat
 {
     var sign                : Self { self < 0 ? -1 : self > 0 ? 1 : 0 }
     
-    var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
-    var clampedTo11         : Self { clamped(minimum:-1, maximum:1) }
-    var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
+    var clampedTo01         : Self { clamped(0, 1) }
+    var clampedTo11         : Self { clamped(-1, 1) }
+    var clampedTo0255       : Self { clamped(0, 255) }
     
     func isInClosedInterval (_ l: CGFloat, _ u: CGFloat) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: CGFloat, _ u: CGFloat) -> Bool { l < self && self < u }
@@ -922,8 +922,8 @@ public extension Float
 {
     var sign                : Self { self < 0 ? -1 : self > 0 ? 1 : 0 }
     
-    var clampedTo01         : Self { clamped(minimum:0, maximum:1) }
-    var clampedTo0255       : Self { clamped(minimum:0, maximum:255) }
+    var clampedTo01         : Self { clamped(0, 1) }
+    var clampedTo0255       : Self { clamped(0, 255) }
     
     func isInClosedInterval (_ l: Float, _ u: Float) -> Bool { l <= self && self <= u }
     func isInOpenInterval   (_ l: Float, _ u: Float) -> Bool { l < self && self < u }

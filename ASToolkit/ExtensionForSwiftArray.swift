@@ -1868,8 +1868,8 @@ public extension Array where Element == Double {
     
     func indexMatchingTest(from: Int, til: Int, test: (_ stored: Double, _ current: Double)->Bool) -> Int? {
         
-        let from = from.clamped(minimum: 0, maximum: count)
-        let til  = til.clamped(minimum: from, maximum: count)
+        let from = from.clamped(0, count)
+        let til  = til.clamped(from, count)
         
         guard from < til else {
             return nil
@@ -1912,8 +1912,8 @@ public extension Array where Element == Double {
             return []
             
         }
-        let from = from.clamped(minimum: 0, maximum: count - span)
-        let til  = til.clamped(minimum: from - span, maximum: count - span)
+        let from = from.clamped(0, count - span)
+        let til  = til.clamped(from - span, count - span)
         
         guard from < til else {
             return []

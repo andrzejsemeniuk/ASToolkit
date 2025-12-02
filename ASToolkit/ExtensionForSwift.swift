@@ -332,3 +332,12 @@ public extension Mirror {
 }
 
 
+var isLogging = true
+
+func logging(_ string: String) {
+    guard isLogging else {
+        return
+    }
+    print(string)
+}
+
