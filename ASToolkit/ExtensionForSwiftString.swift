@@ -8,6 +8,7 @@
 
 import Foundation
 
+nonisolated
 extension String {
     public var asSubstring : Substring {
         return Substring(self)
@@ -26,6 +27,7 @@ extension String {
     }
 }
 
+nonisolated
 extension String {
     public var urlEncoded: String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)!
@@ -45,6 +47,7 @@ extension String {
     }
 }
 
+nonisolated
 public extension String {
     
     static let TRUE     = "true"
@@ -84,6 +87,7 @@ public extension String {
 
 }
 
+nonisolated
 public extension String {
     subscript (safe i:Int) -> Substring? {
         0 <= i && i < self.count ? self[i] : nil
@@ -191,6 +195,7 @@ public extension String {
     
 }
 
+nonisolated
 public extension StringProtocol {
     var asBits : [Bool] {
         self.map { $0 == "0" ? false : true }
@@ -304,6 +309,7 @@ extension String {
      }
  }
 
+nonisolated
 public extension String {
     
     func substring(_ i: Int) -> Substring {
@@ -332,6 +338,7 @@ public extension String {
 }
 
 
+nonisolated
 extension String
 {
     public func trimmed() -> String {
@@ -403,6 +410,7 @@ extension String {
     
 }
 
+nonisolated
 extension String {
     
     public func split(_ delimiter:String) -> [String] {
@@ -443,6 +451,7 @@ extension String {
     }
 }
 
+nonisolated
 extension String {
     
     public func capitalized() -> String {
@@ -461,6 +470,7 @@ extension String {
     }
 }
 
+nonisolated
 public extension String {
     
     func prepended(with:String, delimiter:String = "") -> String {
@@ -496,6 +506,7 @@ public extension String {
 //    }
 //}
 
+nonisolated
 public extension String {
 
     func index(at: Int) -> Index {
@@ -635,6 +646,7 @@ extension String {
 }
 
 
+nonisolated
 extension String {
     
     public func partitioned(by: (Int,Character)->Bool) -> [Substring] {
@@ -655,6 +667,7 @@ extension String {
     }
 }
 
+nonisolated
 public extension String {
     
     func uniqued() -> String {
@@ -663,6 +676,7 @@ public extension String {
     
 }
 
+nonisolated
 public extension Array where Element == String {
     
     func split(span chars: Int) -> ([String],[String]) {
@@ -739,6 +753,7 @@ public extension Array where Element == String {
 
 }
 
+nonisolated
 public extension String {
 
     func split(on: (Character)->Bool) -> [Substring] {
@@ -826,6 +841,7 @@ public extension String {
     static let CRLF : String = LF + CR
 }
 
+nonisolated
 public extension String {
     
     var  asFloat   :  Float?   { Float(self.trimmed().erasingCommas) }
@@ -878,8 +894,11 @@ public extension String {
     var doublequoted : Self {
         surrounded(by: "\"")
     }
+    nonisolated
     var dquoted : Self { doublequoted }
+    nonisolated
     var dq : Self { doublequoted }
+    nonisolated
     var qq : Self { doublequoted }
 
     var singlequoted : Self {

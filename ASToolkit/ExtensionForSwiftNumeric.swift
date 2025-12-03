@@ -10,6 +10,7 @@ import Foundation
 
 
 
+nonisolated
 public extension Numeric where Self : Comparable {
     
     func max(_ other: Self) -> Self { Swift.max(self,other) }
@@ -242,6 +243,7 @@ public extension Double {
 //    from[.random(min: 0, upto: from.count)]
 //}
 
+nonisolated
 public extension Double {
     
     static var   resolution      : UInt32     = 100000
@@ -259,6 +261,7 @@ public extension Double {
 
 }
 
+nonisolated
 public extension Double {
 
     var asInt           : Int { Int(self) }
@@ -282,6 +285,7 @@ public extension Double {
     var log10           : Self { Darwin.log10(self) }
 }
 
+nonisolated
 public extension Double {
     
     func rateOfChangeRatio(on denominator: Double) -> Double? {
@@ -548,6 +552,7 @@ public extension Int64 {
 //    }
 }
 
+nonisolated
 public extension Double {
     
     static let formatterAsInteger : NumberFormatter = {
@@ -775,6 +780,7 @@ public extension CGFloat
     var sqrt : CGFloat { Darwin.sqrt(self) }
 }
 
+nonisolated
 public extension CGFloat {
     
     static var   randomSign      : Self                                      { (arc4random_uniform(2) == 0) ? 1.0 : -1.0 }
@@ -804,6 +810,7 @@ public extension CGFloat {
     var ceil            : Self { Darwin.ceil(self) }
 }
 
+nonisolated
 public extension CGFloat {
     
     init?(_ string:String) {
@@ -836,6 +843,7 @@ extension CGFloat : @retroactive RawRepresentable {
     
 }
 
+nonisolated
 public extension CGFloat {
     var format0 : String { self == 0 ? "0" : NSString(format: "%.0f", self) as String }
     var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
@@ -1216,6 +1224,7 @@ public extension Int {
 
 public func pick(_ n: Int) -> Int { n.pick }
 
+nonisolated
 public extension Int {
 
     var asFloat         : Float         { Float(self) }
@@ -1234,6 +1243,7 @@ public extension Int {
     var abs             : Int           { Swift.abs(self) }
 }
 
+nonisolated
 public extension UInt8 {
 
     var asFloat         : Float         { Float(self) }
@@ -1246,6 +1256,7 @@ public extension UInt8 {
     
 }
 
+nonisolated
 public extension UInt16 {
 
     var asFloat         : Float         { Float(self) }
@@ -1258,6 +1269,7 @@ public extension UInt16 {
     
 }
 
+nonisolated
 public extension UInt {
 
     var asFloat         : Float         { Float(self) }
@@ -1270,6 +1282,7 @@ public extension UInt {
     
 }
 
+nonisolated
 public extension UInt32 {
 
     var asFloat         : Float         { Float(self) }
@@ -1281,6 +1294,7 @@ public extension UInt32 {
     func isInInterval   (_ l: UInt32, _ u:UInt32) -> Bool { return l <= self && self < u }
 }
 
+nonisolated
 public extension UInt64 {
 
     var asDouble        : Double        { Double(self) }
@@ -1297,6 +1311,7 @@ public extension UInt64 {
     static var timestampYYYYMMDDhhmmssms            : UInt64 { UInt64(Date().timeIntervalSince1970 * 1000.0) }
 }
 
+nonisolated
 public extension Int64 {
     
     var sign : Int64 {
@@ -1318,12 +1333,14 @@ public extension Int64 {
 
 
 
+nonisolated
 extension Int : Stringable {
     public static func from(string: String) -> Int? {
         Int(string)
     }
 }
 
+nonisolated
 extension CGFloat : Stringable {
     public static func from(string: String) -> CGFloat? {
         if let v = Double(string) {
@@ -1333,49 +1350,70 @@ extension CGFloat : Stringable {
     }
 }
 
+nonisolated
 extension Double : Stringable {
     public static func from(string: String) -> Double? {
         Double(string)
     }
 }
 
+nonisolated
 public extension Int16 {
     var asString : String { String(self) }
 }
 
+nonisolated
 public extension Int {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension Int32 {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension Int64 {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension UInt {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension UInt32 {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension UInt64 {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension Float {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension Double {
     var asString : String { String(self) }
 }
+
+nonisolated
 public extension CGFloat {
     var asString : String { Double(self).asString }
 }
 
+nonisolated
 public extension Array where Element == Double {
     func asStringTuple(delimiter: String = ",") -> String { self.map { $0.format4 }.joined(separator: delimiter) }
     func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
 }
 
+nonisolated
 public extension Array where Element == CGFloat {
     func asStringTuple(delimiter: String = ",") -> String { self.map { $0.format4 }.joined(separator: delimiter) }
     func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }

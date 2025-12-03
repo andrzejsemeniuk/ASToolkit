@@ -172,6 +172,7 @@ public extension Array
         return self[count-last..<count].asArray
     }
     
+    nonisolated
     func subarray(from:Int, to:Int) -> Array {
         let to = Swift.min(to,count)
         var result = [Element]()
@@ -185,14 +186,17 @@ public extension Array
         subarray(from: from, to: from + (length == nil ? (count - from) : length!))
     }
     
+    nonisolated
     subscript (safe i:Int) -> Array.Element? {
         0 <= i && i < self.count ? self[i] : nil
     }
 
+    nonisolated
 	func filtered<T>(type:T.Type) -> [T] {
 		self.filter { $0 is T }.map { $0 as! T }
 	}
 
+    nonisolated
 	var indexForPossibleLastElement : Int? {
 		0 < count ? count-1 : nil
 	}
@@ -430,6 +434,7 @@ public extension Array where Element == String {
 
 public extension Array {
     
+    nonisolated
     func adjacent() -> [(Element,Element)] {
         var R : [(Element,Element)] = []
         for i in stride(from:1,to:count,by:1) {
@@ -438,6 +443,7 @@ public extension Array {
         return R
     }
 
+    nonisolated
     func forEachAdjacent(_ handle:(Element,Element)->Void) {
         for i in stride(from:1,to:count,by:1) {
             handle(self[i-1],self[i])

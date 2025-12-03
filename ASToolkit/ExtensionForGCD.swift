@@ -38,23 +38,23 @@ public extension DispatchQueue {
     
 }
 
-@inlinable public func wait(_ block: @escaping Block) {
-    DispatchQueue.main.async {
-        block()
-    }
-}
-
-@inlinable public func now(_ block: @escaping Block) {
-    DispatchQueue.main.sync {
-        block()
-    }
-}
-
-@inlinable public func now(_ block: @escaping () throws -> Void) rethrows {
-    try DispatchQueue.main.sync {
-        try block()
-    }
-}
+//@inlinable public func wait(_ block: @escaping Block) {
+//    DispatchQueue.main.async {
+//        block()
+//    }
+//}
+//
+//@inlinable public func now(_ block: @escaping Block) {
+//    DispatchQueue.main.sync {
+//        block()
+//    }
+//}
+//
+//@inlinable public func now(_ block: @escaping () throws -> Void) rethrows {
+//    try DispatchQueue.main.sync {
+//        try block()
+//    }
+//}
 
 @inlinable public func later(_ block: @escaping Block) {
     DispatchQueue.main.async {
@@ -76,3 +76,26 @@ public func later2(_ block: @escaping Block) {
     }
 }
 
+
+
+
+// MARK: - UI Actor & Helper
+
+@globalActor
+public actor UIActor {
+    public static let shared = UIActor()
+}
+
+@inlinable
+public nonisolated func inUI(_ operation: @escaping @MainActor () -> Void) {
+    Task { @MainActor in
+        operation()
+    }
+}
+
+@inlinable
+public nonisolated func onUI(_ operation: @escaping @MainActor () -> Void) {
+    Task { @MainActor in
+        operation()
+    }
+}

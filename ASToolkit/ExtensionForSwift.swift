@@ -332,12 +332,11 @@ public extension Mirror {
 }
 
 
+@MainActor
 var isLogging = true
 
+@MainActor
 func logging(_ string: String) {
-    guard isLogging else {
-        return
-    }
+    guard isLogging else { return }
     print(string)
 }
-

@@ -10,10 +10,12 @@ import Foundation
 
 public extension Collection {
     
+    nonisolated
     var isEmpty: Bool {
         count == 0
     }
     
+    nonisolated
     var isNotEmpty : Bool {
         !isEmpty
     }
