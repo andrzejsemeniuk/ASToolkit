@@ -284,7 +284,7 @@ public struct EnabledValue<T: Codable & Equatable & Hashable> : Codable, Equatab
 
 public extension Task where Success == Never, Failure == Never {
     
-    static func sleep(seconds: Double) async throws {
+    static func sleep(seconds: TimeInterval) async throws {
         guard seconds > 0 else { return }
         try await Task.sleep(nanoseconds: UInt64(Double(1_000_000_000) * seconds))
     }

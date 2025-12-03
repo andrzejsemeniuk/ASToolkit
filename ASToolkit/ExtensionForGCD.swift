@@ -56,23 +56,35 @@ public extension DispatchQueue {
 //    }
 //}
 
-@inlinable public func later(_ block: @escaping Block) {
-    DispatchQueue.main.async {
-        block()
-    }
+@inlinable nonisolated public func later(_ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.async {
+//        block()
+//    }
+    inUI(block)
 }
 
-public func later2(_ block: @escaping Block) {
-    DispatchQueue.main.async {
-        DispatchQueue.main.async {
+public func later2(_ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.async {
+//        DispatchQueue.main.async {
+//            block()
+//        }
+//    }
+    inUI {
+        inUI(block)
+    }
+
+}
+
+@inlinable public func after(_ seconds: TimeInterval, _ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.asyncAfter(seconds) {
+//        block()
+//    }
+    
+    Task {
+        try? await Task.sleep(seconds: seconds)
+        inUI {
             block()
         }
-    }
-}
-
-@inlinable public func after(_ seconds: TimeInterval, _ block: @escaping Block) {
-    DispatchQueue.main.asyncAfter(seconds) {
-        block()
     }
 }
 
