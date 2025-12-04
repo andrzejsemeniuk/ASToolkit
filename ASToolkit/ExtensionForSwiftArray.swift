@@ -2523,3 +2523,11 @@ public extension ClosedRange {
     }
 
 }
+
+public extension Array {
+    
+    func safeValue(at index: Int) -> Element? {
+        index < count ? self[index] : nil
+    }
+    
+}

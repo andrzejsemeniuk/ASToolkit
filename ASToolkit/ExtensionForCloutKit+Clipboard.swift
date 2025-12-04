@@ -66,7 +66,7 @@ public func cloudKitClipboardUpload(container identifier: String, recordType: St
     }
 }
 
-public func cloudKitClipboardDownload(container identifier: String, recordName: String) async throws -> (payload: Data, info: [String: String]) {
+public func cloudKitClipboardDownload(container identifier: String, recordName: String) async throws -> (payload: Data, metadata: CloudKitClipboardMetadata) {
     
     let container = CKContainer(identifier: identifier)
     let database = container.publicCloudDatabase
@@ -82,8 +82,19 @@ public func cloudKitClipboardDownload(container identifier: String, recordName: 
     if let infoData = record["info"] as? Data {
         info ?= try? infoData.decoded()
     }
-    
-    return (payload, info)
+
+    let isCompressed = record["isCompressed"] as? Bool
+    let updatedAt = record["updatedAt"] as? Date
+    let sizeInBytes = record["sizeInBytes"] as? Int
+
+    let metadata = CloudKitClipboardMetadata(
+        info: info,
+        isCompressed: isCompressed,
+        updatedAt: updatedAt,
+        sizeInBytes: sizeInBytes
+    )
+
+    return (payload, metadata)
 }
 
 public struct CloudKitClipboardMetadata {

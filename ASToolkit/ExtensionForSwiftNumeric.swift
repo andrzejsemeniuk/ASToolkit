@@ -643,116 +643,156 @@ public extension Double {
     
 }
 
-public extension Double {
+// Edited as requested:
 
-    func percent(of: Double, fallback: Double) -> Double {
-        guard isNormal else { return fallback }
-        guard of.isNormal else { return fallback }
-        guard of != 0 else { return fallback }
-        return ((self - of) / of) * 100.0
-    }
-
-    func percent(of: Double) -> Double? {
-        guard isNormal else { return nil }
-        guard of.isNormal else { return nil }
-        guard of != 0 else { return nil }
-        return ((self - of) / of) * 100.0
-    }
-
-    func percentInverted(of: Double, fallback: Double) -> Double {
-        of.percent(of: self, fallback: fallback)
-    }
-
-    func percentInverted(of: Double) -> Double? {
-        of.percent(of: self)
-    }
-
-    func ratio(of: Double, fallback: Double) -> Double {
-        guard isNormal else { return fallback }
-        guard of.isNormal else { return fallback }
-        guard of != 0 else { return fallback }
-        return self / of
-    }
+nonisolated
+public extension Int {
     
-    func ratio(of: Double) -> Double? {
-        guard isNormal else { return nil }
-        guard of.isNormal else { return nil }
-        guard of != 0 else { return nil }
-        return self / of
-    }
-
-    func ratioInverted(of: Double, fallback: Double) -> Double {
-        guard isNormal else { return fallback }
-        guard of.isNormal else { return fallback }
-        guard of != 0 else { return fallback }
-        return 1.0 - (self / of)
-    }
-    
-    func ratioInverted(of: Double) -> Double? {
-        guard isNormal else { return nil }
-        guard of.isNormal else { return nil }
-        guard of != 0 else { return nil }
-        return 1.0 - (self / of)
-    }
-
-}
-
-
-
-public extension Double {
-    static let twopi            : Self = Self.pi * 2.0
-    static let degrees2radians  : Self = Self.pi / 180.0
-    static let radians2degrees  : Self = 180.0 / Self.pi
-
-    var radians                 : Self { self * .degrees2radians }
-    var degrees                 : Self { self * .radians2degrees }
-    var radiansFrom01           : Self { self * .twopi }
-    var degreesFrom01           : Self { self * 360.0 }
-    var radiansTo01             : Self { self / .twopi }
-    var degreesTo01             : Self { self / 360.0 }
-    var radiansFrom11           : Self { self * .pi }
-    var degreesFrom11           : Self { self * 180.0 }
-    var radiansTo11             : Self { self / .pi }
-    var degreesTo11             : Self { self / 180.0 }
-
-    var normalizedTo2Pi         : Self { (self.degrees.asInt % 360).asDouble.radians }
-//    mutating func normalizeTo2Pi() { self = self.normalizedTo2Pi }
-    var normalizedToPiPi        : Self { ((self.degrees.asInt % 360) - 180).asDouble.radians }
-    func radians(shortestTo b: Self) -> Self {
-        let a = self.normalizedToPiPi
-        let b = b.normalizedToPiPi
-        return Swift.min(a-b,b-a) // ??
-    }
-
-    var from11ToRadians         : Self { self * .twopi }
-    var from11ToDegrees         : Self { self * 360 }
-
-    
-    static func rangeIn01CenteredOn(value: Double, span: Double) -> (min: Double, max: Double) {
-        let halfLength: CGFloat = span / 2.0
-        var minValue = value - halfLength
-        var maxValue = value + halfLength
-
-        // Adjust the range if it exceeds bounds
-        if minValue < 0 {
-            maxValue += minValue.abs
-            minValue = 0
-        } else if maxValue > 1 {
-            minValue -= (maxValue - 1)
-            maxValue = 1
+    /// Abbreviate the integer using K, M, B, T, P, E suffixes.
+    /// - Parameter precision: Number of decimal places to keep when abbreviated.
+    /// - Parameter thousand: The suffix for thousands (default "K").
+    /// - Parameter million: The suffix for millions (default "M").
+    /// - Parameter billion: The suffix for billions (default "B").
+    /// - Parameter trillion: The suffix for trillions (default "T").
+    /// - Parameter peta: The suffix for peta (default "P").
+    /// - Parameter exa: The suffix for exa (default "E").
+    /// - Returns: A human-readable abbreviated string, e.g., 1_234 -> "1.23K" when precision is 2.
+    func formatAbbreviated(
+        precision: Int,
+        thousand: String = "K",
+        million: String = "M",
+        billion: String = "B",
+        trillion: String = "T",
+        peta: String = "P",
+        exa: String = "E"
+    ) -> String {
+        // Handle zero quickly
+        if self == 0 { return "0" }
+        // Work with absolute value for magnitude and keep sign
+        let sign = self < 0 ? "-" : ""
+        let absValue = Double(Swift.abs(self))
+        // Check thresholds from largest to smallest
+        if absValue >= 1_000_000_000_000_000_000 { // Exa
+            let value = absValue / 1_000_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + exa
         }
-
-        return (min: minValue, max: maxValue)
+        if absValue >= 1_000_000_000_000_000 { // Peta
+            let value = absValue / 1_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + peta
+        }
+        if absValue >= 1_000_000_000_000 { // Tera
+            let value = absValue / 1_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + trillion
+        }
+        if absValue >= 1_000_000_000 { // Billion
+            let value = absValue / 1_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + billion
+        }
+        if absValue >= 1_000_000 { // Million
+            let value = absValue / 1_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + million
+        }
+        if absValue >= 1_000 { // Thousand
+            let value = absValue / 1_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
+            return sign + formatted + thousand
+        }
+        // No abbreviation needed
+        return sign + Int(absValue).formatted()
     }
 
+    /// Convenience alias used elsewhere in the codebase.
+    /// Defaults to 2 decimal places when abbreviated.
+    var formatAsBigNumber: String {
+        formatAbbreviated(precision: 2)
+    }
 }
 
+// New extension for Double with requested changes:
 
+nonisolated
+public extension Double {
+    /// Abbreviate the double using K, M, B, T, P, E suffixes.
+    /// - Parameters:
+    ///   - precisionAbbreviated: Number of decimal places to keep when an abbreviation suffix is used.
+    ///   - precisionUnabbreviated: Number of decimal places to keep when no abbreviation is used.
+    ///   - thousand: The suffix for thousands (default "K").
+    ///   - million: The suffix for millions (default "M").
+    ///   - billion: The suffix for billions (default "B").
+    ///   - trillion: The suffix for trillions (default "T").
+    ///   - peta: The suffix for peta (default "P").
+    ///   - exa: The suffix for exa (default "E").
+    /// - Returns: A human-readable abbreviated string, e.g., 1234.56 -> "1.23K" when precisionAbbreviated is 2.
+    func formatAbbreviated(
+        precisionAbbreviated: Int,
+        precisionUnabbreviated: Int,
+        thousand: String = "K",
+        million: String = "M",
+        billion: String = "B",
+        trillion: String = "T",
+        peta: String = "P",
+        exa: String = "E"
+    ) -> String {
+        // Handle zero quickly (respecting precisionUnabbreviated)
+        if self == 0 {
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = max(0, precisionUnabbreviated)
+            formatter.maximumFractionDigits = max(0, precisionUnabbreviated)
+            formatter.minimumIntegerDigits = 1
+            return formatter.string(from: 0 as NSNumber) ?? "0"
+        }
+        // Work with absolute value for magnitude and keep sign
+        let sign = self < 0 ? "-" : ""
+        let absValue = Swift.abs(self)
+        // Check thresholds from largest to smallest
+        if absValue >= 1_000_000_000_000_000_000 { // Exa
+            let value = absValue / 1_000_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + exa
+        }
+        if absValue >= 1_000_000_000_000_000 { // Peta
+            let value = absValue / 1_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + peta
+        }
+        if absValue >= 1_000_000_000_000 { // Tera
+            let value = absValue / 1_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + trillion
+        }
+        if absValue >= 1_000_000_000 { // Billion
+            let value = absValue / 1_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + billion
+        }
+        if absValue >= 1_000_000 { // Million
+            let value = absValue / 1_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + million
+        }
+        if absValue >= 1_000 { // Thousand
+            let value = absValue / 1_000
+            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
+            return sign + formatted + thousand
+        }
+        // No abbreviation needed: format with precisionUnabbreviated
+        let formatted = absValue.formatted(
+            .number.precision(.fractionLength(0...max(0, precisionUnabbreviated)))
+        )
+        return sign + formatted
+    }
 
-
-
-
-
+    /// Convenience alias similar to Int.formatAsBigNumber.
+    /// Defaults to 2 decimal places for abbreviated and 2 for unabbreviated values.
+    var formatAsBigNumber: String {
+        formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 2)
+    }
+}
 
 
 public extension CGFloat
@@ -1222,6 +1262,7 @@ public extension Int {
 }
 
 
+
 public func pick(_ n: Int) -> Int { n.pick }
 
 nonisolated
@@ -1653,3 +1694,4 @@ public extension Array where Element: BinaryFloatingPoint {
     }
     
 }
+
