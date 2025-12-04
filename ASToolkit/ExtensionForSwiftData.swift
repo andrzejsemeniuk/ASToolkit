@@ -73,3 +73,23 @@ public extension Data {
     
 
 }
+
+public extension Data {
+    
+    var gzipDecompressedSafe : Data? {
+        try? gzipDecompressed()
+    }
+    
+    func gzipDecompressed() throws -> Data {
+        try (self as NSData).decompressed(using: .zlib) as Data
+    }
+    
+    var gzipCompressedSafe : Data? {
+        try? gzipCompressed()
+    }
+    
+    func gzipCompressed() throws -> Data {
+        try (self as NSData).compressed(using: .zlib) as Data
+    }
+
+}

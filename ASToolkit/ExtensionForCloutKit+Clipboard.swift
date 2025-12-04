@@ -8,7 +8,14 @@
 
 import CloudKit
 
+public struct CloudKitClipboardPackedPayload: Codable {
+    let version: Int
+    let encoding: String
+    let payload: Data // gzip-compressed content
+}
+
 public func cloudKitClipboardUpload(container identifier: String, recordType: String, recordName: String, data: Data, info: [String : String]) async throws {
+    
     let container = CKContainer(identifier: identifier)
     let database = container.publicCloudDatabase
     
@@ -60,6 +67,7 @@ public func cloudKitClipboardUpload(container identifier: String, recordType: St
 }
 
 public func cloudKitClipboardDownload(container identifier: String, recordName: String) async throws -> (payload: Data, info: [String: String]) {
+    
     let container = CKContainer(identifier: identifier)
     let database = container.publicCloudDatabase
     
@@ -78,3 +86,70 @@ public func cloudKitClipboardDownload(container identifier: String, recordName: 
     return (payload, info)
 }
 
+public struct CloudKitClipboardMetadata {
+    public let info: [String: String]
+    public let isCompressed: Bool?
+    public let updatedAt: Date?
+    public let sizeInBytes: Int?
+}
+
+public func cloudKitClipboardMetadata(container identifier: String, recordName: String) async throws -> CloudKitClipboardMetadata {
+    let container = CKContainer(identifier: identifier)
+    let database = container.publicCloudDatabase
+
+    let recordID = CKRecord.ID(recordName: recordName)
+
+    // Only fetch the fields we care about; exclude "payload"
+    let desiredKeys: [CKRecord.FieldKey] = ["info", "isCompressed", "updatedAt", "sizeInBytes"]
+
+    return try await withCheckedThrowingContinuation { continuation in
+        let op = CKFetchRecordsOperation(recordIDs: [recordID])
+        op.desiredKeys = desiredKeys
+        op.qualityOfService = .userInitiated
+
+        var resultError: Error?
+        var fetchedRecord: CKRecord?
+
+        op.perRecordResultBlock = { id, result in
+            switch result {
+            case .success(let record):
+                fetchedRecord = record
+            case .failure(let error):
+                resultError = error
+            }
+        }
+
+        op.fetchRecordsResultBlock = { overallResult in
+            if let error = resultError {
+                continuation.resume(throwing: error)
+                return
+            }
+            if case .failure(let error) = overallResult {
+                continuation.resume(throwing: error)
+                return
+            }
+            guard let record = fetchedRecord else {
+                continuation.resume(throwing: AnError.invalidParameter("record not found"))
+                return
+            }
+
+            var info: [String: String] = [:]
+            if let infoData = record["info"] as? Data {
+                info ?= try? infoData.decoded()
+            }
+
+            let isCompressed = record["isCompressed"] as? Bool
+            let updatedAt = record["updatedAt"] as? Date
+            let sizeInBytes = record["sizeInBytes"] as? Int
+
+            continuation.resume(returning: CloudKitClipboardMetadata(
+                info: info,
+                isCompressed: isCompressed,
+                updatedAt: updatedAt,
+                sizeInBytes: sizeInBytes
+            ))
+        }
+
+        database.add(op)
+    }
+}
