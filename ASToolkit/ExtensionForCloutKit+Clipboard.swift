@@ -97,7 +97,7 @@ public func cloudKitClipboardDownload(container identifier: String, recordName: 
     return (payload, metadata)
 }
 
-public struct CloudKitClipboardMetadata {
+public struct CloudKitClipboardMetadata : Equatable, Codable {
     public let info: [String: String]
     public let isCompressed: Bool?
     public let updatedAt: Date?
