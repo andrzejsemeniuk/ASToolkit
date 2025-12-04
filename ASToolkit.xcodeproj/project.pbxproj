@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		570189A22EE1391100F90601 /* ExtensionForCloutKit+Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570189A12EE1390800F90601 /* ExtensionForCloutKit+Clipboard.swift */; };
 		5708C7421F33E15B0029DE65 /* TestExtensionForSwiftArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */; };
 		5708C7431F33E15B0029DE65 /* TestVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5708C7411F33E15B0029DE65 /* TestVariable.swift */; };
 		570E367A2094D8FF006FF787 /* CGLip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570E36792094D8FF006FF787 /* CGLip.swift */; };
@@ -154,6 +155,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		570189A12EE1390800F90601 /* ExtensionForCloutKit+Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForCloutKit+Clipboard.swift"; sourceTree = "<group>"; };
 		5708C7401F33E15B0029DE65 /* TestExtensionForSwiftArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForSwiftArray.swift; sourceTree = "<group>"; };
 		5708C7411F33E15B0029DE65 /* TestVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVariable.swift; sourceTree = "<group>"; };
 		570E36792094D8FF006FF787 /* CGLip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGLip.swift; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 				570FC31F1F17C76A00FEAC03 /* Environment.swift */,
 				5732AC2F2C75006600EE8620 /* Error.swift */,
 				5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */,
+				570189A12EE1390800F90601 /* ExtensionForCloutKit+Clipboard.swift */,
 				572544572CCAC42300AF152A /* ExtensionForCoreData.swift */,
 				570FC2751F1124A300FEAC03 /* ExtensionForCoreGraphics.swift */,
 				570FC2771F1124A300FEAC03 /* ExtensionForFoundationDate.swift */,
@@ -805,6 +808,7 @@
 				57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */,
 				570FC2CC1F1124A300FEAC03 /* NSLayoutConstraintsBuilder.swift in Sources */,
 				570FC2B91F1124A300FEAC03 /* ExtensionForSwiftBool.swift in Sources */,
+				570189A22EE1391100F90601 /* ExtensionForCloutKit+Clipboard.swift in Sources */,
 				570FC3201F17C76A00FEAC03 /* Environment.swift in Sources */,
 				772D916222E2068E00DEBC6A /* StorableVariable.swift in Sources */,
 				57ECCDB72CFF769E00144915 /* AViewForSlider.swift in Sources */,
