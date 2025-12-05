@@ -831,6 +831,29 @@ public extension Int {
         }
     }
 
+    var asBriefStringOfAllElapsedComponentsFromSeconds: String {
+        var totalSeconds = Swift.max(self, 0)
+        let years = totalSeconds / (365 * 24 * 3600)
+        totalSeconds -= years * (365 * 24 * 3600)
+        let months = totalSeconds / (30 * 24 * 3600)
+        totalSeconds -= months * (30 * 24 * 3600)
+        let days = totalSeconds / (24 * 3600)
+        totalSeconds -= days * (24 * 3600)
+        let hours = totalSeconds / 3600
+        totalSeconds -= hours * 3600
+        let minutes = totalSeconds / 60
+        totalSeconds -= minutes * 60
+        let seconds = totalSeconds
+        var parts: [String] = []
+        if years > 0 { parts.append("\(years)a") }
+        if months > 0 { parts.append("\(months)m") }
+        if days > 0 { parts.append("\(days)d") }
+        if hours > 0 { parts.append("\(hours)h") }
+        if minutes > 0 { parts.append("\(minutes)m") }
+        if seconds > 0 { parts.append("\(seconds)s") }
+        if parts.isEmpty { return "0s" }
+        return parts.joined(separator: " ")
+    }
 }
 
 
@@ -856,3 +879,4 @@ public extension Date {
     }()
 
 }
+
