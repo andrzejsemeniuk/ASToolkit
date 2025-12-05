@@ -581,6 +581,10 @@ public extension Date {
         adding(days: -1)!
     }
 
+    var tomorrow : Date {
+        adding(days: +1)!
+    }
+
     func collect(days: Int, delta: Int, condition: (Date)->Bool) -> [Date] {
         collect(component: .day, count: days, delta: delta, condition: condition)
     }
