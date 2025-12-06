@@ -715,6 +715,9 @@ public extension Color {
     var asBWExtremeOpposite : Color {
         .init(white: self.hsba[2] > 0.5 ? 0 : 1)
     }
+    var asBWExtremeOppositeInverted : Color {
+        .init(white: self.hsba[2] < 0.5 ? 0 : 1)
+    }
 }
 
 
