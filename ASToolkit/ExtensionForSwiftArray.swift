@@ -744,7 +744,6 @@ public extension Array {
         return result
     }
 }
-
 //extension Array where Element: Collection, Element.Iterator.Element: Collection {
 extension Array where Element: Collection {
 
@@ -1951,6 +1950,12 @@ public extension Array where Element : Hashable {
         }
     }
     
+    func asDictionaryInverse<T: Hashable>(of f: (Element) -> T) -> [T : Element] {
+        self.reduce(into: [T : Element]()) { dict, element in
+            dict[f(element)] = element
+        }
+    }
+    
     func asArrayIndex(in other: [Element]) -> [Int?] {
         let indices = other.asDictionaryIndex
         return self.map { e in
@@ -2531,3 +2536,4 @@ public extension Array {
     }
     
 }
+
