@@ -409,7 +409,7 @@ public extension Double {
 
 }
 
-public extension Int64 {
+public extension Int {
 
     // https://stackoverflow.com/questions/18267211/ios-convert-large-numbers-to-smaller-format
     static fileprivate let formatterWithAbbreviation : NumberFormatter = {
@@ -438,7 +438,7 @@ public extension Int64 {
             (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
         ]
 
-        let startValue = Double(abs(self))
+        let startValue = Double(self.abs)
         
         let abbreviation: Abbrevation = {
             var prevAbbreviation = abbreviations[0]
@@ -482,7 +482,7 @@ public extension Int64 {
 //            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
         ]
 
-        let startValue = Double(abs(self))
+        let startValue = Double(self.abs)
         
         let abbreviation: Abbrevation = {
             var prevAbbreviation = abbreviations[0]
@@ -565,7 +565,7 @@ public extension Double {
     }()
     
     var withAbbreviationAsString : String {
-        self.asInt64.formatWithAbbrevationAsString
+        self.asInt.formatWithAbbrevationAsString
     }
         //    var withAbbreviationAsAttributedString : String {
         //        self.asInt64.formatWithAbbrevation
