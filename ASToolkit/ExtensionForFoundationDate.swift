@@ -641,6 +641,8 @@ public extension Date {
     
     static let secondsIn1Hour   : TimeInterval = 60.0 * 60.0
     static let secondsIn1Day    : TimeInterval = 24.0 * secondsIn1Hour
+    
+    static let minutesIn1Day    : TimeInterval = 24.0 * 60.0
 }
 
 public extension TimeInterval {
