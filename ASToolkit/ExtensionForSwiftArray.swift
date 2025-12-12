@@ -1995,14 +1995,16 @@ extension Array {
         assigned(value: value, to: to)
     }
     
-    mutating func assign<Value>(value: Value, to: WritableKeyPath<Element,Value>) {
+    mutating func assign<Value>(value: Value, to: WritableKeyPath<Element,Value>, where condition: (Int,Element) -> Bool = { _,_ in true }) {
         for i in range {
-            self[i][keyPath: to] = value
+            if condition(i,self[i]) {
+                self[i][keyPath: to] = value
+            }
         }
     }
     
-    mutating func assign<Value>(_ value: Value, to: WritableKeyPath<Element,Value>) {
-        assign(value: value, to: to)
+    mutating func assign<Value>(_ value: Value, to: WritableKeyPath<Element,Value>, where condition: (Int,Element) -> Bool = { _,_ in true }) {
+        assign(value: value, to: to, where: condition)
     }
 
     func collect<Value>(on: WritableKeyPath<Element,Value>) -> [Value] {
