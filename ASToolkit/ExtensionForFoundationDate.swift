@@ -819,17 +819,17 @@ public extension Int {
         
         // Return the most significant non-zero unit
         if years > 0 {
-            return "\(years) a"
+            return "\(years)a"
         } else if months > 0 {
-            return "\(months) mo"
+            return "\(months)mo"
         } else if days > 0 {
-            return "\(days) d"
+            return "\(days)d"
         } else if hours > 0 {
-            return "\(hours) h"
+            return "\(hours)h"
         } else if minutes > 0 {
-            return "\(minutes) m"
+            return "\(minutes)m"
         } else {
-            return "\(Swift.max(seconds, 0)) s"
+            return "\(Swift.max(seconds, 0))s"
         }
     }
 
@@ -848,7 +848,7 @@ public extension Int {
         let seconds = totalSeconds
         var parts: [String] = []
         if years > 0 { parts.append("\(years)a") }
-        if months > 0 { parts.append("\(months)m") }
+        if months > 0 { parts.append("\(months)mo") }
         if days > 0 { parts.append("\(days)d") }
         if hours > 0 { parts.append("\(hours)h") }
         if minutes > 0 { parts.append("\(minutes)m") }
@@ -880,5 +880,25 @@ public extension Date {
         return Calendar.current.date(from: comps)!
     }()
 
+}
+
+public extension Date {
+    
+    var asBriefStringOfAllElapsedComponentsFromSecondsSinceNow : String {
+        (Date.timestamp - self.timeIntervalSince1970).asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+    }
+    
+    var asStringOfAllElapsedComponentsAgo : String {
+        asBriefStringOfAllElapsedComponentsFromSecondsSinceNow
+    }
+    
+    var asBriefStringOfElapsedTimeFromSeconds : String {
+        (Date.timestamp - self.timeIntervalSince1970).asInt.asBriefStringOfElapsedTimeFromSeconds
+    }
+    
+    var asStringAgo : String {
+        asBriefStringOfElapsedTimeFromSeconds
+    }
+    
 }
 
