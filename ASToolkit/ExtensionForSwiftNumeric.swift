@@ -659,6 +659,7 @@ public extension Int {
     /// - Returns: A human-readable abbreviated string, e.g., 1_234 -> "1.23K" when precision is 2.
     func formatAbbreviated(
         precision: Int,
+        space: String = " ",
         thousand: String = "K",
         million: String = "M",
         billion: String = "B",
@@ -674,33 +675,33 @@ public extension Int {
         // Check thresholds from largest to smallest
         if absValue >= 1_000_000_000_000_000_000 { // Exa
             let value = absValue / 1_000_000_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + exa
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + exa
         }
         if absValue >= 1_000_000_000_000_000 { // Peta
             let value = absValue / 1_000_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + peta
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + peta
         }
         if absValue >= 1_000_000_000_000 { // Tera
             let value = absValue / 1_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + trillion
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + trillion
         }
         if absValue >= 1_000_000_000 { // Billion
             let value = absValue / 1_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + billion
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + billion
         }
         if absValue >= 1_000_000 { // Million
             let value = absValue / 1_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + million
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + million
         }
         if absValue >= 1_000 { // Thousand
             let value = absValue / 1_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precision))))
-            return sign + formatted + thousand
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + thousand
         }
         // No abbreviation needed
         return sign + Int(absValue).formatted()
@@ -731,6 +732,7 @@ public extension Double {
     func formatAbbreviated(
         precisionAbbreviated: Int,
         precisionUnabbreviated: Int,
+        space: String = " ",
         thousand: String = "K",
         million: String = "M",
         billion: String = "B",
@@ -741,8 +743,8 @@ public extension Double {
         // Handle zero quickly (respecting precisionUnabbreviated)
         if self == 0 {
             let formatter = NumberFormatter()
-            formatter.minimumFractionDigits = max(0, precisionUnabbreviated)
-            formatter.maximumFractionDigits = max(0, precisionUnabbreviated)
+            formatter.minimumFractionDigits = precisionUnabbreviated
+            formatter.maximumFractionDigits = precisionUnabbreviated
             formatter.minimumIntegerDigits = 1
             return formatter.string(from: 0 as NSNumber) ?? "0"
         }
@@ -752,37 +754,37 @@ public extension Double {
         // Check thresholds from largest to smallest
         if absValue >= 1_000_000_000_000_000_000 { // Exa
             let value = absValue / 1_000_000_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + exa
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + exa
         }
         if absValue >= 1_000_000_000_000_000 { // Peta
             let value = absValue / 1_000_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + peta
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + peta
         }
         if absValue >= 1_000_000_000_000 { // Tera
             let value = absValue / 1_000_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + trillion
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + trillion
         }
         if absValue >= 1_000_000_000 { // Billion
             let value = absValue / 1_000_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + billion
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + billion
         }
         if absValue >= 1_000_000 { // Million
             let value = absValue / 1_000_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + million
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + million
         }
         if absValue >= 1_000 { // Thousand
             let value = absValue / 1_000
-            let formatted = value.formatted(.number.precision(.fractionLength(0...max(0, precisionAbbreviated))))
-            return sign + formatted + thousand
+            let formatted = value.formatted(.number.precision(.fractionLength(precisionAbbreviated)))
+            return sign + formatted + space + thousand
         }
         // No abbreviation needed: format with precisionUnabbreviated
         let formatted = absValue.formatted(
-            .number.precision(.fractionLength(0...max(0, precisionUnabbreviated)))
+            .number.precision(.fractionLength(precisionUnabbreviated))
         )
         return sign + formatted
     }
