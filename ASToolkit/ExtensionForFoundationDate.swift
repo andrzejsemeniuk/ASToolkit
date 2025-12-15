@@ -648,6 +648,7 @@ public extension Date {
 public extension TimeInterval {
     
     var asDate : Date { Date.init(timeIntervalSince1970: self) }
+    var asDateValidated : Date? { self.isValidTimestamp ? Date.init(timeIntervalSince1970: self) : nil }
     
     static var timestamp : TimeInterval {
         Date().timeIntervalSince1970
@@ -898,6 +899,10 @@ public extension Date {
     
     var asStringAgo : String {
         asBriefStringOfElapsedTimeFromSeconds
+    }
+    
+    var ago : String {
+        asBriefStringOfElapsedTimeFromSeconds + " ago"
     }
     
 }
