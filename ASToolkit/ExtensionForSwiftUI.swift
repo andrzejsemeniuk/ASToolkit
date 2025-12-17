@@ -321,6 +321,10 @@ public extension Color {
     
     static let invert = Color.init(hsba: [0,0,0.56789,0])
 
+    static var background : Color {
+        primary.asBWExtremeOpposite
+//        .init(white: Color.primary.hsba[2] > 0.5 ? 0 : 1, alpha: 1)
+    }
     
     static func rgbaFrom(hex: String) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
