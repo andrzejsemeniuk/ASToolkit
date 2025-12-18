@@ -2040,7 +2040,7 @@ public extension Sequence {
 //        })
 //    }
 
-    func sorted<Value: Comparable>(by keyPath: KeyPath<Self.Element, Value>, ascending: Bool) -> [Self.Element]
+    func sorted<Value: Comparable>(byKeyPath keyPath: KeyPath<Self.Element, Value>, ascending: Bool) -> [Self.Element]
     {
         ascending ?
             self.sorted(by: { $0[keyPath: keyPath]  <  $1[keyPath: keyPath] })
@@ -2048,9 +2048,9 @@ public extension Sequence {
             self.sorted(by: { $0[keyPath: keyPath]  >  $1[keyPath: keyPath] })
     }
     
-    func sorted<Value: Comparable>( by keyPath: KeyPath<Self.Element, Value>) -> [Self.Element]
+    func sorted<Value: Comparable>(byKeyPath keyPath: KeyPath<Self.Element, Value>) -> [Self.Element]
     {
-        self.sorted(by: keyPath, ascending: true)
+        self.sorted(byKeyPath: keyPath, ascending: true)
     }
     
 }

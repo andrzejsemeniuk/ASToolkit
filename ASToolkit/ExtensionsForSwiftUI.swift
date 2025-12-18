@@ -284,6 +284,7 @@ public extension View {
         ScrollView(.horizontal, showsIndicators: showsIndicators) {
             ZStack(alignment: alignment) {
                     // iOS 17 solution:
+//                Rectangle().fill(Color.clear).frame(height: 1).frame(maxWidth: .infinity).containerRelativeFrame([.horizontal])
                 Spacer().containerRelativeFrame([.horizontal])
                 self
             }
