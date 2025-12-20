@@ -280,6 +280,7 @@ public extension Double {
     var abs             : Self { Swift.abs(self) }
     var floor           : Self { Darwin.floor(self) }
     var ceil            : Self { Darwin.ceil(self) }
+    var round           : Self { Darwin.round(self) }
 
     var log2            : Self { Darwin.log2(self) }
     var log10           : Self { Darwin.log10(self) }
