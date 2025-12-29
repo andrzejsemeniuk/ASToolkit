@@ -664,6 +664,9 @@ public extension TimeInterval {
     static let secondsInMonth   : TimeInterval = 60 * 60 * 24 * 31
     static let secondsInYear    : TimeInterval = 60 * 60 * 24 * 365
 
+    var isValidTimestamp : Bool {
+        self != 0.0
+    }
 
 }
 
