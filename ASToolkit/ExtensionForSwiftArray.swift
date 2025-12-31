@@ -743,7 +743,17 @@ public extension Array {
         
         return result
     }
+    
+    func resized(to size: Int, with element: Element) -> [Element] {
+        if count < size {
+            return self + .init(repeating: element, count: size - count)
+        } else {
+            return self.trimmed(to: size)
+        }
+    }
+
 }
+
 //extension Array where Element: Collection, Element.Iterator.Element: Collection {
 extension Array where Element: Collection {
 

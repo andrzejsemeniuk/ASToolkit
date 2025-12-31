@@ -1388,6 +1388,18 @@ public extension String {
     static let CONSONANTS = BCDFGHJKLMNPQRSTVWXZ
     static let ALPHABET = ABCDEFGHIJKLMNOPQRSTUVWXYZ
     
+    var U: String { self.uppercased() }
+    var l: String { self.lowercased() }
+    var s: String { " " + self + " " }
+    var angled: String { "<" + self + ">" }
+    var arrowed: String { "<-" + self + "->" }
+    var arrowed2: String { "<--" + self + "-->" }
+    var slashed: String { "/" + self + "/" }
+    var bracketted: String { "[" + self + "]" }
+    var parenthesized: String { "(" + self + ")" }
+    var embraced: String { "{" + self + "}" }
+    var mp: String { "-" + self + "+" }
+    
     func cased(uppercased: Bool) -> Self {
         uppercased ? self.uppercased() : self.lowercased()
     }
@@ -1723,3 +1735,4 @@ public extension String {
     }
     
 }
+
