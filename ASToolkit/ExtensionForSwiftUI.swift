@@ -326,6 +326,11 @@ public extension Color {
 //        .init(white: Color.primary.hsba[2] > 0.5 ? 0 : 1, alpha: 1)
     }
     
+    static var secondary1 : Color { secondary.opacity(0.1) }
+    static var secondary2 : Color { secondary.opacity(0.2) }
+    static var secondary5 : Color { secondary.opacity(0.5) }
+    static var secondary7 : Color { secondary.opacity(0.7) }
+    
     static func rgbaFrom(hex: String) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0

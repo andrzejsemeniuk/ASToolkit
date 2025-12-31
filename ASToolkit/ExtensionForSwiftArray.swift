@@ -1540,6 +1540,7 @@ public extension Array where Element : Hashable {
         return result
 
     }
+    
     func uniquedInOrderKeepingFirst() -> Self {
         var T = Set<Element>.init(self)
         var r : Self = []
@@ -1551,6 +1552,28 @@ public extension Array where Element : Hashable {
         }
         return r
     }
+    
+    var uniquedPreservingOrder : Self {
+        self.uniquedPreservingOrder(keyed: { $0 })
+    }
+    
+}
+
+public extension Array {
+    
+    func uniquedPreservingOrder<Key : Hashable>(keyed: (Element) -> Key) -> [Element] {
+        var seen = Set<Key>()
+        var result: [Element] = []
+        result.reserveCapacity(count)
+        for element in self {
+            let KEY = keyed(element)
+            if seen.insert(KEY).inserted {
+                result.append(element)
+            }
+        }
+        return result
+    }
+
 }
 
 public extension Array where Element == Int {
@@ -1709,6 +1732,10 @@ public extension Array where Element : Comparable {
     
     var min                         : Element? { minimal(<) }
     var max                         : Element? { maximal(<) }
+
+    var sortedAndUniqued : Self {
+        self.sortedAndUniqued({ a,b in a < b })
+    }
 
 }
 
