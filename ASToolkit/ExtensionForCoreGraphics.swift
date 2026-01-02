@@ -222,6 +222,12 @@ public extension CGPoint {
     func minX(_ P1: CGPoint) -> (CGPoint,CGPoint) { self.x > P1.x ? (P1,self) : (self,P1) }
     func minY(_ P1: CGPoint) -> (CGPoint,CGPoint) { self.y > P1.y ? (P1,self) : (self,P1) }
 
+    func asCGRect(w: CGFloat, h: CGFloat) -> CGRect {
+        .init(x: self.x - w/2, y: self.y - h/2, width: w, height: h)
+    }
+    func asCGRect(side: CGFloat) -> CGRect {
+        asCGRect(w: side, h: side)
+    }
 }
 
 func minX(_ P0: CGPoint, _ P1: CGPoint) -> (CGPoint,CGPoint) {

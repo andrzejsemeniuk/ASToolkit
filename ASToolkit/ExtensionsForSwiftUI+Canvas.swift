@@ -553,3 +553,11 @@ func + (_ lhs: Path, _ rhs: Path) -> Path {
     R.addPath(rhs)
     return R
 }
+
+extension CGRect {
+    
+    var asPath : Path {
+        Path(self)
+    }
+    
+}
