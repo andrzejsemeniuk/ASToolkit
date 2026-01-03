@@ -26,6 +26,10 @@ public extension CaseIterable where Self: Equatable, Self.AllCases: Bidirectiona
         return Self.allCases[index]
     }
     
+    mutating func nextLoopedOnSelf() {
+        self = self.nextLooped
+    }
+    
     func nextLooped(in array: [Self]) -> Self {
         var NEXT = nextLooped
         while array.missing(NEXT) {
@@ -133,3 +137,18 @@ public extension CaseIterable where Self : Equatable {
     
 }
 
+
+
+
+
+public protocol StringNamed: RawRepresentable where RawValue == String {
+    var label: String { get }
+    var Name: String { get }
+    var NAME: String { get }
+}
+
+public extension StringNamed {
+    var label: String { rawValue }
+    var Name: String { rawValue.asCapitalizedWords }
+    var NAME: String { Name.uppercased() }
+}

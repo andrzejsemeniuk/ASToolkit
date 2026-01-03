@@ -1698,3 +1698,118 @@ public extension Array where Element: BinaryFloatingPoint {
     
 }
 
+
+
+
+public extension CGFloat {
+    
+    static func fractions(from: Self, to: Self, by: Self) -> [Self] {
+        var result: [Self] = []
+        let step = by
+        guard step != 0 else { return result }
+        
+        if step > 0 {
+            var value = from
+            while value < to {
+                result.append(value)
+                value += step
+            }
+        } else {
+            var value = from
+            while value > to {
+                result.append(value)
+                value += step
+            }
+        }
+        
+        return result
+    }
+    
+    static func fractions(from: Self, to: Self, count: Int) -> [Self] {
+        guard count > 0 else { return [] }
+        if count == 1 { return [to] }
+        
+        let ascending = from <= to
+        let span = ascending ? (to - from) : (from - to)
+        let step = span / Self(count - 1)
+        
+        var result: [Self] = []
+        result.reserveCapacity(count)
+        
+        if ascending {
+            var value = from
+            for i in 0..<(count - 1) {
+                result.append(value)
+                value = from + step * Self(i + 1)
+            }
+            result.append(to)
+        } else {
+            var value = from
+            for i in 0..<(count - 1) {
+                result.append(value)
+                value = from - step * Self(i + 1)
+            }
+            result.append(to)
+        }
+        
+        return result
+    }
+
+    static func fractions(from: Self, upto to: Self, count: Int) -> [Self] {
+        guard count > 0, from != to else { return [] }
+        if count == 1 { return [ from < to ? Swift.min(from, to - .ulpOfOne) : Swift.max(from, to + .ulpOfOne) ] }
+        
+        let ascending = from < to
+        let span = ascending ? (to - from) : (from - to)
+        // We need the last value to be strictly below/above `to`, so divide by count instead of (count - 1)
+        let step = span / Self(count)
+        
+        var result: [Self] = []
+        result.reserveCapacity(count)
+        
+        if ascending {
+            var value = from
+            for _ in 0..<count {
+                // Ensure strictness: clamp to just below `to` if rounding would push us to `to`.
+                if value >= to { value = to - .ulpOfOne }
+                result.append(value)
+                value += step
+            }
+            // Final safety: if any element equals `to`, nudge it down by ulp.
+            for i in result.indices where result[i] >= to { result[i] = to - .ulpOfOne }
+        } else {
+            var value = from
+            for _ in 0..<count {
+                if value <= to { value = to + .ulpOfOne }
+                result.append(value)
+                value -= step
+            }
+            for i in result.indices where result[i] <= to { result[i] = to + .ulpOfOne }
+        }
+
+        return result
+    }
+
+    static func cross(_ a: [CGFloat], _ b: [CGFloat]) -> [(CGFloat,CGFloat)] {
+        var result: [(CGFloat, CGFloat)] = []
+        result.reserveCapacity(a.count * b.count)
+        for ai in a {
+            for bj in b {
+                result.append((ai, bj))
+            }
+        }
+        return result
+    }
+    
+    static func cross(_ s: [CGFloat], _ b: [CGFloat], with h: CGFloat) -> [(CGFloat, CGFloat, CGFloat)] {
+        var result: [(CGFloat, CGFloat, CGFloat)] = []
+        result.reserveCapacity(s.count * b.count)
+        for si in s {
+            for bj in b {
+                result.append((h, si, bj))
+            }
+        }
+        return result
+    }
+    
+}
