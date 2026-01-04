@@ -1069,6 +1069,8 @@ class NumericIntervalClosedOpen<NUMBER: Numeric & Comparable> : NumericInterval<
 
 
 
+
+
 public func minmax<T: Comparable>(_ a: T, _ b: T) -> (min: T, max: T) {
     a < b ? (a,b) : (b,a)
 }

@@ -16,6 +16,14 @@ public extension Double {
         self.asInt.formatWithAbbrevationAsString
     }
 
+    var formatWithValueAbbrevationAsString : String {
+        formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: "")
+    }
+    
+    var formatWithValueAbbrevationWithSpaceAsString : String {
+        formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: " ")
+    }
+
     /// Abbreviate the double using K, M, B, T, P, E suffixes.
     /// - Parameters:
     ///   - precisionAbbreviated: Number of decimal places to keep when an abbreviation suffix is used.
@@ -62,6 +70,116 @@ public extension Double {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 2)
     }
 }
+
+
+nonisolated
+public extension Double {
+    
+    static let formatterWithGrouping2: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.usesGroupingSeparator = true
+        f.groupingSize = 3
+        f.maximumFractionDigits = 2
+        f.minimumFractionDigits = 2
+        f.locale = .current
+        return f
+    }()
+
+    var format1g: String { self == 0 ? "0.0" : Self.formatterWithGrouping2.string(from: NSNumber(value: self)) ?? String(format: "%.1f", self) }
+    var format2g: String { self == 0 ? "0.00" : Self.formatterWithGrouping2.string(from: NSNumber(value: self)) ?? String(format: "%.2f", self) }
+    var format3g: String { self == 0 ? "0.000" : Self.formatterWithGrouping2.string(from: NSNumber(value: self)) ?? String(format: "%.3f", self) }
+    var format4g: String { self == 0 ? "0.0000" : Self.formatterWithGrouping2.string(from: NSNumber(value: self)) ?? String(format: "%.4f", self) }
+
+    static let formatterAsInteger : NumberFormatter = {
+        let r = NumberFormatter.init()
+        r.usesGroupingSeparator = true
+        r.groupingSeparator = ","
+        r.groupingSize = 3
+        r.maximumFractionDigits = 0
+        return r
+    }()
+    
+    var format0 : String { self == 0 ? "0" : NSString(format: "%.0f", self) as String }
+    var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
+    var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
+    var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
+    var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
+
+    
+    var format1p : String { self == 0 ? "0.0" : NSString(format: "%+.1f", self) as String }
+    var format2p : String { self == 0 ? "0.00" : NSString(format: "%+.2f", self) as String }
+    var format3p : String { self == 0 ? "0.000" : NSString(format: "%+.3f", self) as String }
+    var format4p : String { self == 0 ? "0.0000" : NSString(format: "%+.4f", self) as String }
+    
+    var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
+
+    
+    
+    var format22 : String { NSString(format: "%3.2f", self) as String }
+    
+    func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
+    
+    func format01234(_ zero: Double, _ one: Double, _ two: Double, _ three: Double) -> String {
+        if self.abs > zero {
+            return self.format0
+        }
+        if self.abs > one {
+            return self.format1
+        }
+        if self.abs > two {
+            return self.format2
+        }
+        if self.abs > three {
+            return self.format3
+        }
+        return self.format4
+    }
+    
+    var formatForStockPrice : String {
+        format01234(1000, 1000, 1, 1)
+    }
+    
+    var formatDynamic : String {
+        let ABS = self.abs
+        return ABS.floor == ABS ? self.asInt.asString : ABS > 10 ? self.format2 : ABS > 1 ? self.format3 : self.formatted4
+    }
+    var percent0 : String { self == 0 ? "0%" : NSString(format: "%.0f%%", self * 100.0) as String }
+    var percent1 : String { self == 0 ? "0.0%" : NSString(format: "%.1f%%", self * 100.0) as String }
+    var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
+    
+    var formatted4 : String {
+        guard isNormal else {
+            return isNaN ? "NaN" : isInfinite ? "oo" : "?"
+        }
+        if asInt64.asDouble == self {
+            if #available(iOS 15.0, *) {
+                return asInt64.formatted()
+            } else {
+                    // Fallback on earlier versions
+                return asInt64.asString
+            }
+        }
+        let r = format4
+        for i in 0..<r.count {
+            let i = r.count - 1 - i
+            if r[i] == "." {
+                return r.substring(0..<i).asString
+            } else if r[i] != "0" {
+                return r.substring(0...i).asString
+            }
+        }
+        return r
+    }
+    
+}
+
+
+
+
+
+
+
 
 
 
@@ -135,47 +253,6 @@ public extension Float {
 
 
 
-nonisolated
-public extension Double {
-    
-    var format0 : String { self == 0 ? "0" : NSString(format: "%.0f", self) as String }
-    var format1 : String { self == 0 ? "0.0" : NSString(format: "%.1f", self) as String }
-    var format2 : String { self == 0 ? "0.00" : NSString(format: "%.2f", self) as String }
-    var format3 : String { self == 0 ? "0.000" : NSString(format: "%.3f", self) as String }
-    var format4 : String { self == 0 ? "0.0000" : NSString(format: "%.4f", self) as String }
-
-    var format4plus : String { self > 0.0 ? NSString(format: "+%.4f", self) as String : self == 0 ? " 0.0000" : self.format4 }
-
-    func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
-    
-    var percent1 : String { self == 0 ? "0.0%" : NSString(format: "%.1f%%", self * 100.0) as String }
-    var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
-
-    var formatted4 : String {
-        if asInt64.asDouble == self {
-            if #available(iOS 15.0, *) {
-                return asInt64.formatted()
-            } else {
-                // Fallback on earlier versions
-                return asInt64.asString
-            }
-        }
-        let r = format4
-        for i in 0..<r.count {
-            let i = r.count - 1 - i
-            if r[i] == "." {
-                return r.substring(0..<i).asString
-            } else if r[i] != "0" {
-                return r.substring(0...i).asString
-            }
-        }
-        return r
-    }
-    
-
-    
-}
-
 
 
 
@@ -201,39 +278,45 @@ public extension Int {
     
     var formatWithAbbrevationAsString : String {
         
-        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+        self.asDouble.withAbbreviationAsString
         
-        let abbreviations: [Abbrevation] = [
-            (0, 1, ""),
-            (1000.0, 1000.0, "K"),
-            (999_999.0, 1_000_000.0, "M"),
-            (999_999_999.0, 1_000_000_000.0, "G"),
-            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
-            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
-            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
-        ]
-        
-        let startValue = Double(self.abs)
-        
-        let abbreviation: Abbrevation = {
-            var prevAbbreviation = abbreviations[0]
-            for tmpAbbreviation in abbreviations {
-                if (startValue < tmpAbbreviation.threshold) {
-                    break
-                }
-                prevAbbreviation = tmpAbbreviation
-            }
-            return prevAbbreviation
-        }()
-        
-        let value = Double(self) / abbreviation.divisor
-        
-        let formatter = Self.formatterWithAbbreviation
-        
-        formatter.positiveSuffix = abbreviation.suffix
-        formatter.negativeSuffix = abbreviation.suffix
-        
-        return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
+//        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
+//        
+//        let abbreviations: [Abbrevation] = [
+//            (0, 1, ""),
+//            (1000.0, 1000.0, "K"),
+//            (999_999.0, 1_000_000.0, "M"),
+//            (999_999_999.0, 1_000_000_000.0, "G"),
+//            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
+//            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
+//            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
+//        ]
+//        
+//        let startValue = Double(self.abs)
+//        
+//        let abbreviation: Abbrevation = {
+//            var prevAbbreviation = abbreviations[0]
+//            for tmpAbbreviation in abbreviations {
+//                if (startValue < tmpAbbreviation.threshold) {
+//                    break
+//                }
+//                prevAbbreviation = tmpAbbreviation
+//            }
+//            return prevAbbreviation
+//        }()
+//        
+//        let value = Double(self) / abbreviation.divisor
+//        
+//        let formatter = Self.formatterWithAbbreviation
+//        
+//        formatter.positiveSuffix = abbreviation.suffix
+//        formatter.negativeSuffix = abbreviation.suffix
+//        
+//        return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
+    }
+    
+    var formatWithAbbrevationWithSpaceAsString : String {
+        self.asDouble.withAbbreviationAsString
     }
     
     var formatWithAbbrevationAsMarkdownString : String {
@@ -257,11 +340,11 @@ public extension Int {
             .init(threshold: 1_000_000_000_000, divisor: 1_000_000_000_000, suffix: "T"),
         ]
         let style = NumberAbbreviationStyle(
-            abbreviatedFractionDigits: 2,
-            plainFractionDigits: 0,
-            includeSpaceBeforeSuffix: includeSpace,
-            abbreviations: rules,
-            locale: .current
+            abbreviatedFractionDigits   : 2,
+            plainFractionDigits         : 0,
+            includeSpaceBeforeSuffix    : includeSpace,
+            abbreviations               : rules,
+            locale                      : .current
         )
         return formatNumber(self.asDouble, style: style)
     }
@@ -350,5 +433,81 @@ public extension Array where Element == CGFloat {
 public extension Array where Element == Int {
     func asStringTuple(delimiter: String = ",") -> String { self.map { "\($0)" }.joined(separator: delimiter) }
     func asArrayOfString(_ delimiter: String = ",") -> String { asStringTuple(delimiter: delimiter) }
+}
+
+
+
+
+
+
+
+
+nonisolated
+public extension Int {
+    
+    /// Abbreviate the integer using K, M, B, T, P, E suffixes.
+    /// - Parameter precision: Number of decimal places to keep when abbreviated.
+    /// - Parameter thousand: The suffix for thousands (default "K").
+    /// - Parameter million: The suffix for millions (default "M").
+    /// - Parameter billion: The suffix for billions (default "B").
+    /// - Parameter trillion: The suffix for trillions (default "T").
+    /// - Parameter peta: The suffix for peta (default "P").
+    /// - Parameter exa: The suffix for exa (default "E").
+    /// - Returns: A human-readable abbreviated string, e.g., 1_234 -> "1.23K" when precision is 2.
+    func formatAbbreviated(
+        precision: Int,
+        space: String = " ",
+        thousand: String = "K",
+        million: String = "M",
+        billion: String = "B",
+        trillion: String = "T",
+        peta: String = "P",
+        exa: String = "E"
+    ) -> String {
+        // Handle zero quickly
+        if self == 0 { return "0" }
+        // Work with absolute value for magnitude and keep sign
+        let sign = self < 0 ? "-" : ""
+        let absValue = Double(Swift.abs(self))
+        // Check thresholds from largest to smallest
+        if absValue >= 1_000_000_000_000_000_000 { // Exa
+            let value = absValue / 1_000_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + exa
+        }
+        if absValue >= 1_000_000_000_000_000 { // Peta
+            let value = absValue / 1_000_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + peta
+        }
+        if absValue >= 1_000_000_000_000 { // Tera
+            let value = absValue / 1_000_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + trillion
+        }
+        if absValue >= 1_000_000_000 { // Billion
+            let value = absValue / 1_000_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + billion
+        }
+        if absValue >= 1_000_000 { // Million
+            let value = absValue / 1_000_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + million
+        }
+        if absValue >= 1_000 { // Thousand
+            let value = absValue / 1_000
+            let formatted = value.formatted(.number.precision(.fractionLength(precision)))
+            return sign + formatted + space + thousand
+        }
+        // No abbreviation needed
+        return sign + Int(absValue).formatted()
+    }
+
+    /// Convenience alias used elsewhere in the codebase.
+    /// Defaults to 2 decimal places when abbreviated.
+    var formatAsBigNumber: String {
+        formatAbbreviated(precision: 2)
+    }
 }
 
