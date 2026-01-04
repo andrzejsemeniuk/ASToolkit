@@ -43,6 +43,7 @@
 		571E30E423C79BC700E285F8 /* ExtensionForFoundationFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */; };
 		572544582CCAC42300AF152A /* ExtensionForCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572544572CCAC42300AF152A /* ExtensionForCoreData.swift */; };
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
+		572DB6AD2F0B12EF00877CC9 /* ExtensionForSwiftNumeric+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572DB6AC2F0B12E900877CC9 /* ExtensionForSwiftNumeric+Formatting.swift */; };
 		5732AC302C75006600EE8620 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2E2C75006600EE8620 /* Color.swift */; };
 		5732AC312C75006600EE8620 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2F2C75006600EE8620 /* Error.swift */; };
 		5732AC322C7509B600EE8620 /* ExtensionForUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */; };
@@ -80,11 +81,9 @@
 		579D100E21D7BC9400FDDA96 /* ObjectiveC.m in Sources */ = {isa = PBXBuildFile; fileRef = 579D100C21D7BC9400FDDA96 /* ObjectiveC.m */; };
 		57A6AC711F461DE00055341F /* TestExtensionForUIKitUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */; };
 		57A847D624488B05001D5E42 /* ExtensionForSwiftEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */; };
-		57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */; };
 		57BF03051F5CAADE004A5757 /* TestExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */; };
 		57CDF0932589B1C400F4F527 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 57CDF0922589B1C400F4F527 /* SwiftyJSON */; };
 		57D2BE1A1F37E11B009FB18F /* TestExtensionForFoundationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */; };
-		57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */; };
 		57DD96C71F1802F10001C481 /* ProtocolForVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */; };
 		57DD96C91F1814D20001C481 /* ExtensionForSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */; };
 		57E5865E2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E5865D2C8A10E000E93C96 /* ExtensionForSpriteKit+SKEffectNode.swift */; };
@@ -204,6 +203,7 @@
 		571E30E323C79BC700E285F8 /* ExtensionForFoundationFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForFoundationFormatter.swift; sourceTree = "<group>"; };
 		572544572CCAC42300AF152A /* ExtensionForCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForCoreData.swift; sourceTree = "<group>"; };
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
+		572DB6AC2F0B12E900877CC9 /* ExtensionForSwiftNumeric+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSwiftNumeric+Formatting.swift"; sourceTree = "<group>"; };
 		5732AC2E2C75006600EE8620 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		5732AC2F2C75006600EE8620 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForAppKit.swift; sourceTree = "<group>"; };
@@ -250,13 +250,10 @@
 		57A6AC701F461DE00055341F /* TestExtensionForUIKitUIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForUIKitUIColor.swift; sourceTree = "<group>"; };
 		57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftEnum.swift; sourceTree = "<group>"; };
 		57AA4C5C1F475DDD005384AD /* ExtensionForUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUISlider.swift; sourceTree = "<group>"; };
-		57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASToolkitUITestsForExtensionForUIKitUISlider.swift; sourceTree = "<group>"; };
 		57BF03041F5CAADE004A5757 /* TestExtensionForString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForString.swift; sourceTree = "<group>"; };
 		57D2BE191F37E11B009FB18F /* TestExtensionForFoundationDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestExtensionForFoundationDate.swift; sourceTree = "<group>"; };
 		57D5746525C1C133007557FB /* ExtensionForUIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForUIDevice.swift; sourceTree = "<group>"; };
 		57DBB01F1F4293E400AF2BEB /* ASToolkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASToolkitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASToolkitUITests.swift; sourceTree = "<group>"; };
-		57DBB0231F4293E400AF2BEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57DD96C61F1802F10001C481 /* ProtocolForVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtocolForVariable.swift; sourceTree = "<group>"; };
 		57DD96C81F1814D20001C481 /* ExtensionForSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForSwift.swift; sourceTree = "<group>"; };
 		57E31A5F237E24BF00F065D0 /* ExtensionForSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForSwiftUI.swift; sourceTree = "<group>"; };
@@ -343,7 +340,6 @@
 				57F0A0C91F564EE30015169D /* ASTookitShowcase */,
 				570FC1FF1F111E0E00FEAC03 /* ASToolkit */,
 				570FC20A1F111E0E00FEAC03 /* ASToolkitTests */,
-				57DBB0201F4293E400AF2BEB /* ASToolkitUITests */,
 				777B9EED2087ADB300D3FBBD /* Frameworks */,
 				570FC1FE1F111E0E00FEAC03 /* Products */,
 			);
@@ -414,6 +410,7 @@
 				77FD704121A95DC900F6636B /* ExtensionForSwiftDictionary.swift */,
 				57A847D524488B05001D5E42 /* ExtensionForSwiftEnum.swift */,
 				570FC2881F1124A300FEAC03 /* ExtensionForSwiftNumeric.swift */,
+				572DB6AC2F0B12E900877CC9 /* ExtensionForSwiftNumeric+Formatting.swift */,
 				57FBB1091F43C85E008FA2D9 /* ExtensionForSwiftSequence.swift */,
 				570FC2891F1124A300FEAC03 /* ExtensionForSwiftString.swift */,
 				778C9D9922B16D8E005631C1 /* ExtensionForSwiftSubstring.swift */,
@@ -501,16 +498,6 @@
 				576B29AD1F868FCE0001DC97 /* TestForBindingValue.swift */,
 			);
 			path = ASToolkitTests;
-			sourceTree = "<group>";
-		};
-		57DBB0201F4293E400AF2BEB /* ASToolkitUITests */ = {
-			isa = PBXGroup;
-			children = (
-				57DBB0211F4293E400AF2BEB /* ASToolkitUITests.swift */,
-				57AA4C5E1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift */,
-				57DBB0231F4293E400AF2BEB /* Info.plist */,
-			);
-			path = ASToolkitUITests;
 			sourceTree = "<group>";
 		};
 		57F0A0C91F564EE30015169D /* ASTookitShowcase */ = {
@@ -765,6 +752,7 @@
 				570FC2AE1F1124A300FEAC03 /* ExtensionForGCD.swift in Sources */,
 				570E367A2094D8FF006FF787 /* CGLip.swift in Sources */,
 				57F804102198B31C009B4DE2 /* Sigma.swift in Sources */,
+				572DB6AD2F0B12EF00877CC9 /* ExtensionForSwiftNumeric+Formatting.swift in Sources */,
 				5732AC472C75122300EE8620 /* Proportion.swift in Sources */,
 				5763B2452585663C00B5527B /* ExtensionForSwiftUIPreferenceKey.swift in Sources */,
 				570FC2B61F1124A300FEAC03 /* ExtensionForOperators.swift in Sources */,
@@ -840,8 +828,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57AA4C5F1F475E95005384AD /* ASToolkitUITestsForExtensionForUIKitUISlider.swift in Sources */,
-				57DBB0221F4293E400AF2BEB /* ASToolkitUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,7 +1010,6 @@
 		570FC2121F111E0E00FEAC03 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
@@ -1057,7 +1042,6 @@
 		570FC2131F111E0E00FEAC03 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
@@ -1089,7 +1073,6 @@
 		570FC2151F111E0E00FEAC03 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XALZ38S52J;
 				INFOPLIST_FILE = ASToolkitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1106,7 +1089,6 @@
 		570FC2161F111E0E00FEAC03 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XALZ38S52J;
 				INFOPLIST_FILE = ASToolkitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1157,7 +1139,6 @@
 		57F0A0D81F564EE30015169D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASTookitShowcase/Info.plist;
@@ -1175,7 +1156,6 @@
 		57F0A0D91F564EE30015169D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5AKM62S97F;
 				INFOPLIST_FILE = ASTookitShowcase/Info.plist;
