@@ -15,7 +15,7 @@ public extension Double {
     var withAbbreviationAsString : String {
         self.asInt.formatWithAbbrevationAsString
     }
-
+    
     var formatWithValueAbbrevationAsString : String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: "")
     }
@@ -23,18 +23,18 @@ public extension Double {
     var formatWithValueAbbrevationWithSpaceAsString : String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: " ")
     }
-
-    /// Abbreviate the double using K, M, B, T, P, E suffixes.
-    /// - Parameters:
-    ///   - precisionAbbreviated: Number of decimal places to keep when an abbreviation suffix is used.
-    ///   - precisionUnabbreviated: Number of decimal places to keep when no abbreviation is used.
-    ///   - thousand: The suffix for thousands (default "K").
-    ///   - million: The suffix for millions (default "M").
-    ///   - billion: The suffix for billions (default "B").
-    ///   - trillion: The suffix for trillions (default "T").
-    ///   - peta: The suffix for peta (default "P").
-    ///   - exa: The suffix for exa (default "E").
-    /// - Returns: A human-readable abbreviated string, e.g., 1234.56 -> "1.23K" when precisionAbbreviated is 2.
+    
+        /// Abbreviate the double using K, M, B, T, P, E suffixes.
+        /// - Parameters:
+        ///   - precisionAbbreviated: Number of decimal places to keep when an abbreviation suffix is used.
+        ///   - precisionUnabbreviated: Number of decimal places to keep when no abbreviation is used.
+        ///   - thousand: The suffix for thousands (default "K").
+        ///   - million: The suffix for millions (default "M").
+        ///   - billion: The suffix for billions (default "B").
+        ///   - trillion: The suffix for trillions (default "T").
+        ///   - peta: The suffix for peta (default "P").
+        ///   - exa: The suffix for exa (default "E").
+        /// - Returns: A human-readable abbreviated string, e.g., 1234.56 -> "1.23K" when precisionAbbreviated is 2.
     func formatAbbreviated(
         precisionAbbreviated: Int,
         precisionUnabbreviated: Int,
@@ -63,12 +63,35 @@ public extension Double {
         )
         return formatNumber(self, style: style)
     }
-
-    /// Convenience alias similar to Int.formatAsBigNumber.
-    /// Defaults to 2 decimal places for abbreviated and 2 for unabbreviated values.
+    
+        /// Convenience alias similar to Int.formatAsBigNumber.
+        /// Defaults to 2 decimal places for abbreviated and 2 for unabbreviated values.
     var formatAsBigNumber: String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 2)
     }
+    
+    
+    
+        /// Returns only the abbreviation suffix (e.g., "k", "M", "B", "T") used by
+        /// `formatWithFinancialValueAbbrevation`, or an empty string when no suffix applies.
+    var financialValueAbbreviationSuffix: String {
+        let absValue = self.abs
+        if absValue >= 1_000_000_000_000 { // Trillion
+            return "T"
+        }
+        if absValue >= 1_000_000_000 { // Billion
+            return "B"
+        }
+        if absValue >= 1_000_000 { // Million
+            return "M"
+        }
+        if absValue >= 1_000 { // Thousand
+            return "k"
+        }
+        return ""
+    }
+    
+    
 }
 
 
