@@ -2104,7 +2104,7 @@ public enum HorizontalAlignmentOption {
 
 @available(iOS 16,tvOS 16,*)
 public struct FlowLayout: Layout {
-    public var alignment: HorizontalAlignmentOption = .left
+    public var alignment: HorizontalAlignmentOption = .center
     
     public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let subSizes = subviews.map { $0.sizeThatFits(proposal) }

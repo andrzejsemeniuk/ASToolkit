@@ -2573,6 +2573,10 @@ public extension Array {
     func safeValue(at index: Int) -> Element? {
         index < count ? self[index] : nil
     }
+
+    var mid : Element {
+        self[count / 2]
+    }
     
 }
 
