@@ -1349,3 +1349,17 @@ public extension CGFloat {
     
 }
 
+
+
+
+
+public struct Arc4RandomGenerator: RandomNumberGenerator {
+    mutating public func next() -> UInt64 {
+        var value: UInt64 = 0
+        withUnsafeMutableBytes(of: &value) { buffer in
+            arc4random_buf(buffer.baseAddress, buffer.count)
+        }
+        return value
+    }
+}
+
