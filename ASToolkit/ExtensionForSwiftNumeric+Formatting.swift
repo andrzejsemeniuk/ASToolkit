@@ -12,10 +12,6 @@ import Foundation
 nonisolated
 public extension Double {
     
-    var withAbbreviationAsString : String {
-        self.asInt.formatWithAbbrevationAsString
-    }
-    
     var formatWithValueAbbrevationAsString : String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: "")
     }
@@ -300,46 +296,11 @@ public extension Int {
     }()
     
     var formatWithAbbrevationAsString : String {
-        
-        self.asDouble.withAbbreviationAsString
-        
-//        typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
-//        
-//        let abbreviations: [Abbrevation] = [
-//            (0, 1, ""),
-//            (1000.0, 1000.0, "K"),
-//            (999_999.0, 1_000_000.0, "M"),
-//            (999_999_999.0, 1_000_000_000.0, "G"),
-//            (999_999_999_999.0, 1_000_000_000_000.0, "T"),
-//            (999_999_999_999_999.0, 1_000_000_000_000_000.0, "P"),
-//            (999_999_999_999_999_999.0, 1_000_000_000_000_000_000.0, "E"),
-//        ]
-//        
-//        let startValue = Double(self.abs)
-//        
-//        let abbreviation: Abbrevation = {
-//            var prevAbbreviation = abbreviations[0]
-//            for tmpAbbreviation in abbreviations {
-//                if (startValue < tmpAbbreviation.threshold) {
-//                    break
-//                }
-//                prevAbbreviation = tmpAbbreviation
-//            }
-//            return prevAbbreviation
-//        }()
-//        
-//        let value = Double(self) / abbreviation.divisor
-//        
-//        let formatter = Self.formatterWithAbbreviation
-//        
-//        formatter.positiveSuffix = abbreviation.suffix
-//        formatter.negativeSuffix = abbreviation.suffix
-//        
-//        return formatter.string(from: NSNumber(value: value)) ?? "\(self)"
+        self.asDouble.formatWithValueAbbrevationAsString
     }
     
     var formatWithAbbrevationWithSpaceAsString : String {
-        self.asDouble.withAbbreviationAsString
+        self.asDouble.formatWithValueAbbrevationWithSpaceAsString
     }
     
     var formatWithAbbrevationAsMarkdownString : String {
