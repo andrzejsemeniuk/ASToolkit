@@ -1980,7 +1980,35 @@ public extension Array where Element == Double {
 }
 
 
+
+
+public extension Array {
+    
+    func asDictionaryKeepingFirst<K: Hashable, V>() -> [K: V] where Element == (K, V) {
+        var dict: [K: V] = [:]
+        for (k, v) in self where dict[k] == nil {
+            dict[k] = v
+        }
+        return dict
+    }
+
+    func asDictionary<K: Hashable, V>(merging: (V, V) -> V) -> [K: V] where Element == (K, V) {
+        var dict: [K: V] = [:]
+        for (k, v) in self {
+            if let existing = dict[k] {
+                dict[k] = merging(existing, v)
+            } else {
+                dict[k] = v
+            }
+        }
+        return dict
+    }
+}
+
+
+
 public extension Array where Element : Hashable {
+
     var asDictionaryIndex : [Element : Int] {
         range.asArray.asDictionary { i in
             (self[i],i)
