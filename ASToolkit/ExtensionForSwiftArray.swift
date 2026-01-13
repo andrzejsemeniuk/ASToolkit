@@ -2504,6 +2504,12 @@ public extension Array {
         }
     }
 
+    mutating func replace(at index: Int, with element: Element) {
+        if index < count {
+            self[index] = element
+        }
+    }
+
 }
 
 public extension Array {
