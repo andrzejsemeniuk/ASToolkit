@@ -352,6 +352,9 @@ public extension Array where Element : Numeric {
         return reduce(1, { $0 * $1 })
     }
     
+    func multiplied(by: Element) -> Self {
+        map { $0 * by }
+    }
 }
 
 extension Array where Element == Int {
