@@ -710,6 +710,15 @@ public extension Int
         into.l + (self.modulo(modulo).asDouble / (modulo - 1).asDouble) * (into.u - into.l)
     }
     
+    func decrementLooped(on n: Int) -> Int {
+            // i.decrementLooped(on: array.count)
+        self > 0 ? self - 1 : n > 0 ? n - 1 : 0
+    }
+    func incrementLooped(on n: Int) -> Int {
+            // i.incrementLooped(on: array.count)
+        n > 0 ? (self + 1) % n : n
+    }
+    
     func modulo(_ n: Int) -> Int {
         self % n
     }
