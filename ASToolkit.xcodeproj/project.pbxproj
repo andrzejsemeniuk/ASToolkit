@@ -44,6 +44,7 @@
 		572544582CCAC42300AF152A /* ExtensionForCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572544572CCAC42300AF152A /* ExtensionForCoreData.swift */; };
 		572A8E041F71DC28008CC1C6 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572A8E031F71DC28008CC1C6 /* Bit.swift */; };
 		572DB6AD2F0B12EF00877CC9 /* ExtensionForSwiftNumeric+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572DB6AC2F0B12E900877CC9 /* ExtensionForSwiftNumeric+Formatting.swift */; };
+		572DB6DF2F1EC5ED00877CC9 /* Sigma+Kit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572DB6DE2F1EC5E400877CC9 /* Sigma+Kit.swift */; };
 		5732AC302C75006600EE8620 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2E2C75006600EE8620 /* Color.swift */; };
 		5732AC312C75006600EE8620 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732AC2F2C75006600EE8620 /* Error.swift */; };
 		5732AC322C7509B600EE8620 /* ExtensionForUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570FC28C1F1124A300FEAC03 /* ExtensionForUIColor.swift */; };
@@ -204,6 +205,7 @@
 		572544572CCAC42300AF152A /* ExtensionForCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForCoreData.swift; sourceTree = "<group>"; };
 		572A8E031F71DC28008CC1C6 /* Bit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bit.swift; sourceTree = "<group>"; };
 		572DB6AC2F0B12E900877CC9 /* ExtensionForSwiftNumeric+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionForSwiftNumeric+Formatting.swift"; sourceTree = "<group>"; };
+		572DB6DE2F1EC5E400877CC9 /* Sigma+Kit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sigma+Kit.swift"; sourceTree = "<group>"; };
 		5732AC2E2C75006600EE8620 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		5732AC2F2C75006600EE8620 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		5732AC3A2C750ED700EE8620 /* ExtensionForAppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionForAppKit.swift; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				5762F6701F2F8DA100621781 /* ProtocolRemovable.swift */,
 				5762F6721F2F8DB400621781 /* ProtocolResettable.swift */,
 				57F804092198B31C009B4DE2 /* Sigma.swift */,
+				572DB6DE2F1EC5E400877CC9 /* Sigma+Kit.swift */,
 				772D915D22E2068E00DEBC6A /* StorableVariable.swift */,
 				77CD2A2122E883890020CAB5 /* StorableVariableManager.swift */,
 				571C6DB421E91F7800E326CC /* SWXMLHash.swift */,
@@ -777,6 +780,7 @@
 				77DF095A20D9AC5000E4F49D /* CGStroke.swift in Sources */,
 				570FC2B81F1124A300FEAC03 /* ExtensionForSwiftArray.swift in Sources */,
 				5762F6771F2F8EE200621781 /* ProtocolAssignableToDictionary.swift in Sources */,
+				572DB6DF2F1EC5ED00877CC9 /* Sigma+Kit.swift in Sources */,
 				5732AC302C75006600EE8620 /* Color.swift in Sources */,
 				570FC2DD1F1124A300FEAC03 /* Block.swift in Sources */,
 				570FC2BC1F1124A300FEAC03 /* ExtensionForSwiftCollection.swift in Sources */,
