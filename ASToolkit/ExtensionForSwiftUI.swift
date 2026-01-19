@@ -2270,3 +2270,20 @@ public extension View {
     }
 
 }
+
+
+
+
+@ViewBuilder
+func VStack0<Content: View>(alignment: HorizontalAlignment = .center,  @ViewBuilder content: () -> Content) -> some View {
+    VStack(alignment: alignment, spacing: 0) {
+        content()
+    }
+}
+
+@ViewBuilder
+func HStack0<Content: View>(alignment: VerticalAlignment = .center,  @ViewBuilder content: () -> Content) -> some View {
+    HStack(alignment: alignment, spacing: 0) {
+        content()
+    }
+}
