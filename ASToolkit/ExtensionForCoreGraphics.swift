@@ -537,7 +537,7 @@ public struct CGSegment : Codable, Equatable, Hashable {
         return A.y + t * (B.y - A.y)
     }
 
-    func centeredCommonXLine(with other: CGSegment, stretchedTo length: CGFloat, allowExtrapolation: Bool = false) -> CGSegment {
+    func centeredCommonXLine(with other: CGSegment, stretchedTo length: CGFloat, allowExtrapolation: Bool = false, epsilon: CGFloat = 1e-6) -> CGSegment {
         
         let A0 = from, B0 = to
         let A1 = other.from, B1 = other.to
@@ -546,7 +546,7 @@ public struct CGSegment : Codable, Equatable, Hashable {
         let dx0 = B0.x - A0.x
         let dx1 = B1.x - A1.x
         // Guard against near-vertical lines: if either is near-vertical, fall back to midpoint connector
-        if abs(dx0) < 1e-6 || abs(dx1) < 1e-6 {
+        if abs(dx0) < epsilon || abs(dx1) < epsilon {
             let M0 = (A0 + B0) / 2
             let M1 = (A1 + B1) / 2
             return CGSegment(from: M0, to: M1).stretched(length)
@@ -558,7 +558,7 @@ public struct CGSegment : Codable, Equatable, Hashable {
         let b1 = A1.y - m1 * A1.x
 
         // Parallel (or nearly parallel) case: midline parallel to both with averaged intercept
-        if abs(m0 - m1) < 1e-6 {
+        if abs(m0 - m1) < epsilon {
             let m = m0
             let b = (b0 + b1) / 2
             // Build a long segment along y = m x + b centered near the midpoint of segment midpoints
@@ -598,7 +598,7 @@ public struct CGSegment : Codable, Equatable, Hashable {
         let dir0 = CGPoint(x: 1, y: m0).unit
         let dir1 = CGPoint(x: 1, y: m1).unit
         var avg = CGPoint(x: dir0.x + dir1.x, y: dir0.y + dir1.y).unit
-        if avg.length < 1e-6 { avg = dir0 } // fallback if opposite
+        if avg.length < epsilon { avg = dir0 } // fallback if opposite
 
         // Convert ax + by + c = 0 to a direction vector perpendicular to normal (a, b): dir = (b, -a)
         let d1 = CGPoint(x: bis1.b, y: -bis1.a).unit
