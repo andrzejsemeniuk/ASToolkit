@@ -525,8 +525,113 @@ public struct CGSegment : Codable, Equatable, Hashable {
         return R
     }
     
+    
+    
+    
+    
+    
+    static func yOnSupportingLine(atX x: CGFloat, A: CGPoint, B: CGPoint, epsilon: CGFloat = 1e-6) -> CGFloat? {
+        let dx = B.x - A.x
+        if abs(dx) < epsilon { return nil }
+        let t = (x - A.x) / dx
+        return A.y + t * (B.y - A.y)
+    }
 
+    func centeredCommonXLine(with other: CGSegment, stretchedTo length: CGFloat, allowExtrapolation: Bool = false) -> CGSegment {
+        
+        let A0 = from, B0 = to
+        let A1 = other.from, B1 = other.to
+
+        let x0min = min(A0.x, B0.x), x0max = max(A0.x, B0.x)
+        let x1min = min(A1.x, B1.x), x1max = max(A1.x, B1.x)
+
+        let overlapA = max(x0min, x1min)
+        let overlapB = min(x0max, x1max)
+
+        let a: CGFloat
+        let b: CGFloat
+        
+        if overlapA < overlapB {
+            a = overlapA
+            b = overlapB
+        } else if allowExtrapolation {
+            a = min(x0min, x1min)
+            b = max(x0max, x1max)
+        } else {
+            // Fallback immediately
+            let M0 = (A0 + B0) / 2
+            let M1 = (A1 + B1) / 2
+            return CGSegment(from: M0, to: M1).stretched(length)
+        }
+
+        guard let y0a = Self.yOnSupportingLine(atX: a, A: A0, B: B0),
+              let y1a = Self.yOnSupportingLine(atX: a, A: A1, B: B1),
+              let y0b = Self.yOnSupportingLine(atX: b, A: A0, B: B0),
+              let y1b = Self.yOnSupportingLine(atX: b, A: A1, B: B1) else
+        {
+            let M0 = (A0 + B0) / 2
+            let M1 = (A1 + B1) / 2
+            return CGSegment(from: M0, to: M1).stretched(length)
+        }
+
+        let Ma = CGPoint(x: a, y: (y0a + y1a) / 2)
+        let Mb = CGPoint(x: b, y: (y0b + y1b) / 2)
+        return CGSegment(from: Ma, to: Mb).stretched(length)
+    }
+    
+    func centeredCommonXLine2(with other: CGSegment, stretchedTo length: CGFloat, allowExtrapolation: Bool = false) -> CGSegment {
+        
+        let A0 = from, B0 = to
+        let A1 = other.from, B1 = other.to
+
+        let x0min = min(A0.x, B0.x), x0max = max(A0.x, B0.x)
+        let x1min = min(A1.x, B1.x), x1max = max(A1.x, B1.x)
+
+        let overlapA = max(x0min, x1min)
+        let overlapB = min(x0max, x1max)
+
+        let a: CGFloat
+        let b: CGFloat
+        
+        if overlapA < overlapB {
+            a = overlapA
+            b = overlapB
+        } else if allowExtrapolation {
+            a = min(x0min, x1min)
+            b = max(x0max, x1max)
+        } else {
+            // Fallback immediately
+            let M0 = (A0 + B0) / 2
+            let M1 = (A1 + B1) / 2
+            return CGSegment(from: M0, to: M1).stretched(length)
+        }
+
+        guard let y0a = Self.yOnSupportingLine(atX: a, A: A0, B: B0),
+              let y1a = Self.yOnSupportingLine(atX: a, A: A1, B: B1),
+              let y0b = Self.yOnSupportingLine(atX: b, A: A0, B: B0),
+              let y1b = Self.yOnSupportingLine(atX: b, A: A1, B: B1) else
+        {
+            let M0 = (A0 + B0) / 2
+            let M1 = (A1 + B1) / 2
+            return CGSegment(from: M0, to: M1).stretched(length)
+        }
+
+        let Ma = CGPoint(x: a, y: (y0a + y1a) / 2)
+        let Mb = CGPoint(x: b, y: (y0b + y1b) / 2)
+        return CGSegment(from: Ma, to: Mb).stretched(length)
+    }
+    
+    
+    
+
+    
+    
 }
+
+
+
+
+
 
 public struct CGArrow  : Codable, Equatable, Hashable {
     
