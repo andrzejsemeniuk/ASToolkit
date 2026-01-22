@@ -542,83 +542,78 @@ public struct CGSegment : Codable, Equatable, Hashable {
         let A0 = from, B0 = to
         let A1 = other.from, B1 = other.to
 
-        let x0min = min(A0.x, B0.x), x0max = max(A0.x, B0.x)
-        let x1min = min(A1.x, B1.x), x1max = max(A1.x, B1.x)
+        // Compute slopes (m) and intercepts (b) for supporting lines y = m x + b
+        let dx0 = B0.x - A0.x
+        let dx1 = B1.x - A1.x
+        // Guard against near-vertical lines: if either is near-vertical, fall back to midpoint connector
+        if abs(dx0) < 1e-6 || abs(dx1) < 1e-6 {
+            let M0 = (A0 + B0) / 2
+            let M1 = (A1 + B1) / 2
+            return CGSegment(from: M0, to: M1).stretched(length)
+        }
 
-        let overlapA = max(x0min, x1min)
-        let overlapB = min(x0max, x1max)
+        let m0 = (B0.y - A0.y) / dx0
+        let b0 = A0.y - m0 * A0.x
+        let m1 = (B1.y - A1.y) / dx1
+        let b1 = A1.y - m1 * A1.x
 
-        let a: CGFloat
-        let b: CGFloat
+        // Parallel (or nearly parallel) case: midline parallel to both with averaged intercept
+        if abs(m0 - m1) < 1e-6 {
+            let m = m0
+            let b = (b0 + b1) / 2
+            // Build a long segment along y = m x + b centered near the midpoint of segment midpoints
+            let C = ((A0 + B0) / 2 + (A1 + B1) / 2) / 2
+            let dir = CGPoint(x: 1, y: m).unit
+            let half = dir * (length / 2)
+            let xP = C.x - half.x
+            let xQ = C.x + half.x
+            let P = CGPoint(x: xP, y: m * xP + b)
+            let Q = CGPoint(x: xQ, y: m * xQ + b)
+            return CGSegment(from: P, to: Q)
+        }
+
+        // Non-parallel: compute the two angle bisectors using normalized line coefficients
+        // Line in normalized form: a x + b y + c = 0 where sqrt(a^2 + b^2) = 1
+        func __normalizedABC(m: CGFloat, b: CGFloat) -> (a: CGFloat, b: CGFloat, c: CGFloat) {
+            let denom = sqrt(m * m + 1)
+            let a = m / denom
+            let bb = -1 / denom
+            let c = b / denom
+            return (a, bb, c)
+        }
+
+        let (a0, bb0, c0) = __normalizedABC(m: m0, b: b0)
+        let (a1, bb1, c1) = __normalizedABC(m: m1, b: b1)
+
+        // Bisector equations: (a0 ± a1) x + (b0 ± b1) y + (c0 ± c1) = 0
+        let bis1 = (a: a0 - a1, b: bb0 - bb1, c: c0 - c1)
+        let bis2 = (a: a0 + a1, b: bb0 + bb1, c: c0 + c1)
+
+        // Find intersection point of the two original lines (guaranteed since not parallel)
+        let xi = (b1 - b0) / (m0 - m1)
+        let yi = m0 * xi + b0
+        let I = CGPoint(x: xi, y: yi)
+
+        // Choose the bisector closer to the average direction of the two lines
+        let dir0 = CGPoint(x: 1, y: m0).unit
+        let dir1 = CGPoint(x: 1, y: m1).unit
+        var avg = CGPoint(x: dir0.x + dir1.x, y: dir0.y + dir1.y).unit
+        if avg.length < 1e-6 { avg = dir0 } // fallback if opposite
+
+        // Convert ax + by + c = 0 to a direction vector perpendicular to normal (a, b): dir = (b, -a)
+        let d1 = CGPoint(x: bis1.b, y: -bis1.a).unit
+        let d2 = CGPoint(x: bis2.b, y: -bis2.a).unit
+
+        let dot1 = abs(d1.x * avg.x + d1.y * avg.y)
+        let dot2 = abs(d2.x * avg.x + d2.y * avg.y)
+        let chosenDir = dot1 >= dot2 ? d1 : d2
+
+        // Build a long segment along the chosen bisector through the intersection point
+        let half = chosenDir * (length / 2)
+        let P = I - half
+        let Q = I + half
+        return CGSegment(from: P, to: Q)
         
-        if overlapA < overlapB {
-            a = overlapA
-            b = overlapB
-        } else if allowExtrapolation {
-            a = min(x0min, x1min)
-            b = max(x0max, x1max)
-        } else {
-            // Fallback immediately
-            let M0 = (A0 + B0) / 2
-            let M1 = (A1 + B1) / 2
-            return CGSegment(from: M0, to: M1).stretched(length)
-        }
-
-        guard let y0a = Self.yOnSupportingLine(atX: a, A: A0, B: B0),
-              let y1a = Self.yOnSupportingLine(atX: a, A: A1, B: B1),
-              let y0b = Self.yOnSupportingLine(atX: b, A: A0, B: B0),
-              let y1b = Self.yOnSupportingLine(atX: b, A: A1, B: B1) else
-        {
-            let M0 = (A0 + B0) / 2
-            let M1 = (A1 + B1) / 2
-            return CGSegment(from: M0, to: M1).stretched(length)
-        }
-
-        let Ma = CGPoint(x: a, y: (y0a + y1a) / 2)
-        let Mb = CGPoint(x: b, y: (y0b + y1b) / 2)
-        return CGSegment(from: Ma, to: Mb).stretched(length)
-    }
-    
-    func centeredCommonXLine2(with other: CGSegment, stretchedTo length: CGFloat, allowExtrapolation: Bool = false) -> CGSegment {
-        
-        let A0 = from, B0 = to
-        let A1 = other.from, B1 = other.to
-
-        let x0min = min(A0.x, B0.x), x0max = max(A0.x, B0.x)
-        let x1min = min(A1.x, B1.x), x1max = max(A1.x, B1.x)
-
-        let overlapA = max(x0min, x1min)
-        let overlapB = min(x0max, x1max)
-
-        let a: CGFloat
-        let b: CGFloat
-        
-        if overlapA < overlapB {
-            a = overlapA
-            b = overlapB
-        } else if allowExtrapolation {
-            a = min(x0min, x1min)
-            b = max(x0max, x1max)
-        } else {
-            // Fallback immediately
-            let M0 = (A0 + B0) / 2
-            let M1 = (A1 + B1) / 2
-            return CGSegment(from: M0, to: M1).stretched(length)
-        }
-
-        guard let y0a = Self.yOnSupportingLine(atX: a, A: A0, B: B0),
-              let y1a = Self.yOnSupportingLine(atX: a, A: A1, B: B1),
-              let y0b = Self.yOnSupportingLine(atX: b, A: A0, B: B0),
-              let y1b = Self.yOnSupportingLine(atX: b, A: A1, B: B1) else
-        {
-            let M0 = (A0 + B0) / 2
-            let M1 = (A1 + B1) / 2
-            return CGSegment(from: M0, to: M1).stretched(length)
-        }
-
-        let Ma = CGPoint(x: a, y: (y0a + y1a) / 2)
-        let Mb = CGPoint(x: b, y: (y0b + y1b) / 2)
-        return CGSegment(from: Ma, to: Mb).stretched(length)
     }
     
     
