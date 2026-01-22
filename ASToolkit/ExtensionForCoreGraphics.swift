@@ -333,6 +333,30 @@ public extension CGSize {
 
 public struct CGSegment : Codable, Equatable, Hashable {
     
+    init(from: CGPoint, to: CGPoint) {
+        self.from = from
+        self.to = to
+    }
+    
+    init(from: CGPoint, slope: CGSlope, distance: CGFloat = 1.0) {
+        self.from = from
+        // Build a direction vector from the slope. If dx == 0, it's vertical; use dy's sign.
+        let dir: CGPoint
+        if slope.dx == 0 {
+            // vertical line; go up if dy > 0 else down
+            let sign: CGFloat = slope.dy >= 0 ? 1 : -1
+            dir = CGPoint(x: 0, y: sign)
+        } else {
+            // direction from point0 to point1 normalized
+            let v = CGPoint(x: slope.dx, y: slope.dy)
+            let len = v.length
+            let u = len == 0 ? CGPoint(x: 1, y: 0) : CGPoint(x: v.x / len, y: v.y / len)
+            dir = u
+        }
+        self.to = from + dir * distance
+    }
+    
+    
     
     
     var from    : CGPoint
@@ -1890,3 +1914,4 @@ public extension CGFloat {
     func asCGPoint(x: CGFloat) -> CGPoint { .init(x, self) }
     func asCGPoint(y: CGFloat) -> CGPoint { .init(self, y) }
 }
+
