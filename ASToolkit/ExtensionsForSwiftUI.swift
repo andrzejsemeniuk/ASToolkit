@@ -1485,6 +1485,27 @@ public func ButtonWithTextAndAnimation(_ text: String, selected: Bool = false, t
 }
 
 
+
+public extension Array where Element: Identifiable {
+    func views(@ViewBuilder f: @escaping (_ element: Element) -> some View) -> some View {
+        Group {
+            ForEach(self) { element in
+                f(element)
+            }
+        }
+    }
+}
+
+public extension Array where Element: Hashable {
+    func views(@ViewBuilder f: @escaping (_ element: Element) -> some View) -> some View {
+        Group {
+            ForEach(self, id: \.self) { element in
+                f(element)
+            }
+        }
+    }
+}
+
 public extension Array {
     func views(@ViewBuilder f: @escaping (_ index: Int, _ element: Element) -> some View) -> some View {
         Group {
@@ -1501,6 +1522,9 @@ public extension Array {
         }
     }
 }
+
+
+
 
 public extension View {
     func scaleEffect(_ s: Double) -> some View {
