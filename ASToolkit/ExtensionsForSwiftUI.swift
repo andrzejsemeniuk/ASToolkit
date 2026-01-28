@@ -2049,6 +2049,37 @@ public extension FrameReader.Space {
 
 
 
+public extension View {
+    /// Adds an action to perform when the user swipes down on this view.
+    ///
+    /// The action is triggered when the drag gesture ends with a vertical translation
+    /// greater than or equal to `minDistance` and a velocity heuristic greater than or equal to `minVelocity`.
+    ///
+    /// - Parameters:
+    ///   - minDistance: The minimum vertical distance (in points) the drag must travel downward to trigger the action. Default is 40.
+    ///   - minVelocity: The minimum velocity heuristic (in points per second) the drag must have downward to trigger the action. Default is 300.
+    ///   - action: The closure to execute when the swipe down gesture is recognized.
+    /// - Returns: A view that triggers `action` when a downward swipe is detected.
+    func onSwipeDown(minDistance: CGFloat = 40, minVelocity: CGFloat = 200, perform action: @escaping () -> Void) -> some View {
+        self
+            .contentShape(Rectangle())
+            .highPriorityGesture(
+                DragGesture(minimumDistance: minDistance, coordinateSpace: .local)
+                    .onEnded { value in
+                        let translationY = value.translation.height
+                        let predictedDeltaY = value.predictedEndTranslation.height - value.translation.height
+                        let velocityProxyY = abs(predictedDeltaY)
+                        if translationY >= minDistance && velocityProxyY >= minVelocity && translationY > 0 {
+                            action()
+                        }
+                    }
+            )
+    }
+}
+
+
+
+
 
 
 
@@ -2063,3 +2094,4 @@ public extension FrameReader.Space {
         .background(Color.yellow.opacity(0.5))
     
 }
+
