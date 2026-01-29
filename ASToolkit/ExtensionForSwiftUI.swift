@@ -457,6 +457,18 @@ public extension Color {
     var colorBlackOrWhite : Color {
         return minimumOfRGB > 0.6 ? .black : .white
     }
+    
+    var colorInvertedExcludingAlpha : Color {
+        self.asHSBAInfo.inverted(h: true, s: true, b: true, a: false).asSwiftUIColor
+    }
+
+    var colorInvertedIncludingAlpha : Color {
+        self.asHSBAInfo.inverted(h: true, s: true, b: true, a: true).asSwiftUIColor
+    }
+
+    func colorInverted(h: Bool, s: Bool, b: Bool, a: Bool) -> Color {
+        self.asHSBAInfo.inverted(h: h, s: s, b: b, a: a).asSwiftUIColor
+    }
 
     
     typealias RGBATuple = (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat)
