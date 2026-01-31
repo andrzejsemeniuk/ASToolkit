@@ -2617,3 +2617,21 @@ public extension Array {
     
 }
 
+public extension Array {
+    
+    mutating func replaceLastOrAppend(_ e: Element) {
+        if count > 0 {
+            self[count - 1] = e
+        } else {
+            self.append(e)
+        }
+    }
+
+    mutating func assignAtBack(_ v: Element) {
+        if 0 < count {
+            self[count - 1] = v
+        } else {
+            self = [v]
+        }
+    }
+}
