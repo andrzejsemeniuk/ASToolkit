@@ -173,6 +173,8 @@ extension GraphicsContext {
     ) {
         // Resolve each line to ResolvedText and measure
         let resolvedLines: [(text: GraphicsContext.ResolvedText, size: CGSize)] = lines.map { line in
+//            let s = "This is\n**bold** and\nthis *italic*"
+//            let resolved = self.resolve(Text(s))
             let resolved = self.resolve(styling(Text(line)))
             let size = resolved.measure(in: size)
             return (resolved, size)
