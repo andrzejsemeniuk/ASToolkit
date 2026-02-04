@@ -40,6 +40,9 @@ public extension Data {
 
     func decoded<T: Decodable>() throws -> T {
         try JSONDecoder().decode(T.self, from: self)
+//        print(String(data: self, encoding: .utf8) ?? "<non-utf8>")
+//        let DECODER = JSONDecoder()
+//        return try DECODER.decode(T.self, from: self)
     }
     
     func decoded<T: Decodable>(fallback: T) -> T {
@@ -51,18 +54,18 @@ public extension Data {
     }
 
     
-    static func create<T>(from value: T) -> Self {
-        // https://www.hackingwithswift.com/forums/swift/how-do-i-get-a-uint32-into-a-data/8802
-        var value = value
-        return Data.init(bytes: &value, count: MemoryLayout<T>.size)
-    }
+//    static func create<T>(from value: T) -> Self {
+//        // https://www.hackingwithswift.com/forums/swift/how-do-i-get-a-uint32-into-a-data/8802
+//        var value = value
+//        return Data.init(bytes: &value, count: MemoryLayout<T>.size)
+//    }
     
-    func load<T>() -> T {
-        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
-        return self.withUnsafeBytes { bytes in
-            bytes.load(as: T.self)
-        }
-    }
+//    func load<T>() -> T {
+//        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
+//        return self.withUnsafeBytes { bytes in
+//            bytes.load(as: T.self)
+//        }
+//    }
     
     func loaded<T>() -> T? {
         // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
