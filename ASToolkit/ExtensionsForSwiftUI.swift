@@ -1906,45 +1906,65 @@ public extension View {
 
 
 
-
 public struct ZoomableModifier: ViewModifier {
-    
-    var scale0 : CGFloat = 1.0
-    
+    var scale0: CGFloat = 1.0
+
     @State private var scale: CGFloat = 1.0
+    @State private var magnification: CGFloat = 1.0
     @State private var anchor: UnitPoint = .center
+    @State private var isZoomed = false
+    @State private var viewSize: CGSize = .zero
+    @State private var pinchLocation: CGPoint = .zero
 
     public func body(content: Content) -> some View {
         content
-            .scaleEffect(scale, anchor: anchor)
-            .gesture(
-                MagnifyGesture()
-                    .onChanged { value in
-                        anchor = value.startAnchor
-                        scale = value.magnification
-                    }
-                    .onEnded { value in
-                        withAnimation(.spring(duration: 0.2, bounce: 0.5, blendDuration: 0.05)) {
-                            self.scale = scale0
+            // Read the view's size so we can convert CGPoint -> UnitPoint
+            .background(
+                GeometryReader { g in
+                    Color.clear
+                        .onAppear { viewSize = g.size }
+                        .onChange(of: g.size) { _, newSize in
+                            viewSize = newSize
                         }
-                    }
+                }
             )
             .onAppear {
                 scale = scale0
             }
+            .scaleEffect(isZoomed ? (scale * magnification) : 1, anchor: anchor)
+            .animation(.easeOut(duration: 0.08), value: scale)
+            // Compose magnify + drag so we can track the focal point
+            .simultaneousGesture(
+                SimultaneousGesture(
+                    MagnifyGesture()
+                        .onChanged { value in
+                            isZoomed = true
+                            magnification = value.magnification
+                            // anchor is updated by the DragGesture below
+                        }
+                        .onEnded { _ in
+                            // Temporary zoom behavior: snap back when released
+                            scale = 1
+                            magnification = 1.0
+                            isZoomed = false
+                            anchor = .center
+                        },
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { drag in
+                            pinchLocation = drag.location
+                            anchor = pinchLocation.unitPoint(in: viewSize)
+                        }
+                )
+            )
     }
+
 }
 
 public extension View {
-    func zoomable() -> some View {
-        self.modifier(ZoomableModifier())
+    func zoomable(scale0: CGFloat = 1.0) -> some View {
+        self.modifier(ZoomableModifier(scale0: scale0))
     }
 }
-
-
-
-
-
 
 
 

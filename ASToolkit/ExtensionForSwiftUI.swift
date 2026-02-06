@@ -2303,3 +2303,20 @@ func HStack0<Content: View>(alignment: VerticalAlignment = .center,  @ViewBuilde
         content()
     }
 }
+
+
+
+public extension CGPoint {
+    func unitPoint(in size: CGSize) -> UnitPoint {
+        guard size.width > 0, size.height > 0 else { return .center }
+        let x = Swift.max(0, Swift.min(1, self.x / size.width))
+        let y = Swift.max(0, Swift.min(1, self.y / size.height))
+        return UnitPoint(x: x, y: y)
+    }
+}
+
+public extension CGSize {
+    func unitPoint(of p: CGPoint) -> UnitPoint {
+        p.unitPoint(in: self)
+    }
+}
