@@ -2416,27 +2416,27 @@ public extension UIImage {
 
 public extension View {
     @ViewBuilder
-    func snapshot(trigger: Binding<Bool>, onComplete: @escaping (UIImage) -> ()) -> some View {
-//    func snapshot(trigger: Binding<Bool>, overlay: ( () -> AnyView )? = nil, onComplete: @escaping (UIImage) -> ()) -> some View {
+//    func snapshot(trigger: Binding<Bool>, onComplete: @escaping (UIImage) -> ()) -> some View {
+    func snapshot(trigger: Binding<Bool>, overlay: ( () -> AnyView )? = nil, onComplete: @escaping (UIImage) -> ()) -> some View {
         self
-            .modifier(SnapshotModifier(trigger: trigger, onComplete: onComplete))
+            .modifier(SnapshotModifier(trigger: trigger, overlay: overlay, onComplete: onComplete))
     }
 }
 
 struct SnapshotModifier : ViewModifier {
     @Binding var trigger: Bool
-//    var overlay: ( () -> AnyView )?
+    var overlay: ( () -> AnyView )?
     var onComplete: (UIImage) -> ()
     @State private var view: UIView = .init(frame: .zero)
     
     func body(content: Content) -> some View {
         content
             .background(ViewExtractor(view: view))
-//            .overlay {
-//                if trigger {
-//                    overlay?()
-//                }
-//            }
+            .overlay {
+                if trigger {
+                    overlay?()
+                }
+            }
             .compositingGroup()
             .onChange(of: trigger) {
                 if trigger {
@@ -2450,13 +2450,6 @@ struct SnapshotModifier : ViewModifier {
     }
     
     private func generateSnapshot() {
-//        if let superView = view.superview?.superview {
-//            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
-//            let image = renderer.image { _ in
-//                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
-//            }
-//            onComplete(image)
-//        }
         if let IMAGE = view.snapshot {
             onComplete(IMAGE)
         }
