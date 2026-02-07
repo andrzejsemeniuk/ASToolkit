@@ -2417,6 +2417,7 @@ public extension UIImage {
 public extension View {
     @ViewBuilder
     func snapshot(trigger: Binding<Bool>, onComplete: @escaping (UIImage) -> ()) -> some View {
+//    func snapshot(trigger: Binding<Bool>, overlay: ( () -> AnyView )? = nil, onComplete: @escaping (UIImage) -> ()) -> some View {
         self
             .modifier(SnapshotModifier(trigger: trigger, onComplete: onComplete))
     }
@@ -2424,29 +2425,40 @@ public extension View {
 
 struct SnapshotModifier : ViewModifier {
     @Binding var trigger: Bool
-//    var trigger: Bool
+//    var overlay: ( () -> AnyView )?
     var onComplete: (UIImage) -> ()
     @State private var view: UIView = .init(frame: .zero)
     
     func body(content: Content) -> some View {
         content
             .background(ViewExtractor(view: view))
+//            .overlay {
+//                if trigger {
+//                    overlay?()
+//                }
+//            }
             .compositingGroup()
             .onChange(of: trigger) {
                 if trigger {
-                    generateSnapshot()
                     trigger = false
+                    generateSnapshot()
+//                    later {
+//                        generateSnapshot()
+//                    }
                 }
             }
     }
     
     private func generateSnapshot() {
-        if let superView = view.superview?.superview {
-            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
-            let image = renderer.image { _ in
-                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
-            }
-            onComplete(image)
+//        if let superView = view.superview?.superview {
+//            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
+//            let image = renderer.image { _ in
+//                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
+//            }
+//            onComplete(image)
+//        }
+        if let IMAGE = view.snapshot {
+            onComplete(IMAGE)
         }
     }
 }
@@ -2463,6 +2475,7 @@ struct ViewExtractor: UIViewRepresentable {
 }
 
 struct PreviewForSnapshot: View {
+    
     @State private var trigger = false
 //    @State private var snapshot: UIImage?
     @State private var snapshots: [UIImage] = []
@@ -2493,6 +2506,7 @@ struct PreviewForSnapshot: View {
                     .aspectRatio(contentMode: .fit)
             }
         }
+        
 //        if let snapshot {
 //            Image(uiImage: snapshot)
 //                .aspectRatio(contentMode: .fit)
@@ -2504,4 +2518,25 @@ struct PreviewForSnapshot: View {
 
 #Preview {
     PreviewForSnapshot()
+}
+
+
+
+
+
+
+
+public extension UIView {
+    
+    var snapshot : UIImage? {
+        if let superView = self.superview?.superview {
+            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
+            let image = renderer.image { _ in
+                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
+            }
+            return image
+        }
+        return nil
+    }
+    
 }
