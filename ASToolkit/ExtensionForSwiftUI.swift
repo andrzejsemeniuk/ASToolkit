@@ -2416,7 +2416,6 @@ public extension UIImage {
 
 public extension View {
     @ViewBuilder
-//    func snapshot(trigger: Binding<Bool>, onComplete: @escaping (UIImage) -> ()) -> some View {
     func snapshot(trigger: Binding<Bool>, overlay: ( () -> AnyView )? = nil, onComplete: @escaping (UIImage) -> ()) -> some View {
         self
             .modifier(SnapshotModifier(trigger: trigger, overlay: overlay, onComplete: onComplete))
@@ -2440,11 +2439,10 @@ struct SnapshotModifier : ViewModifier {
             .compositingGroup()
             .onChange(of: trigger) {
                 if trigger {
-                    trigger = false
+                    later {
+                        trigger = false
+                    }
                     generateSnapshot()
-//                    later {
-//                        generateSnapshot()
-//                    }
                 }
             }
     }
