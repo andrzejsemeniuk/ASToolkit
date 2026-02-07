@@ -2320,3 +2320,73 @@ public extension CGSize {
         p.unitPoint(in: self)
     }
 }
+
+
+
+
+@available(iOS 16, tvOS 16, macOS 13, *)
+public struct TakeScreenshotModifier: ViewModifier {
+    @Binding var trigger: Bool
+    var scale: CGFloat
+    var onImage: (UIImage?) -> Void
+    /// Transform applied only for the rendered snapshot. Works with type-erased AnyView to avoid generic inference issues.
+    var transform: (AnyView) -> AnyView
+
+    public init(
+        trigger: Binding<Bool>,
+        scale: CGFloat = UIScreen.main.scale,
+        transform: @escaping (AnyView) -> AnyView,
+        onImage: @escaping (UIImage?) -> Void
+    ) {
+        self._trigger = trigger
+        self.scale = scale
+        self.transform = transform
+        self.onImage = onImage
+    }
+
+    public func body(content: Content) -> some View {
+        content
+            .onChange(of: trigger) { _, newValue in
+                guard newValue == true else { return }
+                // Type-erase content and apply transform only for capture
+                let base = AnyView(content)
+                let captureContent = transform(base)
+                let renderer = ImageRenderer(content: captureContent)
+                renderer.scale = scale
+                let image = renderer.uiImage
+                onImage(image)
+                trigger = false
+            }
+    }
+}
+
+@available(iOS 16, tvOS 16, macOS 13, *)
+public extension View {
+    
+    func takeScreenshot(on trigger: Binding<Bool>, scale: CGFloat = UIScreen.main.scale, perform onImage: @escaping (UIImage?) -> Void) -> some View {
+        self.modifier(
+            TakeScreenshotModifier(trigger: trigger, scale: scale, transform: { $0 }, onImage: onImage)
+        )
+    }
+    
+    /// Captures a screenshot of this View with a temporary transformation applied only at capture time.
+    /// Use this to overlay watermarks, labels, or any additional decorations that shouldn't appear on screen.
+    /// After capturing, `trigger` is set back to false and `onImage` is called with the resulting UIImage.
+    /// - Parameters:
+    ///   - trigger: A binding Bool that, when toggled to true, initiates a capture.
+    ///   - scale: The image scale to use. Defaults to the main screen's scale.
+    ///   - transform: A closure that returns a modified view used only for the snapshot. The closure receives an AnyView of the base content and should return an AnyView.
+    ///   - onImage: Callback receiving the captured UIImage (or nil on failure).
+    func takeScreenshot(
+        on trigger: Binding<Bool>,
+        scale: CGFloat = UIScreen.main.scale,
+        transform: @escaping (AnyView) -> AnyView,
+        perform onImage: @escaping (UIImage?) -> Void
+    ) -> some View {
+        self.modifier(
+            TakeScreenshotModifier(trigger: trigger, scale: scale, transform: transform, onImage: onImage)
+        )
+    }
+}
+
+
