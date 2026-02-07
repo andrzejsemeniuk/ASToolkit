@@ -2390,3 +2390,118 @@ public extension View {
 }
 
 
+import Photos
+
+public extension UIImage {
+    func saveToPhotos(_ completion: @escaping (Bool) -> Void) {
+            // Optional: Request authorization first (iOS 14+ uses limited access by default)
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized || status == .limited else {
+                completion(false)
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(self, nil, nil, nil)
+            completion(true)
+        }
+    }
+}
+
+
+
+
+
+
+
+// https://www.youtube.com/watch?v=ojdjFn9qjwU
+
+public extension View {
+    @ViewBuilder
+    func snapshot(trigger: Binding<Bool>, onComplete: @escaping (UIImage) -> ()) -> some View {
+        self
+            .modifier(SnapshotModifier(trigger: trigger, onComplete: onComplete))
+    }
+}
+
+struct SnapshotModifier : ViewModifier {
+    @Binding var trigger: Bool
+//    var trigger: Bool
+    var onComplete: (UIImage) -> ()
+    @State private var view: UIView = .init(frame: .zero)
+    
+    func body(content: Content) -> some View {
+        content
+            .background(ViewExtractor(view: view))
+            .compositingGroup()
+            .onChange(of: trigger) {
+                if trigger {
+                    generateSnapshot()
+                    trigger = false
+                }
+            }
+    }
+    
+    private func generateSnapshot() {
+        if let superView = view.superview?.superview {
+            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
+            let image = renderer.image { _ in
+                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
+            }
+            onComplete(image)
+        }
+    }
+}
+
+struct ViewExtractor: UIViewRepresentable {
+    var view: UIView
+    func makeUIView(context: Context) -> UIView {
+        view.backgroundColor = .clear
+        return view
+    }
+    func updateUIView(_ uiView: UIView, context: Context) {
+        
+    }
+}
+
+struct PreviewForSnapshot: View {
+    @State private var trigger = false
+//    @State private var snapshot: UIImage?
+    @State private var snapshots: [UIImage] = []
+    
+    var body : some View {
+        Button("Take Screenshot !") {
+            trigger = true
+        }
+        .padding()
+        .backgroundColor(trigger ? .orange : .clear)
+        
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, snapshot!")
+        }
+        .padding()
+        .backgroundColor(.yellow)
+        .cornerRadius(16)
+        .snapshot(trigger: $trigger) {
+            snapshots.append($0)
+        }
+        
+        VStack {
+            ForEach(snapshots, id:\.self) { S in
+                Image(uiImage: S)
+                    .aspectRatio(contentMode: .fit)
+            }
+        }
+//        if let snapshot {
+//            Image(uiImage: snapshot)
+//                .aspectRatio(contentMode: .fit)
+//        }
+    }
+    
+    
+}
+
+#Preview {
+    PreviewForSnapshot()
+}
