@@ -2531,3 +2531,45 @@ public extension UIView {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+import PencilKit
+
+
+
+public extension Data {
+    
+    var asPKDrawing : PKDrawing? {
+        try? PKDrawing(data: self)
+    }
+    
+}
+
+public extension PKDrawing {
+    
+    @discardableResult
+    mutating func assign(data: Data?) -> Bool {
+        if let V = data?.asPKDrawing {
+            self = V
+            return true
+        }
+        return false
+    }
+    
+    static func from(data: Data?) -> PKDrawing? {
+        data?.asPKDrawing
+    }
+    
+}
+
+

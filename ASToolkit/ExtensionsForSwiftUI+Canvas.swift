@@ -499,7 +499,10 @@ extension GraphicsContext {
     
 }
 
-extension Path {
+
+
+
+public extension Path {
     
     static func line(_ from: CGPoint, _ to: CGPoint) -> Path {
         var R = Path()
@@ -547,6 +550,154 @@ extension Path {
         }
         return R
     }
+    
+    
+    func translated(x: CGFloat = 0, y: CGFloat = 0) -> Path {
+        applying(CGAffineTransform(translationX: x, y: y))
+    }
+    
+    
+        /// Adds a quadratic Bézier from `from` to `to` with `control`,
+        /// then continues it beyond `to` by `extensionLength` while preserving C¹ continuity
+        /// (no kink) at the join.
+        ///
+        /// - Note: `Path` has no "currentPoint" API, so you must pass `from` explicitly.
+    mutating func addExtendedQuadCurve0(
+        from p0             : CGPoint,
+        to p2               : CGPoint,
+        control p1          : CGPoint,
+        extensionLength     : CGFloat
+    ) {
+            // First segment (the original curve)
+        self.addQuadCurve(to: p2, control: p1)
+        
+            // If no extension requested, we're done.
+        if extensionLength == 0 { return }
+        
+            // Tangent direction at t = 1 for a quadratic Bézier is proportional to (P2 - P1).
+        let dx = p2.x - p1.x
+        let dy = p2.y - p1.y
+        let mag = sqrt(dx * dx + dy * dy)
+        
+            // Degenerate: control == end → tangent is undefined; can't extend smoothly.
+        guard mag > .leastNonzeroMagnitude else { return }
+        
+        let ux = dx / mag
+        let uy = dy / mag
+        
+            // Extend end point in the endpoint tangent direction.
+        let p3 = CGPoint(
+            x: p2.x + ux * extensionLength,
+            y: p2.y + uy * extensionLength
+        )
+        
+            // Choose the second control point so the join is C¹-continuous.
+            // With a quadratic, matching end tangent requires:
+            //   (P2 - P1) ∥ (P3 - C2)  -> choose C2 = P1 + u * extensionLength
+        let c2 = CGPoint(
+            x: p1.x + ux * extensionLength,
+            y: p1.y + uy * extensionLength
+        )
+        
+            // Second segment (the extension)
+        self.addQuadCurve(to: p3, control: c2)
+    }
+    
+    
+    
+    
+
+        /// Adds a quadratic Bézier from `from` to `to` with `control`,
+        /// then extends the *same quadratic* beyond `to` by approximately `extensionLength`
+        /// (measured as the chord length from `to` to the extrapolated point).
+        ///
+        /// This preserves the original curvature much better than “tangent-only” extension.
+        mutating func addExtendedQuadCurve(
+            from p0: CGPoint,
+            to p2: CGPoint,
+            control p1: CGPoint,
+            extensionLength: CGFloat,
+            maxExtrapolationS: CGFloat = 4,
+            iterations: Int = 24
+        ) {
+            // Draw the original segment
+            self.addQuadCurve(to: p2, control: p1)
+
+            guard extensionLength > 0 else { return }
+
+            // Quadratic Bézier point evaluation: B(t)
+            func point(at t: CGFloat) -> CGPoint {
+                let u = 1 - t
+                let a = u * u
+                let b = 2 * u * t
+                let c = t * t
+                return CGPoint(
+                    x: a * p0.x + b * p1.x + c * p2.x,
+                    y: a * p0.y + b * p1.y + c * p2.y
+                )
+            }
+
+            func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+                let dx = a.x - b.x
+                let dy = a.y - b.y
+                return sqrt(dx * dx + dy * dy)
+            }
+
+            // We want s such that |B(1+s) - B(1)| ~= extensionLength
+            let base = point(at: 1)
+
+            // Ensure we can reach the desired extension within maxExtrapolationS.
+            let far = point(at: 1 + maxExtrapolationS)
+            if distance(far, base) < extensionLength {
+                // Not enough even at maxS — fall back to just using maxS.
+                // (Still a true continuation, just shorter than requested.)
+                let s = maxExtrapolationS
+                let q0 = base
+                let q2 = point(at: 1 + s)
+
+                // Control point for the reparameterized segment [1, 1+s]:
+                // Q1 = B(1) + s * (P2 - P1)
+                let q1 = CGPoint(
+                    x: q0.x + s * (p2.x - p1.x),
+                    y: q0.y + s * (p2.y - p1.y)
+                )
+
+                self.addQuadCurve(to: q2, control: q1)
+                return
+            }
+
+            // Binary search for s in [0, maxS]
+            var lo: CGFloat = 0
+            var hi: CGFloat = maxExtrapolationS
+
+            for _ in 0..<max(1, iterations) {
+                let mid = (lo + hi) * 0.5
+                let pm = point(at: 1 + mid)
+                if distance(pm, base) < extensionLength {
+                    lo = mid
+                } else {
+                    hi = mid
+                }
+            }
+
+            let s = (lo + hi) * 0.5
+
+            // Build the continuation segment that exactly matches the original quadratic on [1, 1+s].
+            // Endpoints:
+            let q0 = base
+            let q2 = point(at: 1 + s)
+
+            // Control point for the restricted/reparameterized quadratic:
+            // Q1 = B(1) + s * (P2 - P1)
+            let q1 = CGPoint(
+                x: q0.x + s * (p2.x - p1.x),
+                y: q0.y + s * (p2.y - p1.y)
+            )
+
+            self.addQuadCurve(to: q2, control: q1)
+        }
+    
+    
     
 }
 
