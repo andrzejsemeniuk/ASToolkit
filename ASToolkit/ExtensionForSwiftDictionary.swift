@@ -131,6 +131,12 @@ public extension Dictionary where Key : Equatable {
     }
 }
 
+public extension Dictionary where Value : Equatable {
+    @inlinable func missing(value: Value) -> Bool {
+        values.first(where: { $0 == value }) == nil
+    }
+}
+
 public extension Dictionary where Value : Hashable {
     func inverted() -> Dictionary<Value,Key> {
         var r : [Value : Key] = [:]
