@@ -117,6 +117,12 @@ public func with<T>(_ value: T, _ update: (inout T) -> Void) -> T {
 
 
 
+public struct Pair<A: Equatable, B: Equatable> : Equatable {
+    var a : A
+    var b : B
+}
+
+
 
 //public protocol JSONCodable : Codable {
 //    
