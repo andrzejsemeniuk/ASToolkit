@@ -40,6 +40,12 @@ public extension Collection {
         return self
     }
     
+    mutating func transformCopy(_ f: (inout Self)->Void) {
+        var R = self
+        f(&R)
+        self = R
+    }
+    
     
     
     @discardableResult
