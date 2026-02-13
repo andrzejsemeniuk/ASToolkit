@@ -1736,3 +1736,43 @@ public extension String {
     
 }
 
+
+public extension String {
+    
+    var trimmedOfParentheses : String {
+        trimmed(prefix: "(", suffix: ")")
+    }
+    
+    func trimmed(prefix: String, suffix: String) -> String {
+        // If both prefix and suffix are empty, return self
+        if prefix.isEmpty && suffix.isEmpty { return self }
+
+        var result = self
+
+        // Remove prefix if present
+        if !prefix.isEmpty, result.hasPrefix(prefix) {
+            result.removeFirst(prefix.count)
+        }
+
+        // Remove suffix if present (check on the possibly prefix-trimmed result)
+        if !suffix.isEmpty, result.hasSuffix(suffix) {
+            result.removeLast(suffix.count)
+        }
+
+        return result
+    }
+    
+    func trimmed(of c: Character) -> String {
+        guard length > 1 else {
+            return self
+        }
+        if self.characters[0] == c, self.characters[count - 1] == c {
+            if length == 2 {
+                return ""
+            }
+            return self.substring(from: 1, to: count - 1).asString
+        }
+        return self
+    }
+}
+
