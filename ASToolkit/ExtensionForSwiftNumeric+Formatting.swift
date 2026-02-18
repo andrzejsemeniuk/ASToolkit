@@ -168,6 +168,9 @@ public extension Double {
     var percent2 : String { self == 0 ? "0.00%" : NSString(format: "%.2f%%", self * 100.0) as String }
     
     var formatted4 : String {
+        if self == 0 {
+            return "0"
+        }
         guard isNormal else {
             return isNaN ? "NaN" : isInfinite ? "oo" : "?"
         }

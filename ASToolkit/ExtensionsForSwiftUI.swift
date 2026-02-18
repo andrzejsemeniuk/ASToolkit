@@ -287,6 +287,7 @@ public extension View {
 //                Rectangle().fill(Color.clear).frame(height: 1).frame(maxWidth: .infinity).containerRelativeFrame([.horizontal])
                 Spacer().containerRelativeFrame([.horizontal])
                 self
+                    .padding(v: 1) // BUGFIX FOR SWIFTUI: self appears cut off at bottom without this
             }
         }
         
