@@ -228,6 +228,21 @@ public extension CGPoint {
     func asCGRect(side: CGFloat) -> CGRect {
         asCGRect(w: side, h: side)
     }
+    
+    
+    func leftmost(_ other: Self) -> Self {
+        self.x < other.x ? self : other
+    }
+
+    func rightmost(_ other: Self) -> Self {
+        self.x < other.x ? other : self
+    }
+    
+    func midpoint(with other: Self) -> Self {
+        (self + other) / 2
+    }
+
+    
 }
 
 func minX(_ P0: CGPoint, _ P1: CGPoint) -> (CGPoint,CGPoint) {

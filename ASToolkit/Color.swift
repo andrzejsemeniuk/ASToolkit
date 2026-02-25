@@ -709,6 +709,7 @@ public extension String {
 
 
 public extension Color {
+
     var asBWExtreme : Color {
         .init(white: self.hsba[2] < 0.5 ? 0 : 1)
     }
@@ -718,6 +719,13 @@ public extension Color {
     var asBWExtremeOppositeInverted : Color {
         .init(white: self.hsba[2] < 0.5 ? 0 : 1)
     }
+    
+    func multiplyOpacity(by: Double) -> Color {
+        var R = self.asHSBAInfo
+        R.a *= by
+        return R.asSwiftUIColor
+    }
+
 }
 
 
