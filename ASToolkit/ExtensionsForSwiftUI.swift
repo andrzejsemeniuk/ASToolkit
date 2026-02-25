@@ -309,12 +309,6 @@ public extension View {
         
     }
     
-    func viewInScrollViewVertical0(showsIndicators: Bool = false) -> some View {
-        ScrollView(.vertical, showsIndicators: showsIndicators) {
-            self
-        }
-    }
-    
     func viewInScrollViewHorizontal0(showsIndicators: Bool = false) -> some View {
         ScrollView(.horizontal, showsIndicators: showsIndicators) {
             self
