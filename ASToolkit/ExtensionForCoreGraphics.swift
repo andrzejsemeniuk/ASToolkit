@@ -1119,11 +1119,14 @@ extension CGSize
 	public func ratioFrom              (point:CGPoint)             -> CGPoint { return CGPoint(x: width != 0.0 ? (point.x / width) : 0.0, y: height != 0.0 ? (point.y / height) : 0.0 ) }
 }
 
+
+#if os(iOS)
+
     // Source - https://stackoverflow.com/a/76728094
     // Posted by eastriver lee
     // Retrieved 2026-03-01, License - CC BY-SA 4.0
 
-    extension UIWindow {
+    public extension UIWindow {
         static var current: UIWindow? {
             for scene in UIApplication.shared.connectedScenes {
                 guard let windowScene = scene as? UIWindowScene else { continue }
@@ -1136,26 +1139,32 @@ extension CGSize
     }
 
 
-    extension UIScreen {
+    public extension UIScreen {
         static var current: UIScreen? {
             UIWindow.current?.screen
         }
     }
 
-#if os(iOS)
-public func UIScreenGetCenter() -> CGPoint {
-	return CGPoint(x:UIScreen.main.bounds.width/2.0,
-                   y:UIScreen.main.bounds.height/2.0)
-//				   mappingVToY:UIScreen.main.bounds.height/2.0)
-}
-#endif
-#if os(macOS)
-public extension NSScreen {
-    var center : CGPoint {
-        self.frame.center
+    public func UIScreenGetCenter() -> CGPoint {
+        return CGPoint(x:UIScreen.main.bounds.width/2.0,
+                       y:UIScreen.main.bounds.height/2.0)
+    //				   mappingVToY:UIScreen.main.bounds.height/2.0)
     }
-}
+
 #endif
+
+
+#if os(macOS)
+
+    public extension NSScreen {
+        var center : CGPoint {
+            self.frame.center
+        }
+    }
+
+#endif
+
+
 
 
 #if os(iOS)
