@@ -463,6 +463,12 @@ public extension Date {
         return formatter.string(from: self)
     }
     
+    var asStringHHMMSS: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter.string(from: self)
+    }
+    
 }
 
 extension Date {

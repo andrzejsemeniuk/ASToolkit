@@ -1774,5 +1774,23 @@ public extension String {
         }
         return self
     }
+    
+    
+    
+    func indexes(of characters: [Character], except excluded: [Int]) -> [Int] {
+        // Convert string to array of characters for easier indexing
+        let selfChars = Array(self)
+        
+        // Return array of indexes where:
+        // 1. Index is not in excluded array
+        // 2. Character at that index is in the target characters array
+        return selfChars.enumerated().compactMap { index, char in
+            if characters.contains(char) && !excluded.contains(index) {
+                return index
+            }
+            return nil
+        }
+    }
+
 }
 
