@@ -859,31 +859,46 @@ public extension String {
         asWordsFromCamelNotation
     }
     
-    var asWordsFromCamelNotation0 : String {
+    var asWordsFromCamelNotation : String {
         var r : String = ""
         var spaces = 0
+        var number0 = false
         for c in self {
-            if c.isUppercase {
-                if r.isNotEmpty {
+            if c.isNumber {
+                if number0 == false && r.isNotEmpty {
                     r.append(" ")
+                }
+                number0 = true
+                r.append(c)
+                continue
+            } else if c.isUppercase {
+                if number0 || r.isNotEmpty {
+                    r.append(" ")
+                    number0 = false
                 }
                 r.append(c)
                 continue
             } else if c.isWhitespace {
                 spaces += 1
+                number0 = false
                 continue
             } else if spaces > 0 {
                 spaces = 0
                 r.append(" ")
+                number0 = false
+            }
+            if number0 {
+                r.append(" ")
+                number0 = false
             }
             r.append(c)
         }
         return r
     }
     
-    var asWordsFromCamelNotation : String {
+    var asWordsFromCamelNotation1 : String {
         var result: String = ""
-        var spaces = 0
+        var needsSpace = false
         var prev: Character? = nil
 
         func isPunctuationOrSymbol(_ c: Character) -> Bool {
@@ -895,33 +910,48 @@ public extension String {
             return false
         }
 
+        func emitPendingSpaceIfNeeded() {
+            if needsSpace && !result.isEmpty {
+                result.append(" ")
+            }
+            needsSpace = false
+        }
+
         for c in self {
+            // Treat whitespace/punctuation/symbol as separator -> mark that a space is needed
             if c.isWhitespace || isPunctuationOrSymbol(c) {
-                spaces += 1
+                needsSpace = true
                 continue
             }
 
+            // Uppercase boundary: ensure a single space before it if not at start
             if c.isUppercase {
-                if !result.isEmpty { result.append(" ") }
+                if !result.isEmpty {
+                    // We are starting a new token; normalize to a single space
+                    result.append(" ")
+                }
+                needsSpace = false
                 result.append(c)
                 prev = c
                 continue
             }
 
+            // Letter <-> digit transitions: ensure a single space before the new token
             if let p = prev {
                 let pIsLetter = p.isLetter
                 let pIsDigit  = p.isNumber
                 let cIsLetter = c.isLetter
                 let cIsDigit  = c.isNumber
                 if (pIsLetter && cIsDigit) || (pIsDigit && cIsLetter) {
-                    if !result.isEmpty { result.append(" ") }
+                    if !result.isEmpty {
+                        result.append(" ")
+                    }
+                    needsSpace = false
                 }
             }
 
-            if spaces > 0 && !result.isEmpty {
-                result.append(" ")
-                spaces = 0
-            }
+            // If there were separators before, emit only one space now
+            emitPendingSpaceIfNeeded()
 
             result.append(c)
             prev = c
