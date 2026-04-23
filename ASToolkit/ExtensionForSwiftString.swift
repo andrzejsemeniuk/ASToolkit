@@ -859,7 +859,7 @@ public extension String {
         asWordsFromCamelNotation
     }
     
-    var asWordsFromCamelNotation : String {
+    var asWordsFromCamelNotation0 : String {
         var r : String = ""
         var spaces = 0
         for c in self {
@@ -880,6 +880,56 @@ public extension String {
         }
         return r
     }
+    
+    var asWordsFromCamelNotation : String {
+        var result: String = ""
+        var spaces = 0
+        var prev: Character? = nil
+
+        func isPunctuationOrSymbol(_ c: Character) -> Bool {
+            for s in c.unicodeScalars {
+                if CharacterSet.punctuationCharacters.contains(s) || CharacterSet.symbols.contains(s) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        for c in self {
+            if c.isWhitespace || isPunctuationOrSymbol(c) {
+                spaces += 1
+                continue
+            }
+
+            if c.isUppercase {
+                if !result.isEmpty { result.append(" ") }
+                result.append(c)
+                prev = c
+                continue
+            }
+
+            if let p = prev {
+                let pIsLetter = p.isLetter
+                let pIsDigit  = p.isNumber
+                let cIsLetter = c.isLetter
+                let cIsDigit  = c.isNumber
+                if (pIsLetter && cIsDigit) || (pIsDigit && cIsLetter) {
+                    if !result.isEmpty { result.append(" ") }
+                }
+            }
+
+            if spaces > 0 && !result.isEmpty {
+                result.append(" ")
+                spaces = 0
+            }
+
+            result.append(c)
+            prev = c
+        }
+
+        return result
+    }
+
     
     var asCapitalizedWords : String {
         asPhrase.split(on: { $0 == " "}).map {
