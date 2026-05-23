@@ -451,6 +451,12 @@ public extension Date {
     }
     
     
+    var asStringYYYYMMDDHHMMSSstripped: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        return formatter.string(from: self)
+    }
+    
     var asStringYYYYMMDDHHMMSS: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"

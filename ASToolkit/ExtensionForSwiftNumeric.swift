@@ -918,6 +918,37 @@ public extension UInt64 {
     static var timestampYYYYMMDD                    : UInt64 { UInt64(Date().timeIntervalSince1970) / 1000000 }
     static var timestampYYYYMMDDhhmmss              : UInt64 { UInt64(Date().timeIntervalSince1970) }
     static var timestampYYYYMMDDhhmmssms            : UInt64 { UInt64(Date().timeIntervalSince1970 * 1000.0) }
+    
+    var asTimeIntervalFromYYYYMMDDHHMMSS : TimeInterval? {
+        // Expecting a 14-digit timestamp: YYYYMMDDHHMMSS
+        var n = self
+        let second = Int(n % 100); n /= 100
+        let minute = Int(n % 100); n /= 100
+        let hour   = Int(n % 100); n /= 100
+        let day    = Int(n % 100); n /= 100
+        let month  = Int(n % 100); n /= 100
+        let year   = Int(n)
+
+        // Basic sanity checks
+        guard (1...12).contains(month), (1...31).contains(day), (0...23).contains(hour), (0...59).contains(minute), (0...59).contains(second), year >= 1970 else {
+            return nil
+        }
+
+        var comps = DateComponents()
+        comps.year = year
+        comps.month = month
+        comps.day = day
+        comps.hour = hour
+        comps.minute = minute
+        comps.second = second
+
+        let calendar = Calendar(identifier: .gregorian)
+        if let date = calendar.date(from: comps) {
+            return date.timeIntervalSince1970
+        } else {
+            return nil
+        }
+    }
 }
 
 nonisolated
