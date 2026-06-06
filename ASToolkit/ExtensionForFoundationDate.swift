@@ -424,7 +424,7 @@ public extension Date {
     }
     
     var asYYYYMMDD : UInt32 {
-        Date.now.formatted("yyyyMMdd").asInt?.asUInt32 ?? 0
+        self.formatted("yyyyMMdd").asInt?.asUInt32 ?? 0
     }
 
     struct Components : Codable {
