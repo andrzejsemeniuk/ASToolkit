@@ -95,4 +95,13 @@ public extension Data {
         try (self as NSData).compressed(using: .zlib) as Data
     }
 
+    nonisolated
+    static func fetch(from url: URL) async throws -> Data {
+        let (data, response) = try await URLSession.shared.data(from: url)
+        // Optional: validate status code
+        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
 }
