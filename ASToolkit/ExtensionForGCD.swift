@@ -50,11 +50,26 @@ public extension DispatchQueue {
 //    }
 //}
 //
-//@inlinable public func now(_ block: @escaping () throws -> Void) rethrows {
-//    try DispatchQueue.main.sync {
-//        try block()
-//    }
-//}
+@inlinable public func now(_ block: @escaping () -> Void) async {
+    await MainActor.run {
+        block()
+    }
+}
+@inlinable public func now(_ block: @escaping () throws -> Void) async rethrows {
+    try await MainActor.run {
+        try block()
+    }
+}
+@inlinable public func now<T>(_ block: @escaping () -> T) async -> T {
+    await MainActor.run {
+        block()
+    }
+}
+@inlinable public func now<T>(_ block: @escaping () throws -> T) async rethrows -> T {
+    try await MainActor.run {
+        try block()
+    }
+}
 
 @inlinable nonisolated public func later(_ block: @escaping @MainActor () -> Void) {
 //    DispatchQueue.main.async {
