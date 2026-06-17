@@ -922,3 +922,23 @@ public extension Date {
     
 }
 
+
+
+
+extension TimeInterval {
+
+    @inlinable
+    func formattedWithAgo(invalid: String, format: String = "yyyy-MM-dd ") -> String {
+        self == 0 ? invalid : self.asDate.formattedWithAgo(format: format)
+    }
+    
+}
+
+extension Date {
+    
+    @inlinable
+    func formattedWithAgo(format: String = "yyyy-MM-dd ") -> String {
+        self.formatted(format) + self.ago
+    }
+    
+}
