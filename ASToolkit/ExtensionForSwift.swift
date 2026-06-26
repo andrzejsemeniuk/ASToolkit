@@ -113,6 +113,21 @@ public func with<T>(_ value: T, _ update: (inout T) -> Void) -> T {
     return copy
 }
 
+    // Non-optional value
+    @inlinable
+    public func with<T, V>(_ value: T, _ keyPath: WritableKeyPath<T, V>, _ newValue: V) -> T {
+        var copy = value
+        copy[keyPath: keyPath] = newValue
+        return copy
+    }
+
+    // Optional value: only applies if non-nil, otherwise returns nil
+    @inlinable
+    public func with<T, V>(_ value: T?, _ keyPath: WritableKeyPath<T, V>, _ newValue: V) -> T? {
+        guard var copy = value else { return nil }
+        copy[keyPath: keyPath] = newValue
+        return copy
+    }
 
 
 
