@@ -186,6 +186,14 @@ public extension Array
         subarray(from: from, to: from + (length == nil ? (count - from) : length!))
     }
     
+    func subarray(to: Int, length:Int) -> Array {
+        subarray(from: Swift.max(0, to - length), to: to)
+    }
+    
+    func subarrayFromEnd(length:Int) -> Array {
+        subarray(to: count, length: length)
+    }
+    
     nonisolated
     subscript (safe i:Int) -> Array.Element? {
         0 <= i && i < self.count ? self[i] : nil

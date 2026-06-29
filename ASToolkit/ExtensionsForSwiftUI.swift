@@ -2101,8 +2101,23 @@ public extension View {
                     }
             )
     }
-}
 
+    
+    
+    
+    /// Calls `action` when the view appears and whenever `value` changes.
+    /// - Parameters:
+    ///   - value: An Equatable value to observe for changes.
+    ///   - action: A closure to run on appear and on change.
+    /// - Returns: A modified view.
+    func onAppearAndChange<T: Equatable>(of value: T, _ action: @escaping () -> Void) -> some View {
+        self
+            .onAppear(perform: action)
+            .onChange(of: value) {
+                action()
+            }
+    }
+}
 
 
 
@@ -2120,4 +2135,5 @@ public extension View {
         .background(Color.yellow.opacity(0.5))
     
 }
+
 
