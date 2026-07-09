@@ -1261,10 +1261,10 @@ public extension View {
 public extension Shape {
     
     func neomorphic(
-        lightColor: Color = Color.white.opacity(0.7),
-        darkColor: Color = Color.gray.opacity(0.2),
-        blur: CGFloat = 10,
-        shadowOffset: CGFloat = 8
+        lightColor      : Color = Color.white.opacity(0.7),
+        darkColor       : Color = Color.gray.opacity(0.2),
+        blur            : CGFloat = 10,
+        shadowOffset    : CGFloat = 8
     ) -> some View {
         self
             .fill(lightColor)
@@ -1280,11 +1280,12 @@ public extension Shape {
 public extension Circle {
     
     func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
-        Circle.init()
-            .fill(fill)
-            //                    .frame(side: radius/2)
-            .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
-            .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
+        Group {
+            Circle.init()
+                .fill(fill)
+                .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
+        }
+            .shadow(color: Color.white.opacity(1.0 - opacity), radius: depth/2, x: -depth/2, y: -depth/2)
     }
     
 }
