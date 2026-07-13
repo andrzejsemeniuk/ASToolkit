@@ -940,5 +940,16 @@ extension Date {
     func formattedWithAgo(format: String = "yyyy-MM-dd ") -> String {
         self.formatted(format) + self.ago
     }
-    
+ 
+        // the UTC date and time when the article was published, formatted in RFC3339 standard (e.g. YYYY-MM-DDTHH:MM:SSZ)
+    var dateUTCinRFC3339 : String {
+        
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+            return formatter.string(from: self)
+        
+    }
+
 }
