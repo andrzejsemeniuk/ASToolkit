@@ -14,7 +14,16 @@ public struct CloudKitClipboardPackedPayload: Codable {
     let payload: Data // gzip-compressed content
 }
 
-public func cloudKitClipboardUpload(container identifier: String, recordType: String, recordName: String, data: Data, info: [String : String]) async throws {
+public let cloudKitDefaultContainerIdentifier = "iCloud.com.wordmindsoftware.sharkee.container"
+public let cloudKitDefaultRecordType  = "SECData"
+
+public func cloudKitClipboardUpload(container identifier    : String = cloudKitDefaultContainerIdentifier,
+                                    recordType              : String = cloudKitDefaultRecordType,
+                                    recordName              : String,
+                                    data                    : Data,
+                                    isCompressed            : Bool,
+                                    info                    : [String : String]
+) async throws {
     
     let container = CKContainer(identifier: identifier)
     let database = container.publicCloudDatabase
@@ -29,7 +38,7 @@ public func cloudKitClipboardUpload(container identifier: String, recordType: St
             }
         }
         record["payload"]      = data as CKRecordValue
-        record["isCompressed"] = true as CKRecordValue
+        record["isCompressed"] = isCompressed as CKRecordValue
         record["updatedAt"]    = Date() as CKRecordValue
         record["sizeInBytes"]  = data.count as CKRecordValue
     }
@@ -66,7 +75,16 @@ public func cloudKitClipboardUpload(container identifier: String, recordType: St
     }
 }
 
-public func cloudKitClipboardDownload(container identifier: String, recordName: String) async throws -> (payload: Data, metadata: CloudKitClipboardMetadata) {
+
+    
+    
+    
+    
+    
+
+public func cloudKitClipboardDownload(container identifier      : String = cloudKitDefaultContainerIdentifier,
+                                      recordName                : String
+) async throws -> (payload: Data, metadata: CloudKitClipboardMetadata) {
     
     let container = CKContainer(identifier: identifier)
     let database = container.publicCloudDatabase
@@ -163,4 +181,33 @@ public func cloudKitClipboardMetadata(container identifier: String, recordName: 
 
         database.add(op)
     }
+}
+
+
+
+
+
+func cloudKitClipboardUpload<T: Encodable>(recordName: String, value: T, info: [String : String]) async throws {
+    try await cloudKitClipboardUpload(recordName: recordName, data: try Data.encoded(value), isCompressed: false, info: info)
+}
+    
+func cloudKitClipboardDownload<T: Decodable>(recordName: String) async throws -> (value: T, info: [String : String], updated: Date?) {
+    let (PAYLOAD,METADATA) = try await cloudKitClipboardDownload(recordName: recordName)
+    return (value: try PAYLOAD.decoded(), info: METADATA.info, updated: METADATA.updatedAt)
+}
+
+
+
+
+struct CloudKitClipboardFormulas : Equatable, Codable {
+    var all : Set<Formula> = .init()
+    var named : [String : Formula] = [:]
+}
+
+func cloudKitClipboardUploadFormulas(_ formulas: CloudKitClipboardFormulas) async throws {
+    try await cloudKitClipboardUpload(recordName: "Formulas", value: formulas, info: [:])
+}
+    
+func cloudKitClipboardDownloadFormulas() async throws -> CloudKitClipboardFormulas {
+    try await cloudKitClipboardDownload(recordName: "Formulas").value
 }
