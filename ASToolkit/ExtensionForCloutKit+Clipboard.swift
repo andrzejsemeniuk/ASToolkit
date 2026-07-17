@@ -208,6 +208,6 @@ func cloudKitClipboardUploadFormulas(_ formulas: CloudKitClipboardFormulas) asyn
     try await cloudKitClipboardUpload(recordName: "Formulas", value: formulas, info: [:])
 }
     
-func cloudKitClipboardDownloadFormulas() async throws -> CloudKitClipboardFormulas {
-    try await cloudKitClipboardDownload(recordName: "Formulas").value
+func cloudKitClipboardDownloadFormulas() async -> CloudKitClipboardFormulas? {
+    try? await cloudKitClipboardDownload(recordName: "Formulas").value
 }
