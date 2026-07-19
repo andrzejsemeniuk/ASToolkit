@@ -198,16 +198,3 @@ func cloudKitClipboardDownload<T: Decodable>(recordName: String) async throws ->
 
 
 
-
-struct CloudKitClipboardFormulas : Equatable, Codable {
-    var all : Set<Formula> = .init()
-    var named : [String : Formula] = [:]
-}
-
-func cloudKitClipboardUploadFormulas(_ formulas: CloudKitClipboardFormulas) async throws {
-    try await cloudKitClipboardUpload(recordName: "Formulas", value: formulas, info: [:])
-}
-    
-func cloudKitClipboardDownloadFormulas() async -> CloudKitClipboardFormulas? {
-    try? await cloudKitClipboardDownload(recordName: "Formulas").value
-}
