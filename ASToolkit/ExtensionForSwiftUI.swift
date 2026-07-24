@@ -2107,16 +2107,41 @@ public extension View {
     func save(size: Binding<CGSize>) -> some View {
         modifier(SizeCalculator(size: size))
     }
+    func saved(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+    func store(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+    func stored(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
 }
 
 
 
 
 @available(iOS 16,tvOS 16,*)
-public enum HorizontalAlignmentOption {
+public enum HorizontalAlignmentOption : String, Equatable, Codable, RawRepresentable, CaseIterable, StringNamed {
     case left
     case center
     case right
+    
+    var asHorizontalAlignment : HorizontalAlignment {
+        switch self {
+            case .left      : .leading
+            case .center    : .center
+            case .right     : .trailing
+        }
+    }
+    
+    var asAlignment : Alignment {
+        switch self {
+            case .left      : .leading
+            case .center    : .center
+            case .right     : .trailing
+        }
+    }
 }
 
 @available(iOS 16,tvOS 16,*)
