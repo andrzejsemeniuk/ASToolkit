@@ -12,12 +12,16 @@ import Foundation
 nonisolated
 public extension Double {
     
-    var formatWithValueAbbrevationAsString : String {
+    var formatWithValueAbbrevation23WithoutSpaceAsString : String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: "")
     }
     
-    var formatWithValueAbbrevationWithSpaceAsString : String {
+    var formatWithValueAbbrevation23WithSpaceAsString : String {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: " ")
+    }
+    
+    var formatWithValueAbbrevation13WithSpaceAsString : String {
+        formatAbbreviated(precisionAbbreviated: 1, precisionUnabbreviated: 3, space: " ")
     }
     
         /// Abbreviate the double using K, M, B, T, P, E suffixes.
@@ -299,11 +303,11 @@ public extension Int {
     }()
     
     var formatWithAbbrevationAsString : String {
-        self.asDouble.formatWithValueAbbrevationAsString
+        self.asDouble.formatWithValueAbbrevation23WithoutSpaceAsString
     }
     
     var formatWithAbbrevationWithSpaceAsString : String {
-        self.asDouble.formatWithValueAbbrevationWithSpaceAsString
+        self.asDouble.formatWithValueAbbrevation23WithSpaceAsString
     }
     
     var formatWithAbbrevationAsMarkdownString : String {
