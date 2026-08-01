@@ -965,6 +965,8 @@ public extension Int64 {
     var asInt           : Int           { Int(self) }
     var asUInt          : UInt          { UInt(self) }
 
+    var asTimeIntervalFromUNIXMilliseconds      : TimeInterval      { asTimeInterval / 1000.0 }
+    var asDateFromUNIXMilliseconds              : Date              { Date(timeIntervalSince1970: asTimeIntervalFromUNIXMilliseconds) }
 }
 
 

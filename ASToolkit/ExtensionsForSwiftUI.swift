@@ -1385,18 +1385,37 @@ struct ScrollViewWithTrackingFrame<Content: View>: View {
 
 extension View {
     
-    public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = false, name: String = "scroll-view", frame: Binding<CGRect>) -> some View {
+    public func viewInScrollViewTrackingFrame(_ axes: Axis.Set, showsIndicators: Bool = true, name: String = "scroll-view", frame: Binding<CGRect>) -> some View {
         ScrollView(axes, showsIndicators: showsIndicators) {
             self
-                .background(GeometryReader { geometry in
-                    Color.clear
-                        .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(name)))
-                })
-                .onPreferenceChange(FramePreferenceKey.self) { value in
-                    frame.wrappedValue = value
+                .background {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .preference(key: FramePreferenceKey.self, value: geometry.frame(in: .named(name)))
+                    }
                 }
         }
         .coordinateSpace(name: name)
+        .onPreferenceChange(FramePreferenceKey.self) { value in
+            frame.wrappedValue = value
+//            print("viewInScrollViewTrackingFrame: new frame=\(frame.wrappedValue)")
+        }
+    }
+    
+    public func viewInScrollViewTrackingFrame1(_ axes: Axis.Set, showsIndicators: Bool = true, name: String = "scroll-view", frame: Binding<CGRect>) -> some View {
+        ScrollView(axes, showsIndicators: showsIndicators) {
+            self
+        }
+        .onScrollGeometryChange(for: CGRect.self) { geometry in
+                // Returns the content's frame relative to the scroll view
+//            geometry.contentInsets
+            return CGRect(
+                origin: geometry.contentOffset,
+                size: geometry.contentSize
+            )
+        } action: { oldValue, newValue in
+            frame.wrappedValue = newValue
+        }
     }
     
     public func viewInScrollViewHorizontalTrackingFrame(showsIndicators: Bool = false, name: String, frame: Binding<CGRect>) -> some View {

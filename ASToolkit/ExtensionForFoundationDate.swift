@@ -953,3 +953,50 @@ extension Date {
     }
 
 }
+
+
+
+
+
+
+extension Calendar {
+    
+    func isWithinMarketHours(date: Date) -> Bool {
+        date.isWithinMarketHours(in: self)
+    }
+    
+}
+
+extension Date {
+    
+    func isWithinMarketHours(in cal: Calendar) -> Bool {
+        
+        let comps = cal.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+        guard let year = comps.year, let month = comps.month, let day = comps.day else {
+            return false
+        }
+            // Build day start in NY time
+        var startComps = DateComponents()
+        startComps.year = year
+        startComps.month = month
+        startComps.day = day
+        startComps.timeZone = cal.timeZone
+        
+            // Market open 09:30:00
+        startComps.hour = 9
+        startComps.minute = 30
+        startComps.second = 0
+        guard let open = cal.date(from: startComps) else { return false }
+        
+            // Market end inclusive 15:59:59
+        startComps.hour = 16
+        startComps.minute = 0
+        startComps.second = 0
+        guard let close = cal.date(from: startComps) else { return false }
+        
+        return self >= open && self < close
+
+    }
+}
+
+
