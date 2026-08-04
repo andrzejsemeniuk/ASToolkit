@@ -14,7 +14,8 @@ public struct CloudKitClipboardPackedPayload: Codable {
     let payload: Data // gzip-compressed content
 }
 
-public let cloudKitDefaultContainerIdentifier = "iCloud.com.wordmindsoftware.sharkee.container"
+public let cloudKitDefaultContainerIdentifier = "iCloud.com.andrzejsemeniuk.AppSharkeeForIPAD"
+//public let cloudKitDefaultContainerIdentifier = "iCloud.com.wordmindsoftware.sharkee.container"
 public let cloudKitDefaultRecordType  = "SECData"
 
 public func cloudKitClipboardUpload(container identifier    : String = cloudKitDefaultContainerIdentifier,
