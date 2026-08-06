@@ -1265,6 +1265,26 @@ public struct ScrollOffsetPreferenceKey: PreferenceKey {
     }
 }
 
+//// Tracks a ScrollView's live content offset on all platforms (notably Mac Catalyst, where the
+//// preference-key approach does not update during an active drag). contentOffset is negated so the
+//// reported point matches the frame-origin sign convention used by ScrollOffsetPreferenceKey
+//// (origin moves negative as content scrolls up).
+//fileprivate struct ScrollGeometryOffsetTracker: ViewModifier {
+//    let position: Binding<CGPoint>
+//    
+//    func body(content: Content) -> some View {
+//        if #available(iOS 18.0, macCatalyst 18.0, macOS 15.0, *) {
+//            content.onScrollGeometryChange(for: CGPoint.self) { geometry in
+//                geometry.contentOffset
+//            } action: { _, newValue in
+//                position.wrappedValue = CGPoint(x: -newValue.x, y: -newValue.y)
+//            }
+//        } else {
+//            content
+//        }
+//    }
+//}
+
 extension View {
     
     public func viewInScrollViewTrackingPosition(_ axes: Axis.Set, showsIndicators: Bool = false, position: Binding<CGPoint>, named: String) -> some View {
@@ -1279,6 +1299,11 @@ extension View {
                 }
         }
         .coordinateSpace(name: named)
+        // On Mac Catalyst the GeometryReader/preference-key path above only fires at setup
+        // and when scrolling settles, not during the live drag. onScrollGeometryChange reads
+        // the underlying scroll view's contentOffset directly and updates reliably mid-scroll
+        // on all platforms; it is a no-op fallback before iOS 18 / macCatalyst 18 / macOS 15.
+//        .modifier(ScrollGeometryOffsetTracker(position: position))
     }
     
     public func viewInScrollViewHorizontalTrackingPosition(showsIndicators: Bool = false, _ position: Binding<CGPoint>, named: String) -> some View {
