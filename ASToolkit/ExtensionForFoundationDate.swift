@@ -932,6 +932,11 @@ extension TimeInterval {
         self == 0 ? invalid : self.asDate.formattedWithAgo(format: format)
     }
     
+    @inlinable
+    func formattedAsDuration(invalid: String) -> String {
+        self == 0 ? invalid : self.asInt.asBriefStringOfElapsedTimeFromSeconds
+    }
+    
 }
 
 extension Date {
