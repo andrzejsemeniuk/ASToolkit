@@ -141,7 +141,7 @@ public extension CaseIterable where Self : Equatable {
 
 
 
-public protocol StringNamed: Identifiable, RawRepresentable where RawValue == String {
+public protocol StringNamed: Identifiable, Hashable, CaseIterable, Codable, RawRepresentable where RawValue == String {
     var id : String { get }
     var label: String { get }
     var Name: String { get }
@@ -153,4 +153,11 @@ public extension StringNamed {
     var label: String { rawValue }
     var Name: String { rawValue.asCapitalizedWords }
     var NAME: String { Name.uppercased() }
+    
+    static var allCasesSorted : [Self] {
+        allCases.sorted { a,b in
+            a.label < b.label
+        }
+    }
+
 }
