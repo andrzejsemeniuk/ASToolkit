@@ -248,3 +248,21 @@ public extension Dictionary where Key == String, Value == String {
         }.sorted().joinedByNothing + "\n]"
     }
 }
+
+public extension Dictionary {
+    mutating func valueFor(key: Key, missing: Value) -> Value {
+        if let R = self[key] {
+            return R
+        }
+        self[key] = missing
+        return missing
+    }
+    mutating func valueFor(key: Key, missing: () -> Value) -> Value {
+        if let R = self[key] {
+            return R
+        }
+        let V = missing()
+        self[key] = V
+        return V
+    }
+}
