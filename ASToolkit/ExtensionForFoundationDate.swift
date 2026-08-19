@@ -933,8 +933,8 @@ extension TimeInterval {
     }
     
     @inlinable
-    func formattedAsDuration(invalid: String) -> String {
-        self == 0 ? invalid : self.asInt.asBriefStringOfElapsedTimeFromSeconds
+    func formattedAsDuration(invalid: String, zero: String = "0") -> String {
+        self < 0 ? invalid : self == 0 ? zero : self.asInt.asBriefStringOfElapsedTimeFromSeconds
     }
     
 }
