@@ -1354,6 +1354,8 @@ public extension String {
         self.map { String($0) }.asArray.joined(separator: by)
     }
     
+    @inlinable var separatedBySpace : String { separated(by: " ")}
+    
     @inlinable var paddedBySpace : String { paddedBySpace1 }
     @inlinable var paddedBySpace1 : String { " \(self) " }
     @inlinable var paddedBySpace2 : String { "  \(self)  " }
