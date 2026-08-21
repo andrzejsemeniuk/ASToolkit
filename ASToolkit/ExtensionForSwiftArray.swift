@@ -670,9 +670,9 @@ public extension Array where Element : Equatable {
         return result
     }
     
-    func removed(_ element:Element) -> Self {
+    func removed(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var result = self
-        if let index = result.firstIndex(where: { $0 == element }) {
+        if let index = result.firstIndex(where: { equals($0,element) }) {
             result.remove(at: index)
         }
         return result
@@ -685,23 +685,23 @@ public extension Array where Element : Equatable {
     }
     
     @discardableResult
-    mutating func removeEvery(_ element: Element) -> Int {
+    mutating func removeEvery(_ element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Int {
         let count0 = count
-        removeAll(where: { $0 == element })
+        removeAll(where: { equals($0,element) })
         return count0 - count
     }
     
-    func removedEvery(_ element: Element) -> Self {
+    func removedEvery(_ element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var r = self
-        r.removeEvery(element)
+        r.removeEvery(element,equals)
         return r
     }
     
-    func uniquedOnAdjacentElementsKeepingOrder() -> Self {
+    func uniquedOnAdjacentElementsKeepingOrder(equals: (Element?,Element)->Bool = { a,b in a == b }) -> Self {
         reduce([], {
             if $0.isEmpty {
                 return [$1]
-            } else if $0.last == $1 {
+            } else if equals($0.last,$1) {
                 return $0
             } else {
                 return $0 + [$1]
@@ -813,13 +813,19 @@ public extension Array where Element: Equatable {
 		return false
 	}
     
+    
     mutating func toggle(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
-        if contains(element, equals) {
-            remove(element)
-        } else {
+        if removeEvery(element, equals) == 0 {
             append(element)
         }
     }
+    
+    mutating func toggle(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if removeEvery(element, equals) == 0 {
+            prepend(element)
+        }
+    }
+
     
     func toggled(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
@@ -827,14 +833,6 @@ public extension Array where Element: Equatable {
         return R
     }
     
-    mutating func toggle(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
-        if contains(element, equals) {
-            remove(element)
-        } else {
-            prepend(element)
-        }
-    }
-
     func toggled(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
         var R = self
         R.toggle(prepend: element, equals)

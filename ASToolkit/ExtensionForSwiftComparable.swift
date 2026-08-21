@@ -126,3 +126,24 @@ public extension Comparable {
     func inIntervalClosedOpen       (_ a: Self, _ b: Self) -> Bool { a < b ? a <= self && self < b : b <= self && self < a }
     func inIntervalOpenOpen         (_ a: Self, _ b: Self) -> Bool { a < b ? a < self && self < b : b < self && self < a }
 }
+
+
+
+
+// chartgpt
+// Helper to compare two optional values with a provided non-optional comparator
+func compareOptional<T>(_ a: T?, _ b: T?, by areInIncreasingOrder: (T, T) -> Bool, reversed: Bool) -> Bool {
+    switch (a, b) {
+    case let (av?, bv?):
+        // Compare concrete values, honoring reversed
+        return reversed ? areInIncreasingOrder(bv, av) : areInIncreasingOrder(av, bv)
+    case (nil, nil):
+        // Keep existing order for two nils (stable behavior)
+        return false
+    case (nil, _?):
+        // Place nils at the end for normal order, at the beginning when reversed
+        return reversed
+    case (_?, nil):
+        return !reversed
+    }
+}
