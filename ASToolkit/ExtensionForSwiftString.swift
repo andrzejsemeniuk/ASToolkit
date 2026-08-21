@@ -1367,6 +1367,10 @@ public extension String {
     @inlinable func padded(by: String, count: Int) -> String {
         "\(by.multiple(count))\(self)\(by.multiple(count))"
     }
+    @inlinable func stripped(of: String) -> String {
+        self.replacingOccurrences(of: of, with: "")
+    }
+
     
     func padded(by character: Character, length K: Int) -> String {
         let currentLength = self.count
