@@ -145,15 +145,22 @@ public protocol StringNamed: Identifiable, Hashable, CaseIterable, Codable, RawR
     var id : String { get }
     var label: String { get }
     var Name: String { get }
+    var name: String { get }
     var NAME: String { get }
+    
+//    static func < (lhs: Self, rhs: Self) -> Bool
+
 }
 
 public extension StringNamed {
     var id : String { rawValue }
     var label: String { rawValue }
     var Name: String { rawValue.asCapitalizedWords }
+    var name: String { Name.lowercased() }
     var NAME: String { Name.uppercased() }
     
+    static func < (lhs: Self, rhs: Self) -> Bool { lhs.label < rhs.label }
+
     static var allCasesSorted : [Self] {
         allCases.sorted { a,b in
             a.label < b.label

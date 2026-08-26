@@ -848,6 +848,7 @@ public extension String {
     var  asDouble  :  Double?  { Double(self.trimmed().erasingCommas) }
     var  asCGFloat :  CGFloat? { CGFloat(self.trimmed().erasingCommas) }
     var  asInt     :  Int?     { Int(self.trimmed().erasingCommas) }
+    var  asIntErasingLeadingZeros     :  Int?     { Int(self.trimmed().erasingCommas.erasingLeading(character: "0")) }
     var  asUInt    :  UInt?    { UInt(self.trimmed().erasingCommas) }
     var  asUInt64  :  UInt64?  { UInt64(self.trimmed().erasingCommas) }
     var  asInt64   :  Int64?   { Int64(self.trimmed().erasingCommas) }
@@ -1000,6 +1001,13 @@ public extension String {
     }
     var erasingSpaces : String {
         self.replacingOccurrences(of: " ", with: "")
+    }
+    
+    func erasingLeading(character: Character) -> Self {
+        if let INDEX = self.firstIndex(where: { $0 != character }) {
+            return self[INDEX...].asString
+        }
+        return self
     }
     
 
