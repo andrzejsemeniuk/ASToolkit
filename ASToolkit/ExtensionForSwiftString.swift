@@ -1912,3 +1912,28 @@ extension String {
     }
 }
 
+
+
+
+extension String {
+    /// Splits the string into consecutive chunks of the given length (in characters),
+    /// returning an array of substrings as Strings. Respects extended grapheme clusters.
+    /// - Parameter length: Desired chunk length (k). If `length` <= 0, returns an empty array.
+    /// - Returns: Array of chunk strings, with the last chunk possibly shorter than `length`.
+    func chunked(into length: Int) -> [String] {
+        guard length > 0 else { return [] }
+        guard !isEmpty else { return [] }
+
+        var result: [String] = []
+        result.reserveCapacity((self.count + length - 1) / length)
+
+        var start = startIndex
+        while start < endIndex {
+            let end = index(start, offsetBy: length, limitedBy: endIndex) ?? endIndex
+            result.append(String(self[start..<end]))
+            start = end
+        }
+        return result
+    }
+}
+
