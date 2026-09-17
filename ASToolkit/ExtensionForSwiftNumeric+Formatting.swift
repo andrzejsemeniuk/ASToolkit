@@ -86,7 +86,7 @@ public extension Double {
             return "M"
         }
         if absValue >= 1_000 { // Thousand
-            return "k"
+            return "K"
         }
         return ""
     }
@@ -325,7 +325,7 @@ public extension Int {
         typealias Abbrevation = (threshold: Double, divisor: Double, suffix: String)
         let rules: [AbbreviationRule] = [
             .init(threshold: 0, divisor: 1, suffix: ""),
-            .init(threshold: 1_000, divisor: 1_000, suffix: "k"),
+            .init(threshold: 1_000, divisor: 1_000, suffix: "K"),
             .init(threshold: 1_000_000, divisor: 1_000_000, suffix: "M"),
             .init(threshold: 1_000_000_000, divisor: 1_000_000_000, suffix: "B"),
             .init(threshold: 1_000_000_000_000, divisor: 1_000_000_000_000, suffix: "T"),
