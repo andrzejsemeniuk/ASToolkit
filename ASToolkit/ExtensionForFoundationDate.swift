@@ -874,6 +874,16 @@ public extension Int {
         if parts.isEmpty { return "0s" }
         return parts.joined(separator: " ")
     }
+    
+    var asBriefStringOfElapsedDaysFromSeconds: String {
+        var totalSeconds = Swift.max(self, 0)
+        let days = totalSeconds / (24 * 3600)
+        totalSeconds -= days * (24 * 3600)
+        var parts: [String] = []
+        if days > 0 { parts.append("\(days)d") }
+        if parts.isEmpty { return "0s" }
+        return parts.joined(separator: " ")
+    }
 }
 
 
