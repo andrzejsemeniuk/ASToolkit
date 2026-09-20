@@ -915,9 +915,9 @@ public extension Date {
     var asBriefStringOfAllElapsedComponentsFromSecondsSinceNow : String {
         let DELTA = Date.timestamp - self.timeIntervalSince1970
         if DELTA < 0 {
-            return "-" + DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+            return "+" + DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
         } else {
-            return DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+            return "-" + DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
         }
     }
     
@@ -932,9 +932,9 @@ public extension Date {
     var asBriefStringOfElapsedDaysFromSecondsSinceNow : String {
         let DELTA = Date.timestamp - self.timeIntervalSince1970
         if DELTA < 0 {
-            return "-" + DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
+            return "+" + DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
         } else {
-            return DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
+            return "-" + DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
         }
     }
     
