@@ -913,7 +913,12 @@ public extension Date {
 public extension Date {
     
     var asBriefStringOfAllElapsedComponentsFromSecondsSinceNow : String {
-        (Date.timestamp - self.timeIntervalSince1970).asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+        let DELTA = Date.timestamp - self.timeIntervalSince1970
+        if DELTA < 0 {
+            return "-" + DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+        } else {
+            return DELTA.abs.asInt.asBriefStringOfAllElapsedComponentsFromSeconds
+        }
     }
     
     var asStringOfAllElapsedComponentsAgo : String {
@@ -922,6 +927,19 @@ public extension Date {
     
     var asBriefStringOfElapsedTimeFromSeconds : String {
         (Date.timestamp - self.timeIntervalSince1970).asInt.asBriefStringOfElapsedTimeFromSeconds
+    }
+    
+    var asBriefStringOfElapsedDaysFromSecondsSinceNow : String {
+        let DELTA = Date.timestamp - self.timeIntervalSince1970
+        if DELTA < 0 {
+            return "-" + DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
+        } else {
+            return DELTA.abs.asInt.asBriefStringOfElapsedDaysFromSeconds
+        }
+    }
+    
+    var asBriefStringOfElapsedAbsoluteDaysFromSecondsSinceNow : String {
+        (Date.timestamp - self.timeIntervalSince1970).abs.asInt.asBriefStringOfElapsedDaysFromSeconds
     }
     
     var asStringAgo : String {
