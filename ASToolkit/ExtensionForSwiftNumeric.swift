@@ -829,6 +829,22 @@ public extension Int {
     var stringWithPositiveSign : String {
         self < 0 ? "\(self)" : self > 0 ? "+\(self)" : "\(self)"
     }
+    
+}
+
+public extension Int {
+    /// Interprets the integer as MMdd (e.g., 1231 -> Dec 31) and returns a Date in the current year.
+    /// Returns nil if the integer is not in a valid MMdd range or the date doesn't exist (e.g., 0230 for Feb 30).
+    var asDateFromMMDD: Date? {
+        let mm = self / 100
+        let dd = self % 100
+        guard (1...12).contains(mm), (1...31).contains(dd) else { return nil }
+        var comps = DateComponents()
+        comps.year = Calendar.current.component(.year, from: Date())
+        comps.month = mm
+        comps.day = dd
+        return Calendar.current.date(from: comps)
+    }
 }
 
 

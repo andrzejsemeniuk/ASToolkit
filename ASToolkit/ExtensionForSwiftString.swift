@@ -1937,3 +1937,10 @@ extension String {
     }
 }
 
+extension String {
+    
+    var justDigits : String {
+        String(self.filter(\.isNumber))
+    }
+    
+}
