@@ -596,6 +596,10 @@ public extension Date {
         Date().timeIntervalSince1970
     }
     
+    var timeInterval : TimeInterval {
+        self.timeIntervalSince1970
+    }
+    
     static var yesterday : Date {
         Date().yesterday
     }
