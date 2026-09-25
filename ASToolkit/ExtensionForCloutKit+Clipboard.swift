@@ -14,11 +14,19 @@ public struct CloudKitClipboardPackedPayload: Codable {
     let payload: Data // gzip-compressed content
 }
 
+nonisolated
 public let cloudKitDefaultContainerIdentifier = "iCloud.com.andrzejsemeniuk.AppSharkeeForIPAD"
 //public let cloudKitDefaultContainerIdentifier = "iCloud.com.wordmindsoftware.sharkee.container"
+
+nonisolated
 public let cloudKitDefaultRecordType  = "SECData"
 
-public func cloudKitClipboardUpload(container identifier    : String = cloudKitDefaultContainerIdentifier,
+
+
+
+
+
+public func cloudKitClipboardUpload0(container identifier    : String = cloudKitDefaultContainerIdentifier,
                                     recordType              : String = cloudKitDefaultRecordType,
                                     recordName              : String,
                                     data                    : Data,
@@ -77,13 +85,105 @@ public func cloudKitClipboardUpload(container identifier    : String = cloudKitD
 }
 
 
+
+public func cloudKitClipboardUpload(
+    container identifier    : String = cloudKitDefaultContainerIdentifier,
+    recordType              : String = cloudKitDefaultRecordType,
+    recordName              : String,
+    data                    : Data,
+    isCompressed            : Bool,
+    info                    : [String : String]
+) async throws {
+
+    let container = CKContainer(identifier: identifier)
+    let database = container.publicCloudDatabase
+    let recordID = CKRecord.ID(recordName: recordName)
+
+    let assetThreshold = 1_000_000 // 1 MB
+
+    func makeTempFileURL(with data: Data) throws -> URL {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("bin")
+        try data.write(to: url, options: .atomic)
+        return url
+    }
+
+    func applyFields(_ record: CKRecord) throws -> URL? {
+        // info
+        if !info.isEmpty {
+            let infoData: Data = try Data.encoded(info)
+            if !infoData.isEmpty {
+                record["info"] = infoData as CKRecordValue
+            }
+        }
+
+        // payload: inline or asset depending on size
+        var tempURLToCleanup: URL? = nil
+        if data.count > assetThreshold {
+            let tempURL = try makeTempFileURL(with: data)
+            let asset = CKAsset(fileURL: tempURL)
+            record["payloadAsset"] = asset
+            record["usesAsset"] = true as CKRecordValue
+            // Clear any old inline field if present
+            record["payload"] = nil
+            tempURLToCleanup = tempURL
+        } else {
+            record["payload"] = data as CKRecordValue
+            record["usesAsset"] = false as CKRecordValue
+            // Clear any old asset field if present
+            record["payloadAsset"] = nil
+        }
+
+        // metadata
+        record["isCompressed"] = isCompressed as CKRecordValue
+        record["updatedAt"]    = Date() as CKRecordValue
+        record["sizeInBytes"]  = data.count as CKRecordValue
+
+        return tempURLToCleanup
+    }
+
+    func applyAndSave(_ record: CKRecord) async throws {
+        let tempURL = try applyFields(record)
+        defer {
+            if let tempURL { try? FileManager.default.removeItem(at: tempURL) }
+        }
+        _ = try await database.save(record)
+    }
+
+    do {
+        let existing = try await database.record(for: recordID)
+        do {
+            try await applyAndSave(existing)
+        } catch let saveError as CKError {
+            switch saveError.code {
+            case .serverRecordChanged:
+                let server = try await database.record(for: recordID)
+                try await applyAndSave(server)
+            case .unknownItem:
+                let fresh = CKRecord(recordType: recordType, recordID: recordID)
+                try await applyAndSave(fresh)
+            default:
+                throw saveError
+            }
+        }
+    } catch let fetchError as CKError {
+        switch fetchError.code {
+        case .unknownItem:
+            let fresh = CKRecord(recordType: recordType, recordID: recordID)
+            try await applyAndSave(fresh)
+        default:
+            throw fetchError
+        }
+    }
+}
     
     
     
     
     
 
-public func cloudKitClipboardDownload(container identifier      : String = cloudKitDefaultContainerIdentifier,
+public func cloudKitClipboardDownload0(container identifier      : String = cloudKitDefaultContainerIdentifier,
                                       recordName                : String
 ) async throws -> (payload: Data, metadata: CloudKitClipboardMetadata) {
     
@@ -116,12 +216,78 @@ public func cloudKitClipboardDownload(container identifier      : String = cloud
     return (payload, metadata)
 }
 
+
+public func cloudKitClipboardDownload(
+    container identifier      : String = cloudKitDefaultContainerIdentifier,
+    recordName                : String
+) async throws -> (payload: Data, metadata: CloudKitClipboardMetadata) {
+
+    let container = CKContainer(identifier: identifier)
+    let database = container.publicCloudDatabase
+
+    let recordID = CKRecord.ID(recordName: recordName)
+    let record = try await database.record(for: recordID)
+
+    let usesAsset = record["usesAsset"] as? Bool
+    let payload: Data
+
+    if usesAsset == true {
+        guard let asset = record["payloadAsset"] as? CKAsset,
+              let url = asset.fileURL else {
+            throw AnError.invalidParameter("payloadAsset missing or invalid")
+        }
+        payload = try Data(contentsOf: url)
+    } else if usesAsset == false {
+        guard let inline = record["payload"] as? Data else {
+            throw AnError.invalidParameter("payload (inline) missing")
+        }
+        payload = inline
+    } else {
+        // Backward compatibility if flag is missing: infer by presence
+        if let asset = record["payloadAsset"] as? CKAsset, let url = asset.fileURL {
+            payload = try Data(contentsOf: url)
+        } else if let inline = record["payload"] as? Data {
+            payload = inline
+        } else {
+            throw AnError.invalidParameter("payload missing (neither asset nor inline present)")
+        }
+    }
+
+    var info: [String: String] = [:]
+    if let infoData = record["info"] as? Data {
+        info ?= try? infoData.decoded()
+    }
+
+    let isCompressed = record["isCompressed"] as? Bool
+    let updatedAt = record["updatedAt"] as? Date
+    let sizeInBytes = record["sizeInBytes"] as? Int
+
+    let metadata = CloudKitClipboardMetadata(
+        info: info,
+        isCompressed: isCompressed,
+        updatedAt: updatedAt,
+        sizeInBytes: sizeInBytes
+    )
+
+    return (payload, metadata)
+}
+
+
+
+
+
 public struct CloudKitClipboardMetadata : Equatable, Codable {
     public let info: [String: String]
     public let isCompressed: Bool?
     public let updatedAt: Date?
     public let sizeInBytes: Int?
 }
+
+
+
+
+
+
 
 public func cloudKitClipboardMetadata(container identifier: String, recordName: String) async throws -> CloudKitClipboardMetadata {
     let container = CKContainer(identifier: identifier)
@@ -192,6 +358,9 @@ func cloudKitClipboardUpload<T: Encodable>(recordName: String, value: T, info: [
     try await cloudKitClipboardUpload(recordName: recordName, data: try Data.encoded(value), isCompressed: false, info: info)
 }
     
+
+
+
 func cloudKitClipboardDownload<T: Decodable>(recordName: String) async throws -> (value: T, info: [String : String], updated: Date?) {
     let (PAYLOAD,METADATA) = try await cloudKitClipboardDownload(recordName: recordName)
     return (value: try PAYLOAD.decoded(), info: METADATA.info, updated: METADATA.updatedAt)
