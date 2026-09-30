@@ -242,6 +242,25 @@ public extension Double {
 
 }
 
+public extension Array<Double?> {
+    
+    var calculateMinAndMax : (min: Double?, max: Double?, delta: Double?) {
+        var min: Double?
+        var max: Double?
+        for V in self {
+            if let V {
+                if min == nil || V < min! {
+                    min = V
+                }
+                if max == nil || V > max! {
+                    max = V
+                }
+            }
+        }
+        return (min: min, max: max, delta: (min == nil) ? nil : max! - min!)
+    }
+    
+}
 
 
 //public func pick<T>(_ from: [T]) -> T {
