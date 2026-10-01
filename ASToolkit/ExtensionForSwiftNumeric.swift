@@ -743,7 +743,10 @@ public extension Int
     }
     
     func modulo(added: Int, _ n: Int) -> Int {
-        (self + added) % n
+        // Preserve current semantics: if n == 0, do simple addition.
+        if n == 0 { return self + added }
+        // Otherwise, reuse the robust wrapping logic.
+        return self.incremented(by: added, modulo: n)
     }
     
     var asEnumerationArray : [Int] {
