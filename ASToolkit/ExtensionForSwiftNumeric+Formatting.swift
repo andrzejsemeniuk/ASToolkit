@@ -142,7 +142,8 @@ public extension Double {
     var format22 : String { NSString(format: "%3.2f", self) as String }
     
     func format(digits: Int = 2) -> String { NSString(format: "%.\(digits)f" as NSString, self) as String }
-    
+
+    @inlinable
     func format01234(_ zero: Double, _ one: Double, _ two: Double, _ three: Double) -> String {
         if self.abs > zero {
             return self.format0
@@ -159,10 +160,12 @@ public extension Double {
         return self.format4
     }
     
+    @inlinable
     var formatForStockPrice : String {
         format01234(1000, 1000, 1, 1)
     }
     
+    @inlinable
     var formatDynamic : String {
         let ABS = self.abs
         return ABS.floor == ABS ? self.asInt.asString : ABS > 10 ? self.format2 : ABS > 1 ? self.format3 : self.formatted4
@@ -197,11 +200,37 @@ public extension Double {
         }
         return r
     }
+
+
+    @inlinable
+    var formatted4trimmedOfTrailingZeros : String {
+        formatted4.numberTrimmedOf0
+    }
+    
+    @inlinable
+    var asStringTrimmedOfTrailingZeros : String {
+        asString.numberTrimmedOf0
+    }
     
 }
 
 
+public extension String {
+    
+    @inlinable
+    var numberTrimmedOf0 : String {
+            // Only attempt trimming when we have a decimal separator present
+        guard self.contains(".") else { return self }
+            // First remove trailing zeros
+        let withoutZeros = self.trimmedOfTrailing(character: "0")
+            // If a decimal point is now the last character, remove it too
+        if withoutZeros.last == "." {
+            return String(withoutZeros.dropLast())
+        }
+        return withoutZeros.asString
+    }
 
+}
 
 
 

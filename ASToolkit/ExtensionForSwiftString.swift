@@ -1915,7 +1915,7 @@ extension String {
 
 
 
-extension String {
+public extension String {
     /// Splits the string into consecutive chunks of the given length (in characters),
     /// returning an array of substrings as Strings. Respects extended grapheme clusters.
     /// - Parameter length: Desired chunk length (k). If `length` <= 0, returns an empty array.
@@ -1937,10 +1937,46 @@ extension String {
     }
 }
 
-extension String {
+public extension String {
     
     var justDigits : String {
         String(self.filter(\.isNumber))
+    }
+    
+}
+
+public extension String {
+    
+    func trimmedOfTrailing(character: Character) -> Substring {
+        var end = endIndex
+        while end > startIndex, self[index(before: end)] == character {
+            end = index(before: end)
+        }
+        return self[startIndex..<end]
+    }
+
+    func trimmedOfTrailing(set: CharacterSet) -> Substring {
+        var end = unicodeScalars.endIndex
+        while end > unicodeScalars.startIndex, set.contains(unicodeScalars[unicodeScalars.index(before: end)]) {
+            end = unicodeScalars.index(before: end)
+        }
+        let start = startIndex
+        let endStringIndex = end == unicodeScalars.endIndex ? self.endIndex : String.Index(end, within: self)!
+        return self[start..<endStringIndex]
+    }
+
+    func trimmedOfTrailingOccurrences(of suffix: String) -> Substring {
+        guard !suffix.isEmpty, count >= suffix.count else { return self[...] }
+        var end = endIndex
+        while end > startIndex {
+            let startOfSuffix = index(end, offsetBy: -suffix.count)
+            if self[startOfSuffix..<end] == suffix {
+                end = startOfSuffix
+            } else {
+                break
+            }
+        }
+        return self[startIndex..<end]
     }
     
 }
