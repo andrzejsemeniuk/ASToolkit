@@ -212,3 +212,20 @@ public extension Collection where Element : Equatable {
 //        self.filter { other.contains($0) }
 //    }
 //}
+
+
+
+
+extension MutableCollection {
+    
+    /// Mutate each element of the collection in place.
+    /// - Parameter transform: A closure that can modify the element in place.
+    mutating func transformEvery(_ transform: (inout Element) -> Void) {
+        var idx = startIndex
+        while idx != endIndex {
+            transform(&self[idx])
+            formIndex(after: &idx)
+        }
+    }
+}
+
