@@ -342,7 +342,8 @@ nonisolated
 extension String
 {
     public func trimmed() -> String {
-        return self.trimmingCharacters(in: CharacterSet.whitespaces)
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+//        return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
     public func trimIfBeyondDigitCount(_ count:Int) -> Substring {
