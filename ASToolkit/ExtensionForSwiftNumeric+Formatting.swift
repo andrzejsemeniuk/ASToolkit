@@ -20,6 +20,14 @@ public extension Double {
         formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 3, space: " ")
     }
     
+    var formatWithValueAbbrevation12WithSpaceAsString : String {
+        formatAbbreviated(precisionAbbreviated: 1, precisionUnabbreviated: 2, space: " ")
+    }
+
+    var formatWithValueAbbrevation22WithSpaceAsString : String {
+        formatAbbreviated(precisionAbbreviated: 2, precisionUnabbreviated: 2, space: " ")
+    }
+
     var formatWithValueAbbrevation13WithSpaceAsString : String {
         formatAbbreviated(precisionAbbreviated: 1, precisionUnabbreviated: 3, space: " ")
     }
@@ -208,8 +216,65 @@ public extension Double {
     }
     
     @inlinable
+    var asStringAbbreviated : String {
+        if self > 9_999_999 {
+            formatWithValueAbbrevation22WithSpaceAsString
+        } else {
+//            asStringTrimmedOfTrailingZeros
+            formattedIntegerGroupedFractionTrimmed
+        }
+    }
+    
+    @inlinable
     var asStringTrimmedOfTrailingZeros : String {
         asString.numberTrimmedOf0
+//        self.floor == self ? self.asInt.formatted() : asString.numberTrimmedOf0
+//        formattedIntegerGroupedFractionTrimmed
+    }
+    
+    /// Formats the integer part using Int.formatted() and trims trailing zeros in the fractional part.
+    /// Examples:
+    /// - 12345.0      -> "12,345"
+    /// - 12345.6000   -> "12,345.6"
+    /// - 12345.1200   -> "12,345.12"
+    /// - -1000.0500   -> "-1,000.05"
+    var formattedIntegerGroupedFractionTrimmed: String {
+        // Handle NaN/Inf consistently with your existing style if needed
+        guard self.isFinite else {
+            return isNaN ? "NaN" : (self > 0 ? "oo" : "-oo")
+        }
+
+        // Separate sign and magnitude to avoid issues with negatives when splitting
+        let isNegative = self < 0
+        let magnitude = self.abs
+
+        // Split integer and fractional parts
+        let integerPart = Int(magnitude.rounded(.towardZero))
+        let fractional = magnitude - Double(integerPart)
+
+        // Format integer part with grouping via formatted()
+        let integerString = integerPart.formatted()
+
+        // If no fractional component, just return the integer part (with sign)
+        if fractional == 0 {
+            return isNegative ? "-" + integerString : integerString
+        }
+
+        // Build a fractional string with a safe upper bound of precision, then trim trailing zeros
+        // You can adjust the precision bound if you need more/less fractional digits.
+        let fractionalBound = 10
+        let fractionalFull = String(format: "%.\(fractionalBound)f", fractional)
+        // fractionalFull looks like "0.xxxxx"
+        let rawFraction = fractionalFull.dropFirst(2) // remove "0."
+        // Trim trailing zeros
+        let trimmedFraction = rawFraction.reversed().drop(while: { $0 == "0" }).reversed()
+        // If trimming resulted in empty, treat as integer-only
+        guard !trimmedFraction.isEmpty else {
+            return isNegative ? "-" + integerString : integerString
+        }
+
+        let result = integerString + "." + String(trimmedFraction)
+        return isNegative ? "-" + result : result
     }
     
 }
@@ -228,6 +293,17 @@ public extension String {
             return String(withoutZeros.dropLast())
         }
         return withoutZeros.asString
+    }
+    
+    @inlinable
+    var numberFormattedAsIntegerIfApplicable : String {
+        if self.hasSuffix(".0") {
+            return self.asDouble?.asInt.formatted() ?? self
+        }
+        if self.contains(".").not {
+            return self.asDouble?.asInt.formatted() ?? self
+        }
+        return self
     }
 
 }
