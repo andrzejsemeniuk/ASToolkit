@@ -842,8 +842,116 @@ public extension String {
     static let CRLF : String = LF + CR
 }
 
+
 nonisolated
 public extension String {
+
+    /// Parses abbreviated numbers like "1.23K", "1.23 K", "2m", "4.5b", "7t", "8p", "9e" into a Double.
+    /// Supported suffixes (case-insensitive):
+    /// K (kilo, 1e3), M (mega/million, 1e6), B (billion, 1e9), T (trillion, 1e12), P (peta, 1e15), E (exa, 1e18)
+    /// If no recognized suffix is present, falls back to plain Double parsing.
+    var asDoubleAbbreviated: Double? {
+        // Pre-trim whitespace and remove commas
+        let s = self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")
+        if s.isEmpty { return nil }
+
+        // Regex:
+        // ^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$
+        // 1: signed number (int or decimal)
+        // 2: optional single-letter suffix
+        let pattern = #"^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$"#
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            let ns = s as NSString
+            let range = NSRange(location: 0, length: ns.length)
+            if let match = regex.firstMatch(in: s, options: [], range: range) {
+                // Extract number
+                if let numRange = Range(match.range(at: 1), in: s) {
+                    let numberPart = String(s[numRange])
+                    guard let base = Double(numberPart) else { return nil }
+
+                    // Extract suffix if present
+                    var multiplier: Double = 1.0
+                    if match.numberOfRanges > 2, let sufRange = Range(match.range(at: 2), in: s) {
+                        let suf = s[sufRange].uppercased()
+                        switch suf {
+                        case "K": multiplier = 1e3
+                        case "M": multiplier = 1e6
+                        case "B": multiplier = 1e9
+                        case "T": multiplier = 1e12
+                        case "P": multiplier = 1e15
+                        case "E": multiplier = 1e18
+                        default:  multiplier = 1.0
+                        }
+                    }
+                    return base * multiplier
+                }
+            }
+        }
+        // Fallback
+        return Double(s)
+    }
+    
+    var asDoubleExtended : Double? { asDouble ?? asDoubleAbbreviated }
+    
+    /// Parses abbreviated integers like "1.23K", "1.23 K", "2m", "4.5b", "7t", "8p", "9e" into an Int.
+    /// Supported suffixes (case-insensitive):
+    /// K (kilo, 1e3), M (mega/million, 1e6), B (billion, 1e9), T (trillion, 1e12), P (peta, 1e15), E (exa, 1e18)
+    /// If no recognized suffix is present, falls back to plain Int parsing via `asIntExtended`.
+    var asIntAbbreviated: Int? {
+        // Pre-trim whitespace and remove commas
+        let s = self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")
+        if s.isEmpty { return nil }
+
+        // Regex:
+        // ^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$
+        // 1: signed number (int or decimal)
+        // 2: optional single-letter suffix
+        let pattern = #"^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$"#
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            let ns = s as NSString
+            let range = NSRange(location: 0, length: ns.length)
+            if let match = regex.firstMatch(in: s, options: [], range: range) {
+                // Extract number
+                if let numRange = Range(match.range(at: 1), in: s) {
+                    let numberPart = String(s[numRange])
+                    guard let base = Double(numberPart) else { return nil }
+
+                    // Extract suffix if present
+                    var multiplier: Double = 1.0
+                    if match.numberOfRanges > 2, let sufRange = Range(match.range(at: 2), in: s) {
+                        let suf = s[sufRange].uppercased()
+                        switch suf {
+                        case "K": multiplier = 1e3
+                        case "M": multiplier = 1e6
+                        case "B": multiplier = 1e9
+                        case "T": multiplier = 1e12
+                        case "P": multiplier = 1e15
+                        case "E": multiplier = 1e18
+                        default:  multiplier = 1.0
+                        }
+                    }
+
+                    // Multiply and convert to Int (truncates toward zero)
+                    let value = base * multiplier
+                    if value.isFinite {
+                        return Int(value)
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        // Fallback
+        return Int(s)
+    }
+
+    /// Convenience: tries plain Int first, then abbreviated parsing.
+    var asIntExtended: Int? {
+        if let v = Int(self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")) {
+            return v
+        }
+        return asIntAbbreviated
+    }    
     
     var  asFloat   :  Float?   { Float(self.trimmed().erasingCommas) }
     var  asDouble  :  Double?  { Double(self.trimmed().erasingCommas) }
