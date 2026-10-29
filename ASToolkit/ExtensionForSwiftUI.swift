@@ -1113,7 +1113,7 @@ public extension View {
         self.frame(width: side, height: side, alignment: alignment)
         }
     
-        //    static var neomorphicFillColorDefault = Color.offWhite
+        //    static var neomorphicBGColorDefault = Color.offWhite
     
     func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
         self
