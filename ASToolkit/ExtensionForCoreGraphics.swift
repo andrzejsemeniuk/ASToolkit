@@ -747,8 +747,8 @@ public extension CGRect {
     
     func centered(at: CGPoint = .zero) -> Self {
         var r = self
-        r.origin.x = -r.width/2 + at.x
-        r.origin.y = +r.height/2 + at.y
+        r.origin.x = at.x - r.width/2
+        r.origin.y = at.y - r.height/2
         return r
     }
     
@@ -1058,53 +1058,65 @@ public extension CGPoint
 
 extension CGRect
 {
-	public var midpoint        :CGPoint        { return pointFromRatio(x:0.5,y:0.5) }
+    public var midpoint        :CGPoint        { origin.added(x: size.width/2, y: size.height/2) }
 
-	public var tl              :CGPoint        { return pointFromRatio(x:0,y:1) }
-	public var tr              :CGPoint        { return pointFromRatio(x:1,y:1) }
-	public var bl              :CGPoint        { return pointFromRatio(x:0,y:0) }
-	public var br              :CGPoint        { return pointFromRatio(x:1,y:0) }
-	public var c               :CGPoint        { return midpoint }
-    public var mt              :CGPoint        { return pointFromRatio(x:0.5,y:1) }
-    public var mb              :CGPoint        { return pointFromRatio(x:0.5,y:0) }
-    public var ml              :CGPoint        { return pointFromRatio(x:0,y:0.5) }
-    public var mr              :CGPoint        { return pointFromRatio(x:1,y:0.5) }
+    public var tl              :CGPoint        { origin }
+    public var tr              :CGPoint        { origin.added(x: size.width) }
+    public var bl              :CGPoint        { origin.added(y: size.height) }
+    public var br              :CGPoint        { origin.added(x: size.width, y: size.height) }
+//	public var tl              :CGPoint        { pointFromRatio(x:0,y:0) }
+//	public var tr              :CGPoint        { pointFromRatio(x:1,y:0) }
+//	public var bl              :CGPoint        { pointFromRatio(x:0,y:1) }
+//	public var br              :CGPoint        { pointFromRatio(x:1,y:1) }
+	public var c               :CGPoint        { midpoint }
+    public var mt              :CGPoint        { pointFromRatio(x:0.5,y:1) }
+    public var mb              :CGPoint        { pointFromRatio(x:0.5,y:0) }
+    public var ml              :CGPoint        { pointFromRatio(x:0,y:0.5) }
+    public var mr              :CGPoint        { pointFromRatio(x:1,y:0.5) }
+    public var ct              :CGPoint        { origin.added(x: +size.width/2) }
+    public var cb              :CGPoint        { origin.added(x: +size.width/2, y: size.height) }
+    public var cl              :CGPoint        { origin.added(y: +size.height/2) }
+    public var cr              :CGPoint        { origin.added(x: +size.width, y: +size.height/2) }
 
-	public var center          :CGPoint        { return midpoint }
+	public var center          :CGPoint        { midpoint }
 
-	public var top             :CGFloat        { return origin.y }
-	public var left            :CGFloat        { return origin.x }
-	public var bottom          :CGFloat        { return origin.y + height }
-	public var right           :CGFloat        { return origin.x + width }
+	public var top             :CGFloat        { origin.y }
+	public var left            :CGFloat        { origin.x }
+	public var bottom          :CGFloat        { origin.y + height }
+	public var right           :CGFloat        { origin.x + width }
 
     public var minSide          : CGFloat       { size.minSide }
     public var maxSide          : CGFloat       { size.maxSide }
 
-    public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: origin.x + width * x, y: origin.y + height * y) }
-	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x,y:ratio.y) }
+    public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { CGPoint(x: origin.x + width * x, y: origin.y + height * y) }
+	public func pointFrom              (ratio:CGXY)                -> CGPoint { pointFromRatio(x:ratio.x,y:ratio.y) }
 
-	public func ratioFrom              (point:CGPoint)             -> CGPoint { return CGPoint(x: width != 0.0 ? ((point.x - origin.x) / width) : 0.0, y: height != 0.0 ? ((point.y - origin.y) / height) : 0.0 ) }
+	public func ratioFrom              (point:CGPoint)             -> CGPoint { CGPoint(x: width != 0.0 ? ((point.x - origin.x) / width) : 0.0, y: height != 0.0 ? ((point.y - origin.y) / height) : 0.0 ) }
     
 }
 
 extension CGSize
 {
-	public var midpoint        :CGPoint        { return pointFromRatio(x:0.5,y:0.5) }
+    public var midpoint        :CGPoint        { .init(x: width/2, y: height/2) }
 
-	public var tl              :CGPoint        { return pointFromRatio(x:0,y:1) }
-	public var tr              :CGPoint        { return pointFromRatio(x:1,y:1) }
-	public var bl              :CGPoint        { return pointFromRatio(x:0,y:0) }
-	public var br              :CGPoint        { return pointFromRatio(x:1,y:0) }
-	public var c               :CGPoint        { return midpoint }
+    public var tl              :CGPoint        { .zero }
+    public var tr              :CGPoint        { .init(x: width, y: 0) }
+    public var bl              :CGPoint        { .init(x: 0, y: height) }
+    public var br              :CGPoint        { .init(x: width, y: height) }
+//	public var tl              :CGPoint        { pointFromRatio(x:0,y:1) }
+//	public var tr              :CGPoint        { pointFromRatio(x:1,y:1) }
+//	public var bl              :CGPoint        { pointFromRatio(x:0,y:0) }
+//	public var br              :CGPoint        { pointFromRatio(x:1,y:0) }
+	public var c               :CGPoint        { midpoint }
 
-	public var center          :CGPoint        { return midpoint }
+	public var center          :CGPoint        { midpoint }
 
-	public var top             :CGFloat        { return height }
-	public var left            :CGFloat        { return 0 }
-	public var bottom          :CGFloat        { return 0 }
-	public var right           :CGFloat        { return width }
-    public var w               :CGFloat        { return width }
-    public var h               :CGFloat        { return height }
+	public var top             :CGFloat        { height }
+	public var left            :CGFloat        { 0 }
+	public var bottom          :CGFloat        { 0 }
+	public var right           :CGFloat        { width }
+    public var w               :CGFloat        { width }
+    public var h               :CGFloat        { height }
 
     public var minSide          : CGFloat       { min(width,height) }
     public var maxSide          : CGFloat       { max(width,height) }
@@ -1113,10 +1125,10 @@ extension CGSize
     public var asMinSquare      : CGSize        { .init(minSide, minSide) }
     public var asSquareFromDiagonal      : CGSize        { .init(diagonal, diagonal) }
 
-	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { return CGPoint(x: width * x, y: height * y) }
-	public func pointFrom              (ratio:CGXY)                -> CGPoint { return pointFromRatio(x:ratio.x, y:ratio.y) }
+	public func pointFromRatio         (x:CGFloat, y:CGFloat)      -> CGPoint { CGPoint(x: width * x, y: height * y) }
+	public func pointFrom              (ratio:CGXY)                -> CGPoint { pointFromRatio(x:ratio.x, y:ratio.y) }
 
-	public func ratioFrom              (point:CGPoint)             -> CGPoint { return CGPoint(x: width != 0.0 ? (point.x / width) : 0.0, y: height != 0.0 ? (point.y / height) : 0.0 ) }
+	public func ratioFrom              (point:CGPoint)             -> CGPoint { CGPoint(x: width != 0.0 ? (point.x / width) : 0.0, y: height != 0.0 ? (point.y / height) : 0.0 ) }
 }
 
 
