@@ -1,0 +1,107 @@
+//
+//  ExtensionForSwiftData.swift
+//  ASToolkit
+//
+//  Created by andrzej semeniuk on 3/16/22.
+//  Copyright © 2022 Andrzej Semeniuk. All rights reserved.
+//
+
+import Foundation
+
+public extension Data {
+    
+    func append(fileURL: URL, withNewLine: Bool = true) throws {
+        if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
+            defer {
+                fileHandle.closeFile()
+            }
+            fileHandle.seekToEndOfFile()
+            fileHandle.write(self)
+        }
+        else {
+            try write(to: fileURL, options: .atomic)
+        }
+    }
+    
+    static let empty : Data = .init()
+    
+    var asString : String? {
+        .init(data: self, encoding: .utf8)
+    }
+    
+    
+    func decoded<T: Decodable>(as type: T.Type) -> T? {
+        try? JSONDecoder().decode(type.self, from: self)
+    }
+    
+    func decoded<T: Decodable>(as type: T.Type, _ fallback: T) -> T {
+        (try? JSONDecoder().decode(type.self, from: self)) ?? fallback
+    }
+
+    func decoded<T: Decodable>() throws -> T {
+        try JSONDecoder().decode(T.self, from: self)
+//        print(String(data: self, encoding: .utf8) ?? "<non-utf8>")
+//        let DECODER = JSONDecoder()
+//        return try DECODER.decode(T.self, from: self)
+    }
+    
+    func decoded<T: Decodable>(fallback: T) -> T {
+        (try? self.decoded()) ?? fallback
+    }
+    
+    static func encoded<T: Encodable>(_ from: T) throws -> Data {
+        try JSONEncoder().encode(from)
+    }
+
+    
+//    static func create<T>(from value: T) -> Self {
+//        // https://www.hackingwithswift.com/forums/swift/how-do-i-get-a-uint32-into-a-data/8802
+//        var value = value
+//        return Data.init(bytes: &value, count: MemoryLayout<T>.size)
+//    }
+    
+//    func load<T>() -> T {
+//        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
+//        return self.withUnsafeBytes { bytes in
+//            bytes.load(as: T.self)
+//        }
+//    }
+    
+    func loaded<T>() -> T? {
+        // https://stackoverflow.com/questions/55793040/convert-data-to-uint32-using-extension
+        return self.withUnsafeBytes { bytes in
+            bytes.load(as: T.self)
+        }
+    }
+    
+
+}
+
+public extension Data {
+    
+    var gzipDecompressedSafe : Data? {
+        try? gzipDecompressed()
+    }
+    
+    func gzipDecompressed() throws -> Data {
+        try (self as NSData).decompressed(using: .zlib) as Data
+    }
+    
+    var gzipCompressedSafe : Data? {
+        try? gzipCompressed()
+    }
+    
+    func gzipCompressed() throws -> Data {
+        try (self as NSData).compressed(using: .zlib) as Data
+    }
+
+    nonisolated
+    static func fetch(from url: URL) async throws -> Data {
+        let (data, response) = try await URLSession.shared.data(from: url)
+        // Optional: validate status code
+        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
+            throw URLError(.badServerResponse)
+        }
+        return data
+    }
+}

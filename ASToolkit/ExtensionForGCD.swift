@@ -8,10 +8,121 @@
 
 import Foundation
 
-extension DispatchQueue {
+public extension DispatchQueue {
     
-    public var background: DispatchQueue {
+    static var ui: DispatchQueue {
+        return DispatchQueue.main
+    }
+    
+    static var background: DispatchQueue {
         return DispatchQueue.global(qos: .background)
     }
     
+	static var utility: DispatchQueue {
+		return DispatchQueue.global(qos: .utility)
+	}
+
+    func asyncLater(_ sec:TimeInterval, block:@escaping ()->Void) {
+        self.asyncAfter(deadline: .now() + sec, execute: block)
+    }
+    
+}
+
+public typealias Q = DispatchQueue
+
+public extension DispatchQueue {
+    
+    @inlinable func asyncAfter(_ seconds: TimeInterval, block: @escaping ()->Void) {
+        self.asyncAfter(deadline: .now() + seconds, execute: block)
+    }
+    
+}
+
+//@inlinable public func wait(_ block: @escaping Block) {
+//    DispatchQueue.main.async {
+//        block()
+//    }
+//}
+//
+//@inlinable public func now(_ block: @escaping Block) {
+//    DispatchQueue.main.sync {
+//        block()
+//    }
+//}
+//
+@inlinable public func now(_ block: @escaping () -> Void) async {
+    await MainActor.run {
+        block()
+    }
+}
+@inlinable public func now(_ block: @escaping () throws -> Void) async rethrows {
+    try await MainActor.run {
+        try block()
+    }
+}
+@inlinable public func now<T>(_ block: @escaping () -> T) async -> T {
+    await MainActor.run {
+        block()
+    }
+}
+@inlinable public func now<T>(_ block: @escaping () throws -> T) async rethrows -> T {
+    try await MainActor.run {
+        try block()
+    }
+}
+
+@inlinable nonisolated public func later(_ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.async {
+//        block()
+//    }
+    inUI(block)
+}
+
+public func later2(_ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.async {
+//        DispatchQueue.main.async {
+//            block()
+//        }
+//    }
+    inUI {
+        inUI(block)
+    }
+
+}
+
+@inlinable public func after(_ seconds: TimeInterval, _ block: @escaping @MainActor () -> Void) {
+//    DispatchQueue.main.asyncAfter(seconds) {
+//        block()
+//    }
+    
+    Task {
+        try? await Task.sleep(seconds: seconds)
+        inUI {
+            block()
+        }
+    }
+}
+
+
+
+
+// MARK: - UI Actor & Helper
+
+@globalActor
+public actor UIActor {
+    public static let shared = UIActor()
+}
+
+@inlinable
+public nonisolated func inUI(_ operation: @escaping @MainActor () -> Void) {
+    Task { @MainActor in
+        operation()
+    }
+}
+
+@inlinable
+public nonisolated func onUI(_ operation: @escaping @MainActor () -> Void) {
+    Task { @MainActor in
+        operation()
+    }
 }

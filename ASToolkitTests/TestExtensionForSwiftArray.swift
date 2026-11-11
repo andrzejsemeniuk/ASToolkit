@@ -7,6 +7,15 @@
 //
 
 import XCTest
+import ASToolkit
+
+//func ==<Element : Equatable> (lhs: [[Element]], rhs: [[Element]]) -> Bool {
+//	return lhs.count == rhs.count && !zip(lhs, rhs).contains {$0 != $1 }
+//}
+func ==<Element : Equatable> (lhs: [[Element]], rhs: [[Element]]) -> Bool {
+	return lhs.elementsEqual(rhs, by: ==)
+}
+
 
 class TestExtensionForSwiftArray: XCTestCase {
     
@@ -44,37 +53,117 @@ class TestExtensionForSwiftArray: XCTestCase {
         XCTAssertEqual([1,2,3,4].subarray(from:0,length:3),[1,2,3])
     }
     
-    func testTrim() {
+    func testTrimFrom() {
         var a = [1,2,3]
         var r = a
         
+        // a=[1,2,3]
         XCTAssertEqual(a.count,3)
         
-        r = a.trim(to:2)
+        // a=[1,2,3]
+        r = a.trim(from:2)
+        // a=[1,2]
+        // r=[3]
         XCTAssertEqual(a.count,2)
         XCTAssertEqual(a,[1,2])
         XCTAssertEqual(r.count,1)
         XCTAssertEqual(r,[3])
         
 
-        r = a.trim(to:0)
+        // a=[1,2]
+        r = a.trim(from:0)
+        // a=[]
+        // r=[1,2]
         XCTAssertEqual(a.count,0)
         XCTAssertEqual(a,[])
         XCTAssertEqual(r.count,2)
         XCTAssertEqual(r,[1,2])
 
         a = [1,2,3,4,5]
-        r = a.trim(to:1)
+        r = a.trim(from:1)
         XCTAssertEqual(a.count,1)
         XCTAssertEqual(a,[1])
         XCTAssertEqual(r.count,4)
         XCTAssertEqual(r,[2,3,4,5])
         
         a = [1,2,3]
-        XCTAssertEqual(a.trim(to:5).count,0)
+        XCTAssertEqual(a.trim(from:5).count,0)
+        a = []
+        XCTAssertEqual(a.trim(from:5).count,0)
+
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:-2),[2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:-4),[1,2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:5),[])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(from:0),[1,2,3])
+    }
+    
+    func testTrimTo() {
+        var a = [1,2,3]
+        var r = a
+        
+        XCTAssertEqual(a.count,3)
+
+        r = a.trim(to:0)
+        XCTAssertEqual(a.count,3)
+        XCTAssertEqual(a,[1,2,3])
+        XCTAssertEqual(r.count,0)
+        XCTAssertEqual(r,[])
+
+        r = a.trim(to:2)
+        XCTAssertEqual(a.count,1)
+        XCTAssertEqual(a,[3])
+        XCTAssertEqual(r.count,2)
+        XCTAssertEqual(r,[1,2])
+        
+        a = [0,1,2,3,4,5]
+        r = a.trim(to:4)
+        XCTAssertEqual(a.count,2)
+        XCTAssertEqual(a,[4,5])
+        XCTAssertEqual(r.count,4)
+        XCTAssertEqual(r,[0,1,2,3])
+        
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:5),[1,2,3])
         a = []
         XCTAssertEqual(a.trim(to:5).count,0)
+        
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:-1),[1,2])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:-4),[])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:4),[1,2,3])
+        a = [1,2,3]
+        XCTAssertEqual(a.trim(to:0),[])
+
     }
+    
+    func testisNotEmpty() {
+        XCTAssertTrue([1,2,3].isNotEmpty)
+        XCTAssertFalse([].isNotEmpty)
+    }
+
+    func testTransposed() {
+        XCTAssertTrue([[1]].transposed() == [[1]])
+        XCTAssertTrue([[1,2,3],[4,5]].transposed() == [[1,4],[2,5],[3]])
+        XCTAssertTrue([[4,1],[5,2],[3]].transposed() == [[4,5,3],[1,2]])
+        XCTAssertTrue([[1,2,3]].transposed() == [[1],[2],[3]])
+        XCTAssertTrue([[1],[2],[3]].transposed() == [[1,2,3]])
+    }
+
+	func testDimensions() {
+		XCTAssertTrue([[]].dimensions == (rows:1,columns:0))
+		XCTAssertTrue([[2],[1]].dimensions == (rows:2,columns:1))
+		XCTAssertTrue([[2,3],[1]].dimensions == (rows:2,columns:2))
+		XCTAssertTrue([[2,3]].dimensions == (rows:1,columns:2))
+		XCTAssertTrue([[2],[1,2]].dimensions == (rows:2,columns:2))
+		XCTAssertTrue([[2]].dimensions == (rows:1,columns:1))
+	}
+    
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
@@ -83,4 +172,30 @@ class TestExtensionForSwiftArray: XCTestCase {
         }
     }
     
+    func testRotate() {
+//        XCTAssertTrue([].rotated(-2) == [])
+
+        XCTAssertTrue([1,2,3].rotated(0) == [1,2,3])
+
+        XCTAssertTrue([1,2,3].rotated(1) == [3,1,2])
+        XCTAssertTrue([1,2,3].rotated(-1) == [2,3,1])
+
+        XCTAssertTrue([1,2,3].rotated(2) == [2,3,1])
+        XCTAssertTrue([1,2,3].rotated(-2) == [3,1,2])
+
+        XCTAssertTrue([1].rotated(-2) == [1])
+        XCTAssertTrue([1].rotated(2) == [1])
+
+        XCTAssertTrue([1,2].rotated(6) == [1,2])
+        XCTAssertTrue([1,2].rotated(7) == [2,1])
+        XCTAssertTrue([1,2].rotated(-6) == [1,2])
+        XCTAssertTrue([1,2].rotated(-7) == [2,1])
+
+        XCTAssertTrue([1,2,3].rotated(-3) == [1,2,3])
+        XCTAssertTrue([1,2,3].rotated(3) == [1,2,3])
+
+        XCTAssertTrue([1,2,3].rotated(4) == [3,1,2])
+        XCTAssertTrue([1,2,3].rotated(-4) == [2,3,1])
+
+    }
 }

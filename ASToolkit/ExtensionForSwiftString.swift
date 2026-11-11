@@ -6,28 +6,40 @@
 //  Copyright © 2017 Andrzej Semeniuk. All rights reserved.
 //
 
-//import Foundation
+import Foundation
 
-extension String
-{
+nonisolated
+extension String {
+    public var asSubstring : Substring {
+        return Substring(self)
+    }
+    
     public var length: Int {
-        return characters.count
+        return count
     }
     
     public var empty: Bool {
         return length < 1
     }
+    
+    public var isNotEmpty : Bool {
+        return !isEmpty
+    }
 }
 
-extension String
-{
+nonisolated
+extension String {
     public var urlEncoded: String {
         return addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)!
     }
     
+    public var urlDecoded: String {
+        return removingPercentEncoding ?? self
+    }
+    
     public var base64Encoded: String {
         let step1:NSString      = self as NSString
-        let step2:Data        = step1.data(using: String.Encoding.utf8.rawValue)!
+        let step2:Data          = step1.data(using: String.Encoding.utf8.rawValue)!
         let options             = Data.Base64EncodingOptions(rawValue: 0)
         let result:String       = step2.base64EncodedString(options: options)
         
@@ -35,60 +47,310 @@ extension String
     }
 }
 
-extension String
-{
-    public subscript (safe i:Int) -> String? {
-        return 0 <= i && i < self.count ? self[i] : nil
+nonisolated
+public extension String {
+    
+    static let TRUE     = "true"
+    static let FALSE    = ""
+    
+    static func asBool(_ flag: Bool) -> String {
+        flag ? .TRUE : .FALSE
     }
 
-    public subscript (i: Int) -> String {
-        return self[Range(i ..< i + 1)]
+    var asBool : Bool {
+        self == Self.TRUE
+    }
+
+    var isTRUE : Bool {
+        asBool
+    }
+
+    var isFALSE : Bool {
+        asBool.not
     }
     
-    public subscript (r: Range<Int>) -> String {
-        let start = characters.index(startIndex, offsetBy: r.lowerBound)
-        let end = characters.index(start, offsetBy: r.upperBound - r.lowerBound)
-        return self[Range(start ..< end)]
+    @discardableResult
+    mutating func setTRUE() -> Self {
+        self = Self.TRUE
+        return self
     }
 
-    public func at(_ i: Int) -> String {
-        let c = self[self.characters.index(self.startIndex, offsetBy: i)]
+    @discardableResult
+    mutating func setFALSE() -> Self {
+        self = Self.FALSE
+        return self
+    }
+    
+    func transformed<T>(to: (String)->T?) -> T? {
+        to(self)
+    }
+
+}
+
+nonisolated
+public extension String {
+    subscript (safe i:Int) -> Substring? {
+        0 <= i && i < self.count ? self[i] : nil
+    }
+
+    subscript (i: Int) -> Substring {
+        self[i ..< i + 1]
+    }
+    
+    subscript (r: Range<Int>) -> Substring {
+        let start = self.index(startIndex, offsetBy: r.lowerBound)
+        let end = self.index(start, offsetBy: r.upperBound - r.lowerBound)
+        return self[start..<end]
+    }
+    
+        //    subscript(_ range: CountableRange<Int>) -> String {
+        //        let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+        //        let end = index(start, offsetBy: min(self.count - range.lowerBound,
+        //                                             range.upperBound - range.lowerBound))
+        //        return String(self[start..<end])
+        //    }
+
+            subscript(_ range: CountablePartialRangeFrom<Int>) -> Substring {
+                let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+        //         return String(self[start...])
+                return self[start...]
+            }
+
+
+    func at(_ i: Int) -> String {
+        let c = self[self.index(self.startIndex, offsetBy: i)]
         return String(c as Character)
     }
 
-    public func character(at i: Int) -> Character {
-        return self[self.characters.index(self.startIndex, offsetBy: i)] as Character
+    func character(at i: Int) -> Character {
+        return self[self.index(self.startIndex, offsetBy: i)] as Character
     }
     
-    public func substring(from: Int) -> String {
-        return self[Range(min(from, length) ..< length)]
+    func substring(from: Int) -> Substring {
+        if from < 0 {
+            return self[max(0, length + from) ..< length]
+        }
+        return self[min(from, length) ..< length]
     }
     
-    public func substring(to: Int) -> String {
-        return self[Range(0 ..< min(to, length))]
+    func substring(to: Int) -> Substring {
+        if to < 0 {
+            return self[0 ..< max(0, length + to)]
+        }
+        return self[0 ..< max(0, min(to, length))]
     }
     
-    public func substring(from: Int, to: Int) -> String {
-        return self[Range(min(from, length) ..< min(to, length))]
+    func prefix(to: String) -> String {
+        self.split(to).first ?? self
+    }
+    func suffix(to: String) -> String {
+        self.split(to).last ?? self
+    }
+    
+    func substring(from: Int, to: Int) -> Substring {
+        return self[min(from, length) ..< min(to, length)]
     }
 
-    public func substring(from:Int = 0, length:Int) -> String {
-        return self.substring(with: Range<String.Index>(self.characters.index(self.startIndex, offsetBy: from)..<self.characters.index(self.startIndex, offsetBy: from+length)))
+    func substring(from: UInt, to: UInt) -> Substring {
+        return self[min(Int(from), length) ..< min(Int(to), length)]
+    }
+
+    func substring(from:Int = 0, length:Int) -> Substring {
+        if from < 0 {
+            let f = max(0, length + from)
+            let t = max(f,min(f + length, self.length))
+            return self[f..<t]
+        }
+        return self[from..<max(from,from+length)]
+    }
+    
+    
+    func runRange(at index: Int) -> ClosedRange<Int> {
+        let char = self[self.index(self.startIndex, offsetBy: index)]
+        var start = index
+        var end = index
+        
+        // Find start of run
+        while start > 0 && self[self.index(self.startIndex, offsetBy: start - 1)] == char {
+            start -= 1
+        }
+        
+        // Find end of run
+        while end < self.count - 1 && self[self.index(self.startIndex, offsetBy: end + 1)] == char {
+            end += 1
+        }
+        
+        return start...end
+    }
+
+    
+    
+    var containsVowel: Bool {
+        firstMatch(of: /[aeiouyAEIOUY]/) != nil
+    }
+    
+    var containsConsonant: Bool {
+        firstMatch(of: /[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ]/) != nil
     }
     
 }
 
+nonisolated
+public extension StringProtocol {
+    var asBits : [Bool] {
+        self.map { $0 == "0" ? false : true }
+    }
+    var asString : String {
+        String(self)
+    }
+}
+
+
+
+public protocol Stringable {
+    static func from(string: String) -> Self?
+}
+
+
+public extension String {
+    
+    func parse<Type0: Stringable>(_ pattern: String) -> Type0? {
+        guard let regex = try? NSRegularExpression.init(pattern: pattern, options: []) else {
+            return nil
+        }
+        let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+        guard let a = result[safe:0] else { return nil }
+        let b = self[a.range.lowerBound..<a.range.upperBound]
+        return Type0.from(string: String(b))
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable>(_ pattern: String) -> (Type0?,Type1?) {
+        var r : (Type0?,Type1?) = (nil,nil)
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+            if let a = result[safe:0] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.0 = Type0.from(string: String(b))
+            }
+            if let a = result[safe:1] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.1 = Type1.from(string: String(b))
+            }
+        }
+        return r
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable, Type2: Stringable>(_ pattern: String) -> (Type0?,Type1?,Type2?) {
+        var r : (Type0?,Type1?,Type2?) = (nil,nil,nil)
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count))
+            if let a = result[safe:0] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.0 = Type0.from(string: String(b))
+            }
+            if let a = result[safe:1] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.1 = Type1.from(string: String(b))
+            }
+            if let a = result[safe:2] {
+                let b = self[a.range.lowerBound..<a.range.upperBound]
+                r.2 = Type2.from(string: String(b))
+            }
+        }
+        return r
+    }
+    
+    func parse<Type0: Stringable, Type1: Stringable, Type2: Stringable>(_ pattern: String, _ out0: inout  Type0?, _ out1: inout Type1?, _ out2: inout Type2?) -> Bool {
+        var r = false
+        if let regex = try? NSRegularExpression.init(pattern: pattern, options: []) {
+            guard let result = regex.matches(in: self, options: [], range: NSMakeRange(0,count)).first else { return r }
+            var got = 0
+            let found : [String] = Array(0...result.numberOfRanges-1).map {
+                let range = result.range(at: $0)
+                return self[range.lowerBound..<range.upperBound].asString
+            }
+            print("\(self) -> |\(result.numberOfRanges)| \(found)")
+            if result.numberOfRanges > 1 {
+                let a = result.range(at: 1)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out0 = Type0.from(string: String(b))
+                got += out0 != nil ? 1 : 0
+            }
+            if result.numberOfRanges > 2 {
+                let a = result.range(at: 2)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out1 = Type1.from(string: String(b))
+                got += out1 != nil ? 1 : 0
+            }
+            if result.numberOfRanges > 3 {
+                let a = result.range(at: 3)
+                let b = self[a.lowerBound..<a.upperBound]
+//                print(" found \(b)")
+                out2 = Type2.from(string: String(b))
+                got += out2 != nil ? 1 : 0
+            }
+            r = got == 3
+        }
+        return r
+    }
+
+}
+
+extension String {
+    func appendLineToURL(fileURL: URL) throws {
+        try (self + "\n").appendToURL(fileURL: fileURL)
+     }
+
+     func appendToURL(fileURL: URL) throws {
+         let data = self.data(using: String.Encoding.utf8)!
+         try data.append(fileURL: fileURL)
+     }
+ }
+
+nonisolated
+public extension String {
+    
+    func substring(_ i: Int) -> Substring {
+      let idx1 = index(startIndex, offsetBy: i)
+      let idx2 = index(idx1, offsetBy: 1)
+      return self[idx1..<idx2]
+    }
+
+    func substring(_ r: Range<Int>) -> Substring {
+      let start = index(startIndex, offsetBy: r.lowerBound)
+      let end = index(startIndex, offsetBy: r.upperBound)
+      return self[start ..< end]
+    }
+
+    func substring(_ r: CountableClosedRange<Int>) -> Substring {
+      let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+      let endIndex = self.index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+      return self[startIndex...endIndex]
+    }
+    
+    func substring(_ r: PartialRangeFrom<Int>) -> Substring {
+        let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+        return self[startIndex..<self.endIndex]
+    }
+
+}
+
+
+nonisolated
 extension String
 {
     public func trimmed() -> String {
-        return self.trimmingCharacters(in: CharacterSet.whitespaces)
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+//        return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    public func trimIfBeyondDigitCount(_ count:Int) -> String {
+    public func trimIfBeyondDigitCount(_ count:Int) -> Substring {
         var count = count
         let digits:Set<Character> = ["0","1","2","3","4","5","6","7","8","9"]
         var i = 0
-        for c in characters {
+        for c in self {
             i = i+1
             if digits.contains(c) {
                 count = count-1
@@ -97,7 +359,7 @@ extension String
                 }
             }
         }
-        return self
+        return Substring(self)
     }
     
     public func prefixWithPlusIfPositive() -> String
@@ -108,11 +370,27 @@ extension String
         return self
     }
     
-    public func trimmedFromEndIfLongerThan(_ count:Int) -> String {
-        if count < length {
-            return substring(from:0,length:count)
+    public func prefixed(upToLength: Int, with: Character) -> String {
+        var R = self
+        let c = String(with)
+        while R.length < upToLength {
+            R = c + R
         }
-        return self
+        return R
+    }
+    
+    public func trimmedFromEndIfLongerThan(_ count:Int, withSuffix: String = "") -> Substring {
+        if count < length {
+            return substring(from:0,length:count) + withSuffix
+        }
+        return Substring(self)
+    }
+    
+    public func trimmedFromEnd(_ count: Int) -> Substring {
+        if count <= length {
+            return substring(from:0,length:length - count)
+        }
+        return Substring(self)
     }
     
 }
@@ -133,6 +411,7 @@ extension String {
     
 }
 
+nonisolated
 extension String {
     
     public func split(_ delimiter:String) -> [String] {
@@ -140,6 +419,10 @@ extension String {
     }
  
     public func countOf(substring:String) -> Int {
+        return split(substring).count-1
+    }
+    
+    public func countOf0(substring:String) -> Int {
         var r = 0
         var i = 0
         let limit = self.length - substring.length + 1
@@ -163,8 +446,13 @@ extension String {
         }
         return r
     }
+    
+    public func countOf(character: Character) -> Int {
+        self.reduce(0, { $0 + ($1 == character ? 1 : 0) })
+    }
 }
 
+nonisolated
 extension String {
     
     public func capitalized() -> String {
@@ -174,11 +462,1630 @@ extension String {
         return self
     }
     
-    public func tweened(with:String = " ") -> String {
+    public func tweened(with:String = " ") -> Substring {
         var result = self.substring(to: 1)
         for i in stride(from:1,to:length,by:1) {
             result += with + self[i]
         }
         return result
     }
+}
+
+nonisolated
+public extension String {
+    
+    func prepended(with:String, delimiter:String = "") -> String {
+        if isEmpty {
+            return with
+        }
+        else if with.isEmpty {
+            return self
+        }
+        else {
+            return "\(with)\(delimiter)\(self)"
+        }
+    }
+    
+    func appended(with:String, delimiter:String = "") -> String {
+        if isEmpty {
+            return with
+        }
+        else if with.isEmpty {
+            return self
+        }
+        else {
+            return "\(self)\(delimiter)\(with)"
+        }
+    }
+
+}
+
+//public extension Range {
+//
+//    var distance : Int {
+//        self.endIndex - self.startIndex
+//    }
+//}
+
+nonisolated
+public extension String {
+
+    func index(at: Int) -> Index {
+        index(startIndex, offsetBy: at)
+    }
+    
+    func indexDistance(to: Index) -> Int {
+        distance(from: startIndex, to: to)
+    }
+    
+    func matches(regex: String) -> Bool {
+        self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    }
+
+	func matches(regex: String?) -> Bool {
+        regex == nil ? true : matches(regex: regex!)
+	}
+
+	func substring(regex: String) -> Substring? {
+		if let range = self.range(of: regex, options: .regularExpression, range: nil, locale: nil) {
+			return self[range]
+			//			return self.substring(from: range.lowerBound.encodedOffset, to: range.upperBound.encodedOffset)
+		}
+		return nil
+	}
+
+    func replacing(regex: String, with: (Substring)->String) -> String {
+        var r = ""
+        var i = 0
+        while let range = self.range(of: regex, options: .regularExpression, range: index(at: i)..<endIndex, locale: nil) {
+            r += self.substring(from: UInt(i), to: indexDistance(to: range.lowerBound).magnitude)
+            i = indexDistance(to: range.upperBound)
+            r += with(self[range])
+        }
+        if index(at: i) < endIndex {
+            r += self.substring(from: i)
+        }
+        return r
+    }
+
+	func escaped() -> String {
+		var r = ""
+		for (_,char) in self.enumerated() {
+			r += "\\\(char)"
+		}
+		return r
+	}
+    
+    var asEscapedCString : String {
+        var result = ""
+        for char in self {
+            switch char {
+            case "\"":
+                result += "\\\""
+            case "\\":
+                result += "\\\\"
+            case "\n":
+                result += "\\n"
+            case "\r":
+                result += "\\r"
+            case "\t":
+                result += "\\t"
+            case "\0":
+                result += "\\0"
+            default:
+                result.append(char)
+            }
+        }
+        return result
+    }
+    
+    static func fromEscapedCString(_ escaped: String) -> String {
+        var result = ""
+        var i = escaped.startIndex
+        
+        while i < escaped.endIndex {
+            if escaped[i] == "\\" {
+                let nextIndex = escaped.index(after: i)
+                if nextIndex < escaped.endIndex {
+                    switch escaped[nextIndex] {
+                    case "\"":
+                        result.append("\"")
+                    case "\\":
+                        result.append("\\")
+                    case "n":
+                        result.append("\n")
+                    case "r":
+                        result.append("\r")
+                    case "t":
+                        result.append("\t")
+                    case "0":
+                        result.append("\0")
+                    default:
+                        result.append(escaped[i])
+                        result.append(escaped[nextIndex])
+                    }
+                    i = escaped.index(after: nextIndex)
+                } else {
+                    result.append(escaped[i])
+                    i = nextIndex
+                }
+            } else {
+                result.append(escaped[i])
+                i = escaped.index(after: i)
+            }
+        }
+        return result
+    }
+
+}
+
+//extension String {
+//
+//	public func ends(with: String) -> Bool {
+//		return matches(regex: ".*\(with.escaped())$")
+//	}
+//
+//}
+
+extension String {
+    
+    public func mismatches(with: String, upto: Int = 0) -> [Int] {
+        
+        let limit = upto > 0 ? max(0,min(upto,min(length,with.length))) : max(0,min(length,with.length))
+        
+        var r : [Int] = []
+        
+        for i in 0..<limit {
+            if self[i] != with[i] {
+                r.append(i)
+            }
+        }
+        
+        return r
+    }
+    
+}
+
+
+nonisolated
+extension String {
+    
+    public func partitioned(by: (Int,Character)->Bool) -> [Substring] {
+        var r : [Substring] = []
+        var i = 0
+        for (j,c) in self.enumerated() {
+            if by(j,c) {
+                if i < j {
+                    r.append(self[i..<j])
+                    i = j
+                }
+            }
+        }
+        if i < count {
+            r.append(self[i..<count])
+        }
+        return r
+    }
+}
+
+nonisolated
+public extension String {
+    
+    func uniqued() -> String {
+        String(Set<Character>(self))
+    }
+    
+}
+
+nonisolated
+public extension Array where Element == String {
+    
+    func split(span chars: Int) -> ([String],[String]) {
+        var length = 0
+        for (index,word) in self.enumerated() {
+            if word.length + length <= chars {
+                length += word.length
+            } else if index == 0 {
+                return ([word], (index+1) < self.count ? Array(self[index+1..<self.count]) : [])
+            } else {
+                return (Array(self[0..<index]), index < self.count ? Array(self[index..<self.count]) : [])
+            }
+        }
+        return (self,[])
+    }
+
+    func lines(span chars: Int) -> [[String]] {
+        var words = self
+        var r : [[String]] = []
+        while true {
+            let (a,b) = words.split(span: chars)
+            if a.isEmpty {
+                break
+            }
+            r.append(a)
+            if b.isEmpty {
+                break
+            }
+            words = b
+        }
+        return r
+    }
+    
+    func joined(_ transform: (String)->String, separator: String = ",") -> String {
+        map { transform($0) }.joined(separator: separator)
+    }
+    var cqq : String {
+        joined({ $0.qq })
+    }
+    
+    var joinedByNothing : String {
+        self.joined(separator: "")
+    }
+    var joinedByComma : String {
+        self.joined(separator: ",")
+    }
+    var joinedBySpacedComma : String {
+        self.joined(separator: ", ")
+    }
+    var joinedByDot : String {
+        self.joined(separator: ".")
+    }
+    var joinedBySlash : String {
+        self.joined(separator: "/")
+    }
+    var joinedBySpace : String {
+        self.joined(separator: " ")
+    }
+    var joinedByPipe : String {
+        self.joined(separator: "|")
+    }
+    var joinedBy3Pipe : String {
+        self.joined(separator: "|||")
+    }
+    var joinedByNewline : String {
+        self.joined(separator: "\n")
+    }
+    var joinedByPlus : String {
+        self.joined(separator: "+")
+    }
+    func joinedBy(_ separator: String) -> String {
+        self.joined(separator: separator)
+    }
+
+}
+
+nonisolated
+public extension String {
+
+    func split(on: (Character)->Bool) -> [Substring] {
+        var indexes : [Int] = [0]
+        for (index,c) in self.enumerated() {
+            if on(c) {
+                indexes.append(index)
+            }
+        }
+        indexes.append(count)
+        
+        if indexes[safe: 1] == 0 {
+            indexes.removeFirst()
+        }
+
+        var splits : [Substring] = []
+
+        indexes.forEachAdjacent() { from,to in
+            splits.append(self.substring(from: from.asUInt, to: to.asUInt))
+        }
+        
+        return splits
+    }
+    
+    var splitByComma : [String] {
+        split(",")
+    }
+    var splitByDot : [String] {
+        split(".")
+    }
+    var splitByDash : [String] {
+        split("-")
+    }
+    var splitByColon : [String] {
+        split(":")
+    }
+    var splitByPipe : [String] {
+        split("|")
+    }
+    var splitBy3Pipe : [String] {
+        split("|||")
+    }
+    var splitBySlash : [String] {
+        split("/")
+    }
+    var splitByHash : [String] {
+        split("#")
+    }
+    var splitByNewline : [String] {
+        split("\n")
+    }
+    var splitByPlus : [String] {
+        split("+")
+    }
+    var splitBySpace : [String] {
+        split(" ")
+    }
+    var splitByFieldDelimiter : [String] {
+        split("+")
+    }
+    var splitByTypeDelimiter : [String] {
+        split(":")
+    }
+    var splitByIdentifierDelimiter : [String] {
+        split("@")
+    }
+    
+    func splitOnFirst(_ delimiter: String) -> (first: String, remainder: Substring) {
+        let SPLIT = self.split(delimiter)
+        return (first: SPLIT[0], remainder: self.substring(from: SPLIT[0].count))
+    }
+    
+    func chunked(by: String) -> [String] {
+        self.split(by).filter { $0.isNotEmpty }
+    }
+    
+    var chunkedBySpace : [String] {
+        self.split(" ").map { $0.trimmed() }.filter { $0.isNotEmpty }
+//        self.chunked(by: " ")
+    }
+    
+    static let newline : String = "\n"
+    static let LF : String = "\n"
+    static let CR : String = "\r"
+    static let CRLF : String = LF + CR
+}
+
+
+nonisolated
+public extension String {
+
+    /// Parses abbreviated numbers like "1.23K", "1.23 K", "2m", "4.5b", "7t", "8p", "9e" into a Double.
+    /// Supported suffixes (case-insensitive):
+    /// K (kilo, 1e3), M (mega/million, 1e6), B (billion, 1e9), T (trillion, 1e12), P (peta, 1e15), E (exa, 1e18)
+    /// If no recognized suffix is present, falls back to plain Double parsing.
+    var asDoubleAbbreviated: Double? {
+        // Pre-trim whitespace and remove commas
+        let s = self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")
+        if s.isEmpty { return nil }
+
+        // Regex:
+        // ^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$
+        // 1: signed number (int or decimal)
+        // 2: optional single-letter suffix
+        let pattern = #"^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$"#
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            let ns = s as NSString
+            let range = NSRange(location: 0, length: ns.length)
+            if let match = regex.firstMatch(in: s, options: [], range: range) {
+                // Extract number
+                if let numRange = Range(match.range(at: 1), in: s) {
+                    let numberPart = String(s[numRange])
+                    guard let base = Double(numberPart) else { return nil }
+
+                    // Extract suffix if present
+                    var multiplier: Double = 1.0
+                    if match.numberOfRanges > 2, let sufRange = Range(match.range(at: 2), in: s) {
+                        let suf = s[sufRange].uppercased()
+                        switch suf {
+                        case "K": multiplier = 1e3
+                        case "M": multiplier = 1e6
+                        case "B": multiplier = 1e9
+                        case "T": multiplier = 1e12
+                        case "P": multiplier = 1e15
+                        case "E": multiplier = 1e18
+                        default:  multiplier = 1.0
+                        }
+                    }
+                    return base * multiplier
+                }
+            }
+        }
+        // Fallback
+        return Double(s)
+    }
+    
+    var asDoubleExtended : Double? { asDouble ?? asDoubleAbbreviated }
+    
+    /// Parses abbreviated integers like "1.23K", "1.23 K", "2m", "4.5b", "7t", "8p", "9e" into an Int.
+    /// Supported suffixes (case-insensitive):
+    /// K (kilo, 1e3), M (mega/million, 1e6), B (billion, 1e9), T (trillion, 1e12), P (peta, 1e15), E (exa, 1e18)
+    /// If no recognized suffix is present, falls back to plain Int parsing via `asIntExtended`.
+    var asIntAbbreviated: Int? {
+        // Pre-trim whitespace and remove commas
+        let s = self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")
+        if s.isEmpty { return nil }
+
+        // Regex:
+        // ^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$
+        // 1: signed number (int or decimal)
+        // 2: optional single-letter suffix
+        let pattern = #"^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(?:\s*([kKmMbBtTpPeE]))?\s*$"#
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            let ns = s as NSString
+            let range = NSRange(location: 0, length: ns.length)
+            if let match = regex.firstMatch(in: s, options: [], range: range) {
+                // Extract number
+                if let numRange = Range(match.range(at: 1), in: s) {
+                    let numberPart = String(s[numRange])
+                    guard let base = Double(numberPart) else { return nil }
+
+                    // Extract suffix if present
+                    var multiplier: Double = 1.0
+                    if match.numberOfRanges > 2, let sufRange = Range(match.range(at: 2), in: s) {
+                        let suf = s[sufRange].uppercased()
+                        switch suf {
+                        case "K": multiplier = 1e3
+                        case "M": multiplier = 1e6
+                        case "B": multiplier = 1e9
+                        case "T": multiplier = 1e12
+                        case "P": multiplier = 1e15
+                        case "E": multiplier = 1e18
+                        default:  multiplier = 1.0
+                        }
+                    }
+
+                    // Multiply and convert to Int (truncates toward zero)
+                    let value = base * multiplier
+                    if value.isFinite {
+                        return Int(value)
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        // Fallback
+        return Int(s)
+    }
+
+    /// Convenience: tries plain Int first, then abbreviated parsing.
+    var asIntExtended: Int? {
+        if let v = Int(self.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: ",", with: "")) {
+            return v
+        }
+        return asIntAbbreviated
+    }    
+    
+    var  asFloat   :  Float?   { Float(self.trimmed().erasingCommas) }
+    var  asDouble  :  Double?  { Double(self.trimmed().erasingCommas) }
+    var  asCGFloat :  CGFloat? { CGFloat(self.trimmed().erasingCommas) }
+    var  asInt     :  Int?     { Int(self.trimmed().erasingCommas) }
+    var  asIntErasingLeadingZeros     :  Int?     { Int(self.trimmed().erasingCommas.erasingLeading(character: "0")) }
+    var  asUInt    :  UInt?    { UInt(self.trimmed().erasingCommas) }
+    var  asUInt64  :  UInt64?  { UInt64(self.trimmed().erasingCommas) }
+    var  asInt64   :  Int64?   { Int64(self.trimmed().erasingCommas) }
+
+    var  asTimeInterval : TimeInterval?  { TimeInterval(self.trimmed().erasingCommas) }
+
+    var asPhrase : String {
+//        self.splitAndKeep(on: { $0.isUppercase || $0.isWhitespace })
+        asWordsFromCamelNotation
+    }
+    
+    var asWordsFromCamelNotation : String {
+        var r : String = ""
+        var spaces = 0
+        var number0 = false
+        for c in self {
+            if c.isNumber {
+                if number0 == false && r.isNotEmpty {
+                    r.append(" ")
+                }
+                number0 = true
+                r.append(c)
+                continue
+            } else if c.isUppercase {
+                if number0 || r.isNotEmpty {
+                    r.append(" ")
+                    number0 = false
+                }
+                r.append(c)
+                continue
+            } else if c.isWhitespace {
+                spaces += 1
+                number0 = false
+                continue
+            } else if spaces > 0 {
+                spaces = 0
+                r.append(" ")
+                number0 = false
+            }
+            if number0 {
+                r.append(" ")
+                number0 = false
+            }
+            r.append(c)
+        }
+        return r
+    }
+    
+    var asWordsFromCamelNotation1 : String {
+        var result: String = ""
+        var needsSpace = false
+        var prev: Character? = nil
+
+        func isPunctuationOrSymbol(_ c: Character) -> Bool {
+            for s in c.unicodeScalars {
+                if CharacterSet.punctuationCharacters.contains(s) || CharacterSet.symbols.contains(s) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        func emitPendingSpaceIfNeeded() {
+            if needsSpace && !result.isEmpty {
+                result.append(" ")
+            }
+            needsSpace = false
+        }
+
+        for c in self {
+            // Treat whitespace/punctuation/symbol as separator -> mark that a space is needed
+            if c.isWhitespace || isPunctuationOrSymbol(c) {
+                needsSpace = true
+                continue
+            }
+
+            // Uppercase boundary: ensure a single space before it if not at start
+            if c.isUppercase {
+                if !result.isEmpty {
+                    // We are starting a new token; normalize to a single space
+                    result.append(" ")
+                }
+                needsSpace = false
+                result.append(c)
+                prev = c
+                continue
+            }
+
+            // Letter <-> digit transitions: ensure a single space before the new token
+            if let p = prev {
+                let pIsLetter = p.isLetter
+                let pIsDigit  = p.isNumber
+                let cIsLetter = c.isLetter
+                let cIsDigit  = c.isNumber
+                if (pIsLetter && cIsDigit) || (pIsDigit && cIsLetter) {
+                    if !result.isEmpty {
+                        result.append(" ")
+                    }
+                    needsSpace = false
+                }
+            }
+
+            // If there were separators before, emit only one space now
+            emitPendingSpaceIfNeeded()
+
+            result.append(c)
+            prev = c
+        }
+
+        return result
+    }
+
+    
+    var asCapitalizedWords : String {
+        asPhrase.split(on: { $0 == " "}).map {
+            $0.capitalized
+        }.joined(separator: " ")
+    }
+    
+    func surrounded(by: String) -> Self {
+        "\(by)\(self)\(by)"
+    }
+        
+    var doublequoted : Self {
+        surrounded(by: "\"")
+    }
+    nonisolated
+    var dquoted : Self { doublequoted }
+    nonisolated
+    var dq : Self { doublequoted }
+    nonisolated
+    var qq : Self { doublequoted }
+
+    var singlequoted : Self {
+        surrounded(by: "'")
+    }
+    var squoted : Self { singlequoted }
+    var sq : Self { singlequoted }
+
+    var bracketed : Self {
+        "[\(self)]"
+    }
+
+    var sp1 : Self { surrounded(by: " ")}
+    var sp2 : Self { surrounded(by: "  ")}
+    var sp3 : Self { surrounded(by: "   ")}
+    
+    var erasingCommas : String {
+        self.replacingOccurrences(of: ",", with: "")
+    }
+    var erasingSpaces : String {
+        self.replacingOccurrences(of: " ", with: "")
+    }
+    
+    func erasingLeading(character: Character) -> Self {
+        if let INDEX = self.firstIndex(where: { $0 != character }) {
+            return self[INDEX...].asString
+        }
+        return self
+    }
+    
+
+}
+
+
+public extension String {
+    
+    func acronym(delimiter: String = " ", join: String = "") -> String {
+        split(delimiter).map { String($0).trimmed()[safe: 0] }.compactMap { $0 }.joined(separator: join)
+    }
+    
+}
+
+public extension String {
+    
+    func multiple(_ count: Int) -> Self {
+        Array<String>.init(repeating: self, count: count).joined()
+    }
+    func repeated(_ count: Int) -> Self {
+        Array<String>.init(repeating: self, count: 1+count).joined()
+    }
+    
+}
+
+public extension String {
+    
+    var asBytes     : [UInt8]   { .init(self.utf8) }
+    var asData      : Data      { asDataUTF8 }
+    var asDataUTF8  : Data      { .init(utf8) }
+
+}
+
+public extension String {
+    
+    var formatterForDate : DateFormatter {
+        let r = DateFormatter()
+        r.dateFormat = self //format //"yyyy.MM.dd"
+        return r
+    }
+
+}
+
+public extension String {
+    
+    mutating func assignIf(_ condition0: Bool, _ value0: String, _ condition1: Bool? = nil, _ value1: String? = nil, _ otherwise: String) {
+        if condition0 {
+            self = value0
+        } else if let condition1, let value1, condition1 {
+            self = value1
+        } else {
+            self = otherwise
+        }
+    }
+    
+}
+
+public extension String {
+
+    func removingCharacters(in forbiddenChars: CharacterSet) -> String {
+        let passed = self.unicodeScalars.filter { !forbiddenChars.contains($0) }
+        return String(String.UnicodeScalarView(passed))
+    }
+
+    func removingCharacters(in string: String) -> String {
+        return removingCharacters(in: CharacterSet(charactersIn: string))
+    }
+    
+    func missing(_ string: String) -> Bool {
+        contains(string).not
+    }
+    
+    mutating func remove(at index: Int) {
+        self = characters.removed(at: index).asString
+    }
+    
+    mutating func assign(at index: String.Index, character: String) {
+        if character.isNotEmpty {
+            assign(at: index, character: character.first!)
+        }
+    }
+    
+    mutating func assign(at index: String.Index, character: Character) {
+        let index = self.distance(from: self.startIndex, to: index)
+        if index < count {
+            var C = characters
+            C[index] = character
+            self = C.asString
+        }
+    }
+    
+    mutating func assign(at index: Int, character: String) {
+        if character.isNotEmpty {
+            assign(at: index, character: character.first!)
+        }
+    }
+    
+    mutating func assign(at index: Int, character: Character) {
+        if index < count {
+            var C = characters
+            C[index] = character
+            self = C.asString
+        }
+    }
+}
+
+public extension String {
+    
+    var characters : [Character] {
+        map { $0 }
+    }
+    
+}
+
+
+// https://forums.swift.org/t/string-extension-with-full-subscript-support/35498
+public extension String {
+    
+    /**
+     Enables passing in negative indices to access characters
+     starting from the end and going backwards.
+     if num is negative, then it is added to the
+     length of the string to retrieve the true index.
+     */
+    func negativeIndex(_ num: Int) -> Int {
+        return num < 0 ? num + self.count : num
+    }
+    
+    func strOpenRange(index i: Int) -> Range<String.Index> {
+        let j = negativeIndex(i)
+        return strOpenRange(j..<(j + 1), checkNegative: false)
+    }
+    
+    func strOpenRange(
+        _ range: Range<Int>, checkNegative: Bool = true
+    ) -> Range<String.Index> {
+
+        var lower = range.lowerBound
+        var upper = range.upperBound
+
+        if checkNegative {
+            lower = negativeIndex(lower)
+            upper = negativeIndex(upper)
+        }
+        
+        let idx1 = index(self.startIndex, offsetBy: lower)
+        let idx2 = index(self.startIndex, offsetBy: upper)
+        
+        return idx1..<idx2
+    }
+    
+    func strClosedRange(
+        _ range: CountableClosedRange<Int>, checkNegative: Bool = true
+    ) -> ClosedRange<String.Index> {
+        
+        var lower = range.lowerBound
+        var upper = range.upperBound
+
+        if checkNegative {
+            lower = negativeIndex(lower)
+            upper = negativeIndex(upper)
+        }
+        
+        let start = self.index(self.startIndex, offsetBy: lower)
+        let end = self.index(start, offsetBy: upper - lower)
+        
+        return start...end
+    }
+    
+    // MARK: - Subscripts
+    
+    /**
+     Gets and sets a character at a given index.
+     Negative indices are added to the length so that
+     characters can be accessed from the end backwards
+     
+     Usage: `string[n]`
+     */
+//    subscript(_ i: Int) -> String {
+//        get {
+//            return String(self[strOpenRange(index: i)])
+//        }
+//        set {
+//            let range = strOpenRange(index: i)
+//            replaceSubrange(range, with: newValue)
+//        }
+//    }
+    
+    
+    /**
+     Gets and sets characters in an open range.
+     Supports negative indexing.
+     
+     Usage: `string[n..<n]`
+     */
+//    subscript(_ r: Range<Int>) -> String {
+//        get {
+//            return String(self[strOpenRange(r)])
+//        }
+//        set {
+//            replaceSubrange(strOpenRange(r), with: newValue)
+//        }
+//    }
+
+    /**
+     Gets and sets characters in a closed range.
+     Supports negative indexing
+     
+     Usage: `string[n...n]`
+     */
+    subscript(_ r: CountableClosedRange<Int>) -> String {
+        get {
+            return String(self[strClosedRange(r)])
+        }
+        set {
+            replaceSubrange(strClosedRange(r), with: newValue)
+        }
+    }
+    
+    /// `string[n...]`. See PartialRangeFrom
+    subscript(r: PartialRangeFrom<Int>) -> String {
+        
+        get {
+            return String(self[strOpenRange(r.lowerBound..<self.count)])
+        }
+        set {
+            replaceSubrange(strOpenRange(r.lowerBound..<self.count), with: newValue)
+        }
+    }
+    
+    /// `string[...n]`. See PartialRangeThrough
+    subscript(r: PartialRangeThrough<Int>) -> String {
+        
+        get {
+            let upper = negativeIndex(r.upperBound)
+            return String(self[strClosedRange(0...upper, checkNegative: false)])
+        }
+        set {
+            let upper = negativeIndex(r.upperBound)
+            replaceSubrange(
+                strClosedRange(0...upper, checkNegative: false), with: newValue
+            )
+        }
+    }
+    
+    /// `string[...<n]`. See PartialRangeUpTo
+    subscript(r: PartialRangeUpTo<Int>) -> String {
+        
+        get {
+            let upper = negativeIndex(r.upperBound)
+            return String(self[strOpenRange(0..<upper, checkNegative: false)])
+        }
+        set {
+            let upper = negativeIndex(r.upperBound)
+            replaceSubrange(
+                strOpenRange(0..<upper, checkNegative: false), with: newValue
+            )
+        }
+    }
+
+
+}
+
+public extension String {    
+    
+    var last8characters : String {
+        last(characters: 8)
+    }
+    
+    var last12characters : String {
+        last(characters: 12)
+    }
+    
+    var last16characters : String {
+        last(characters: 16)
+    }
+    
+    var last32characters : String {
+        last(characters: 32)
+    }
+    
+    func last(characters limit: Int) -> String {
+        length < (limit + 1) ? self : String(self.characters.trimmed(to: length - limit))
+    }
+
+}
+
+public extension String {
+    
+    func asArrayOfInt(delimiter: String = ",") -> [Int] {
+        split(delimiter).compactMap { Int($0) }
+    }
+    func asArrayOfDouble(delimiter: String = ",") -> [Double] {
+        split(delimiter).compactMap { Double($0) }
+    }
+
+}
+
+public extension String {
+    
+    @available(tvOS 16.0, *)
+    @available(iOS 16.0, *)
+    func matches(_ regex: Regex<String>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+    
+    @available(tvOS 16.0, *)
+    @available(iOS 16.0, *)
+    func matches(_ regex: Regex<Substring>) -> Bool {
+        self.firstMatch(of: regex) != nil
+    }
+}
+
+public extension String {
+    
+    init(type: String, identifier: String) {
+        self = type + "@" + identifier
+    }
+    
+    init(type: String, identifier: String, field: String) {
+        self = type + "@" + identifier + "+" + field
+    }
+    
+    func with(identifier: String) -> String {
+        self + "@" + identifier
+    }
+    
+    func with(field: String) -> String {
+        self + "+" + field
+    }
+    
+    func with(path: String) -> String {
+        self + "/" + path
+    }
+    
+    func with(path: [String]) -> String {
+        self + "/" + path.joinedBySlash
+    }
+}
+
+public extension String {
+    
+    func asDateWithFormat(_ format: String) -> Date? {
+        DateFormatter.init(withFormat: format).date(from: self)
+    }
+    
+}
+
+public extension String {
+    
+    func separated(by: String) -> String {
+        self.map { String($0) }.asArray.joined(separator: by)
+    }
+    
+    @inlinable var separatedBySpace : String { separated(by: " ")}
+    
+    @inlinable var paddedBySpace : String { paddedBySpace1 }
+    @inlinable var paddedBySpace1 : String { " \(self) " }
+    @inlinable var paddedBySpace2 : String { "  \(self)  " }
+    @inlinable var paddedBySpace3 : String { "   \(self)   " }
+    
+    @inlinable func padded(by: String) -> String {
+        "\(by)\(self)\(by)"
+    }
+    @inlinable func padded(by: String, count: Int) -> String {
+        "\(by.multiple(count))\(self)\(by.multiple(count))"
+    }
+    @inlinable func stripped(of: String) -> String {
+        self.replacingOccurrences(of: of, with: "")
+    }
+
+    
+    func padded(by character: Character, length K: Int) -> String {
+        let currentLength = self.count
+        guard currentLength < K else {
+//            let excess = currentLength - K
+//            let leftTrim = excess / 2
+//            let rightTrim = excess - leftTrim
+//            return String(self.dropFirst(leftTrim).dropLast(rightTrim))
+            return self
+        }
+        
+        let totalPadding = K - currentLength
+        let leftPadding = totalPadding / 2
+        let rightPadding = totalPadding - leftPadding
+        
+        let leftPad = String(repeating: character, count: leftPadding)
+        let rightPad = String(repeating: character, count: rightPadding)
+        
+        return leftPad + self + rightPad
+    }
+    func padded(with string: String, front: Bool, length: Int) -> String {
+        var R = self
+        while R.count < length {
+            if front {
+                let NEW = string + R
+                if NEW.count > length {
+                    R = string[0..<(NEW.count - length)] + R
+                } else {
+                    R = string + R
+                }
+            } else {
+                let NEW = string + R
+                if NEW.count > length {
+                    R = R + string[0..<(NEW.count - length)]
+                } else {
+                    R = R + string
+                }
+            }
+        }
+        return R
+    }
+    @inlinable func suffixed(_ with: String, separator: String = "") -> String {
+        self + separator + with
+    }
+    @inlinable func prefixed(_ with: String, separator: String = "") -> String {
+        with + separator + self
+    }
+    func truncated(_ limit: Int, _ suffix: String = "") -> String {
+        guard limit < count else {
+            return self
+        }
+        return self.prefix(limit) + suffix
+    }
+    
+    var withConvertedUnicodePatterns : String {
+        replacing(regex: "U\\+....", with: { s in
+            let S = s.asString.split("U+")
+            if S.count == 2, let N = UInt32(S[1], radix: 16) {
+                let U = Unicode.Scalar(N)
+                return U?.escaped(asASCII: false) ?? s.asString
+            }
+            return s.asString
+        })
+    }
+    
+        //    open func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
+    
+    func decoded<T: Decodable>() -> T? {
+        decoded(T.self)
+    }
+
+    func decoded<T: Decodable>(_ fallback: T) -> T {
+        decoded(T.self, fallback)
+    }
+    
+    func decoded<T: Decodable>(_ using: T.Type) -> T? {
+        try? JSONDecoder().decode(using, from: asData)
+    }
+    
+    func decoded<T: Decodable>(_ using: T.Type, _ fallback: T) -> T {
+        (try? JSONDecoder().decode(using, from: asData)) ?? fallback
+    }
+        
+    static func encoded<T: Encodable>(_ from: T) throws -> Data {
+        try JSONEncoder().encode(from)
+    }
+    
+    static func encoded<T: Encodable>(_ from: T) -> String? {
+        try? JSONEncoder().encode(from).asString
+    }
+    
+    static func encoded<T: Encodable>(_ from: T, _ fallback: String) -> String {
+        (try? JSONEncoder().encode(from).asString) ?? fallback
+    }
+    
+    static let abcdefghijklmnopqrstuvwxyz = "abcdefghijklmnopqrstuvwxyz"
+    static let ABCDEFGHIJKLMNOPQRSTUVWXYZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    static let AEIOUY = "AEIOUY"
+    static let BCDFGHJKLMNPQRSTVWXZ = "BCDFGHJKLMNPQRSTVWXZ"
+    static let VOWELS = AEIOUY
+    static let CONSONANTS = BCDFGHJKLMNPQRSTVWXZ
+    static let ALPHABET = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    
+    var U: String { self.uppercased() }
+    var l: String { self.lowercased() }
+    var s: String { " " + self + " " }
+    var angled: String { "<" + self + ">" }
+    var arrowed: String { "<-" + self + "->" }
+    var arrowed2: String { "<--" + self + "-->" }
+    var slashed: String { "/" + self + "/" }
+    var bracketted: String { "[" + self + "]" }
+    var parenthesized: String { "(" + self + ")" }
+    var embraced: String { "{" + self + "}" }
+    var mp: String { "-" + self + "+" }
+    
+    func cased(uppercased: Bool) -> Self {
+        uppercased ? self.uppercased() : self.lowercased()
+    }
+    
+    func asAnotherTypeValue<T: Decodable>() -> T? {
+        self.decoded()
+    }
+    
+    mutating func fromAnotherTypeValue<T: Encodable>(_ value: T) {
+        self ?= String.encoded(value)
+    }
+    
+    static func LETTER(_ i: Int, _ fallback: String = "?") -> String {
+        ABCDEFGHIJKLMNOPQRSTUVWXYZ.characters[safe: i]?.asString ?? fallback
+    }
+    static func letter(_ i: Int, _ fallback: String = "?") -> String {
+        LETTER(i,fallback).lowercased()
+    }
+}
+
+public extension String {
+    
+    mutating func asSet(remove element: String, delimiter: String = ",") {
+        self = split(delimiter).removed(element).filter { $0.isNotEmpty }.joined(separator: delimiter)
+    }
+    mutating func asSet(append element: String, ifMissing: Bool = true, limit: Int? = nil, delimiter: String = ",") {
+        guard element.isNotEmpty else { return }
+        guard ifMissing, contains(element).not else { return }
+        var r = split(delimiter).filter { $0.isNotEmpty && $0 != element }.appended(element)
+        if let limit = limit {
+            while r.count > limit {
+                _ = r.removeFirst()
+            }
+        }
+        self = r.joined(separator: delimiter)
+    }
+    mutating func asSet(prepend element: String, ifMissing: Bool = true, limit: Int? = nil, delimiter: String = ",") {
+        guard element.isNotEmpty else { return }
+        guard ifMissing, contains(element).not else { return }
+        var r = split(delimiter).filter { $0.isNotEmpty && $0 != element }.prepended(element)
+        if let limit = limit {
+            while r.count > limit {
+                _ = r.removeLast()
+            }
+        }
+        self = r.joined(separator: delimiter)
+    }
+    mutating func asSetInsert(prepend element: String, delimiter: String = ",") {
+        if isEmpty {
+            self = element
+        } else {
+            var elements = asSetElements(delimiter: delimiter)
+            elements.removeAll(where: { $0 == element })
+            elements.prepend(element)
+            self = elements.joined(separator: delimiter)
+        }
+    }
+    mutating func asSetInsert(append element: String, delimiter: String = ",") {
+        if isEmpty {
+            self = element
+        } else {
+            var elements = asSetElements(delimiter: delimiter)
+            elements.removeAll(where: { $0 == element })
+            elements.append(element)
+            self = elements.joined(separator: delimiter)
+        }
+    }
+    mutating func asSet(toggle element: String, prepend: Bool = false, delimiter: String = ",") {
+        if asSet(contains: element, delimiter: delimiter) {
+            asSet(remove: element, delimiter: delimiter)
+        } else {
+            if prepend {
+                asSet(prepend: element, delimiter: delimiter)
+            } else {
+                asSet(append: element, delimiter: delimiter)
+            }
+        }
+    }
+    func asSet(contains element: String, delimiter: String = ",") -> Bool {
+        split(delimiter).contains(element)
+    }
+    func asSetElements(delimiter: String = ",") -> [String] {
+        split(delimiter)
+    }
+    func asSet(_ elements: [String], delimiter: String = ",") -> String {
+        elements.joined(separator: delimiter)
+    }
+    mutating func asSetAssign(_ elements: [String], delimiter: String = ",") {
+        self = self.asSet(elements, delimiter: delimiter)
+    }
+
+    func asSetConvert<T: CustomStringConvertible>(delimiter: String = ",", _ converter: (String)->T?) -> [T] {
+        split(delimiter).compactMap { converter($0) }
+    }
+    
+    static func asSet(create from: [String], delimiter: String = ",") -> String {
+        from.joined(separator: delimiter)
+    }
+    
+    static func asSet<T: CustomStringConvertible>(create from: [T], delimiter: String = ",") -> String {
+        from.map { $0.description }.joined(separator: delimiter)
+    }
+    
+    static func asSet<T: StringProtocol>(create from: [T], delimiter: String = ",") -> String {
+        from.joined(separator: delimiter)
+    }
+    
+}
+
+//public extension String {
+//    mutating func asSetOfHSBAValues(remove element: HSBAInfo) {
+//        asSet(remove: element.asStringOfHSBA, delimiter: "|")
+//        asSet(remove: element.asStringOfHSB, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(append element: HSBAInfo) {
+//        asSet(append: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(prepend element: HSBAInfo) {
+//        asSet(prepend: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    mutating func asSetOfHSBAValues(set: [HSBAInfo]) {
+//        self = set.map { $0.asStringOfHSBA }.joined(separator: "|") //.sortedAndUniqued(<).joined(separator: "|")
+//    }
+//    func asSetOfHSBAValues(contains element: HSBAInfo) -> Bool {
+//        asSet(contains: element.asStringOfHSBA, delimiter: "|")
+//    }
+//    func asSetOfHSBAValuesStrings() -> [String] {
+//        asSetElements(delimiter: "|").filter { $0.isNotEmpty }
+//    }
+//    func asSetOfHSBAValues() -> [HSBAInfo] {
+//        asSetOfHSBAValuesStrings().map { .init($0) }
+//    }
+//    mutating func asSetOfHSBAValuesNormalize() {
+//        asSetOfHSBAValues(set: asSetOfHSBAValues())
+//    }
+//
+//}
+
+public extension String {
+    
+    func asDoubleTuple(delimiter: String = ",", unparsed: Double) -> [Double] { self.split(delimiter).map { Double($0) ?? unparsed }}
+
+    static func random(length: Int) -> String {
+        length.map { _ in
+//            "\(Character.fromA(scalar: ($0 + Int.random) % 24) ?? "?")"
+            String(format: "%c", 65 + Int.random % 48) as String
+        }.joined()
+    }
+    
+    var asSymbolsArray : [String] {
+        self.splitBySpace.map { $0.trimmed() }.filteredOutEmpty.uppercased()
+    }
+}
+
+
+public extension String {
+
+    var asURL : URL? {
+        URL.init(string: self)
+    }
+    
+    static func from(_ value: Any?) -> String? {
+        value == nil ? nil : "\(value!)"
+    }
+
+    /// Returns a dictionary containing the counts of each character in the string.
+    var countsOfCharacters : [Character: Int] {
+        var counts: [Character: Int] = [:]
+        for char in self where char.isLetter {
+            counts[char, default: 0] += 1
+        }
+        return counts
+    }
+    
+    /// Checks whether the string (`self`) contains all the letters of another string.
+    func containsAllLetters(of other: String) -> Bool {
+        let selfCounts = self.countsOfCharacters
+        let otherCounts = other.countsOfCharacters
+        
+        for (char, count) in otherCounts {
+            if selfCounts[char, default: 0] < count {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func missing(characters characterSet: CharacterSet) -> Bool {
+        rangeOfCharacter(from: characterSet) == nil
+    }
+    
+    func missing(characters: String) -> Bool {
+        missing(characters: CharacterSet(charactersIn: characters))
+    }
+    
+}
+
+
+public extension String {
+    
+    func with(s: Int) -> String {
+        s == 1 ? self : self + "s"
+    }
+    
+    func with(es: Int) -> String {
+        es == 1 ? self : self + "es"
+    }
+    
+    static func s(_ count: Int) -> String {
+        count == 1 ? "" : "s"
+    }
+    
+    static func es(_ count: Int) -> String {
+        count == 1 ? "" : "es"
+    }
+    
+    
+    func with(s: UInt) -> String {
+        s == 1 ? self : self + "s"
+    }
+    
+    func with(es: UInt) -> String {
+        es == 1 ? self : self + "es"
+    }
+    
+    static func s(_ count: UInt) -> String {
+        count == 1 ? "" : "s"
+    }
+    
+    static func es(_ count: UInt) -> String {
+        count == 1 ? "" : "es"
+    }
+    
+}
+
+
+public extension String {
+    
+        // Generic method to replace characters at specific indices
+    mutating func replace(at indices: [String.Index], with characters: [Character]) {
+        guard indices.count == characters.count else { return }
+        var chars = Array(self)
+        for (index, char) in zip(indices, characters) {
+            let intIndex = self.distance(from: startIndex, to: index)
+            if intIndex < chars.count {
+                chars[intIndex] = char
+            }
+        }
+        self = String(chars)
+    }
+    
+        // Generic method to get characters at specific indices
+    func characters(at indices: [String.Index]) -> [Character] {
+        indices.compactMap { index in
+            guard index < endIndex else { return nil }
+            return self[index]
+        }
+    }
+    
+        // Helper method to convert Int indices to String.Index
+    func indices(where predicate: (Character) -> Bool) -> [String.Index] {
+        var result: [String.Index] = []
+        var index = startIndex
+        while index < endIndex {
+            if predicate(self[index]) {
+                result.append(index)
+            }
+            index = self.index(after: index)
+        }
+        return result
+    }
+    
+}
+
+
+#if os(iOS)
+
+import UIKit
+
+extension String {
+    
+    @discardableResult
+    func openAsURL() -> Bool {
+        if let url = URL(string: self) {
+            UIApplication.shared.open(url)
+            return true
+        }
+        return false
+    }
+}
+
+#endif
+
+
+public extension Int {
+    
+    var asUppercasedLetter : String {
+        String.ABCDEFGHIJKLMNOPQRSTUVWXYZ.characters[modulo: self].asString
+    }
+    var asLowercasedLetter : String {
+        String.abcdefghijklmnopqrstuvwxyz.characters[modulo: self].asString
+    }
+    
+}
+
+public extension String {
+    
+    var boolArray : [Bool] {
+        characters.map {
+            $0 == "0" ? false : true
+        }
+    }
+    
+    func boolArray(at: Int) -> Bool {
+        characters[at] != "0"
+    }
+    
+    func boolArray(at: Int, fallback: Bool) -> Bool {
+        guard let R = characters[safe: at] else {
+            return fallback
+        }
+        return R != "0"
+    }
+    
+    func boolArray(set at: Int, _ value: Bool) -> Self {
+        guard at < count else {
+            return self + ("0".repeated(count - at - 1)) + (value ? "1" : "0")
+        }
+        var R = self.characters
+        R[at] = value ? "1" : "0"
+        return R.asString
+    }
+    
+}
+
+
+public extension String {
+    
+    var trimmedOfParentheses : String {
+        trimmed(prefix: "(", suffix: ")")
+    }
+    
+    func trimmed(prefix: String, suffix: String) -> String {
+        // If both prefix and suffix are empty, return self
+        if prefix.isEmpty && suffix.isEmpty { return self }
+
+        var result = self
+
+        // Remove prefix if present
+        if !prefix.isEmpty, result.hasPrefix(prefix) {
+            result.removeFirst(prefix.count)
+        }
+
+        // Remove suffix if present (check on the possibly prefix-trimmed result)
+        if !suffix.isEmpty, result.hasSuffix(suffix) {
+            result.removeLast(suffix.count)
+        }
+
+        return result
+    }
+    
+    func trimmed(of c: Character) -> String {
+        guard length > 1 else {
+            return self
+        }
+        if self.characters[0] == c, self.characters[count - 1] == c {
+            if length == 2 {
+                return ""
+            }
+            return self.substring(from: 1, to: count - 1).asString
+        }
+        return self
+    }
+    
+    
+    
+    func indexes(of characters: [Character], except excluded: [Int]) -> [Int] {
+        // Convert string to array of characters for easier indexing
+        let selfChars = Array(self)
+        
+        // Return array of indexes where:
+        // 1. Index is not in excluded array
+        // 2. Character at that index is in the target characters array
+        return selfChars.enumerated().compactMap { index, char in
+            if characters.contains(char) && !excluded.contains(index) {
+                return index
+            }
+            return nil
+        }
+    }
+
+}
+
+
+
+
+import CryptoKit
+
+extension String {
+    
+    var asUUID : UUID {
+        let hash = SHA256.hash(data: Data(self.utf8))
+        let bytes = Array(hash.prefix(16))
+        
+        let uuidString = String(
+            format: "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+            bytes[0], bytes[1], bytes[2], bytes[3],
+            bytes[4], bytes[5],
+            bytes[6], bytes[7],
+            bytes[8], bytes[9],
+            bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]
+        )
+        
+        return UUID(uuidString: uuidString)!
+    }
+}
+
+
+
+
+public extension String {
+    /// Splits the string into consecutive chunks of the given length (in characters),
+    /// returning an array of substrings as Strings. Respects extended grapheme clusters.
+    /// - Parameter length: Desired chunk length (k). If `length` <= 0, returns an empty array.
+    /// - Returns: Array of chunk strings, with the last chunk possibly shorter than `length`.
+    func chunked(into length: Int) -> [String] {
+        guard length > 0 else { return [] }
+        guard !isEmpty else { return [] }
+
+        var result: [String] = []
+        result.reserveCapacity((self.count + length - 1) / length)
+
+        var start = startIndex
+        while start < endIndex {
+            let end = index(start, offsetBy: length, limitedBy: endIndex) ?? endIndex
+            result.append(String(self[start..<end]))
+            start = end
+        }
+        return result
+    }
+}
+
+public extension String {
+    
+    var justDigits : String {
+        String(self.filter(\.isNumber))
+    }
+    
+}
+
+public extension String {
+    
+    func trimmedOfTrailing(character: Character) -> Substring {
+        var end = endIndex
+        while end > startIndex, self[index(before: end)] == character {
+            end = index(before: end)
+        }
+        return self[startIndex..<end]
+    }
+
+    func trimmedOfTrailing(set: CharacterSet) -> Substring {
+        var end = unicodeScalars.endIndex
+        while end > unicodeScalars.startIndex, set.contains(unicodeScalars[unicodeScalars.index(before: end)]) {
+            end = unicodeScalars.index(before: end)
+        }
+        let start = startIndex
+        let endStringIndex = end == unicodeScalars.endIndex ? self.endIndex : String.Index(end, within: self)!
+        return self[start..<endStringIndex]
+    }
+
+    func trimmedOfTrailingOccurrences(of suffix: String) -> Substring {
+        guard !suffix.isEmpty, count >= suffix.count else { return self[...] }
+        var end = endIndex
+        while end > startIndex {
+            let startOfSuffix = index(end, offsetBy: -suffix.count)
+            if self[startOfSuffix..<end] == suffix {
+                end = startOfSuffix
+            } else {
+                break
+            }
+        }
+        return self[startIndex..<end]
+    }
+    
 }

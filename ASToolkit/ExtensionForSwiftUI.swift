@@ -1,0 +1,2601 @@
+    //
+    //  ExtensionForSwiftUI.swift
+    //  ASToolkit
+    //
+    //  Created by andrzej semeniuk on 11/14/19.
+    //  Copyright © 2019 Andrzej Semeniuk. All rights reserved.
+    //
+
+import SwiftUI
+    //import UIKit
+import SpriteKit
+import Combine
+
+@available(iOS 13, *)
+public extension View {
+    
+    var inZStack : some View {
+        ZStack {
+            self
+        }
+    }
+    
+    var asAnyView : AnyView {
+        AnyView.init(self)
+    }
+    
+    var _av : AnyView {
+        AnyView.init(self)
+    }
+    
+    func padding(top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: top, leading: leading, bottom: bottom, trailing: trailing))
+    }
+    
+    func padding(_ top: CGFloat, _ leading: CGFloat, _ bottom: CGFloat, _ trailing: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: top, leading: leading, bottom: bottom, trailing: trailing))
+    }
+    
+    func padding(t: CGFloat, l: CGFloat, b: CGFloat, r: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: t, leading: l, bottom: b, trailing: r))
+    }
+    
+    func padding(top: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: top, leading: 0, bottom: 0, trailing: 0))
+    }
+    
+    func padding(bottom: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: 0, leading: 0, bottom: bottom, trailing: 0))
+    }
+    
+    func padding(leading: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: 0, leading: leading, bottom: 0, trailing: 0))
+    }
+    
+    func padding(trailing: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: trailing))
+    }
+    
+    func padding(h: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: 0, leading: h, bottom: 0, trailing: h))
+    }
+    
+    func padding(v: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: v, leading: 0, bottom: v, trailing: 0))
+    }
+    
+    func padding(h: CGFloat, v: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: v, leading: h, bottom: v, trailing: h))
+    }
+    
+    func padding(v: CGFloat, h: CGFloat) -> some View {
+        self.padding(EdgeInsets.init(top: v, leading: h, bottom: v, trailing: h))
+    }
+    
+    
+    func offset(_ point: CGPoint) -> some View {
+        self.offset(CGSize(width: point.x, height: point.y))
+    }
+}
+
+@available(iOS 13, *)
+public extension Text {
+        //    public func fontSize(_ size: CGFloat?) -> Text {
+        //        if let size = size {
+        //            self.font()
+        //        }
+        //        return self
+        //    }
+}
+
+@available(iOS 13, *)
+public extension View {
+    
+    func fxBlur(radius: CGFloat) -> some View {
+        self.blur(radius: radius)
+    }
+    func fxBlur(radius: CGFloat, opaque: Bool) -> some View {
+        self.blur(radius: radius, opaque: opaque)
+    }
+    
+}
+
+@available(iOS 13, *)
+public extension View {
+    
+    func borderRectangle(
+        corner      : CGFloat = 0,
+        lineColor   : Color = .black,
+        lineWidth   : CGFloat = 1,
+        lineCap     : CGLineCap = .butt,
+        lineJoin    : CGLineJoin = .miter,
+        miterLimit  : CGFloat = 10,
+        dash        : [CGFloat] = [CGFloat](),
+        dashPhase   : CGFloat = 0) -> some View {
+            
+            self.overlay(RoundedRectangle.init(cornerRadius: corner)
+                .strokeBorder(style: StrokeStyle.init(lineWidth     : lineWidth,
+                                                      lineCap       : lineCap,
+                                                      lineJoin      : lineJoin,
+                                                      miterLimit    : miterLimit,
+                                                      dash          : dash,
+                                                      dashPhase     : dashPhase))
+                    .foregroundColor(lineColor)
+            )
+            
+        }
+    
+    func border(
+        corner      : CGFloat = 0,
+        lineColor   : Color = .black,
+        lineWidth   : CGFloat = 1,
+        lineCap     : CGLineCap = .butt,
+        lineJoin    : CGLineJoin = .miter,
+        miterLimit  : CGFloat = 10,
+        dash        : [CGFloat] = [CGFloat](),
+        dashPhase   : CGFloat = 0) -> some View {
+            
+            self.overlay(RoundedRectangle.init(cornerRadius: corner)
+                .stroke(lineColor, style: StrokeStyle.init(lineWidth     : lineWidth,
+                                                           lineCap       : lineCap,
+                                                           lineJoin      : lineJoin,
+                                                           miterLimit    : miterLimit,
+                                                           dash          : dash,
+                                                           dashPhase     : dashPhase))
+            )
+            
+        }
+    
+    func border(
+        color       : Color,
+        thickness   : CGFloat                   = 1,
+        dash        : [CGFloat]                 = [],
+        phase       : CGFloat                   = 0
+    ) -> some View {
+        self.borderRectangle(corner: 0, lineColor: color, lineWidth: thickness, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: dash, dashPhase: phase)
+    }
+    
+    func frameUnbounded(alignment: Alignment = .center) -> some View {
+            //        return self.edgesIgnoringSafeArea(.all)
+            //        return self.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+    }
+    
+    func frameUnboundedWidth(alignment: Alignment = .center) -> some View {
+        frame(maxWidth: .infinity, alignment: alignment)
+    }
+    
+    func frameUnboundedHeight(alignment: Alignment = .center) -> some View {
+        frame(maxHeight: .infinity, alignment: alignment)
+    }
+    
+    func frame(_ w: CGFloat, _ h: CGFloat) -> some View {
+        frame(width: w, height: h)
+    }
+    
+}
+
+    //@available(iOS 13, *)
+public extension Color {
+    
+    init(hsba   : [Double], alpha: Double = 1)                      { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
+    init(hsb    : [Double], opacity: Double = 1)                    { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(HSBA hsba   : [Double], alpha: Double = 1)                 { self.init(hue: hsba[0].clampedTo01, saturation: hsba[1].clampedTo01, brightness: hsba[2].clampedTo01, opacity: hsba[safe: 3]?.clampedTo01 ?? alpha) }
+    init(HSB hsb    : [Double], opacity: Double = 1)                { self.init(hue: hsb[0].clampedTo01, saturation: hsb[1].clampedTo01, brightness: hsb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(hsva   : [Double], alpha: Double = 1)                      { self.init(hue: hsva[0].clampedTo01, saturation: hsva[1].clampedTo01, brightness: hsva[2].clampedTo01, opacity: hsva[safe: 3]?.clampedTo01 ?? alpha) }
+    init(hsv    : [Double], opacity: Double = 1)                    { self.init(hue: hsv[0].clampedTo01, saturation: hsv[1].clampedTo01, brightness: hsv[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(hue    : Double, opacity: Double = 1)                      { self.init(hue: hue.clampedTo01, saturation: 1, brightness: 1, opacity: opacity.clampedTo01) }
+    init(rgba   : [Double])                                         { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
+    init(rgb    : [Double], opacity: Double = 1)                    { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    init(RGBA rgba: [Double])                                       { self.init(red: rgba[0].clampedTo01, green: rgba[1].clampedTo01, blue: rgba[2].clampedTo01, opacity: rgba[3].clampedTo01) }
+    init(RGB rgb  : [Double], opacity: Double = 1)                  { self.init(red: rgb[0].clampedTo01, green: rgb[1].clampedTo01, blue: rgb[2].clampedTo01, opacity: opacity.clampedTo01) }
+    
+    
+    static func hsba    (_ hsba     : [Double])                                         -> Color { Color.init(hsba: hsba) }
+    static func hsba    (_ h: Double, _ s: Double, _ b: Double, _ a: Double)            -> Color { Color.init(hsba: [h,s,b,a]) }
+    static func hsb     (_ hsb      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsb: hsb, opacity: opacity) }
+    static func hsb     (_ h: Double, _ s: Double, _ b: Double)                         -> Color { Color.init(hsb: [h,s,b]) }
+    static func hsva    (_ hsva     : [Double])                                         -> Color { Color.init(hsva: hsva) }
+    static func hsv     (_ hsv      : [Double], opacity: Double = 1)                    -> Color { Color.init(hsv: hsv) }
+    static func hue     (_ hue      : Double, opacity: Double = 1)                      -> Color { Color.init(hue: hue, opacity: opacity) }
+    static func rgba    (_ rgba     : [Double])                                         -> Color { Color.init(rgba: rgba) }
+    static func rgb     (_ rgb      : [Double], opacity: Double = 1)                    -> Color { Color.init(rgb: rgb, opacity: opacity) }
+    
+    init(white: Double, alpha: Double)                              { self.init(rgba: [white,white,white,alpha]) }
+    
+    static let whites : [Color] = [
+        .init(white: 1, alpha: 0.05),
+        .init(white: 1, alpha: 0.1),
+        .init(white: 1, alpha: 0.2),
+        .init(white: 1, alpha: 0.3),
+        .init(white: 1, alpha: 0.4),
+        .init(white: 1, alpha: 0.5),
+        .init(white: 1, alpha: 0.6),
+        .init(white: 1, alpha: 0.7),
+        .init(white: 1, alpha: 0.8),
+        .init(white: 1, alpha: 0.9),
+    ]
+    
+    static let blacks : [Color] = [
+        .init(white: 0, alpha: 0.05),
+        .init(white: 0, alpha: 0.1),
+        .init(white: 0, alpha: 0.2),
+        .init(white: 0, alpha: 0.3),
+        .init(white: 0, alpha: 0.4),
+        .init(white: 0, alpha: 0.5),
+        .init(white: 0, alpha: 0.6),
+        .init(white: 0, alpha: 0.7),
+        .init(white: 0, alpha: 0.8),
+        .init(white: 0, alpha: 0.9),
+    ]
+    
+    static let brown    = Color.init(hsb: [0.07, 0.8, 0.8])
+    static let beige    = Color.init(hsb: [0.10, 0.6, 0.8])
+    
+    static let yellow1  = Color.init(hsb: [0.121, 1.0, 1.0])
+    static let yellow2  = Color.init(hsb: [0.131, 1.0, 1.0])
+    static let yellow3  = Color.init(hsb: [0.135, 1.0, 1.0])
+    static let yellow4  = Color.init(hsb: [0.140, 1.0, 1.0])
+    
+    static let blue1    = Color.init(hsb: [0.56, 1.0, 1.0])
+    static let blue2    = Color.init(hsb: [0.58, 1.0, 1.0])
+    static let blue3    = Color.init(hsb: [0.60, 1.0, 1.0])
+    static let blue4    = Color.init(hsb: [0.62, 1.0, 1.0])
+    
+    static let green0   = Color.init(hsb: [0.3000,1.0000,0.6000])
+    
+    static let aqua     = Color.init(hsb: [0.5300,1.0000,1.0000])
+    static let aqua0    = Color.init(hsb: [0.5300,1.0000,1.0000])
+    static let aqua1    = Color.init(hsb: [0.5300,0.9000,1.0000])
+    static let aqua2    = Color.init(hsb: [0.5300,0.8000,1.0000])
+    static let aqua3    = Color.init(hsb: [0.5300,0.7000,1.0000])
+    static let aqua4    = Color.init(hsb: [0.5300,0.6000,1.0000])
+
+    static let brown0   = Color.init(hsba: [0.1300,1.0000,0.6000,1.0000])
+    static let brown1   = Color.init(hsba: [0.0958,0.5389,0.8667,1.0000])
+    static let brown2   = Color.init(hsba: [0.0958,0.4611,0.8667,1.0000])
+    static let brown3   = Color.init(hsba: [0.0958,0.4611,1.0000,1.0000])
+    static let brown4   = Color.init(hsba: [0.0983,0.3361,0.9697,1.0000])
+    static let brown5   = Color.init(hsba: [0.1098,0.9804,0.8000,1.0000])
+    static let brown6   = Color.init(hsba: [0.1098,0.9765,0.8980,1.0000])
+    static let brown7   = Color.init(hsba: [0.1098,0.9804,1.0000,1.0000])
+    static let brown8   = Color.init(hsba: [0.1098,0.8471,1.0000,1.0000])
+    
+    static let taupe0   = Color.init(hsba: [0.1098,0.2471,1.0000,1.0000])
+    static let taupe1   = Color.init(hsba: [0.1098,0.2471,0.9000,1.0000])
+    static let taupe2   = Color.init(hsba: [0.1098,0.2471,0.8000,1.0000])
+    static let taupe3   = Color.init(hsba: [0.1098,0.2471,0.7000,1.0000])
+    
+    static let violet0   = Color.init(hsba: [0.8,0.5,1,1])
+    static let violet1   = Color.init(hsba: [0.8,0.6,1,1])
+    static let violet2   = Color.init(hsba: [0.8,0.7,1,1])
+    
+    static let pink0     = Color.init(hsba: [0.9,0.4,1,1])
+    static let pink1     = Color.init(hsba: [0.9,0.5,1,1])
+    static let pink2     = Color.init(hsba: [0.9,0.6,1,1])
+
+    static let gray1    = Color.init(white: 0.1)
+    static let gray2    = Color.init(white: 0.2)
+    static let gray25   = Color.init(white: 0.25)
+    static let gray3    = Color.init(white: 0.3)
+    static let gray35   = Color.init(white: 0.35)
+    static let gray4    = Color.init(white: 0.4)
+    static let gray45   = Color.init(white: 0.45)
+    static let gray48   = Color.init(white: 0.48)
+    static let gray5    = Color.init(white: 0.5)
+    static let gray55   = Color.init(white: 0.55)
+    static let gray6    = Color.init(white: 0.6)
+    static let gray65   = Color.init(white: 0.65)
+    static let gray66   = Color.init(white: 0.66)
+    static let gray67   = Color.init(white: 0.67)
+    static let gray68   = Color.init(white: 0.68)
+    static let gray69   = Color.init(white: 0.69)
+    static let gray7    = Color.init(white: 0.7)
+    static let gray75   = Color.init(white: 0.75)
+    static let gray8    = Color.init(white: 0.8)
+    static let gray81   = Color.init(white: 0.81)
+    static let gray82   = Color.init(white: 0.82)
+    static let gray83   = Color.init(white: 0.83)
+    static let gray84   = Color.init(white: 0.84)
+    static let gray85   = Color.init(white: 0.85)
+    static let gray86   = Color.init(white: 0.86)
+    static let gray87   = Color.init(white: 0.87)
+    static let gray88   = Color.init(white: 0.88)
+    static let gray89   = Color.init(white: 0.89)
+    static let gray9    = Color.init(white: 0.9)
+    static let gray91   = Color.init(white: 0.91)
+    static let gray92   = Color.init(white: 0.92)
+    static let gray93   = Color.init(white: 0.93)
+    static let gray94   = Color.init(white: 0.94)
+    static let gray95   = Color.init(white: 0.95)
+    static let gray96   = Color.init(white: 0.96)
+    static let gray97   = Color.init(white: 0.97)
+    static let gray98   = Color.init(white: 0.98)
+    static let gray99   = Color.init(white: 0.99)
+    
+    static let transparent = Color.init(white: 1, alpha: 0.00001)
+    
+    static let almostTransparent = Color.init(white: 1, alpha: 0.001)
+    
+    static var offWhite = Color.init(hsba: [0, 0, 0.94, 1])
+    
+    static let invert = Color.init(hsba: [0,0,0.56789,0])
+
+    static var background : Color {
+        primary.asBWExtremeOpposite
+//        .init(white: Color.primary.hsba[2] > 0.5 ? 0 : 1, alpha: 1)
+    }
+    
+    static var secondary1 : Color { secondary.opacity(0.1) }
+    static var secondary2 : Color { secondary.opacity(0.2) }
+    static var secondary5 : Color { secondary.opacity(0.5) }
+    static var secondary7 : Color { secondary.opacity(0.7) }
+    
+    var glow : Color {
+        asHSBAInfo.mix(with: .white, by: 0.3).asSwiftUIColor.multiplyOpacity(by: 0.5)
+    }
+    
+    var oppositeRGB : Color {
+        let RGBA = self.rgba
+        return .init(RGBA: [1.0 - RGBA.r, 1.0 - RGBA.g, 1.0 - RGBA.b, RGBA.a])
+    }
+    
+    static func rgbaFrom(hex: String) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        guard Scanner(string: hex).scanHexInt64(&int) else { return nil }
+        
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            return nil // Invalid hex format
+        }
+        
+        return (
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue: Double(b) / 255,
+            alpha: Double(a) / 255
+        )
+    }
+    
+    init(hex: String, fallback: Color = .white) {
+        if let RGBA = Self.rgbaFrom(hex: hex) {
+            self.init(
+                .sRGB,
+                red     : RGBA.red,
+                green   : RGBA.green,
+                blue    : RGBA.blue,
+                opacity : RGBA.alpha
+            )
+        } else {
+            self = fallback
+        }
+    }
+    
+    
+    
+    var name : String { self.description }
+    
+#if os(iOS) || os(tvOS)
+    func uiColor(_ c: UIColor = .white) -> UIKit.UIColor {
+        UIColor(self)
+            //        if let rgba = name.rgba {
+            //            return UIKit.UIColor.init(r: CGFloat(rgba.r) / CGFloat(255.0) , g: CGFloat(rgba.g) / CGFloat(255.0) , b: CGFloat(rgba.b) / CGFloat(255.0) , a: CGFloat(rgba.a) / CGFloat(255.0) )
+            //        } else {
+            //            return c
+            //        }
+    }
+    
+    func asUIColor(_ c: UIColor = .white) -> UIKit.UIColor {
+        uiColor(c)
+    }
+    
+    var hsva : [Double] {
+        self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
+    }
+    
+    var hsba : [Double] {
+        self.uiColor(.purple).arrayOfHSBA.map { Double($0) }
+    }
+#endif
+    
+    var asSKColor : SKColor {
+        SKColor.init(hsba: self.hsba.asArrayOfCGFloat)
+    }
+    
+    var asHSBAInfo : HSBAInfo {
+        .init(self.hsba)
+    }
+    
+    var asRGBAInfo : RGBAInfo {
+        .init(self.rgba)
+    }
+    
+#if os(macOS)
+    func nsColor() -> NSColor {
+        NSColor(self)
+    }
+    
+    var asNSColor : NSColor {
+            //        NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self).usingColorSpace(.extendedSRGB) ?? NSColor(self).usingColorSpace(.genericRGB) ?? NSColor(self)
+            //        NSColor(self) // crash during getHue() for some colors ... requires setting colorspace
+        NSColor(self).usingColorSpace(.deviceRGB)!
+            //        NSColor(self).usingColorSpace(.extendedSRGB)!
+            //        NSColor(self).usingColorSpace(.genericRGB)!
+    }
+    
+    var hsva : [Double] {
+        var h : CGFloat = 0
+        var s : CGFloat = 0
+        var v : CGFloat = 0
+        var a : CGFloat = 1
+        asNSColor.getHue(&h, saturation: &s, brightness: &v, alpha: &a) // crash if NSColor has not set colorspace
+        
+            //        https://stackoverflow.com/questions/15682923/convert-nscolor-to-rgb
+            //        NSColor *testColor = [[NSColor colorWithCalibratedWhite:0.65 alpha:1.0] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        
+        return [h,s,v,a]
+    }
+    
+    var hsba : [Double] {
+        hsva
+    }
+#endif
+    
+
+    var minimumOfRGB : CGFloat {
+        [
+            self.red,
+            self.green,
+            self.blue,
+        ].min!
+    }
+    
+    var colorBlackOrWhite : Color {
+        return minimumOfRGB > 0.6 ? .black : .white
+    }
+    
+    var colorInvertedExcludingAlpha : Color {
+        self.asHSBAInfo.inverted(h: true, s: true, b: true, a: false).asSwiftUIColor
+    }
+
+    var colorInvertedIncludingAlpha : Color {
+        self.asHSBAInfo.inverted(h: true, s: true, b: true, a: true).asSwiftUIColor
+    }
+
+    func colorInverted(h: Bool, s: Bool, b: Bool, a: Bool) -> Color {
+        self.asHSBAInfo.inverted(h: h, s: s, b: b, a: a).asSwiftUIColor
+    }
+
+    
+    typealias RGBATuple = (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat)
+    
+    var rgba: RGBATuple {
+            var red     : CGFloat = 0
+            var green   : CGFloat = 0
+            var blue    : CGFloat = 0
+            var alpha   : CGFloat = 0
+            
+            #if os(iOS)
+            UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            #elseif os(macOS)
+            NSColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            #endif
+            
+            return (red, green, blue, alpha)
+        }
+        
+        // Convenience accessors
+    var red: CGFloat {
+        get {
+            rgba.r
+        }
+        set {
+            var V = self.rgba
+            V.r = newValue
+            self = .init(V)
+        }
+    }
+    var green: CGFloat {
+        get {
+            rgba.g
+        }
+        set {
+            var V = self.rgba
+            V.g = newValue
+            self = .init(V)
+        }
+    }
+    var blue: CGFloat {
+        get {
+            rgba.b
+        }
+        set {
+            var V = self.rgba
+            V.b = newValue
+            self = .init(V)
+        }
+    }
+    var alpha: CGFloat {
+        get {
+            rgba.a
+        }
+        set {
+            var V = self.rgba
+            V.a = newValue
+            self = .init(V)
+        }
+    }
+    
+    init(_ RGBA: RGBATuple) {
+        self = RGBAInfo.init(RGBA).asSwiftUIColor
+    }
+    
+//    var hsba: (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
+//            var hue: CGFloat = 0
+//            var saturation: CGFloat = 0
+//            var brightness: CGFloat = 0
+//            var alpha: CGFloat = 0
+//
+//            #if os(iOS)
+//            UIColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+//            #elseif os(macOS)
+//            NSColor(self).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+//            #endif
+//
+//            return (hue, saturation, brightness, alpha)
+//        }
+//
+//        // Convenience accessors
+//        var hue: CGFloat { hsba.hue }
+//        var saturation: CGFloat { hsba.saturation }
+//        var brightness: CGFloat { hsba.brightness }
+//        // Note: alpha is already defined in the RGBA extension
+    
+    
+    
+    func opacity(_ a: CGFloat) -> Color {
+        self.opacity(a.asDouble)
+    }
+    
+    
+    var isBlack : Bool {
+        name == "black"
+    }
+    
+    var isWhite : Bool {
+        name == "white"
+    }
+    
+    func inverseBlackOrWhite(_ min: CGFloat = 0, _ mid: CGFloat = 0.5, _ max: CGFloat = 1.0) -> Color {
+        let hsva0 = hsva
+        return Color.init(HSBA: [hsva0[0],0,hsva0[2] < mid ? max : min,hsva0[3]])
+    }
+    
+    
+    func brighten(by amount: CGFloat) -> Color {
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            (hsba[2] + amount).clampedTo01,
+            hsba[3]
+        ])
+    }
+    
+    func saturate(by amount: CGFloat) -> Color {
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            (hsba[1] + amount).clampedTo01,
+            hsba[2],
+            hsba[3]
+        ])
+    }
+    
+    func opacity(add amount: Double?) -> Color {
+        guard let amount else {
+            return self
+        }
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            hsba[2],
+            (hsba[3] + amount).clampedTo01
+        ])
+    }
+    
+    func opacity(multiply amount: Double?) -> Color {
+        guard let amount else {
+            return self
+        }
+        let hsba = self.hsba
+        return Color(hsba: [
+            hsba[0],
+            hsba[1],
+            hsba[2],
+            (hsba[3] * amount).clampedTo01
+        ])
+    }
+    
+    
+    struct HSBA : Codable, Equatable {
+        
+        public enum Component : CaseIterable {
+            case hue, saturation, brightness, alpha
+        }
+        
+        public var h       : CGFloat
+        public var s       : CGFloat
+        public var b       : CGFloat
+        public var a       : CGFloat
+        
+        public var asSKColor            : SKColor       { SKColor.init(hsba: [h,s,b,a]) }
+        public var asUIColor            : UIColor       { UIColor.init(hsba: [h,s,b,a]) }
+        public var asColor              : Color         { Color.init(hsba: [h.asDouble,s.asDouble,b.asDouble,a.asDouble]) }
+        public var asArrayOfDouble      : [Double]      { [h,s,b,a].asArrayOfDouble }
+        public var asArrayOfCGFloat     : [CGFloat]     { [h,s,b,a] }
+        public var asString             : String        { "\(h),\(s),\(b),\(a)" }
+        
+        public init(h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 1) {
+            self.h = h
+            self.s = s
+            self.b = b
+            self.a = a
+        }
+        
+        public init(white: CGFloat, alpha: CGFloat = 1) {
+            h = 0
+            s = 0
+            b = white
+            a = alpha
+        }
+        
+        public init(from: SKColor) {
+            let hsba = from.arrayOfHSBA
+            h = hsba[0].clampedTo01
+            s = hsba[1].clampedTo01
+            b = hsba[2].clampedTo01
+            a = hsba[3].clampedTo01
+        }
+        
+        public init(from: Color) {
+            self.init(hsba: from.hsva)
+        }
+        
+        public init(hsba: [Double]) {
+                //            print("0 Color.HSBA.init(hsba: \(hsba))")
+            h = hsba[0].asCGFloat.clampedTo01
+            s = hsba[1].asCGFloat.clampedTo01
+            b = hsba[2].asCGFloat.clampedTo01
+            a = hsba[3].asCGFloat.clampedTo01
+                //            print("1 Color.HSBA.init(hsba: \(hsba)), hsba=\(h),\(s),\(b),\(a)")
+        }
+        
+        public init(hsb: [Double], a alpha: CGFloat = 1) {
+            print("0 Color.HSBA.init(hsb: \(hsb))")
+            h = hsb[0].asCGFloat.clampedTo01
+            s = hsb[1].asCGFloat.clampedTo01
+            b = hsb[2].asCGFloat.clampedTo01
+            a = alpha.clampedTo01
+            print("1 Color.HSBA.init(hsb: \(hsb)), hsba=\(h),\(s),\(b),\(a)")
+        }
+        
+        public static let clear     : HSBA = .init(white: 1, alpha: 0)
+        public static let black     : HSBA = .init(white: 0, alpha: 0)
+        public static let white     : HSBA = .init(white: 1, alpha: 1)
+        
+        public static func white(_ value: CGFloat, opacity: CGFloat) -> HSBA {
+            .init(white: value, alpha: opacity)
+        }
+        public static func white(_ value: CGFloat, alpha: CGFloat) -> HSBA {
+            .init(white: value, alpha: alpha)
+        }
+        
+        public var isClear          : Bool { a <= 0 }
+        public var isTransparent    : Bool { a <= 0 }
+        public var isOpaque         : Bool { a > 0 }
+        
+        public func get(component: Component) -> CGFloat {
+            switch component {
+                case .hue           : return h
+                case .saturation    : return s
+                case .brightness    : return b
+                case .alpha         : return a
+            }
+        }
+        
+        mutating public func set(component: Component, _ v: CGFloat) {
+            let v = v.clampedTo01
+            switch component {
+                case .hue           : h = v
+                case .saturation    : s = v
+                case .brightness    : b = v
+                case .alpha         : a = v
+            }
+        }
+        
+    }
+    
+}
+
+public extension Array where Element == Double {
+    var asColorHSBA     : Color     { .init(hsba: self) }
+    var asColorHSB      : Color     { .init(hsb: self) }
+    var asColorRGBA     : Color     { .init(rgba: self) }
+    var asColorRGB      : Color     { .init(rgb: self) }
+    var asUIColorHSBA   : UIColor   { UIColor.init(hsba: self.asArrayOfCGFloat) }
+    var asUIColorHSB    : UIColor   { UIColor.init(hsb: self.asArrayOfCGFloat) }
+    var asUIColorRGBA   : UIColor   { UIColor.init(rgba: self.asArrayOfCGFloat) }
+    var asUIColorRGB    : UIColor   { UIColor.init(rgb: self.asArrayOfCGFloat) }
+}
+
+public extension Array where Element == CGFloat {
+    var asColorHSBA     : Color     { .init(hsba: self.asArrayOfDouble) }
+    var asColorHSB      : Color     { .init(hsb: self.asArrayOfDouble) }
+    var asColorRGBA     : Color     { .init(rgba: self.asArrayOfDouble) }
+    var asColorRGB      : Color     { .init(rgb: self.asArrayOfDouble) }
+    var asUIColorHSBA   : UIColor   { UIColor.init(hsba: self) }
+    var asUIColorHSB    : UIColor   { UIColor.init(hsb: self) }
+    var asUIColorRGBA   : UIColor   { UIColor.init(rgba: self) }
+    var asUIColorRGB    : UIColor   { UIColor.init(rgb: self) }
+}
+
+@available(iOS 13, *)
+public extension ViewDimensions {
+    
+    func ratio(w: CGFloat) -> CGFloat {
+        w * width
+    }
+    
+    func ratio(h: CGFloat) -> CGFloat {
+        h * height
+    }
+    
+}
+
+@available(iOS 13, *)
+public extension ForEach where Content : View {
+    
+        //    public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content)
+    
+        //    public init(array: Array<Data.Element>, @ViewBuilder content: @escaping (Data.Element) -> Content) {
+        //        self.init(0..<array.count, id: \.self, content: { index in
+        //            content(array[index])
+        //        })
+        //    }
+    
+}
+
+/*
+ @available(iOS 13, *)
+ struct NilView : View {
+ 
+ var body: some View {
+ EmptyView()
+ }
+ }
+ 
+ @available(iOS 13, *)
+ struct ConditionView<Content> : View where Content : View {
+ 
+ let condition                   : ()->Bool
+ @ViewBuilder  let contentWhenConditionIsTrue  : ()->Content
+ @ViewBuilder  let contentWhenConditionIsFalse : ()->Content
+ 
+ init(condition: @escaping ()->Bool, @ViewBuilder ifTrue: @escaping ()->Content, @ViewBuilder ifFalse: @escaping ()->Content = { NilView() } ) {
+ self.condition = condition
+ self.contentWhenConditionIsTrue = ifTrue
+ self.contentWhenConditionIsFalse = ifFalse
+ }
+ 
+ init(_ flag: Bool, @ViewBuilder ifTrue: @escaping ()->Content, @ViewBuilder ifFalse: @escaping ()->Content = { NilView() } ) {
+ self.condition = { flag }
+ self.contentWhenConditionIsTrue = ifTrue
+ self.contentWhenConditionIsFalse = ifFalse
+ }
+ 
+ var body: some View {
+ if condition() {
+ return contentWhenConditionIsTrue()
+ } else {
+ return contentWhenConditionIsTrue()
+ }
+ }
+ 
+ }
+ 
+ // ConditionView(condition: { self.x > 0 }, ifTrue: { Text("Yes") }, ifFalse: { Text("No") })
+ */
+
+
+@available(iOS 13, *)
+public struct Lines : View {
+    
+    public init(horizontal  : Bool,
+                offsets     : [CGFloat]     = [],
+                ratios      : [CGFloat]     = [],
+                color       : Color         = .gray,
+                lineWidth   : CGFloat       = 1,
+                lineCap     : CGLineCap     = .butt,
+                lineJoin    : CGLineJoin    = .miter,
+                miterLimit  : CGFloat       = 10,
+                dash        : [CGFloat]     = [],
+                dashPhase   : CGFloat       = 0
+    ) {
+        self._horizontal    = State.init(initialValue: horizontal)
+        self._offsets       = State.init(initialValue: offsets)
+        self._ratios        = State.init(initialValue: ratios)
+        self._color         = State.init(initialValue: color)
+        self._lineWidth     = State.init(initialValue: lineWidth)
+        self._lineCap       = State.init(initialValue: lineCap)
+        self._lineJoin      = State.init(initialValue: lineJoin)
+        self._miterLimit    = State.init(initialValue: miterLimit)
+        self._dash          = State.init(initialValue: dash)
+        self._dashPhase     = State.init(initialValue: dashPhase)
+    }
+    
+    @State var horizontal   : Bool
+    
+    @State var offsets      : [CGFloat]     = []
+    @State var ratios       : [CGFloat]     = []
+    @State var color        : Color         = .gray
+    @State var lineWidth    : CGFloat       = 1
+    @State var lineCap      : CGLineCap     = .butt
+    @State var lineJoin     : CGLineJoin    = .miter
+    @State var miterLimit   : CGFloat       = 10
+    @State var dash         : [CGFloat]     = []
+    @State var dashPhase    : CGFloat       = 0
+    
+    var style               : StrokeStyle  {
+        .init(lineWidth     : lineWidth,
+              lineCap       : lineCap,
+              lineJoin      : lineJoin,
+              miterLimit    : miterLimit,
+              dash          : dash,
+              dashPhase     : dashPhase)
+    }
+    
+    public static func create(horizontal: Bool, offsets: [CGFloat] = [0], ratios: [CGFloat] = [], color: Color, style: StrokeStyle) -> Lines {
+        .init(horizontal    : horizontal,
+              offsets       : offsets,
+              ratios        : ratios,
+              color         : color,
+              lineWidth     : style.lineWidth,
+              lineCap       : style.lineCap,
+              lineJoin      : style.lineJoin,
+              miterLimit    : style.miterLimit,
+              dash          : style.dash,
+              dashPhase     : style.dashPhase)
+    }
+    
+    public static func horizontal(color: Color, style: StrokeStyle) -> Lines {
+        .init(horizontal    : true,
+              offsets       : [0],
+              ratios        : [],
+              color         : color,
+              lineWidth     : style.lineWidth,
+              lineCap       : style.lineCap,
+              lineJoin      : style.lineJoin,
+              miterLimit    : style.miterLimit,
+              dash          : style.dash,
+              dashPhase     : style.dashPhase)
+    }
+    
+    public static func vertical(color: Color, style: StrokeStyle) -> Lines {
+        .init(horizontal    : false,
+              offsets       : [0],
+              ratios        : [],
+              color         : color,
+              lineWidth     : style.lineWidth,
+              lineCap       : style.lineCap,
+              lineJoin      : style.lineJoin,
+              miterLimit    : style.miterLimit,
+              dash          : style.dash,
+              dashPhase     : style.dashPhase)
+    }
+    
+    public var body : some View {
+        GeometryReader { proxy in
+            Path() { path in
+                for ratio in self.ratios {
+                    if self.horizontal {
+                        path.move(to: .init(x: 0, y: ratio * proxy.size.height))
+                        path.addLine(to: .init(x: proxy.size.width, y: ratio * proxy.size.height))
+                    } else {
+                        path.move(to: .init(x: ratio * proxy.size.width, y: 0))
+                        path.addLine(to: .init(x: ratio * proxy.size.width, y: proxy.size.height))
+                    }
+                }
+                for offset in self.offsets {
+                    if self.horizontal {
+                        path.move(to: .init(x: 0, y: offset < 0 ? proxy.size.height + offset : offset))
+                        path.addLine(to: .init(x: proxy.size.width, y: offset < 0 ? proxy.size.height + offset : offset))
+                    } else {
+                        path.move(to: .init(x: offset < 0 ? proxy.size.width + offset : offset, y: 0))
+                        path.addLine(to: .init(x: offset < 0 ? proxy.size.width + offset : offset, y: proxy.size.height))
+                    }
+                }
+            }
+            .strokedPath(self.style)
+        }
+            //        .frame(width: nil, height: self.horizontal && self.ratios.isEmpty && self.offsets.count == 1 && self.offsets.first! == 0 ? self.lineWidth : nil) //proxy.size.height)
+        .foregroundColor(self.color)
+    }
+    
+}
+
+
+@available(iOS 13, *)
+public extension EdgeInsets {
+    
+    init(_ all: CGFloat) { self.init(top: all, leading: all, bottom: all, trailing: all) }
+    
+    init(top: CGFloat) { self.init(top: top, leading: 0, bottom: 0, trailing: 0) }
+    init(leading: CGFloat) { self.init(top: 0, leading: leading, bottom: 0, trailing: 0) }
+    init(bottom: CGFloat) { self.init(top: 0, leading: 0, bottom: bottom, trailing: 0) }
+    init(trailing: CGFloat) { self.init(top: 0, leading: 0, bottom: 0, trailing: trailing) }
+    
+    init(h: CGFloat) { self.init(top: 0, leading: h, bottom: 0, trailing: h) }
+    init(v: CGFloat) { self.init(top: v, leading: 0, bottom: v, trailing: 0) }
+    init(h: CGFloat, v:CGFloat) { self.init(top: v, leading: h, bottom: v, trailing: h) }
+    
+    init(t: CGFloat, b: CGFloat, l: CGFloat, r: CGFloat) { self.init(top: t, leading: l, bottom: b, trailing: r) }
+    
+    static let zero : EdgeInsets = .init()
+    
+}
+
+
+@available(iOS 13, *)
+public struct LayeredSystemImage : View {
+    
+    public init(foregroundSystemName: String, foregroundColor: Color = Color.blue, foregroundScale: CGFloat = 1, backgroundSystemName: String, backgroundColor: Color = Color.white) {
+        self.foregroundSystemName = foregroundSystemName
+        self.foregroundColor = foregroundColor
+        self.foregroundScale = foregroundScale
+        self.backgroundSystemName = backgroundSystemName
+        self.backgroundColor = backgroundColor
+    }
+    
+    
+    
+    public var foregroundSystemName    : String
+    
+    public var foregroundColor         : Color = Color.blue
+    
+    public var foregroundScale         : CGFloat = 1
+    
+    public var backgroundSystemName    : String
+    
+    public var backgroundColor         : Color = Color.white
+    
+    
+    public var body : some View {
+        
+        Image(systemName: foregroundSystemName)
+            .scaleEffect(CGSize.init(width: foregroundScale, height: foregroundScale))
+            .foregroundColor(foregroundColor)
+            .background(Image(systemName: backgroundSystemName)
+                        //                .scaleEffect(CGSize.init(side: 1.0/foregroundScale))
+                .foregroundColor(backgroundColor))
+        
+    }
+    
+}
+
+@available(iOS 13, *)
+public class EnumeratedHashableIdentifiableElement<T : Hashable> : Hashable, Identifiable {
+    
+    public static func == (lhs: EnumeratedHashableIdentifiableElement, rhs: EnumeratedHashableIdentifiableElement) -> Bool {
+        lhs.index == rhs.index && lhs.element == rhs.element
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+            //        hasher.combine(element)
+        hasher.combine("\(index)\(element)")
+    }
+    
+    public var index : Int
+    public var element : T
+    
+    public var id:Int {
+        index
+    }
+    
+    public init(index: Int, element: T) {
+        self.index = index
+        self.element = element
+    }
+    
+    public static func from(array collection: [T]) -> [EnumeratedHashableIdentifiableElement<T>] {
+        collection.enumerated().map { .init(index: $0, element: $1) }
+    }
+}
+
+
+
+//@available(iOS 13, *)
+//public extension View {
+
+public func hline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+    hline(color, thickness, discrete.asArrayOfCGFloat)
+}
+
+public func hline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: 0, y: thickness/2))
+            path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
+        }
+        .strokedPath(.init(lineWidth: thickness, dash: dash))
+    }
+    .frame(height:thickness)
+    .foregroundColor(color)
+}
+
+public func hline(color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: 0, y: thickness/2))
+            path.addLine(to: .init(x: geometry.size.width, y: thickness/2))
+        }
+        .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
+    }
+    .frame(height:thickness)
+    .foregroundColor(color)
+}
+
+
+public func vline(_ color: Color, _ thickness: CGFloat = 1, discrete: [Int]) -> some View {
+    vline(color, thickness, discrete.asArrayOfCGFloat)
+}
+
+public func vline(_ color: Color, _ thickness: CGFloat = 1, _ dash: [CGFloat] = []) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            path.move(to: .init(x: thickness/2, y: 0))
+            path.addLine(to: .init(x: thickness/2, y: geometry.size.height))
+        }
+        .strokedPath(.init(lineWidth: thickness, dash: dash))
+    }
+    .frame(width:thickness)
+    .foregroundColor(color)
+}
+
+public func separator(color: Color = Color.gray7, thickness: CGFloat = 1, dash: [CGFloat] = []) -> some View {
+    hline(color, thickness, dash)
+        //        Lines.create(horizontal: true, color: Color.gray7, style: StrokeStyle.init(lineWidth: 1, lineCap: .butt, lineJoin: .bevel, miterLimit: 0, dash: [], dashPhase: 0))
+        //            .frame(height:1)
+}
+
+
+
+public func zigzag(points: [CGPoint], color: Color, width thickness: CGFloat, cap: CGLineCap, join: CGLineJoin, limit: CGFloat = 10, phase: CGFloat = 0, pattern dash: [CGFloat]) -> some View {
+    GeometryReader { geometry in
+        Path { path in
+            guard points.isNotEmpty else { return }
+            path.move(to: points[0])
+            for i in points.range {
+                if i > 0 {
+                    path.addLine(to: points[i])
+                    }
+                }
+            }
+        .strokedPath(.init(lineWidth: thickness, lineCap: cap, lineJoin: join, miterLimit: limit, dash: dash, dashPhase: phase))
+        }
+    .foregroundColor(color)
+}
+
+
+
+//}
+
+
+
+
+
+
+
+@available(iOS 13, *)
+public extension View {
+    
+    
+    func frame(side: CGFloat, alignment: Alignment = .center) -> some View {
+        self.frame(width: side, height: side, alignment: alignment)
+        }
+    
+        //    static var neomorphicBGColorDefault = Color.offWhite
+    
+    func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        self
+            .background(
+                RoundedRectangle.init(cornerRadius: radius)
+                    .fill(fill)
+                    .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
+                    .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
+            )
+    }
+    
+    func neomorphicCapsule(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        self
+            .background(
+                Capsule.init()
+                    .fill(fill)
+                    .shadow(color: Color.black.opacity(opacity), radius: depth.abs, x: depth, y: depth)
+                    .shadow(color: Color.white.opacity(1.0-opacity), radius: radius.abs/2, x: -radius/2, y: -radius/2)
+        )
+    }
+    
+//    func neomorphicCapsuleView(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+//        self
+//            .background(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: depth, radius: radius)
+//            )
+//            .overlay(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: -depth, radius: radius)
+//            )
+//    }
+    
+//    func neomorphicCapsuleBackground(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+//        self
+//            .background(
+//                neomorphicCapsule(fill: fill, opacity: opacity, depth: depth, radius: radius)
+//            )
+//    }
+    
+    func neomorphicCircle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        self.background(Circle().neomorphic(fill: fill, opacity: opacity, depth: depth, radius: radius))
+    }
+    
+    func neomorphicRectangle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        self
+            .background(
+                Rectangle.init()
+                    .fill(fill)
+                    .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
+                    .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
+            )
+    }
+    
+    func neomorphicRoundedRectangle(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        self
+            .background(
+                RoundedRectangle.init(cornerRadius: radius)
+                    .fill(fill)
+                    .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
+                    .shadow(color: Color.white.opacity(1.0-opacity), radius: depth/2, x: -depth/2, y: -depth/2)
+            )
+    }
+    
+    
+}
+
+public extension View {
+    
+    func neomorphicCapsuleBackground(
+        lightColor: Color = Color.white, //.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8,
+        padding: CGFloat = 8
+    ) -> some View {
+        self.padding(padding)
+            .background(
+                ZStack {
+                    Capsule()
+                        .fill(lightColor)
+                        .neomorphicShadow(lightColor: lightColor, darkColor: darkColor, blur: blur, shadowOffset: shadowOffset)
+//                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+//                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                }
+            )
+//            .clipShape(Capsule())
+    }
+    
+    func neomorphicRoundedRectangleBackground(
+        radius: CGFloat,
+        lightColor: Color = Color.white, //.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8,
+        padding: CGFloat = 8
+    ) -> some View {
+        self.padding(padding)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: radius)
+                        .fill(lightColor)
+                        .neomorphicShadow(lightColor: lightColor, darkColor: darkColor, blur: blur, shadowOffset: shadowOffset)
+//                        .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+//                        .shadow(color: lightColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+                }
+            )
+//            .clipShape(Capsule())
+    }
+    
+    func neomorphicShadow(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: -shadowOffset/2)
+    }
+    
+    func neomorphicIllumination(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: -shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: shadowOffset/2, y: shadowOffset/2)
+    }
+    
+    
+    func neomorphicOverlay(
+        lightColor: Color = Color.white.opacity(0.7),
+        darkColor: Color = Color.gray.opacity(0.2),
+        blur: CGFloat = 10,
+        shadowOffset: CGFloat = 8
+    ) -> some View {
+        self
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: -shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: shadowOffset/2)
+    }
+    
+}
+
+public extension Shape {
+    
+    func neomorphic(
+        lightColor      : Color = Color.white.opacity(0.7),
+        darkColor       : Color = Color.gray.opacity(0.2),
+        blur            : CGFloat = 10,
+        shadowOffset    : CGFloat = 8
+    ) -> some View {
+        self
+            .fill(lightColor)
+            .shadow(color: darkColor, radius: blur, x: shadowOffset, y: shadowOffset)
+            .shadow(color: lightColor, radius: blur, x: -shadowOffset/2, y: -shadowOffset/2)
+    }
+    
+}
+
+
+
+@available(iOS 13, *)
+public extension Circle {
+    
+    func neomorphic(fill: Color = Color.offWhite, opacity: Double = 0.2, depth: CGFloat = 8, radius: CGFloat = 16) -> some View {
+        Group {
+            Circle.init()
+                .fill(fill)
+                .shadow(color: Color.black.opacity(opacity), radius: depth, x: depth, y: depth)
+        }
+            .shadow(color: Color.white.opacity(1.0 - opacity), radius: depth/2, x: -depth/2, y: -depth/2)
+    }
+    
+}
+
+@available(iOS 13, *)
+public extension View {
+    
+    func neomorphicHint() -> some View {
+        self
+            .neomorphic(depth: 3, radius: 16)
+    }
+    
+    func neomorphicHintForPicks() -> some View {
+        self
+            .neomorphic(fill: .gray5, depth: 3, radius: 16)
+    }
+    
+    func neomorphicButton(enabled: Bool = true, on: Bool, color: Color = Color.orange) -> some View {
+        self
+            .neomorphic(fill: enabled ? color : Color.gray8, depth: 4, radius: 16)
+    }
+    
+    func styleForHint(_ font: Font, disabled: Bool) -> some View {
+        self
+            //            .font(Font.custom("Gill Sans", size: 10))
+            .font(font)
+            .font(.caption)
+            //            .foregroundColor(disabled ? Color.gray4.opacity(0.4) : Color.gray4)
+            .foregroundColor(disabled ? Color.blue.opacity(0.3) : Color.blue)
+            .shadow(color: .white, radius: 4, x: 0, y: 0)
+            .padding(6)
+            //            .neomorphicHint()
+            //            .background(disabled ? Color.gray4 : Color.clear)
+    }
+    
+    func styleForHintForPicks(_ font: Font) -> some View {
+        self
+            //            .font(Font.custom("Gill Sans", size: 10))
+            .font(font)
+            .font(.caption)
+            .foregroundColor(.white)
+            //                .shadow(color: .gray5, radius: 4, x: 0, y: 0)
+            .padding(6)
+            .neomorphicHintForPicks()
+    }
+    
+    
+    func opaque(_ flag: Bool) -> some View {
+        self
+            .opacity(flag ? 1 : 0)
+    }
+    
+}
+
+
+@available(iOS 13, *)
+public extension HorizontalAlignment {
+    
+    private enum HCenterAlignment: AlignmentID {
+        
+        static func defaultValue(in dimensions: ViewDimensions) -> CGFloat {
+            return dimensions[HorizontalAlignment.center]
+        }
+        
+    }
+    
+    static let hCentered = HorizontalAlignment(HCenterAlignment.self)
+}
+
+
+
+
+
+@available(iOS 13, *)
+public struct CorrectedScrollView<Content> : View where Content : View {
+    
+    
+    @State private var offset : CGPoint = .zero
+    
+    var axes : Axis.Set = [.horizontal, .vertical]
+    
+    var showsIndicators = false
+    
+    @State var content : ()->Content
+    
+    
+    public var body : some View {
+        
+        ScrollView(axes, showsIndicators: showsIndicators) {
+            
+            content()
+            .background(geometryReader)
+            .offset(x: offset.x, y: offset.y)
+            
+            }
+        }
+    
+    
+    private var geometryReader : some View {
+        
+        GeometryReader { geometry in
+            
+            AsyncBlockView {
+                
+                let offset : CGPoint = CGPoint.init(
+                x: -geometry.frame(in: .global).minX,
+                y: -geometry.frame(in: .global).minY
+                )
+                
+                if self.offset == .zero {
+                    self.offset = offset
+                    }
+                
+                }
+            
+            }
+        
+        }
+    
+    
+}
+
+
+@available(iOS 13, *)
+public struct AsyncBlockView : View {
+    
+    @State var view     : ()->AnyView = {
+        AnyView(Rectangle().fill(Color.clear))
+        }
+    
+    var block           : ()->()
+    
+    public var body            : some View {
+        
+        DispatchQueue.main.async {
+            self.block()
+            }
+        
+        return view()
+        }
+    
+}
+
+
+
+@available(iOS 13, *)
+public struct HalfCapsule : Shape {
+    
+    public var offset      : CGFloat
+    public var padding     : CGFloat
+    public var mirrored    : Bool
+    
+    public init(offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
+        self.offset     = offset
+        self.padding    = padding
+        self.mirrored   = mirrored
+        }
+    
+    public func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let d = (rect.height + padding + padding)/2
+        
+        let x0 = rect.minX + offset //- padding
+        let x1 = rect.maxX + padding
+        let y0 = rect.minY - padding
+        let y1 = rect.maxY + padding
+        
+        path.move(to: CGPoint(x: x0 - d/2, y: y1))
+        path.addLine(to: CGPoint(x: x0 + d/2, y: y0 ))
+        path.addLine(to: CGPoint(x: x1 - d/2, y: y0))
+        path.addArc(center: CGPoint(x: x1 - d/2, y: y0 + d), radius: d, startAngle: Angle.init(degrees: +90), endAngle: Angle.init(degrees: -90), clockwise: true)
+        path.addLine(to: CGPoint(x: x1 - d/2, y: y1))
+        path.addLine(to: CGPoint(x: x0 - d/2, y: y1))
+        
+        if mirrored {
+            path = path.applying(.init(translationX: -rect.midX, y: -rect.midY))
+            path = path.applying(.init(scaleX: -1, y: -1))
+            path = path.applying(.init(translationX: rect.midX, y: rect.midY))
+            }
+        
+        return path
+        }
+    
+}
+
+
+
+@available(iOS 13, *)
+public struct Pie : Shape {
+    
+    public var start           : Angle
+    public var value           : Binding<Double>
+    //        var bg              : (_ value: Double)->Color = { value in .gray }
+    //        var fg              : (_ value: Double)->Color = { value in .gray9 }
+    public var offset      : CGFloat
+    public var padding     : CGFloat
+    public var mirrored    : Bool
+    
+    
+    public init(value: Binding<Double>, start: Angle = Angle.init(degrees: -90), offset: CGFloat = 0, padding: CGFloat = 0, mirrored: Bool = false) {
+        self.value      = value
+        self.start      = start
+        self.offset     = offset
+        self.padding    = padding
+        self.mirrored   = mirrored
+        }
+    
+    
+    public func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let r = min(rect.height,rect.width)/2
+        
+        //            let x0 = rect.minX + offset //- padding
+        //            let x1 = rect.maxX + padding
+        //            let y0 = rect.minY - padding
+        //            let y1 = rect.maxY + padding
+        //
+        //            path.move(to: CGPoint(x: x0 - d/2, y: y1))
+        //            path.addLine(to: CGPoint(x: x0 + d/2, y: y0 ))
+        //            path.addLine(to: CGPoint(x: x1 - d/2, y: y0))
+        //            path.addArc(center: CGPoint(x: x1 - d/2, y: y0 + d), radius: d, startAngle: Angle.init(degrees: +90), endAngle: Angle.init(degrees: -90), clockwise: true)
+        //            path.addLine(to: CGPoint(x: x1 - d/2, y: y1))
+        //            path.addLine(to: CGPoint(x: x0 - d/2, y: y1))
+        
+        path.move(to: rect.center)
+        //            path.addArc(center: rect.center, radius: r, startAngle: start, endAngle: Angle.init(degrees: (value.wrappedValue*360.0)-start.degrees), clockwise: false)
+        
+        if mirrored {
+            let angle = Angle.init(degrees: start.degrees - (value.wrappedValue*360.0))
+            path.addArc(center: rect.center, radius: r, startAngle: start, endAngle: angle, clockwise: true)
+            } else {
+                let angle = Angle.init(degrees: (value.wrappedValue*360.0)-start.degrees)
+            path.addArc(center: rect.center, radius: r, startAngle: start, endAngle: angle, clockwise: false)
+                }
+        
+        
+        return path
+        }
+
+}
+
+#if os(iOS)
+@available(iOS 13, *)
+public struct ActivityIndicator: UIViewRepresentable {
+    
+    public init(isAnimating: Binding<Bool>, style: UIActivityIndicatorView.Style) {
+        self.isAnimating = isAnimating
+        self.style = style
+    }
+    
+    
+    var isAnimating: Binding<Bool>
+    
+    let style: UIActivityIndicatorView.Style
+    
+    public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+        return UIActivityIndicatorView(style: style)
+    }
+    
+    public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+        isAnimating.wrappedValue ? uiView.startAnimating() : uiView.stopAnimating()
+    }
+}
+#endif
+
+
+@available(iOS 13, *)
+public extension View {
+    
+    func disabledWithColor(_ flag: Bool) -> some View {
+        self
+            .opacity(flag ? 0.25 : 1) // TODO COLOR FROM STYLE
+            .saturation(flag ? 0 : 1) // TODO COLOR FROM STYLE
+            .disabled(flag)
+    }
+}
+
+@available(iOS 13, *)
+public extension String {
+    
+    func color(_ default: Color = .red) -> Color {
+            //        counter += 1
+        if let rgba = self.rgba {
+                //            print("[\(counter)] color name recognized: \(self) = \(rgba)")
+            return Color.init(red: Double(rgba.r) / 255.0, green: Double(rgba.g) / 255.0, blue: Double(rgba.b) / 255.0, opacity: Double(rgba.a) / 255.0)
+        } else {
+                //            print("[\(counter)] color name unrecognized: \(self)")
+            switch self {
+                case "accent"       : return .accentColor
+                case "accentColor"  : return .accentColor
+                case "black"        : return .black
+                case "blue"         : return .blue
+                case "clear"        : return .clear
+                case "gray"         : return .gray
+                case "green"        : return .green
+                case "orange"       : return .orange
+                case "pink"         : return .pink
+                case "primary"      : return .primary
+                case "purple"       : return .purple
+                case "red"          : return .red
+                case "secondary"    : return .secondary
+                case "white"        : return .white
+                case "yellow"       : return .yellow
+                    
+                default             : return `default`
+            }
+        }
+    }
+    
+    var rgba : (r: UInt8, g: UInt8, b: UInt8, a: UInt8)? {
+        
+            // "#AB0C4DFF
+        let trimmed = self.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        guard trimmed.length == 8 && self[0] == "#" else {
+            return nil
+        }
+        let scanner = Scanner(string: trimmed)
+        var hexNumber: UInt64 = 0
+            //        var r: CGFloat = 0.0, g: CGFloat = 0.0, b: CGFloat = 0.0, a: CGFloat = 0.0
+        var r: UInt8 = 0
+        var g: UInt8 = 0
+        var b: UInt8 = 0
+        var a: UInt8 = 0
+        
+        let result = scanner.scanHexInt64(&hexNumber)
+        if result {
+            r = UInt8((hexNumber & 0xff000000) >> 24)
+            g = UInt8((hexNumber & 0x00ff0000) >> 16)
+            b = UInt8((hexNumber & 0x0000ff00) >> 8)
+            a = UInt8(hexNumber  & 0x000000ff)
+            return (r, g, b, a)
+        }
+        return nil
+    }
+    
+}
+
+    //@available(iOS 13, *)
+    //public struct TestStruct : View {
+    //    public init(lines: [String], v: String = "v") {
+    //        self._lines = State.init(initialValue: lines)
+    //        self.v = v
+    //    }
+//
+//
+//    @State private var lines: [String]
+//
+//    private var v: String = "v"
+//
+//    public var body: some View {
+//        Text("lines: \(lines.count), v:\(v)")
+//    }
+//}
+
+@available(iOS 13, *)
+public struct LinesOfStringsStack<Content> : View where Content : View {
+    
+    public init(lines: [[String]], vspacing: CGFloat = 8, hspacing: CGFloat = 8, alignment: HorizontalAlignment = .center, builder: @escaping (String) -> Content) {
+        self._lines = State.init(initialValue: lines)
+        self._vspacing = State.init(initialValue: vspacing)
+        self._hspacing = State.init(initialValue: hspacing)
+        self._alignment = State.init(initialValue: alignment)
+        self.builder = builder
+        }
+    
+    
+    @State public var lines : [[String]]
+    
+    @State var vspacing : CGFloat
+    @State var hspacing : CGFloat
+    @State var alignment : HorizontalAlignment
+    
+    let builder : (String) -> Content
+    
+    public var body : some View {
+            //        HStack {
+            //            Spacer()
+        VStack(alignment: self.alignment, spacing: vspacing) {
+            ForEach(lines, id: \.self) { line in
+                HStack(spacing: hspacing) {
+                    ForEach(line, id: \.self) { word in
+                        self.builder(word)
+                    }
+                }
+            }
+        }
+            //            Spacer()
+            //        }
+    }
+}
+
+public extension View {
+    func width(_ v: CGFloat) -> some View {
+        self.frame(minWidth: v, idealWidth: v, maxWidth: v)
+    }
+    func height(_ v: CGFloat) -> some View {
+        self.frame(minHeight: v, idealHeight: v, maxHeight: v)
+    }
+}
+
+public extension View {
+    func circleBorder(color: Color, bg: Color = .clear, thickness: CGFloat, dash: [CGFloat] = []) -> some View {
+        self
+            .background(Circle().fill(bg))
+            .overlay(Circle().strokeBorder(color, style: .init(lineWidth: thickness, lineCap: .butt, lineJoin: .miter, miterLimit: 1, dash: dash, dashPhase: 0)))
+    }
+    
+    func hCentered() -> some View {
+        self.alignmentGuide(HorizontalAlignment.hCentered, computeValue: { $0.width / 2 })
+    }
+}
+
+@available(iOS 13, *)
+public struct OrEmptyView<VIEW> : View where VIEW : View {
+    
+        //    condition: Binding<SharkeeApp.Model.LoadState>.init(get: { self.model.loadState(for: name) }, set: { _ in }),
+    
+    public init(condition: Binding<Bool>, view: VIEW) {
+        self.condition = condition
+        self._view = State.init(initialValue: view)
+    }
+    
+    var condition  : Binding<Bool>
+    
+    @State var view         : VIEW
+    
+    public var body: some View {
+        if condition.wrappedValue {
+            view
+        } else {
+            EmptyView()
+        }
+    }
+}
+
+public extension Binding {
+    
+    init(get: @escaping () -> Value) {
+        self.init(get: get, set: { _ in })
+    }
+    
+    static func get(_ get: @escaping () -> Value) -> Binding<Value> {
+        .init(get: get, set: { _ in })
+    }
+    
+    static func constant(_ value: Value) -> Binding<Value> {
+        .init(get: { value }, set: { _ in })
+    }
+}
+
+public extension View {
+    
+    func visible(_ flag: Bool) -> AnyView {
+        if flag {
+            return self.asAnyView
+        } else {
+            return EmptyView().asAnyView
+        }
+    }
+}
+
+public extension Color {
+    
+    struct HSBASpans : Codable {
+        
+        public struct Span : Codable {
+            public var v0 : CGFloat
+            public var v1 : CGFloat?
+            
+            public var isRange : Bool {
+                v1 != nil
+            }
+            
+            public init(v0: CGFloat = 1, v1: CGFloat? = nil) {
+                self.v0 = v0
+                self.v1 = v1
+            }
+        }
+        
+        public var h   : Span
+        public var s   : Span
+        public var b   : Span
+        public var a   : Span
+        
+        public init(h: Span = .init(),
+                    s: Span = .init(),
+                    b: Span = .init(),
+                    a: Span = .init())
+        {
+            self.h = h
+            self.s = s
+            self.b = b
+            self.a = a
+        }
+    }
+    
+}
+
+#if os(iOS)
+public struct Blur: UIViewRepresentable {
+    
+    public var style: UIBlurEffect.Style = .systemMaterial
+    
+    public init(style: UIBlurEffect.Style = .systemMaterial) {
+        self.style = style
+    }
+    
+        // create UIView
+    public func makeUIView(context: Context) -> UIVisualEffectView {
+        let r = UIVisualEffectView(effect: UIBlurEffect(style: style))
+            //        r.alpha = 0.5 // does not blur when alpha/opacity is < 1
+        return r
+    }
+    
+        // update UIView
+    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = UIBlurEffect(style: style)
+    }
+}
+
+public extension View {
+    
+    var isPhone : Bool {
+        UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
+    var isPad : Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    var isMac : Bool {
+        UIDevice.current.userInterfaceIdiom == .mac
+    }
+    
+    var idiom : UIUserInterfaceIdiom {
+        UIDevice.current.userInterfaceIdiom
+    }
+    
+    var isLandscape : Bool {
+        UIDevice.current.orientation.isLandscape
+    }
+    
+    var isPortrait : Bool {
+        UIDevice.current.orientation.isPortrait
+    }
+}
+
+
+public struct TapGestureWithLocation : UIViewRepresentable {
+    
+    public typealias Callback = (CGPoint) -> Void
+    
+    var tappedCallback: Callback
+    
+    public init(_ callback: @escaping Callback) {
+        self.tappedCallback = callback
+    }
+    
+    public func makeUIView(context: UIViewRepresentableContext<TapGestureWithLocation>) -> UIView {
+        let mappingYToV = UIView(frame: .zero)
+        let gesture = UITapGestureRecognizer(target: context.coordinator,
+                                             action: #selector(Coordinator.tapped))
+        mappingYToV.addGestureRecognizer(gesture)
+        return mappingYToV
+    }
+    
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<TapGestureWithLocation>) {
+    }
+    
+    public class Coordinator: NSObject {
+        var tappedCallback: ((CGPoint) -> Void)
+        init(tappedCallback: @escaping ((CGPoint) -> Void)) {
+            self.tappedCallback = tappedCallback
+        }
+        @objc func tapped(gesture:UITapGestureRecognizer) {
+            let point = gesture.location(in: gesture.view)
+            self.tappedCallback(point)
+        }
+    }
+    
+    public func makeCoordinator() -> TapGestureWithLocation.Coordinator {
+        Coordinator(tappedCallback:self.tappedCallback)
+    }
+}
+
+
+
+
+public extension UIView {
+    var screenshot : UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if (image != nil) {
+            UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil);
+        }
+        
+        return image
+    }
+}
+
+public struct SaveScreenshotView: UIViewRepresentable {
+    
+    public func makeUIView(context: Context) -> UIView {
+        let someView = UIView(frame: UIScreen.main.bounds)
+        _ = someView.screenshot
+        return someView
+    }
+    
+    public func updateUIView(_ viewForChartMonthly10years: UIView, context: Context) {
+    }
+}
+
+#endif
+
+
+
+#if os(macOS)
+
+public extension Scene {
+    
+    func defaultSizeFullscreen(size: CGSize = .init(1024, 768)) -> some Scene {
+        self.defaultSize(NSScreen.main?.frame.size ?? size)
+    }
+}
+
+public extension View {
+    
+    func defaultSizeFullscreen(size: CGSize = .init(1024, 768)) -> some View {
+        self.frame(NSScreen.main!.frame.size.width,NSScreen.main!.frame.size.height)
+            //        self.frame(size: NSScreen.main!.frame.size)
+            //        return self.frame(size: NSScreen.main?.frame.size ?? size)
+    }
+    
+}
+
+#endif
+
+public extension UnitPoint {
+    
+    func asAlignment(_ fallback: Alignment = .center) -> Alignment {
+        if self == .bottom { return .bottom }
+        if self == .top { return .top }
+        if self == .leading { return .leading }
+        if self == .trailing { return .trailing }
+        if self == .center { return .center }
+        return fallback
+    }
+}
+
+public extension Alignment {
+    
+    var asUnitPoint : UnitPoint {
+        switch self {
+            case .center                    : return .init(x: 0, y: 0)
+                
+            case .top                       : return .init(x: 0, y: +1)
+            case .bottom                    : return .init(x: 0, y: -1)
+            case .leading                   : return .init(x: -1, y: 0)
+            case .trailing                  : return .init(x: +1, y: 0)
+                
+            case .topLeading                : return .init(x: -1, y: +1)
+            case .topTrailing               : return .init(x: +1, y: +1)
+            case .bottomLeading             : return .init(x: -1, y: -1)
+            case .bottomTrailing            : return .init(x: +1, y: -1)
+                
+            default:
+                return .init()
+        }
+    }
+}
+
+
+public extension View {
+    func onAppearStartTimer(_ seconds: TimeInterval, _ block: @escaping Block) -> some View {
+        self
+            .onAppear {
+                Timer.publish(every: seconds, on: .main, in: .default)
+                    .autoconnect()
+                    .sink { (_) in
+                        block()
+                    }
+                    .store(in: &cancellables)
+            }
+    }
+    
+}
+
+fileprivate var cancellables = Set<AnyCancellable>()
+
+
+
+
+
+
+
+//extension View {
+
+public struct ViewSize : Equatable, Codable {
+    
+    struct Length : Equatable, Codable {
+        
+        enum Kind : Equatable, Codable {
+            case unbound, unspecified, fixed, min, max, infinity
+            
+            var usesPixels : Bool {
+                switch self {
+                    case .unbound, .unspecified, .infinity:
+                        return false
+                    case .min, .fixed, .max:
+                        return true
+                }
+            }
+        }
+        
+        var kind : Kind = .unbound
+        var pixels : CGFloat = 256
+        
+        var usesPixels : Bool {
+            kind.usesPixels
+        }
+    }
+    
+    var width  : Length
+    var height : Length
+    
+    public func frame(width on: some View, proportion: CGFloat = 1) -> some View {
+        Group {
+            switch width.kind {
+                case .unspecified:
+                    on
+                case .unbound:
+                    on.frame(maxWidth: nil)
+                case .infinity:
+                    on.frame(maxWidth: .infinity)
+                case .fixed:
+                    on.frame(width: width.pixels * proportion)
+                case .min:
+                    on.frame(minWidth: width.pixels * proportion)
+                case .max:
+                    on.frame(maxWidth: width.pixels * proportion)
+            }
+        }
+    }
+    
+    public func frame(height on: some View, proportion: CGFloat = 1) -> some View {
+        Group {
+            switch height.kind {
+                case .unspecified:
+                    on
+                case .unbound:
+                    on.frame(maxHeight: nil)
+                case .infinity:
+                    on.frame(maxHeight: .infinity)
+                case .fixed:
+                    on.frame(height: height.pixels * proportion)
+                case .min:
+                    on.frame(minHeight: height.pixels * proportion)
+                case .max:
+                    on.frame(maxHeight: height.pixels * proportion)
+            }
+        }
+    }
+    
+    public func frame(on: some View, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
+        frame(width: frame(height: on, proportion: vfactor), proportion: hfactor)
+    }
+    
+}
+
+
+public extension View {
+    
+    func frame(size: ViewSize, hfactor : CGFloat = 1, vfactor: CGFloat = 1) -> some View {
+        size.frame(on: self, hfactor: hfactor, vfactor: vfactor)
+    }
+    
+}
+
+extension EdgeInsets : RawRepresentable {
+    
+    public typealias RawValue = String
+    
+    public init?(rawValue: String) {
+        let SPLIT = rawValue.splitByComma
+        self.init(top: SPLIT[safe: 0]?.asCGFloat ?? 0, leading: SPLIT[safe: 1]?.asCGFloat ?? 0, bottom: SPLIT[safe: 2]?.asCGFloat ?? 0, trailing: SPLIT[safe: 3]?.asCGFloat ?? 0)
+    }
+    
+    public var rawValue: String {
+        "\(top),\(bottom),\(leading),\(trailing)"
+    }
+}
+
+
+    // https://stackoverflow.com/questions/57577462/get-width-of-a-view-using-in-swiftui
+
+public struct SizeCalculator: ViewModifier {
+    
+    @Binding var size: CGSize
+    
+    public func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { proxy in
+                    Color.clear // we just want the reader to get triggered, so let's use an empty color
+                        .onAppear {
+                            size = proxy.size
+                        }
+                }
+            )
+    }
+}
+
+public extension View {
+    func save(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+    func saved(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+    func store(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+    func stored(size: Binding<CGSize>) -> some View {
+        modifier(SizeCalculator(size: size))
+    }
+}
+
+
+
+
+@available(iOS 16,tvOS 16,*)
+public enum HorizontalAlignmentOption : String, Equatable, Codable, RawRepresentable, CaseIterable, StringNamed {
+    case left
+    case center
+    case right
+    
+    var asHorizontalAlignment : HorizontalAlignment {
+        switch self {
+            case .left      : .leading
+            case .center    : .center
+            case .right     : .trailing
+        }
+    }
+    
+    var asAlignment : Alignment {
+        switch self {
+            case .left      : .leading
+            case .center    : .center
+            case .right     : .trailing
+        }
+    }
+}
+
+@available(iOS 16,tvOS 16,*)
+public struct FlowLayout: Layout {
+    public var alignment: HorizontalAlignmentOption = .center
+    
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let subSizes = subviews.map { $0.sizeThatFits(proposal) }
+        
+        let proposedWidth = proposal.width ?? .infinity
+        var maxRowWidth = CGFloat.zero
+        var rowCount = CGFloat.zero
+        var x = CGFloat.zero
+        for subSize in subSizes {
+            // This prevents empty rows if any subviews are wider than proposedWidth.
+            let lineBreakAllowed = x > 0
+            
+            if lineBreakAllowed, x + subSize.width > proposedWidth {
+                rowCount += 1
+                x = 0
+            }
+            
+            x += subSize.width
+            maxRowWidth = max(maxRowWidth, x)
+        }
+        
+        if x > 0 {
+            rowCount += 1
+        }
+        
+        let rowHeight = subSizes.lazy.map { $0.height }.max() ?? 0
+        return CGSize(
+            width: proposal.width ?? maxRowWidth,
+            height: rowCount * rowHeight
+        )
+    }
+    
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let subSizes = subviews.map { $0.sizeThatFits(proposal) }
+        let proposedWidth = proposal.width ?? .infinity
+        
+        var rows: [[(LayoutSubview, CGSize)]] = []
+        var currentRow: [(LayoutSubview, CGSize)] = []
+        var rowWidth: CGFloat = 0
+        
+        for (subview, subSize) in zip(subviews, subSizes) {
+            if rowWidth > 0 && rowWidth + subSize.width > proposedWidth {
+                rows.append(currentRow)
+                currentRow = []
+                rowWidth = 0
+            }
+            currentRow.append((subview, subSize))
+            rowWidth += subSize.width
+        }
+        
+        if !currentRow.isEmpty {
+            rows.append(currentRow)
+        }
+        
+        var y = bounds.origin.y
+        for row in rows {
+            let rowHeight = row.map { $0.1.height }.max() ?? 0
+            let totalRowWidth = row.map { $0.1.width }.reduce(0, +)
+            
+            var x: CGFloat
+            switch alignment {
+                case .left:
+                    x = bounds.origin.x
+                case .center:
+                    x = bounds.origin.x + (proposedWidth - totalRowWidth) / 2
+                case .right:
+                    x = bounds.origin.x + (proposedWidth - totalRowWidth)
+            }
+            
+            for (subview, size) in row {
+                subview.place(
+                    at: CGPoint(x: x, y: y + 0.5 * (rowHeight - size.height)),
+                    proposal: ProposedViewSize(width: size.width, height: size.height)
+                )
+                x += size.width
+            }
+            
+            y += rowHeight
+        }
+    }
+}
+
+public func menuBuilderAlphabeticData2Tier(of names: [String], mapper: (String)->String = { $0 }) -> [String : [String : String]] {
+    var R : [String : [String : String]] = [:]
+    
+    for NAME in names {
+        let LETTER0     : String = NAME.at(0)
+        let LETTER1     : String = NAME.count > 1 ? NAME.at(1) : ""
+        let LETTERS01   : String = LETTER0 + LETTER1
+        
+        R[LETTER0, default: [:]][LETTERS01, default: .init()].append(mapper(NAME))
+        }
+    
+    return R
+}
+
+//@available(macOS 14,*)
+//func menuBuilder(from COLLECTION: [String : [String : String]], generator: (_ entry: String) -> some View) -> AnyView {
+//    Group {
+//        let LETTERS0 = COLLECTION.keys.sorted()
+//        ForEach(LETTERS0.range, id: \.self) { i in
+//            let LETTER0 = LETTERS0[i]
+    //            let D0 = COLLECTION[LETTER0]!
+//            let SUM = D0.values.asArray.sum {
+//                $0.count
+//            }
+//            Menu(LETTER0 + " /\(SUM)") {
+//                let LETTERS1 = D0.keys.sorted()
+//                ForEach(LETTERS1.range, id: \.self) { ii in
+//                    let LETTER1 = LETTERS1[ii]
+//                    let ENTRYS = D0[LETTER1]!
+//                    Menu(LETTER1 + " /\(ENTRYS.count)") {
+//                        ForEach(ENTRYS.range, id: \.self) { i in
+//                            generator(ENTRYS[i])
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }.asAnyView
+//}
+
+public func VStackL<Content : View>(@ViewBuilder content: () -> Content) -> some View {
+    VStack(alignment: .leading) {
+        content()
+        }
+}
+
+
+public func withAnimation(on: Bool, _ block: @escaping Block) {
+    if on {
+        withAnimation {
+            block()
+        }
+    } else {
+        block()
+    }
+}
+
+public extension View {
+    
+    func colorInvert(_ flag: Bool) -> some View {
+        Group {
+            if flag {
+                self
+                    .colorInvert()
+            } else {
+                self
+            }
+        }
+    }
+
+    func colorSelected(_ flag: Bool) -> some View {
+        Group {
+            if flag {
+                self
+                    .colorInvert()
+                    .backgroundColor(.primary)
+            } else {
+                self
+            }
+        }
+    }
+
+}
+
+
+
+
+@ViewBuilder
+func VStack0<Content: View>(alignment: HorizontalAlignment = .center,  @ViewBuilder content: () -> Content) -> some View {
+    VStack(alignment: alignment, spacing: 0) {
+        content()
+    }
+}
+
+@ViewBuilder
+func HStack0<Content: View>(alignment: VerticalAlignment = .center,  @ViewBuilder content: () -> Content) -> some View {
+    HStack(alignment: alignment, spacing: 0) {
+        content()
+    }
+}
+
+
+
+public extension CGPoint {
+    func unitPoint(in size: CGSize) -> UnitPoint {
+        guard size.width > 0, size.height > 0 else { return .center }
+        let x = Swift.max(0, Swift.min(1, self.x / size.width))
+        let y = Swift.max(0, Swift.min(1, self.y / size.height))
+        return UnitPoint(x: x, y: y)
+    }
+}
+
+public extension CGSize {
+    func unitPoint(of p: CGPoint) -> UnitPoint {
+        p.unitPoint(in: self)
+    }
+}
+
+
+
+
+@available(iOS 16, tvOS 16, macOS 13, *)
+public struct TakeScreenshotModifier: ViewModifier {
+    @Binding var trigger: Bool
+    var scale: CGFloat
+    var onImage: (UIImage?) -> Void
+    /// Transform applied only for the rendered snapshot. Works with type-erased AnyView to avoid generic inference issues.
+    var transform: (AnyView) -> AnyView
+
+    public init(
+        trigger: Binding<Bool>,
+        scale: CGFloat = UIScreen.main.scale,
+        transform: @escaping (AnyView) -> AnyView,
+        onImage: @escaping (UIImage?) -> Void
+    ) {
+        self._trigger = trigger
+        self.scale = scale
+        self.transform = transform
+        self.onImage = onImage
+    }
+
+    public func body(content: Content) -> some View {
+        content
+            .onChange(of: trigger) { _, newValue in
+                guard newValue == true else { return }
+                // Type-erase content and apply transform only for capture
+                let base = AnyView(content)
+                let captureContent = transform(base)
+                let renderer = ImageRenderer(content: captureContent)
+                renderer.scale = scale
+                let image = renderer.uiImage
+                onImage(image)
+                trigger = false
+            }
+    }
+}
+
+@available(iOS 16, tvOS 16, macOS 13, *)
+public extension View {
+    
+    func takeScreenshot(on trigger: Binding<Bool>, scale: CGFloat = UIScreen.main.scale, perform onImage: @escaping (UIImage?) -> Void) -> some View {
+        self.modifier(
+            TakeScreenshotModifier(trigger: trigger, scale: scale, transform: { $0 }, onImage: onImage)
+        )
+    }
+    
+    /// Captures a screenshot of this View with a temporary transformation applied only at capture time.
+    /// Use this to overlay watermarks, labels, or any additional decorations that shouldn't appear on screen.
+    /// After capturing, `trigger` is set back to false and `onImage` is called with the resulting UIImage.
+    /// - Parameters:
+    ///   - trigger: A binding Bool that, when toggled to true, initiates a capture.
+    ///   - scale: The image scale to use. Defaults to the main screen's scale.
+    ///   - transform: A closure that returns a modified view used only for the snapshot. The closure receives an AnyView of the base content and should return an AnyView.
+    ///   - onImage: Callback receiving the captured UIImage (or nil on failure).
+    func takeScreenshot(
+        on trigger: Binding<Bool>,
+        scale: CGFloat = UIScreen.main.scale,
+        transform: @escaping (AnyView) -> AnyView,
+        perform onImage: @escaping (UIImage?) -> Void
+    ) -> some View {
+        self.modifier(
+            TakeScreenshotModifier(trigger: trigger, scale: scale, transform: transform, onImage: onImage)
+        )
+    }
+}
+
+
+import Photos
+
+public extension UIImage {
+    func saveToPhotos(_ completion: @escaping (Bool) -> Void) {
+            // Optional: Request authorization first (iOS 14+ uses limited access by default)
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized || status == .limited else {
+                completion(false)
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(self, nil, nil, nil)
+            completion(true)
+        }
+    }
+}
+
+
+
+
+
+
+
+// https://www.youtube.com/watch?v=ojdjFn9qjwU
+
+public extension View {
+    @ViewBuilder
+    func snapshot(trigger: Binding<Bool>, overlay: ( () -> AnyView )? = nil, onComplete: @escaping (UIImage) -> ()) -> some View {
+        self
+            .modifier(SnapshotModifier(trigger: trigger, overlay: overlay, onComplete: onComplete))
+    }
+}
+
+struct SnapshotModifier : ViewModifier {
+    @Binding var trigger: Bool
+    var overlay: ( () -> AnyView )?
+    var onComplete: (UIImage) -> ()
+    @State private var view: UIView = .init(frame: .zero)
+    
+    func body(content: Content) -> some View {
+        content
+            .background(ViewExtractor(view: view))
+            .overlay {
+                if trigger {
+                    overlay?()
+                }
+            }
+            .compositingGroup()
+            .onChange(of: trigger) {
+                if trigger {
+                    later {
+                        trigger = false
+                    }
+                    generateSnapshot()
+                }
+            }
+    }
+    
+    private func generateSnapshot() {
+        if let IMAGE = view.snapshot {
+            onComplete(IMAGE)
+        }
+    }
+}
+
+struct ViewExtractor: UIViewRepresentable {
+    var view: UIView
+    func makeUIView(context: Context) -> UIView {
+        view.backgroundColor = .clear
+        return view
+    }
+    func updateUIView(_ uiView: UIView, context: Context) {
+        
+    }
+}
+
+struct PreviewForSnapshot: View {
+    
+    @State private var trigger = false
+//    @State private var snapshot: UIImage?
+    @State private var snapshots: [UIImage] = []
+    
+    var body : some View {
+        Button("Take Screenshot !") {
+            trigger = true
+        }
+        .padding()
+        .backgroundColor(trigger ? .orange : .clear)
+        
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, snapshot!")
+        }
+        .padding()
+        .backgroundColor(.yellow)
+        .cornerRadius(16)
+        .snapshot(trigger: $trigger) {
+            snapshots.append($0)
+        }
+        
+        VStack {
+            ForEach(snapshots, id:\.self) { S in
+                Image(uiImage: S)
+                    .aspectRatio(contentMode: .fit)
+            }
+        }
+        
+//        if let snapshot {
+//            Image(uiImage: snapshot)
+//                .aspectRatio(contentMode: .fit)
+//        }
+    }
+    
+    
+}
+
+#Preview {
+    PreviewForSnapshot()
+}
+
+
+
+
+
+
+
+public extension UIView {
+    
+    var snapshot : UIImage? {
+        if let superView = self.superview?.superview {
+            let renderer = UIGraphicsImageRenderer(size: superView.bounds.size)
+            let image = renderer.image { _ in
+                superView.drawHierarchy(in: superView.bounds, afterScreenUpdates: true)
+            }
+            return image
+        }
+        return nil
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+import PencilKit
+
+
+
+public extension Data {
+    
+    var asPKDrawing : PKDrawing? {
+        try? PKDrawing(data: self)
+    }
+    
+}
+
+public extension PKDrawing {
+    
+    @discardableResult
+    mutating func assign(data: Data?) -> Bool {
+        if let V = data?.asPKDrawing {
+            self = V
+            return true
+        }
+        return false
+    }
+    
+    static func from(data: Data?) -> PKDrawing? {
+        data?.asPKDrawing
+    }
+    
+}
+
+

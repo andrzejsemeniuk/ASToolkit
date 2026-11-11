@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension Sequence {
+public extension Sequence {
 
-    public var asArray : [Iterator.Element] { return Array(self) }
-
+    var asArray : [Iterator.Element] { return Array(self) }
+    
 }

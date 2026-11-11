@@ -8,17 +8,173 @@
 
 import Foundation
 
-extension Array
+public extension RangeReplaceableCollection {
+    
+    var combinations: [Self] { generate(2) }
+    
+    func generate(_ n: Int) -> [Self] {
+        repeatElement(self, count: n).reduce([.init()]) { result, element in
+            result.flatMap { elements in
+                element.map { elements + CollectionOfOne($0) }
+            }
+        }
+    }
+}
+
+public extension Array where Element == Int {
+    init(_ range: Range<Int>) {
+        self = range.asArray
+    }
+}
+
+public extension Array
 {
-    public mutating func trim(to:Int) -> Array {
-        let to = Swift.min(to,count)
-        let result = subarray(from:to, length:count-to)
-        let range = startIndex.advanced(by: to)..<endIndex
+    
+    var isNotEmpty : Bool {
+        return !isEmpty
+    }
+
+    mutating func clear() {
+        self = []
+    }
+
+    var cleared: Self { [] }
+    var new: Self { [] }
+    var emptied: Self { [] }
+    
+
+    mutating func dump() -> Array {
+		let result = self
+		clear()
+		return result
+	}
+    
+    mutating func prepend(_ element: Element) {
+        self.insert(element, at: 0)
+    }
+
+    mutating func discardFromFront(keeping: Int) {
+        self = suffix(keeping)
+    }
+    mutating func discardFromBack(keeping: Int) {
+        self = prefix(keeping).asArray
+    }
+    
+    func discardedFromFront(keeping: Int) -> Self {
+        var R = self
+        R.discardFromFront(keeping: keeping)
+        return R
+    }
+    
+    func discardedFromBack(keeping: Int) -> Self {
+        var R = self
+        R.discardFromBack(keeping: keeping)
+        return R
+    }
+    
+
+    @discardableResult
+    mutating func trim(to: Int) -> Array {
+        if to >= count {
+            defer {
+                self = []
+            }
+            return self
+        }
+        if to <= -count || to == 0 {
+            return []
+        }
+        var to = to
+        if to < 0 {
+            to = count + to
+        }
+        let result = subarray(from:0, length:to)
+        let range = startIndex..<startIndex.advanced(by: to)
         self.removeSubrange(range)
         return result
     }
     
-    public func subarray(from:Int, to:Int) -> Array {
+    @discardableResult
+    mutating func trim(from: Int) -> Array {
+        if from >= count {
+            return []
+        }
+        if from <= -count || from == 0 {
+            defer {
+                self = []
+            }
+            return self
+        }
+        var from = from
+        if from < 0 {
+            from = count + from
+        }
+        let result = subarray(from:from, length:count-from)
+        let range = startIndex.advanced(by: from)..<endIndex
+        self.removeSubrange(range)
+        return result
+    }
+    
+    func trimmed(to:Int) -> Array {
+        if count <= to {
+            return []
+        }
+        return subarray(from: to, to: count)
+    }
+    
+    func trimmed(from:Int) -> Array {
+        if from < 1 {
+            return []
+        }
+        return count <= from ? self : subarray(from: 0, to:from)
+    }
+    
+    @discardableResult
+    mutating func keep(to:Int) -> Array {
+        let R = to < count ? subarray(from: to, to: count) : []
+        if R.isNotEmpty {
+            self = trimmed(from: to)
+        }
+        return R
+    }
+    
+    @discardableResult
+    mutating func keepFirst(_ count1: Int) -> Array {
+        keep(to: count1)
+    }
+    
+    @discardableResult
+    mutating func keepLast(_ count1: Int) -> Array {
+        keep(from: count - count1)
+    }
+    
+    @discardableResult
+    mutating func keep(from:Int) -> Array {
+        let R = 0 < from ? subarray(from: 0, to: from) : []
+        if R.isNotEmpty {
+            self = trimmed(to: from)
+        }
+        return R
+    }
+    
+    func kept(to:Int) -> Array {
+        trimmed(from: to)
+    }
+    
+    func kept(from:Int) -> Array {
+        trimmed(to: from)
+    }
+    
+    func kept(last: Int) -> Array {
+        guard count > last else {
+            return self
+        }
+        return self[count-last..<count].asArray
+    }
+    
+    nonisolated
+    func subarray(from:Int, to:Int) -> Array {
+        let to = Swift.min(to,count)
         var result = [Element]()
         for i in stride(from:Swift.max(0,Swift.min(count,from)), to:Swift.max(0,Swift.min(count, to)), by:1) {
             result.append(self[i])
@@ -26,28 +182,198 @@ extension Array
         return result
     }
     
-    public func subarray(from:Int, length:Int) -> Array {
-        return subarray(from:from, to:from+length)
+    func subarray(from:Int, length:Int? = nil) -> Array {
+        subarray(from: from, to: from + (length == nil ? (count - from) : length!))
     }
     
-    public subscript (safe i:Int) -> Array.Element? {
-        return 0 <= i && i < self.count ? self[i] : nil
+    func subarray(to: Int, length:Int) -> Array {
+        subarray(from: Swift.max(0, to - length), to: to)
+    }
+    
+    func subarrayFromEnd(length:Int) -> Array {
+        subarray(to: count, length: length)
+    }
+    
+    nonisolated
+    subscript (safe i:Int) -> Array.Element? {
+        0 <= i && i < self.count ? self[i] : nil
+    }
+
+    nonisolated
+	func filtered<T>(type:T.Type) -> [T] {
+		self.filter { $0 is T }.map { $0 as! T }
+	}
+
+    nonisolated
+	var indexForPossibleLastElement : Int? {
+		0 < count ? count-1 : nil
+	}
+
+	var indexForPossiblePreLastElement : Int? {
+		1 < count ? count-2 : nil
+	}
+
+	var indexForSafeLastElement : Int {
+        count > 0 ? count-1 : 0
+	}
+
+	var indexForSafePreLastElement : Int {
+		1 < count ? count-2 : -1
+	}
+
+	var preLast : Element? {
+		self[safe:count-2]
+	}
+    
+    var firstElement : Element {
+        first!
+    }
+    
+    var lastElement : Element {
+        last!
+    }
+    
+    func indexForNextLooped(_ i: Int) -> Int {
+        count < 1 ? 0 : (i + 1) % count
+    }
+    
+    func indexForPreviousLooped(_ i: Int) -> Int {
+        count < 1 ? 0 : i > 0 ? i - 1 : count-1
+    }
+    
+    @discardableResult
+    mutating func popFirst() -> Element? {
+        count > 0 ? remove(at: 0) : nil
+    }
+
+    @discardableResult
+    mutating func popLast() -> Element? {
+        count > 0 ? remove(at: count-1) : nil
+    }
+    
+}
+
+public extension Array {
+
+	init(creating: ()->Element, count: Int) {
+		self.init()
+		count.loop {
+			self.append(creating())
+		}
+	}
+    
+}
+
+public extension Array {
+    
+    mutating func rotate(_ amount: Int) {
+        
+        if isEmpty || amount % count == 0 {
+            return
+        }
+        var amount1 = abs(amount) % count
+        if amount > 0 {
+            amount1 = count-amount1
+        }
+        self = Array(self[amount1..<count] + self[0..<amount1])
+    }
+    
+    func rotated(_ amount: Int) -> Self {
+        var r = self
+        r.rotate(amount)
+        return r
+    }
+
+    mutating func shift(_ amount: Int, fill: Element) {
+        guard isNotEmpty else {
+            return
+        }
+        var amount = amount
+        while amount < 0 {
+            self.removeFirst()
+            self.append(fill)
+            amount += 1
+        }
+        while amount > 0 {
+            self.removeLast()
+            self.prepend(fill)
+            amount -= 1
+        }
+    }
+    
+    func shifted(_ amount: Int, fill: Element) -> Self {
+        var r = self
+        r.shift(amount, fill: fill)
+        return r
+    }
+    
+}
+
+
+
+public extension Array{
+
+    func sortedCombinedWithSorted(other: Array, comparing comparator: (Element,Element)->Int, uniqued: Bool) -> Array {
+        var r : Self = []
+        var i0 = 0
+        var i1 = 0
+        while i0 < count, i1 < other.count {
+            let c = comparator(self[i0], other[i1])
+            if c < 0 {
+                r.append(self[i0])
+                i0 += 1
+            } else if c > 0 {
+                r.append(other[i1])
+                i1 += 1
+            } else {
+                r.append(self[i0])
+                if !uniqued {
+                    r.append(other[i0])
+                }
+                i0 += 1
+                i1 += 1
+            }
+        }
+        if i0 < count {
+            r += self[i0..<count]
+        } else if i1 < other.count {
+            r += other[i1..<other.count]
+        }
+        
+        return r
     }
 }
 
 
-extension Array where Element == Character {
-    
-    public var asArrayOfUInt32      : [UInt32]      { return self.map { $0.unicodeScalarCodePoint } }
-    
-}
 
+public extension Array where Element : Numeric {
+    
+    var sum                         : Element      { self.reduce(0, { $0 + $1 }) }
+    
+    func sum(if condition: (Element)->Bool) -> Element {
+//        reduce(0, { $0 + (condition($1) ? $1 : 0)})
+        reduce(0, { condition($1) ? $0 + $1 : $0 })
+    }
+    
+    var product                     : Element? {
+        guard isNotEmpty else { return nil }
+        return reduce(1, { $0 * $1 })
+    }
+    
+    func multiplied(by: Element) -> Self {
+        map { $0 * by }
+    }
+}
 
 extension Array where Element == Int {
     
     public var asArrayOfCGFloat     : [CGFloat]     { return self.map { CGFloat($0) } }
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
+
+    var average : Double? {
+        isEmpty ? nil : Double(sum) / count.asDouble
+    }
 
 }
 
@@ -58,6 +384,10 @@ extension Array where Element == Float {
     public var asArrayOfDouble      : [Double]      { return self.map { Double($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Float? {
+        isEmpty ? nil : sum / count.asFloat
+    }
+
 }
 
 
@@ -67,6 +397,9 @@ extension Array where Element == CGFloat {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Double? {
+        isEmpty ? nil : Double(sum) / count.asDouble
+    }
 }
 
 
@@ -76,65 +409,312 @@ extension Array where Element == Double {
     public var asArrayOfFloat       : [Float]       { return self.map { Float($0) } }
     public var asArrayOfInt         : [Int]         { return self.map { Int($0) } }
     
+    var average : Double? {
+        isEmpty ? nil : sum / count.asDouble
+    }
 }
 
-extension Array {
+public extension Array where Element == String {
     
-    public func adjacent(_ handle:(Element,Element)->()) {
+    func uppercased() -> Self {
+        map { $0.uppercased() }
+    }
+    
+    func lowercased() -> Self {
+        map { $0.lowercased() }
+    }
+    
+    var filteredOutEmpty : Self {
+        filter { $0.isNotEmpty }
+    }
+    
+    var sortedByDescendingLength : Self {
+        sorted {
+            $0.length > $1.length || ($0.length == $1.length && $0 < $1)
+        }
+    }
+
+    var longestLength: Int {
+        self.map { $0.count }.max() ?? 0
+    }
+    
+    var longest: String? {
+        self.max(by: { $0.count < $1.count })
+    }
+}
+
+public extension Array {
+    
+    nonisolated
+    func adjacent() -> [(Element,Element)] {
+        var R : [(Element,Element)] = []
+        for i in stride(from:1,to:count,by:1) {
+            R.append((self[i-1],self[i]))
+        }
+        return R
+    }
+
+    nonisolated
+    func forEachAdjacent(_ handle:(Element,Element)->Void) {
         for i in stride(from:1,to:count,by:1) {
             handle(self[i-1],self[i])
         }
     }
 
-    public func find(_ where:(Element)->Bool) -> Element? {
-        if let index = self.index(where:`where`) {
-            return self[index]
-        }
-        return nil
-    }
+	mutating func forEachSubsequent(_ handle:(Element,inout Element)->Void) {
+		for i in stride(from:1,to:count,by:1) {
+			handle(self[i-1],&self[i])
+		}
+	}
 }
 
-extension Array {
+public extension Array {
     
-    public func appended(_ element:Element) -> Array<Element> {
+    func appended(_ element:Element) -> Self {
         var result = self
         result.append(element)
         return result
     }
+    
+    func prepended(_ element:Element) -> Self {
+        var result = self
+        result.prepend(element)
+        return result
+    }
+    
+    func replaced(_ element: Element, at: Int) -> Self {
+        if at < count, 0 <= at {
+            var r = self
+            r[at] = element
+            return r
+        }
+        return self
+    }
+    
+    func replaced(_ elements: Self, at: [Int]) -> Self {
+        var r = self
+        for index in at {
+            if r.valid(index: index) {
+                r[index] = elements[index]
+            }
+        }
+        return r
+    }
+    
+    func valid(index: Int) -> Bool {
+        index < count && 0 <= index 
+    }
 }
 
 extension Array {
     
-    public func split(by:Int) -> [[Element]] {
-        var result : [[Element]] = []
-        var row : [Element] = []
+        //    public func split(by: Int) -> [[Element]] {
+        //        var result : [[Element]] = []
+        //        var row : [Element] = []
+        //        for element in self {
+        //            if row.count >= by {
+        //                result.append(row)
+        //                row = []
+        //            }
+        //            row.append(element)
+        //        }
+        //
+        //        if row.isNotEmpty {
+        //            result.append(row)
+        //        }
+        //
+        //        return result
+        //    }
+    
+    public func split0(by n: Int) -> [[Element]] {
+        precondition(n > 0, "split(by:) requires n > 0")
+        var result: [[Element]] = []
+        var row: [Element] = []
+        
         for element in self {
-            if row.count >= by {
+            if row.count >= n {
                 result.append(row)
                 row = []
             }
             row.append(element)
         }
         
-        if !row.empty {
+        if !row.isEmpty {
             result.append(row)
         }
-        
         return result
+    }
+    
+    public func split(by n: Int) -> [[Element]] {
+        precondition(n > 0, "split(by:) requires n > 0")
+        return stride(from: 0, to: count, by: n).map { i in
+            Array(self[i ..< Swift.min(i + n, count)])
+        }
     }
 }
 
-extension Array where Element : Equatable {
+public extension Array {
     
-    public func next(after:Element) -> Element? {
+    func previousLooped(_ element: Element, missing: Element? = nil, check: (Element) -> Bool) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = firstIndex(where: check) {
+            if INDEX > 0 {
+                return self[INDEX-1]
+            }
+            return last!
+        }
+        return missing ?? element
+    }
+    
+    func nextLooped(_ element: Element, missing: Element? = nil, check: (Element) -> Bool) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = firstIndex(where: check) {
+            if INDEX < count-1 {
+                return self[INDEX+1]
+            }
+            return first!
+        }
+        return missing ?? element
+    }
+
+}
+
+
+public extension Array where Element : Equatable {
+    
+    func previousLooped(_ element: Element, missing: Element? = nil, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX > 0 {
+                return self[INDEX - 1]
+            }
+            return last!
+        }
+        return missing ?? element
+    }
+
+    func nextLooped(_ element: Element, missing: Element? = nil, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element {
+        guard count > 0 else {
+            return missing ?? element
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX < count - 1 {
+                return self[INDEX + 1]
+            }
+            return first!
+        }
+        return missing ?? element
+    }
+
+    func previousLoopedOptional(_ element: Element, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX > 0 {
+                return self[INDEX - 1]
+            }
+            return last!
+        }
+        return nil
+    }
+
+    func nextLoopedOptional(_ element: Element, equal: (Element,Element) -> Bool = { $0 == $1 }) -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        if let INDEX = self.index(where: { equal($0,element) }) {
+            if INDEX < count - 1 {
+                return self[INDEX + 1]
+            }
+            return first!
+        }
+        return nil
+    }
+
+    func next(after:Element, wrap: Bool = true) -> Element? {
         if let index = self.index(where: { $0 == after }) {
             if index < (count-1) {
                 return self[index+1]
             }
-            return self[0]
+            if wrap {
+                return self[0]
+            }
         }
         return nil
     }
+    
+    func inserted(_ element:Element, at: Int) -> Self {
+        var result = self
+        if at < count {
+            result.insert(element, at: at)
+        } else {
+            result.append(element)
+        }
+        return result
+    }
+    
+    func inserted(_ element:Element, after: Int) -> Self {
+        var result = self
+        if (after+1) < count {
+            result.insert(element, at: 1+after)
+        } else {
+            result.append(element)
+        }
+        return result
+    }
+    
+    func removed(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var result = self
+        if let index = result.firstIndex(where: { equals($0,element) }) {
+            result.remove(at: index)
+        }
+        return result
+    }
+    
+    func removed(at index: Int) -> Self {
+        var result = self
+        result.remove(at: index)
+        return result
+    }
+    
+    @discardableResult
+    mutating func removeEvery(_ element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Int {
+        let count0 = count
+        removeAll(where: { equals($0,element) })
+        return count0 - count
+    }
+    
+    func removedEvery(_ element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var r = self
+        r.removeEvery(element,equals)
+        return r
+    }
+    
+    func uniquedOnAdjacentElementsKeepingOrder(equals: (Element?,Element)->Bool = { a,b in a == b }) -> Self {
+        reduce([], {
+            if $0.isEmpty {
+                return [$1]
+            } else if equals($0.last,$1) {
+                return $0
+            } else {
+                return $0 + [$1]
+            }
+        })
+    }
+    
+    func removedAll(where c: (Element)->Bool) -> Self {
+        var R = self
+        R.removeAll(where: c)
+        return R
+    }
+
 }
 
 public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
@@ -146,10 +726,1918 @@ public func zippy<A,B>(_ a:[A], _ b:[B]) -> [(A,B)] {
     return r
 }
 
-extension Array {
+public extension Array {
     
-    public func zipped<B>(with:[B]) -> [(Element,B)] {
+    func zipped<B>(with:[B]) -> [(Element,B)] {
         return zippy(self,with)
+    }
+    
+    var enumeratedWithExcelStyle : [String] {
+        guard count > 0 else { return [] }
+        
+        var result: [String] = []
+        var current = 0
+        
+        while current < count {
+            var value = current
+            var column = ""
+            
+            while value >= 0 {
+                let remainder = value % 26
+                column = String(UnicodeScalar(65 + remainder)!) + column
+                value = (value / 26) - 1
+            }
+            
+            result.append(column)
+            current += 1
+        }
+        
+        return result
+    }
+    
+    func resized(to size: Int, with element: Element) -> [Element] {
+        if count < size {
+            return self + .init(repeating: element, count: size - count)
+        } else {
+            return self.trimmed(to: size)
+        }
+    }
+
+}
+
+//extension Array where Element: Collection, Element.Iterator.Element: Collection {
+extension Array where Element: Collection {
+
+    public func transposed() -> [[Element.Iterator.Element]] {
+        var result : [[Element.Iterator.Element]] = [[]]
+        for row in self {
+            for (y,column) in row.enumerated() {
+                while (result.count <= y) {
+                    result.append([])
+                }
+                result[y].append(column)
+            }
+        }
+        return result
+    }
+
+	public var dimensions : (rows:Int,columns:Int) {
+		let columns = self.reduce(Int(0),{ result,element in
+			return Swift.max(result,Int(element.count))
+		})
+		return (rows:self.count, columns:columns)
+	}
+}
+
+public extension Array where Element: Equatable {
+
+    func index(of:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Int? {
+		return self.index(where: { element in
+			equals(of,element)
+		})
+	}
+
+    func contains(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+		return firstIndex(where: { equals(element,$0) }) != nil
+	}
+
+    func missing(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        return !contains(element, equals)
+    }
+
+    @discardableResult mutating func remove(_ element:Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        if let index = self.index(of: element, equals) {
+			_ = self.remove(at: index)
+			return true
+		}
+		return false
+	}
+    
+    
+    mutating func toggle(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if removeEvery(element, equals) == 0 {
+            append(element)
+        }
+    }
+    
+    mutating func toggle(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if removeEvery(element, equals) == 0 {
+            prepend(element)
+        }
+    }
+
+    
+    func toggled(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.toggle(append: element, equals)
+        return R
+    }
+    
+    func toggled(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.toggle(prepend: element, equals)
+        return R
+    }
+
+    
+    @discardableResult
+    mutating func enlist(append element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        if missing(element, equals) {
+            append(element)
+            return true
+        }
+        return false
+    }
+
+    @discardableResult
+    mutating func enlist(prepend element: Element, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Bool {
+        if missing(element, equals) {
+            prepend(element)
+            return true
+        }
+        return false
+    }
+    
+    
+    mutating func append(_ element: Element, limit: Int, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        self.append(element)
+        discardFromFront(keeping: limit)
+    }
+    
+    mutating func prepend(_ element: Element, limit: Int, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        self.prepend(element)
+        discardFromBack(keeping: limit)
+    }
+
+    
+    mutating func append(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if enlist(append: missing, equals), let limit {
+            discardFromFront(keeping: limit)
+        }
+    }
+    
+    mutating func prepend(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        if enlist(prepend: missing, equals), let limit {
+            discardFromBack(keeping: limit)
+        }
+    }
+
+    
+    mutating func append(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        removeAll(where: { equals($0,removing) })
+        self = self + [removing]
+        if let limit {
+            discardFromFront(keeping: limit)
+        }
+    }
+    
+    mutating func prepend(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        removeAll(where: { equals($0,removing) })
+        self = [removing] + self
+        if let limit {
+            discardFromBack(keeping: limit)
+        }
+    }
+
+    
+    func appended(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.append(removing: removing, limit: limit, equals)
+        return R
+    }
+    
+    func prepended(removing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.prepend(removing: removing, limit: limit, equals)
+        return R
+    }
+
+    
+    func appended(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.append(missing: missing, limit: limit, equals)
+        return R
+    }
+    
+    func prepended(missing: Element, limit: Int? = nil, _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        R.prepend(missing: missing, limit: limit, equals)
+        return R
+    }
+
+    
+    func appended(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        for e in missing {
+            R.append(missing: e, equals)
+        }
+        return R
+    }
+    
+    func prepended(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) -> Self {
+        var R = self
+        for e in missing {
+            R.prepend(missing: e, equals)
+        }
+        return R
+    }
+
+    mutating func append(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        missing.forEach {
+            self.append(missing: $0, equals)
+        }
+    }
+    
+    mutating func prepend(missing: [Element], _ equals: (Element,Element)->Bool = { a,b in a == b }) {
+        missing.reversed().forEach {
+            self.prepend(missing: $0, equals)
+        }
+    }
+
+    mutating func distinct() {
+        self.distinct { a,b in
+            a == b
+        }
+    }
+    
+    func indexes(where f: (Element)->Bool) -> [Int] {
+        self.enumerated().compactMap { (i,e) in
+            f(e) ? i : nil
+        }
+    }
+    
+}
+
+
+public extension Array  {
+    
+    mutating func distinct(_ equals: (Element,Element)->Bool) {
+        var i0 = 0
+        while i0 < count {
+            var i1 = i0 + 1
+            while i1 < count {
+                if equals(self[i1], self[i0]) {
+                    remove(at: i1)
+                } else {
+                    i1 += 1
+                }
+            }
+            i0 += 1
+        }
+    }
+    
+}
+
+public extension Array where Element: Identifiable & Equatable {
+
+    mutating func append(missing: Element) {
+        enlist(append: missing, { a,b in a.id == b.id })
+    }
+    
+    mutating func prepend(missing: Element) {
+        enlist(prepend: missing, { a,b in a.id == b.id })
+    }
+
+}
+
+public extension Array {
+    
+    func contains(_ element: Element, equatable: (Element,Element)->Bool) -> Bool {
+        first(where: { equatable($0, element) }) != nil
+    }
+    
+    func predicate(_ predicate: (Element)->Bool) -> Bool {
+        first(where: { predicate($0) }) != nil
     }
 }
 
+public extension Array {
+
+    func compacted() -> [Element] {
+//        return self.filter({ $0 != nil }).map { $0! })
+        return self.compactMap({
+            return $0
+        })
+    }
+    
+    func withCompacted<T>(perform: ([Element])->T) -> T {
+        perform(compacted())
+    }
+    
+    func withCompacted<T>(perform: ([Element])->T?) -> T? {
+        perform(compacted())
+    }
+    
+    func ensured(count: Int, fill: Element) -> Self {
+        var R = self
+        while R.count < count {
+            R.append(fill)
+        }
+        return R
+    }
+    
+    func assigned(value: Element, at: Int) -> Self {
+        if at < count {
+            var R = self
+            R[at] = value
+            return R
+        }
+        return self
+    }
+
+}
+
+public extension Array {
+    
+    var odd : [Element] {
+        enumerated().filter { $0.0.isOdd }.map { $0.1 }
+    }
+    
+    var even : [Element] {
+        enumerated().filter { $0.0.isEven }.map { $0.1 }
+    }
+
+}
+
+extension Array {
+
+	public func index(where q: (Element)->Bool) -> Int? {
+		for i in 0..<count {
+			if q(self[i]) {
+				return i
+			}
+		}
+		return nil
+	}
+
+	public func index(default v:Int, where q: (Element)->Bool) -> Int {
+		return self.index(where: q) ?? v
+	}
+}
+
+extension Array {
+
+    public mutating func assign(_ value:Element) {
+        for i in 0..<count {
+            self[i] = value
+        }
+    }
+
+	public func forEachAssigned(_ block:(Element)->Element) -> [Element] {
+		var result = Array<Element>(self)
+		for i in 0..<count {
+			result[i] = block(self[i])
+		}
+		return result
+	}
+
+	public mutating func forEachAssign(_ block:(Element)->Element) {
+		for i in 0..<count {
+			self[i] = block(self[i])
+		}
+	}
+
+}
+
+extension Array {
+
+	public func at(_ index:Int) -> Element {
+		return index < 0 ? self[count+index] : self[index]
+	}
+
+	public func at(safe index:Int) -> Element? {
+		return index < 0 ? self[safe:count+index] : self[safe:index]
+	}
+
+	public mutating func at(_ index:Int, set value:Element) {
+		if index < 0 {
+			self[count+index] = value
+		}
+		else {
+			self[index] = value
+		}
+	}
+
+	public mutating func at(safe index:Int, set value:Element) {
+		if index < 0 {
+			let i = (-index) % count
+			self[count - i] = value
+		}
+		else {
+			let i = index % count
+			self[i] = value
+		}
+	}
+
+}
+
+public extension Array {
+    
+    var random : Element {
+        self[ randomIndex ]
+    }
+
+    var pick : Element {
+        random
+    }
+    
+    var randomIndex : Int {
+        return Int.random(n: UInt32(count))
+    }
+
+    func picked(_ count: Int) -> Self {
+        // EXPENSIVE O(n)
+        self.shuffled().kept(to: count)
+    }
+    
+    func element(some: Int) -> Element {
+        self[some % count]
+    }
+    
+    
+    func pick(using g: inout RandomNumberGenerator) -> Element {
+        self[ randomIndex(using: &g) ]
+    }
+
+    func picked(using g: inout RandomNumberGenerator) -> Self {
+        self.shuffled(using: &g).kept(to: count)
+    }
+
+    func randomIndex(using g: inout RandomNumberGenerator) -> Int {
+        g.next(upperBound: count.asUInt32).asInt
+    }
+    
+
+}
+
+
+
+public func + <T:Equatable>(lhs:Array<T>, rhs:Array<T>) -> Array<T> {
+	var r = lhs
+	r.append(contentsOf:rhs)
+	return r
+}
+
+public func + <T:Equatable>(lhs:Array<T>, rhs:T) -> Array<T> {
+	return lhs + [rhs]
+}
+
+
+public func - <T:Equatable>(lhs:Array<T>, rhs:Array<T>) -> Array<T> {
+	return lhs.filter { v in
+		return !rhs.contains(v)
+	}
+}
+
+public func -= <T:Equatable>(lhs: inout Array<T>, rhs: Array<T>) {
+	lhs = lhs - rhs
+}
+
+public func - <T:Equatable>(lhs:Array<T>, rhs:T) -> Array<T> {
+	return lhs.filter { v in
+		return v != rhs
+	}
+}
+
+public func -= <T:Equatable>(lhs: inout Array<T>, rhs: T) {
+	lhs = lhs - rhs
+}
+
+
+public extension Array where Element : Equatable {
+    
+    func count(element: Element) -> Int {
+        count(where: { $0 == element })
+    }
+
+}
+
+public extension Array {
+    
+    func count(where q: (Element)->Bool) -> Int {
+        self.reduce(0, { $0 + (q($1) ? 1 : 0) } )
+    }
+    
+    func all(where q: (Element)->Bool) -> Bool {
+        for e in self {
+            if !q(e) {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func some(where q: (Element)->Bool, count: Int = 1) -> Bool {
+        var c = count
+        for e in self {
+            if q(e) {
+                c -= 1
+                if c < 1 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func any(where q: (Element)->Bool) -> Bool {
+        return some(where: q, count: 1)
+    }
+    
+    func most(where q: (Element)->Bool) -> Bool {
+        var count = 0
+        let half = self.count/2
+        for e in self {
+            if q(e) {
+                count += 1
+                if count > half {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func none(where q: (Element)->Bool) -> Bool {
+        for e in self {
+            if q(e) {
+                return false
+            }
+        }
+        return true
+    }
+    
+}
+
+public extension Array where Element : Equatable {
+    
+    func has(_ element: Element) -> Bool {
+        contains(element)
+    }
+    
+    func has(none array: [Element]) -> Bool {
+        contains(none: array)
+    }
+    
+    func has(all array: [Element]) -> Bool {
+        contains(all: array)
+    }
+    
+    func has(any array: [Element]) -> Bool {
+        contains(any: array)
+    }
+    
+    func contains(none array: [Element]) -> Bool {
+        array.none { self.contains($0) }
+    }
+    
+    func contains(all array: [Element]) -> Bool {
+        array.all { self.contains($0) }
+    }
+    
+    func contains(any array: [Element]) -> Bool {
+        array.any { self.contains($0) }
+    }
+    
+    func missing(none array: [Element]) -> Bool {
+        contains(all: array)
+    }
+    
+    func missing(all array: [Element]) -> Bool {
+        contains(none: array)
+    }
+    
+    func missing(any array: [Element]) -> Bool {
+        !contains(all: array)
+    }
+    
+}
+
+public extension Array where Element == Int {
+    
+    func invertedIndex() -> Self {
+        var r = self
+        for i in 0..<count {
+            r[self[i]] = i
+        }
+        return r
+    }
+    
+    var asArrayOfString : [String] {
+        map { "\($0)"}
+    }
+    
+    var asStringJoinedByComma : String {
+        asArrayOfString.joinedByComma
+    }
+    
+    var asStringRange : String {
+        guard count > 0 else {
+            return "[]"
+        }
+        guard count > 1 else {
+            return "[\(self[0])]"
+        }
+        return "[\(min!)-\(max!)]"
+    }
+    
+}
+
+public extension Array {
+    
+    func orderedIndex(with sorting: (Element,Element)->Bool) -> [Int] {
+        self.enumerated().sorted(by: { sorting($0.1,$1.1) }).map { $0.0 }
+    }
+
+}
+
+public extension Array {
+    
+    func removedEqualAdjacent(_ equal: (Element,Element)->Bool) -> Self {
+        guard count > 1 else { return self }
+        var r : Self = []
+        r.reserveCapacity(count)
+        r.append(self[0])
+        for i in 1..<count {
+            if !equal(r.last!,self[i]) {
+                r.append(self[i])
+            }
+        }
+        return r
+    }
+    
+    func sortedAndUniqued(_ less: (Element,Element)->Bool) -> Self {
+        guard count > 1 else { return self }
+        return self.sorted(by: less).removedEqualAdjacent { a,b in
+            !less(a,b) && !less(b,a)
+        }
+    }
+    
+    mutating func rotate(amount: Int = 1, until check: (Self)->Bool) {
+        while !check(self) {
+            self.rotate(amount)
+        }
+    }
+    
+    func rotated(amount: Int = 1, until check: (Self)->Bool) -> Self {
+        var R = self
+        while !check(R) {
+            R.rotate(amount)
+        }
+        return R
+    }
+}
+
+public extension Array {
+    
+    var range : Range<Int> {
+        0..<count
+    }
+    
+}
+
+
+public extension Array where Element == Int {
+    
+    func inverseMapped(to: Int) -> Self {
+        self.map { to - $0 }
+    }
+    
+}
+
+
+public extension Array {
+    
+    @discardableResult
+    mutating func prepad(with: Element, upto limit: Int) -> Self {
+        while count < limit {
+            prepend(with)
+        }
+        return self
+    }
+    
+    func prepadded(with: Element, upto limit: Int) -> Self {
+        var r = self
+        r.prepad(with: with, upto: limit)
+        return r
+    }
+    
+    func padded(with: Element, upto limit: Int) -> Self {
+        var r = self
+        while r.count < limit {
+            r.append(with)
+        }
+        return r
+    }
+    
+    func padded(with: Element, till limit: Int) -> Self {
+        padded(with: with, upto: limit + 1)
+    }
+    
+}
+
+public extension Array {
+    
+    func asDictionary<K: Hashable,V>(_ f: (Element)->(K,V)) -> [K:V] {
+        self.map {
+            f($0)
+        }.reduce([:], {
+            var d = $0
+            let (k,v) = $1
+            d[k] = v
+            return d
+        })
+    }
+ 
+    func asDictionary<K,V>() -> [K:V] where Iterator.Element == (K,V) {
+        self.reduce([:]) {
+            var dict:[K:V] = $0
+            dict[$1.0] = $1.1
+            return dict
+        }
+    }
+}
+
+public extension Array {
+    
+    func indexGroups(where f: (Element)->Bool) -> [[Int]] {
+        var groups : [[Int]] = []
+        var group : [Int] = []
+        for i in 0..<count {
+            if f(self[i]) {
+                group.append(i)
+            } else if group.isNotEmpty {
+                groups.append(group)
+                group = []
+            }
+        }
+        if group.isNotEmpty {
+            groups.append(group)
+            group = []
+        }
+        return groups
+    }
+}
+
+
+
+
+
+public extension Array where Element : Equatable {
+    
+    func count(first: Int = -1, of: Element) -> Int {
+        var r = 0
+        let first = first > -1 ? Swift.min(first,count) : count
+        for i in 0..<first {
+            if self[i] == of { r += 1 }
+        }
+        return r
+    }
+    
+    func runCounts(of: Element) -> [Int : Int] {
+        guard count > 0 else { return [:] }
+        var r : [Int : Int] = [:]
+        var counter = 0
+        for i in 0..<count {
+            if self[i] != of {
+                if counter > 0 {
+                    r[counter, default: 0] += 1
+                    counter = 0
+                }
+            } else {
+                counter += 1
+            }
+        }
+        if counter > 0 {
+            r[counter, default: 0] += 1
+        }
+        return r
+    }
+    
+    func runCountsAsArray(of: Element) -> [Int] {
+        let c = runCounts(of: of)
+        let max = c.keys.max() ?? 0
+        guard max > 0 else { return [] }
+        var r : [Int] = .init(repeating: 0, count: max)
+        for (k,v) in c {
+            r[k-1] = v
+        }
+        return r
+    }
+    
+    func runsSum(of: Element) -> Int {
+        runCountsAsArray(of: of).enumerated().map { index,run in (index + 1) * run }.sum
+    }
+    
+    
+//    func previousLooped(_ e: Element) -> Element! {
+//        if let index = firstIndex(of: e) {
+//            return index > 0 ? self[index-1] : self.last
+//        }
+//        return nil //e
+//    }
+//    
+//    func nextLooped(_ e: Element) -> Element! {
+//        if let index = firstIndex(of: e) {
+//            return index < count-1 ? self[index+1] : self.first
+//        }
+//        return nil //e
+//    }
+}
+
+public extension Array where Element : Hashable {
+    func uniqued() -> Self {
+//        let SELF : any Sequence<Element> = self
+//        SELF.uniqued(on: { $0 })
+        var seen: Set<Element> = []
+        var result: [Element] = []
+        for element in self {
+          if seen.insert(element).inserted {
+            result.append(element)
+          }
+        }
+        return result
+
+    }
+    
+    func uniquedInOrderKeepingFirst() -> Self {
+        var T = Set<Element>.init(self)
+        var r : Self = []
+        for e in self {
+            if T.contains(e) {
+                r.append(e)
+                T.remove(e)
+            }
+        }
+        return r
+    }
+    
+    var uniquedPreservingOrder : Self {
+        self.uniquedPreservingOrder(keyed: { $0 })
+    }
+    
+}
+
+public extension Array {
+    
+    func uniquedPreservingOrder<Key : Hashable>(keyed: (Element) -> Key) -> [Element] {
+        var seen = Set<Key>()
+        var result: [Element] = []
+        result.reserveCapacity(count)
+        for element in self {
+            let KEY = keyed(element)
+            if seen.insert(KEY).inserted {
+                result.append(element)
+            }
+        }
+        return result
+    }
+
+}
+
+public extension Array where Element == Int {
+    var sumOfPositives : Int {
+        self.reduce(0, {
+            $0 + ($1 > 0 ? $1 : 0)
+        })
+    }
+    var sumOfNegatives : Int {
+        self.reduce(0, {
+            $0 + ($1 < 0 ? $1 : 0)
+        })
+    }
+    var ratios : [Double] {
+        guard count > 1 else { return [] }
+        var r : [Double] = []
+        for i in 1..<count {
+            if self[i] != 0 {
+                r.append(Double(self[i-1])/Double(self[i]))
+            } else {
+                r.append(Double.nan)
+            }
+        }
+        return r
+    }
+
+}
+
+public extension Array where Element == Bool {
+    
+    var sequence : [Int] {
+        guard count > 0 else { return [] }
+        var r : [Int] = []
+        var counter = 1
+        var last : Bool = self[0]
+        for i in 1..<count {
+            if self[i] != last {
+                r.append(last ? counter : -counter)
+                counter = 1;
+                last = self[i]
+            } else {
+                counter += 1
+            }
+        }
+        if counter > 0 {
+            r.append(last ? counter : -counter)
+        }
+        return r
+    }
+
+    var sequenceNormzalizedTo11 : [Double] {
+        let values = sequence
+        let min = values.min() ?? 0
+        let max = values.max() ?? 0
+        let m = Double(Swift.max(abs(max),abs(min)))
+        return values.map { v in
+            Double(v)/m
+        }
+    }
+    
+    func sequenceWeighted(_ weight: Double = 1.0) -> [Double] {
+        sequence.enumerated().map { i,v in Double(1+i) * Double(v) * weight }
+    }
+    
+    var runCountsOf0Summary : String {
+        let r = runCountsAsArray(of: false)
+        return r.description.replacingOccurrences(of: ", ", with: " ") + " |\(r.count)|"
+    }
+    var runCountsOf1Summary : String {
+        let r = runCountsAsArray(of: true)
+        return r.description.replacingOccurrences(of: ", ", with: " ") + " |\(r.count)|"
+    }
+
+    func runIndexes(of: Bool) -> [Int : [Int]] {
+        var r : [Int : [Int]] = [:]
+        var index = 0
+        for run in sequence {
+            r[run, default: []].append(index)
+            index += abs(run)
+        }
+        return r
+    }
+    func runIndexesAsArray(of: Bool) -> [Int] {
+        let i = runIndexes(of: of)
+        return i.keys.sorted().map { k in i[k]! }.flatMap { $0 }
+    }
+    
+    var asStringOf01 : String {
+        map { $0 ? "1" : "0" }.joined(separator: "")
+    }
+
+    func countOf(pattern: [Bool]) -> Int {
+        var r = 0
+        var i = 0
+        let end = count-pattern.count+1
+        while i < end {
+            var j = i
+            while j < count, j-i < pattern.count, self[j] == pattern[j-i] {
+                j += 1
+            }
+            if (j-i) == pattern.count {
+                r += 1
+                i += pattern.count
+            } else {
+                i += 1
+            }
+        }
+        return r
+    }
+
+    static func allPermutations(n: Int) -> [[Bool]] {
+        return [false,true].generate(n)
+    }
+    
+    func count(_ value: Bool) -> Int {
+        self.count(where: { $0 == value })
+    }
+}
+
+public extension Array where Element : Comparable {
+    
+    func minimal(_ less: (Element,Element)->Bool) -> Element? {
+        guard isNotEmpty else { return nil }
+        return self.reduce(first!, { before,current in
+            less(before,current) ? before : current
+        })
+    }
+    func maximal(_ less: (Element,Element)->Bool) -> Element? {
+        guard isNotEmpty else { return nil }
+        return self.reduce(first!, { before,current in
+            less(before,current) ? current : before
+        })
+    }
+    func minimalIndex(_ less: (Element,Element)->Bool) -> Int? {
+        guard isNotEmpty else { return nil }
+        let E = self.enumerated()
+        return E.reduce(0, { before,current in
+            less(self[before],current.1) ? before : current.0
+        })
+    }
+    func maximalIndex(_ less: (Element,Element)->Bool) -> Int? {
+        guard isNotEmpty else { return nil }
+        let E = self.enumerated()
+        return E.reduce(0, { before,current in
+            less(self[before],current.1) ? current.0 : before
+        })
+    }
+
+    var minAndMax : (min: Element, max: Element)? {
+        let MM = arrayMinMaxIndexes(of: self)
+        if let iMIN = MM.0, let iMAX = MM.1 {
+            return (self[iMIN],self[iMAX])
+        }
+        return nil
+    }
+    
+    var min                         : Element? { minimal(<) }
+    var max                         : Element? { maximal(<) }
+
+    var sortedAndUniqued : Self {
+        self.sortedAndUniqued({ a,b in a < b })
+    }
+
+}
+
+//public extension Array where Element : Optional<Comparable> {
+//}
+
+func arrayMinMaxIndexes<T: Comparable>(of VALUES: [T?]) -> (Int?,Int?) {
+    var iMIN : Int!
+    var vMIN : T!
+    var iMAX : Int!
+    var vMAX : T!
+    for i in VALUES.range {
+        if let V = VALUES[i] {
+            if iMIN != nil {
+                if V < vMIN {
+                    iMIN = i
+                    vMIN = V
+                }
+            } else {
+                iMIN = i
+                vMIN = V
+            }
+            if iMAX != nil {
+                if V > vMAX {
+                    iMAX = i
+                    vMAX = V
+                }
+            } else {
+                iMAX = i
+                vMAX = V
+            }
+        }
+    }
+    return (iMIN,iMAX)
+}
+
+
+public extension Array where Element: Equatable {
+    mutating func move(_ item: Element, to newIndex: Index) {
+        if let index = index(of: item) {
+            move(at: index, to: newIndex)
+        }
+    }
+    
+    mutating func bringToFront(item: Element) {
+        move(item, to: 0)
+    }
+    
+    mutating func sendToBack(item: Element) {
+        move(item, to: endIndex-1)
+    }
+    
+    mutating func moveUp(_ item: Element, loop: Bool = true) {
+        guard count > 1 else { return }
+        if let index = index(of: item) {
+            let newIndex = index + 1
+            if newIndex >= count {
+                if loop {
+                    move(at: index, to: 0)
+                }
+            } else {
+                move(at: index, to: newIndex)
+            }
+        }
+    }
+    
+    mutating func moveDown(_ item: Element, loop: Bool = true) {
+        guard count > 1 else { return }
+        if let index = index(of: item) {
+            let newIndex = index - 1
+            if newIndex < 0 {
+                if loop {
+                    move(at: index, to: count-1)
+                }
+            } else {
+                move(at: index, to: newIndex)
+            }
+        }
+    }
+    
+    mutating func moveUp(index: Index, loop: Bool = true) {
+        guard count > 1 else { return }
+        let newIndex = index + 1
+        if newIndex >= count {
+            if loop {
+                move(at: index, to: 0)
+            }
+        } else {
+            move(at: index, to: Swift.max(0,newIndex))
+        }
+    }
+    
+    mutating func moveDown(index: Index, loop: Bool = true) {
+        guard count > 1 else { return }
+        let newIndex = index - 1
+        if newIndex < 0 {
+            if loop {
+                move(at: index, to: count-1)
+            }
+        } else {
+            move(at: index, to: Swift.min(count-1,newIndex))
+        }
+    }
+
+    mutating func moveUp(index: Index, by: Int, loop: Bool = true) {
+        guard count > 1 else { return }
+        var by = by
+        while by > 0 {
+            moveUp(index: index, loop: loop)
+            by -= 1
+        }
+    }
+    
+    mutating func moveDown(index: Index, by: Int, loop: Bool = true) {
+        guard count > 1 else { return }
+        var by = by
+        while by > 0 {
+            moveDown(index: index, loop: loop)
+            by -= 1
+        }
+    }
+    
+}
+
+public extension Array {
+    mutating func move(at index: Index, to newIndex: Index) {
+        insert(remove(at: index), at: newIndex)
+    }
+}
+
+
+public extension Array where Element == Double {
+    var indexOfMaxValue : Int? {
+        var imax : Int!
+        var vmax : Double!
+        for i in range {
+            if vmax == nil || vmax < self[i] {
+                imax = i
+                vmax = self[i]
+            }
+        }
+        return imax
+    }
+    var indexOfMinValue : Int? {
+        var imin : Int!
+        var vmin : Double!
+        for i in range {
+            if vmin == nil || vmin > self[i] {
+                imin = i
+                vmin = self[i]
+            }
+        }
+        return imin
+    }
+    
+//    var indexOfMinValue1 : Int? {
+//        var v : Double!
+//        return reduce(v, {
+//            $0 == nil ? $1 : $0 > $1 ? $1 : $0
+//        })
+//    }
+    
+    func indexMatchingTest(from: Int, til: Int, test: (_ stored: Double, _ current: Double)->Bool) -> Int? {
+        
+        let from = from.clamped(0, count)
+        let til  = til.clamped(from, count)
+        
+        guard from < til else {
+            return nil
+        }
+        
+        var V0 : Double!
+        var I0 : Index?
+        
+        for i in from..<til {
+            if V0 == nil {
+                V0 = self[i]
+                I0 = i
+                continue
+            }
+            let V = self[i]
+            if test(V0,V) {
+                V0 = V
+                I0 = i
+            }
+        }
+        
+        return I0
+    }
+
+    func indexWithMinimumValue(from: Int, til: Int) -> Int? {
+        indexMatchingTest(from: from, til: til, test: { v0,v1 in
+            v1 < v0
+        })
+    }
+
+    func indexWithMaximumValue(from: Int, til: Int) -> Int? {
+        indexMatchingTest(from: from, til: til, test: { v0,v1 in
+            v0 < v1
+        })
+    }
+
+    func indexesMatchingSpans(from: Int, til: Int, span: Int, test: (ArraySlice<Double>)->Bool) -> [Int] {
+        
+        guard span > 0 else {
+            return []
+            
+        }
+        let from = from.clamped(0, count - span)
+        let til  = til.clamped(from - span, count - span)
+        
+        guard from < til else {
+            return []
+        }
+        
+//        var INDEXES : [Int] = []
+//        
+//        for i in from..<til {
+//            if test(self[i...i+span]) {
+//                INDEXES.append(i)
+//            }
+//        }
+//        
+//        return INDEXES
+        
+        return (from..<til).compactMap { i in
+            test(self[i...i+span]) ? i : nil
+        }
+    }
+
+
+}
+
+
+
+
+public extension Array {
+    
+    func asDictionaryKeepingFirst<K: Hashable, V>() -> [K: V] where Element == (K, V) {
+        var dict: [K: V] = [:]
+        for (k, v) in self where dict[k] == nil {
+            dict[k] = v
+        }
+        return dict
+    }
+
+    func asDictionary<K: Hashable, V>(merging: (V, V) -> V) -> [K: V] where Element == (K, V) {
+        var dict: [K: V] = [:]
+        for (k, v) in self {
+            if let existing = dict[k] {
+                dict[k] = merging(existing, v)
+            } else {
+                dict[k] = v
+            }
+        }
+        return dict
+    }
+}
+
+
+
+public extension Array where Element : Hashable {
+
+    var asDictionaryIndex : [Element : Int] {
+        range.asArray.asDictionary { i in
+            (self[i],i)
+        }
+    }
+    
+    func asDictionaryInverse<T: Hashable>(of f: (Element) -> T) -> [T : Element] {
+        self.reduce(into: [T : Element]()) { dict, element in
+            dict[f(element)] = element
+        }
+    }
+    
+    func asArrayIndex(in other: [Element]) -> [Int?] {
+        let indices = other.asDictionaryIndex
+        return self.map { e in
+            indices[e]
+        }
+    }
+    
+    func asArrayIndex(in other: [Element], fallback: Int) -> [Int] {
+        let indices = other.asDictionaryIndex
+        return self.map { e in
+            indices[e] ?? fallback
+        }
+    }
+    
+    var counts : [Element : Int] {
+        var R : [Element : Int] = [:]
+        self.forEach { e in
+            R[e, default: 0] += 1
+        }
+        return R
+    }
+
+}
+
+
+extension Array {
+
+    @discardableResult
+    func assigned<Value>(value: Value, to: WritableKeyPath<Element,Value>) -> Self {
+        var r = self
+        r.assign(value: value, to: to)
+        return r
+    }
+
+    @discardableResult
+    func assigned<Value>(_ value: Value, to: WritableKeyPath<Element,Value>) -> Self {
+        assigned(value: value, to: to)
+    }
+    
+    mutating func assign<Value>(value: Value, to: WritableKeyPath<Element,Value>, where condition: (Int,Element) -> Bool = { _,_ in true }) {
+        for i in range {
+            if condition(i,self[i]) {
+                self[i][keyPath: to] = value
+            }
+        }
+    }
+    
+    mutating func assign<Value>(_ value: Value, to: WritableKeyPath<Element,Value>, where condition: (Int,Element) -> Bool = { _,_ in true }) {
+        assign(value: value, to: to, where: condition)
+    }
+
+    func collect<Value>(on: WritableKeyPath<Element,Value>) -> [Value] {
+        map { $0[keyPath: on] }
+    }
+    
+    
+}
+
+public extension Array where Element : Equatable {
+    
+    @inlinable func startsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        starts(with: possiblePrefix)
+    }
+    @inlinable func endsWith<PossiblePrefix>(_ possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        ends(with: possiblePrefix)
+    }
+    @inlinable func ends<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, Element == PossiblePrefix.Element {
+        reversed().starts(with: possiblePrefix.reversed())
+    }
+
+}
+
+public extension Sequence {
+    
+//    func sorted<Value>(
+//        by keyPath: KeyPath<Self.Element, Value>,
+//        using valuesAreInIncreasingOrder: (Value, Value) throws -> Bool)
+//        rethrows -> [Self.Element]
+//    {
+//        try self.sorted(by: {
+//            try valuesAreInIncreasingOrder($0[keyPath: keyPath], $1[keyPath: keyPath])
+//        })
+//    }
+
+    func sorted<Value: Comparable>(byKeyPath keyPath: KeyPath<Self.Element, Value>, ascending: Bool) -> [Self.Element]
+    {
+        ascending ?
+            self.sorted(by: { $0[keyPath: keyPath]  <  $1[keyPath: keyPath] })
+        :
+            self.sorted(by: { $0[keyPath: keyPath]  >  $1[keyPath: keyPath] })
+    }
+    
+    func sorted<Value: Comparable>(byKeyPath keyPath: KeyPath<Self.Element, Value>) -> [Self.Element]
+    {
+        self.sorted(byKeyPath: keyPath, ascending: true)
+    }
+    
+}
+
+public extension Array {
+    
+    func firstWith<V: Equatable>(_ path: KeyPath<Element,V>, equal to: V) -> Element? {
+        self.first(where: { e in
+            e[keyPath: path] == to
+        })
+    }
+
+    func firstIndexWith<V: Equatable>(_ path: KeyPath<Element,V>, equal to: V) -> Int? {
+        self.firstIndex(where: { e in
+            e[keyPath: path] == to
+        })
+    }
+
+//    var firstNonNil<T> : T? where Element == T? {
+    func firstNonNil<T>() -> T? where Element == T? {
+        for e in self {
+            if e != nil {
+                return e
+            }
+        }
+        return nil
+    }
+    
+    func firstNonNil<T>(_ converter: (Element)->T?) -> T? {
+        for e in self {
+            if let R = converter(e) {
+                return R
+            }
+        }
+        return nil
+    }
+}
+
+public extension Array {
+    
+    mutating func swapWithPreviousIndex(at i: Int, loop: Bool) {
+        if i > 0 {
+            swapAt(i, i-1)
+        } else if loop {
+            append(remove(at: 0))
+        }
+    }
+
+    mutating func swapWithPreviousIndex(_ i: Int, _ loop: Bool = true) {
+        swapWithPreviousIndex(at: i, loop: loop)
+    }
+
+    mutating func swapWithNextIndex(at i: Int, loop: Bool) {
+        if i < count-1 {
+            swapAt(i, i+1)
+        } else if loop {
+            prepend(remove(at: i))
+        }
+    }
+
+    mutating func swapWithNextIndex(_ i: Int, _ loop: Bool = true) {
+        swapWithNextIndex(at: i, loop: loop)
+    }
+    
+    func swappedRight(_ i: Int, _ loop: Bool = true) -> Self {
+        var R = self
+        R.swapWithNextIndex(at: i, loop: loop)
+        return R
+    }
+    
+    
+}
+
+public extension Array {
+    
+    func minElement<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (element: Element, value: T)? {
+        var R : Element!
+        var V : T!
+        for e in self {
+            if let D = try predicate(e) {
+                if V != nil {
+                    if D < V {
+                        V = D
+                        R = e
+                    }
+                } else {
+                    V = D
+                    R = e
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    func maxElement<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (element: Element, value: T)? {
+        var R : Element!
+        var V : T!
+        for e in self {
+            if let D = try predicate(e) {
+                if V != nil {
+                    if V < D {
+                        V = D
+                        R = e
+                    }
+                } else {
+                    V = D
+                    R = e
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    func minIndex<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (index: Int, element: T)? {
+        var R : Int!
+        var V : T!
+        for i in self.range {
+            let e = self[i]
+            if let D = try predicate(e) {
+                if V != nil {
+                    if D < V {
+                        V = D
+                        R = i
+                    }
+                } else {
+                    V = D
+                    R = i
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+    func maxIndex<T: Comparable>(where predicate: (Element) throws -> T?) rethrows -> (index: Int, element: T)? {
+        var R : Int!
+        var V : T!
+        for i in self.range {
+            let e = self[i]
+            if let D = try predicate(e) {
+                if V != nil {
+                    if V < D {
+                        V = D
+                        R = i
+                    }
+                } else {
+                    V = D
+                    R = i
+                }
+            }
+        }
+        return R == nil ? nil : (R!,V!)
+    }
+
+
+}
+
+
+extension Array {
+    
+    init(loop: ()->Element?) {
+        var V : [Element] = []
+        while let v = loop() {
+            V.append(v)
+        }
+        self.init(V)
+    }
+    
+    init(initial: Element, loop: (Element)->Element?) {
+        var V = [initial]
+        while let v = loop(V.last!) {
+            V.append(v)
+        }
+        self.init(V)
+    }
+    
+}
+
+extension Array where Element : Comparable & Numeric {
+    
+    init(initial: Element, delta: Element, limit: Element) {
+        var V : Self = []
+        var v = initial
+        if delta > 0 {
+            while v < limit {
+                V.append(v)
+                v += delta
+            }
+        } else if delta < 0 {
+            while v > limit {
+                V.append(v)
+                v += delta
+            }
+        }
+        self.init(V)
+    }
+    
+}
+
+extension Array : @retroactive RawRepresentable where Element == Bool {
+    
+    public init?(rawValue: String) {
+        self = rawValue.splitByComma.map { $0 == "T" }
+    }
+    
+    public var rawValue: String {
+        map { $0 ? "T" : "F" }.joinedByComma
+    }
+    
+    
+    public typealias RawValue = String
+    
+}
+
+
+public extension Array where Element == String {
+    
+    var asSymbolsString : String {
+        self.filteredOutEmpty.joinedBySpace
+    }
+    
+    @discardableResult
+    mutating func joinElements(at index: Int, with: String = "") -> Bool {
+        guard index >= 0 && index < count - 1 else { return false }
+        
+        let firstElement = self[index]
+        let secondElement = self[index + 1]
+        self[index] = firstElement + with + secondElement
+        remove(at: index + 1)
+        return true
+    }
+    
+    func indexForNextCharacter(after position: Int, in joinedString: String) -> Int? {
+        guard position >= 0 && position < joinedString.count - 1 else { return nil }
+        
+        let nextPosition = position + 1
+        var currentLength = 0
+        
+        for (index, element) in self.enumerated() {
+            let nextLength = currentLength + element.count
+            if nextPosition <= nextLength {
+                return index
+            }
+            currentLength = nextLength
+        }
+        
+        return nil
+    }
+    
+    var countOfLetters : Int {
+        map { $0.count }.sum
+    }
+}
+
+
+
+public extension Array where Element : StringProtocol {
+    var concatenated : String {
+        reduce("", { $0 + $1 })
+    }
+}
+
+
+
+
+public extension Array {
+    
+    func sum(where f: (Element)->Int) -> Int {
+        reduce(0, { $0 + f($1) })
+    }
+    
+    func sum(where f: (Element)->Double) -> Double {
+        reduce(0.0, { $0 + f($1) })
+    }
+    
+    func sum(where f: (Element)->CGFloat) -> CGFloat {
+        reduce(0.0, { $0 + f($1) })
+    }
+    
+}
+
+public extension Array where Element == Double {
+    
+    func weighted01(transformedFrom01: (Double)->Double = { $0 }) -> [Element : Double] {
+        guard let MINMAX = self.minAndMax else {
+            return [:]
+        }
+        let DELTA = MINMAX.max - MINMAX.min
+        guard DELTA > 0.0 else {
+            return [:]
+        }
+        var R : [Element : Double] = [:]
+        self.forEach {
+            R[$0] = transformedFrom01(($0 - MINMAX.min) / DELTA)
+        }
+        return R
+    }
+    
+}
+
+public extension Array {
+    
+    func crossed<T>(with other: [T]) -> [(Element,T)] {
+        var R : [(Element,T)] = []
+        for A in self {
+            for B in other {
+                R.append((A,B))
+            }
+        }
+        return R
+    }
+    
+    func joined<T>(with other: [T]) -> [(Element,T)] {
+        crossed(with: other)
+    }
+    
+    
+}
+
+public extension Array {
+    // Existing closure-based implementation
+    func ranked<T: Comparable>(by getValue: (Element) -> T) -> [Int] {
+        guard !isEmpty else { return [] }
+        
+        var R : [Int] = .init(repeating: 1, count: count)
+        
+        for i in 1..<count {
+            if getValue(self[i]) == getValue(self[i-1]) {
+                R[i] = R[i-1]
+            } else {
+                R[i] = i + 1
+            }
+        }
+        
+        return R
+    }
+    
+    // New KeyPath-based implementation
+    func ranked<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Int] {
+        ranked { $0[keyPath: keyPath] }
+    }
+}
+
+public func union<T: Hashable>(_ lhs: [T], _ rhs: [T]) -> [T] {
+    Array(Set(lhs).union(Set(rhs)))
+}
+
+public extension Array {
+    
+    func permutations() -> [[Element]] {
+        if count <= 1 {
+            return [self]
+        }
+        
+        var result: [[Element]] = []
+        
+        for i in 0..<count {
+            var subArray = self
+            let element = subArray.remove(at: i)
+            
+            let subPermutations = subArray.permutations()
+            
+            for permutation in subPermutations {
+                var newPermutation = [element]
+                newPermutation.append(contentsOf: permutation)
+                result.append(newPermutation)
+            }
+        }
+        
+        return result
+    }
+    
+    // Generic method to find indices of elements matching a condition
+    func indices(where predicate: (Element) -> Bool) -> [Int] {
+        enumerated().compactMap { index, element in
+            predicate(element) ? index : nil
+        }
+    }
+    
+    // Generic method to replace elements at specific indices
+    mutating func replace(at indices: [Int], with elements: [Element]) {
+        guard indices.count == elements.count else { return }
+        for (index, element) in zip(indices, elements) {
+            if index < count {
+                self[index] = element
+            }
+        }
+    }
+
+    mutating func replace(at index: Int, with element: Element) {
+        if index < count {
+            self[index] = element
+        }
+    }
+
+}
+
+public extension Array {
+    
+    var stridePerPair: StrideTo<Int> {
+        stride(from: 0, to: count - 1, by: 2)
+    }
+    
+    func stridePer(_ n: Int) -> StrideTo<Int> {
+        stride(from: 0, to: count - 1, by: n)
+    }
+}
+
+
+
+public extension Array {
+    
+    func rotated(rows: Int) -> Self {
+        guard rows > 0, count % rows == 0 else { return self }
+        let cols = count / rows
+        guard !isEmpty else { return Self() }
+        var result: [Element] = .init(repeating: self[0], count: count)
+        for r in 0..<rows {
+            for c in 0..<cols {
+                result[c * rows + r] = self[r * cols + c]
+            }
+        }
+        return result
+    }
+    
+}
+
+public extension Array where Element : Equatable {
+    
+    subscript(modulo index: Int) -> Element {
+        get {
+            self.at(index % count)
+        }
+        set {
+            self[index % count] = newValue
+        }
+    }
+
+}
+
+extension Array {
+    
+    func transformed(_ f: (inout Element) -> Void ) -> Self {
+        self.map {
+            var E = $0
+            f(&E)
+            return E
+        }
+    }
+    
+    func transformed(_ f: (_ index: Int, inout Element) -> Void ) -> Self {
+        self.enumerated().map { i,V in
+            var E = V
+            f(i,&E)
+            return E
+        }
+    }
+    
+    func transformedEnumerated(_ f: (_ index: Int, inout Element) -> Void ) -> Self {
+        self.enumerated().map { i,V in
+            var E = V
+            f(i,&E)
+            return E
+        }
+    }
+}
+
+
+public extension ClosedRange where Element == Int {
+    
+    var asArray : [Int] {
+        Array(self)
+    }
+    
+
+}
+
+public extension ClosedRange {
+    
+    @inlinable func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+        try Array(self).map { element in
+            try transform(element)
+        }
+    }
+
+}
+
+public extension Array {
+    
+    func safeValue(at index: Int) -> Element? {
+        index < count ? self[index] : nil
+    }
+
+    var mid : Element {
+        self[count / 2]
+    }
+    
+}
+
+public extension Array {
+    
+    mutating func replaceLastOrAppend(_ e: Element) {
+        if count > 0 {
+            self[count - 1] = e
+        } else {
+            self.append(e)
+        }
+    }
+
+    mutating func assignAtBack(_ v: Element) {
+        if 0 < count {
+            self[count - 1] = v
+        } else {
+            self = [v]
+        }
+    }
+}

@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO MAKE EXTENSION ON UInt32 AND UInt64
+
 // 32
 
 public func bit32(on:Int) -> UInt32 {

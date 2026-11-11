@@ -15,5 +15,5 @@ FOUNDATION_EXPORT double ASToolkitVersionNumber;
 FOUNDATION_EXPORT const unsigned char ASToolkitVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <ASToolkit/PublicHeader.h>
-
+#import "ObjectiveC.h"
 

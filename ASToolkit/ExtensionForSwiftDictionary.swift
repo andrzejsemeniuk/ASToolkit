@@ -1,0 +1,268 @@
+//
+//  ExtensionForSwiftDictionary.swift
+//  ASToolkit
+//
+//  Created by andrej on 11/24/18.
+//  Copyright © 2018 Andrzej Semeniuk. All rights reserved.
+//
+
+import Foundation
+import SwiftUI
+
+extension Dictionary where Key == String, Value == String {
+
+	public func json(options: JSONSerialization.WritingOptions = [.prettyPrinted]) -> String? {
+//		guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: options) else {
+//			return nil
+//		}
+//		return String(data: jsonData, encoding: .utf8)
+        
+        guard let encoded = try? JSONEncoder().encode(self) else {
+            return nil
+        }
+        return String(data: encoded, encoding: .utf8)
+	}
+
+	static public func from(json text: String, options: JSONSerialization.ReadingOptions = []) -> [String: String]? {
+		if let data = text.data(using: .utf8) {
+			do {
+//				return try JSONSerialization.jsonObject(with: data, options: options) as? [String: Any]
+                return try JSONDecoder().decode(Dictionary<String,String>.self, from: data)
+			}
+			catch {
+
+			}
+		}
+		return nil
+	}
+    
+    
+
+}
+
+extension Dictionary where Key == String {
+    
+    func with(prefix: String) -> Self {
+        var R : Self = [:]
+        keys.forEach { key in
+            R["a/\(key)"] = self[key]!
+        }
+        return R
+    }
+}
+
+extension Dictionary {
+    
+    public var isNotEmpty : Bool {
+        !isEmpty
+    }
+    
+}
+
+public extension Dictionary {
+    
+    mutating func forEachValue(_ block: (_ value: inout Value)->()) {
+        self.keys.forEach { k in
+            block(&self[k]!)
+        }
+    }
+    
+    func filtered(where f: (_ key: Key, _ value: Value)->Bool) -> Self {
+        var R : Self = [:]
+        self.forEach { (K,V) in
+            if f(K,V) {
+                R[K] = V
+            }
+        }
+        return R
+    }
+    
+    mutating func filter(where f: (_ key: Key, _ value: Value)->Bool) {
+        self.forEach { (K,V) in
+            if !f(K,V) {
+                self.removeValue(forKey: K)
+            }
+        }
+    }
+    
+    mutating func removeAll(where f: (_ key: Key, _ value: Value)->Bool) {
+        filter(where: { K,V in !f(K,V) })
+    }
+    
+    func removedAll(where f: (_ key: Key, _ value: Value)->Bool) -> Self {
+        filtered(where: { K,V in !f(K,V) })
+    }
+    
+    mutating func clear() {
+        self = [:]
+    }
+    
+}
+
+public func += <K,V>(lhs: inout Dictionary<K,V>, rhs: Dictionary<K,V>) {
+    lhs = lhs.merging(rhs, uniquingKeysWith: { $1 })
+}
+
+public func + <K,V>(lhs: Dictionary<K,V>, rhs: Dictionary<K,V>) -> Dictionary<K,V> {
+    return lhs.merging(rhs, uniquingKeysWith: { $1 })
+}
+
+public func asDictionary<K,V>(_ keys: [K], _ value: V) -> Dictionary<K,V> {
+    keys.reduce([:], { dictionary,key in
+        dictionary + [key : value]
+    })
+}
+
+public extension Dictionary.Keys where Key : Equatable {
+    @inlinable func missing(_ element: Key) -> Bool {
+        !contains(element)
+    }
+}
+
+public extension Dictionary where Key : Equatable {
+    @inlinable func contains(key: Key) -> Bool {
+        keys.contains(key)
+    }
+    @inlinable func missing(key: Key) -> Bool {
+        keys.missing(key)
+    }
+    func filterByKey(_ matching: [Key]) -> Self {
+        filter({ k,v in k.in(matching) })
+    }
+}
+
+public extension Dictionary where Value : Equatable {
+    @inlinable func missing(value: Value) -> Bool {
+        values.first(where: { $0 == value }) == nil
+    }
+}
+
+public extension Dictionary where Value : Hashable {
+    func inverted() -> Dictionary<Value,Key> {
+        var r : [Value : Key] = [:]
+        for (k,v) in self {
+            r[v] = k
+        }
+        return r
+    }
+}
+
+public extension Dictionary {
+    
+    mutating func merge(from dictionary: Dictionary<Key, Value>?, override: Bool) {
+        if dictionary != nil {
+            self = self.merging(dictionary!, uniquingKeysWith: { override ? $1 : $0 })
+        }
+    }
+    
+    func merged(from dictionary: Dictionary<Key, Value>?, override: Bool) -> Self {
+        if dictionary == nil {
+            return self
+        } else {
+            return self.merging(dictionary!, uniquingKeysWith: { override ? $1 : $0 })
+        }
+    }
+    
+    func merged(into dictionary: Dictionary<Key, Value>?, override: Bool) -> Self? {
+        if dictionary == nil {
+            return nil
+        } else {
+            return dictionary!.merging(self, uniquingKeysWith: { override ? $1 : $0 })
+        }
+    }
+}
+
+public extension Dictionary where Key == String, Value == String {
+    
+    func asBool(_ title: String, _ fallback: Bool = false) -> Bool {
+        self[title]?.asBool ?? fallback
+    }
+    
+    mutating func asBool(_ title: String, set value: Bool) {
+        self[title] = String.asBool(value)
+    }
+    
+
+}
+
+public extension Dictionary {
+    
+    func transposed<K: Hashable, V>(_ f: (Key,Value) -> (K,V)?) -> Dictionary<K,V> {
+        var R : Dictionary<K,V> = .init()
+        for (k,v) in self {
+            if let NEW = f(k,v) {
+                R[NEW.0] = NEW.1
+            }
+        }
+        return R
+    }
+    
+}
+
+
+public extension Dictionary where Key: Comparable {
+    
+    @discardableResult
+    mutating func removeMinKey() -> Value? {
+        guard let minKey = keys.min() else { return nil }
+        return removeValue(forKey: minKey)
+    }
+    
+}
+
+public extension Dictionary where Key == Int {
+    
+    mutating func incrementInPlace(keysHigherThan index: Int, by: Int) {
+        // First, collect all keys to adjust and their values
+        let keysToAdjust = self.keys.filter { $0 > index }
+        var valuesToReadd: [(Int, Value)] = []
+        
+        // Remove all keys and store their values
+        for key in keysToAdjust {
+            if let value = self.removeValue(forKey: key) {
+                valuesToReadd.append((key + by, value))
+            }
+        }
+        
+        // Now add them back with adjusted keys
+        for (newKey, value) in valuesToReadd {
+            self[newKey] = value
+        }
+    }
+    
+    func firstKey(in range: ClosedRange<Int>) -> Int? {
+        return keys.first { range.contains($0) }
+    }
+}
+
+public extension Dictionary {
+    var entries: [(key: Key, value: Value)] {
+        return map { ($0.key, $0.value) }
+    }
+}
+
+public extension Dictionary where Key == String, Value == String {
+    var print: String {
+        "[" + entries.map { (k,v) in
+            "\n \(k.qq) : \(v.qq),"
+        }.sorted().joinedByNothing + "\n]"
+    }
+}
+
+public extension Dictionary {
+    mutating func valueFor(key: Key, missing: Value) -> Value {
+        if let R = self[key] {
+            return R
+        }
+        self[key] = missing
+        return missing
+    }
+    mutating func valueFor(key: Key, missing: () -> Value) -> Value {
+        if let R = self[key] {
+            return R
+        }
+        let V = missing()
+        self[key] = V
+        return V
+    }
+}

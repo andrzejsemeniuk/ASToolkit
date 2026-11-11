@@ -7,7 +7,53 @@
 //
 
 import Foundation
+
+#if os(iOS)
 import UIKit
+
+public func | (string:String,font:UIFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(string: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func | (string:NSAttributedString,font:UIFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func |= (string:inout NSAttributedString, font:UIFont) {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    string = r
+}
+
+#endif
+
+#if os(macOS)
+import AppKit
+
+public func | (string:String,font:NSFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(string: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func | (string:NSAttributedString,font:NSFont) -> NSAttributedString {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    return r
+}
+
+public func |= (string:inout NSAttributedString, font:NSFont) {
+    let r = NSMutableAttributedString(attributedString: string)
+    r.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location:0,length:r.length))
+    string = r
+}
+
+
+#endif
 
 extension NSAttributedString {
     public subscript(_ text:String) -> NSRange {
@@ -53,50 +99,38 @@ public func += (lhs:inout NSMutableAttributedString, rhs:NSAttributedString) {
 
 public func | (string:String,color:UIColor) -> NSAttributedString {
     let r = NSMutableAttributedString(string:string)
-    r.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location:0,length:r.length))
+    r.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:0,length:r.length))
     return r
 }
 
 public func | (string:NSAttributedString,color:UIColor) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location:0,length:r.length))
+    r.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:0,length:r.length))
     return r
 }
 
 
-public func | (string:String,font:UIFont) -> NSAttributedString {
-    let r = NSMutableAttributedString(string: string)
-    r.addAttribute(NSFontAttributeName, value: font, range: NSRange(location:0,length:r.length))
-    return r
-}
 
-public func | (string:NSAttributedString,font:UIFont) -> NSAttributedString {
-    let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSFontAttributeName, value: font, range: NSRange(location:0,length:r.length))
-    return r
-}
-
-
-public func | (string:NSAttributedString,attributes:[String:Any]) -> NSAttributedString {
+public func | (string:NSAttributedString,attributes:[NSAttributedString.Key:Any]) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString: string)
     r.addAttributes(attributes, range: NSRange(location: 0,length: r.length))
     return r
 }
 
-public func | (string:String,attributes:[String:Any]) -> NSAttributedString {
+public func | (string:String,attributes:[NSAttributedString.Key:Any]) -> NSAttributedString {
     let r = NSMutableAttributedString(string: string)
     r.addAttributes(attributes, range: NSRange(location: 0,length: r.length))
     return r
 }
 
 
-public func | (string:NSAttributedString,tuple:(attributes:[String:Any],range:NSRange)) -> NSAttributedString {
+public func | (string:NSAttributedString,tuple:(attributes:[NSAttributedString.Key:Any],range:NSRange)) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString: string)
     r.addAttributes(tuple.attributes, range: tuple.range)
     return r
 }
 
-public func | (string:String,tuple:(attributes:[String:Any],range:NSRange)) -> NSAttributedString {
+public func | (string:String,tuple:(attributes:[NSAttributedString.Key:Any],range:NSRange)) -> NSAttributedString {
     let r = NSMutableAttributedString(string: string)
     r.addAttributes(tuple.attributes, range: tuple.range)
     return r
@@ -105,13 +139,13 @@ public func | (string:String,tuple:(attributes:[String:Any],range:NSRange)) -> N
 
 public func | (string:NSAttributedString,tuple:(name:String,value:Any)) -> NSAttributedString {
     let r = NSMutableAttributedString(attributedString: string)
-    r.addAttributes([tuple.name:tuple.value], range: NSRange(location: 0,length: r.length))
+    r.addAttributes([NSAttributedString.Key(rawValue: tuple.name):tuple.value], range: NSRange(location: 0,length: r.length))
     return r
 }
 
 public func | (string:String,tuple:(name:String,value:Any)) -> NSAttributedString {
     let r = NSMutableAttributedString(string:string)
-    r.addAttributes([tuple.name:tuple.value], range: NSRange(location: 0,length: r.length))
+    r.addAttributes([NSAttributedString.Key(rawValue: tuple.name):tuple.value], range: NSRange(location: 0,length: r.length))
     return r
 }
 
@@ -122,6 +156,11 @@ public func | (a:String,b:NSAttributedString) -> NSAttributedString {
     let r = NSMutableAttributedString(string:a)
     r.append(b)
     return r
+}
+
+public func | (a:NSAttributedString,b:String) -> NSAttributedString {
+    let r = NSMutableAttributedString(string:b)
+    return a | r
 }
 
 
@@ -145,23 +184,17 @@ public func |= (a:inout NSAttributedString,b:NSAttributedString)  {
 
 public func |= (string:inout NSAttributedString, color:UIColor) {
     let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location:0,length:r.length))
+    r.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location:0,length:r.length))
     string = r
 }
 
-public func |= (string:inout NSAttributedString, font:UIFont) {
-    let r = NSMutableAttributedString(attributedString: string)
-    r.addAttribute(NSFontAttributeName, value: font, range: NSRange(location:0,length:r.length))
-    string = r
-}
-
-public func |= (string:inout NSAttributedString, attributes:[String:Any]) {
+public func |= (string:inout NSAttributedString, attributes:[NSAttributedString.Key:Any]) {
     let r = NSMutableAttributedString(attributedString: string)
     r.addAttributes(attributes, range: NSRange(location: 0,length: r.length))
     string = r
 }
 
-public func |= (string:inout NSAttributedString, tuple:(attributes:[String:Any],range:NSRange)) {
+public func |= (string:inout NSAttributedString, tuple:(attributes:[NSAttributedString.Key:Any],range:NSRange)) {
     let r = NSMutableAttributedString(attributedString: string)
     r.addAttributes(tuple.attributes, range: tuple.range)
     string = r

@@ -8,6 +8,44 @@
 
 import Foundation
 
-public typealias Block_B_V                  = ((Bool)->Void)
+public typealias Block                      = () -> Void
+public typealias AsyncBlock                 = () async -> Void
+public typealias BlockWithBlock             = (Block) -> Void
+public typealias BlockWithThrows            = () throws -> Void
+
+public typealias Block_B_V                  = ((Bool) -> Void)
 public typealias BlockBoolToVoid            = Block_B_V
 public typealias BlockAcceptingBool         = Block_B_V
+public typealias BlockReturningBool         = () -> Bool
+
+public func sleep(interval:TimeInterval = 0.1, loop:()->Bool, success:()->Bool) async throws -> Bool {
+	while loop() {
+		if success() {
+			return true
+		}
+		try await Task.sleep(seconds: interval)
+	}
+	return false
+}
+
+@discardableResult
+public func ignore(report:Bool = true, file:String = #file, line:Int = #line, _ block: () throws -> Void) -> Bool {
+	do {
+		try block()
+		return true
+	}
+	catch let error {
+		if report {
+			print("ignore(), error: [\(error)] in \(file):\(line)")
+		}
+		return false
+	}
+}
+
+public func perform(after: TimeInterval, _ f: @escaping ()->Void) {
+    let _ = Timer.scheduledTimer(withTimeInterval: after, repeats: false, block: { t in
+        f()
+        t.invalidate()
+    })
+    
+}

@@ -10,25 +10,43 @@ import Foundation
 import UIKit
 
 open class UIViewCircle : UIView {
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        initialize()
-    }
+//    override public init(frame: CGRect) {
+//        super.init(frame: frame)
+//        initialize()
+//    }
     
-    public convenience init(side:CGFloat) {
-        self.init(frame: CGRect(side:side))
-    }
+//    public convenience init(side:CGFloat) {
+//        self.init(frame: CGRect(side:side))
+//    }
     
-    public convenience init(radius:CGFloat) {
-        self.init(frame: CGRect(side:radius*2))
-    }
+//    public convenience init(radius:CGFloat) {
+//        self.init(frame: CGRect(side:radius*2))
+//    }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    required public init?(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     func initialize() {
         self.layer.cornerRadius = min(frame.size.width,frame.size.height)/2
+    }
+    
+    static public func create(frame: CGRect) -> UIViewCircle {
+        let r = UIViewCircle.init(frame: frame)
+        r.initialize()
+        return r
+    }
+    
+    static public func create(side: CGFloat) -> UIViewCircle {
+        let r = UIViewCircle.init(frame: CGRect(side:side))
+        r.initialize()
+        return r
+    }
+    
+    static public func create(radius: CGFloat) -> UIViewCircle {
+        let r = UIViewCircle.init(frame: CGRect(side:radius*2))
+        r.initialize()
+        return r
     }
 }
 

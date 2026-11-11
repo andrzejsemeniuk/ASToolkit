@@ -36,7 +36,7 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
-    open weak var manager                   : GenericManagerOfSettings?
+    open weak var controller                   : GenericManagerOfSettings?
     
     
     public struct Section {
@@ -72,7 +72,7 @@ open class GenericControllerOfSettings : UITableViewController
     open var fontForFieldText               : UIFont?
 
     
-    static open var lastOffsetY             : [String:CGPoint]                      = [:]
+    static public var lastOffsetY             : [String:CGPoint]                      = [:]
     
     
     
@@ -151,7 +151,7 @@ open class GenericControllerOfSettings : UITableViewController
         
         actions.removeAll()
         
-        manager?.synchronize()
+        controller?.synchronize()
         
         super.viewWillDisappear(animated)
     }
@@ -283,84 +283,6 @@ open class GenericControllerOfSettings : UITableViewController
     
     
     
-    // MARK: - Alerts
-    
-    open func createAlertForInput               (title:String, message:String, value:String = "", ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-        alert.addTextField { textfield in
-            textfield.text = value
-        }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            setter(alert.textFields?[safe:0]?.text ?? "")
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
-    }
-    
-    open func createAlertForQuestion            (title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", handler:@escaping Action) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            handler()
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
-    }
-    
-    open func createAlertForUITextField         (_ field:UITextField, title:String, message:String, ok:String = "Ok", cancel:String = "Cancel", setter:@escaping (String)->()) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-        alert.addTextField { textfield in
-            textfield.text = field.text
-        }
-        let ok = UIAlertAction.init(title: ok, style: UIAlertActionStyle.default) { action in
-            setter(alert.textFields?[safe:0]?.text ?? "")
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(ok)
-        let cancel = UIAlertAction.init(title: cancel, style: UIAlertActionStyle.cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
-    }
-    
-    open func createAlertForChoice              (title:String, message:String, choices:[String], cancel:String = "Cancel", handler:@escaping (String)->()) {
-        let alert = UIAlertController.init(title: title, message: message, preferredStyle: .actionSheet)
-        for choice in choices {
-            let ok = UIAlertAction.init(title: choice, style: .destructive) { action in
-                handler(choice)
-                //                alert.dismiss(animated: true) {
-                //                }
-            }
-            alert.addAction(ok)
-        }
-        let cancel = UIAlertAction.init(title: cancel, style: .cancel) { action in
-            alert.dismiss(animated: true) {
-            }
-        }
-        alert.addAction(cancel)
-        self.present(alert, animated: true)
-    }
-    
-    
-    
-    
-    
     
     // MARK: - CREATE CELL - TAP
     
@@ -390,7 +312,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
+                    self?.presentAlertForQuestion(title: title.trimmed(), message: message.trimmed(), ok:ok, cancel:cancel) {
                         action?()
                     }
                 }
@@ -408,7 +330,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
+                    self?.presentAlertForInput(title: title.trimmed(), message: message.trimmed(), value:value(), ok:ok, cancel:cancel) { result in
                         action(result)
                     }
                 }
@@ -426,7 +348,7 @@ open class GenericControllerOfSettings : UITableViewController
                 label.font          = self?.fontForLabelText ?? label.font
                 setup?(cell,indexPath)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
+                    self?.presentAlertForChoice(title: title.trimmed(), message: message.trimmed(), choices:choices(), cancel:cancel) { result in
                         action(result)
                     }
                 }
@@ -490,7 +412,7 @@ open class GenericControllerOfSettings : UITableViewController
         return view
     }
     
-    open func handleUISwitch                    (control:UISwitch?) {
+    @objc open func handleUISwitch                    (control:UISwitch?) {
         if let myswitch = control, let update = registeredUISwitches[myswitch] {
             update(myswitch)
         }
@@ -539,7 +461,7 @@ open class GenericControllerOfSettings : UITableViewController
         return view
     }
     
-    open func handleUISlider                    (control:UISlider?) {
+    @objc open func handleUISlider                    (control:UISlider?) {
         if let myslider = control, let update = registeredUISliders[myslider] {
             update(myslider)
         }
@@ -595,8 +517,8 @@ open class GenericControllerOfSettings : UITableViewController
         view.font = self.fontForFieldText ?? view.font
         view.textAlignment = .right
         view.textColor = .gray
-        view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(attributes: [
-            NSFontAttributeName : view.font ?? UIFont.defaultFont
+        view.frame.size = (String.init(repeating:"m", count:count) as NSString).size(withAttributes: [
+            NSAttributedString.Key.font : view.font ?? UIFont.defaultFont
             ])
         register(indexPath:indexPath, id:id)
         return view
@@ -612,7 +534,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) { [weak self] in
-                    self?.createAlertForUITextField(field, title:title, message:message) { text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { text in
                         setting.value   = text
                         action?()
                         field.text      = setting.value
@@ -633,7 +555,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Double(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -662,7 +584,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = CGFloat(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -691,7 +613,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Float(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)
@@ -720,7 +642,7 @@ open class GenericControllerOfSettings : UITableViewController
                 setup?(cell,indexPath,field)
                 self?.register(indexPath: indexPath, id: id)
                 self?.addAction(indexPath: indexPath) {
-                    self?.createAlertForUITextField(field, title:title, message:message) { [weak field] text in
+                    self?.presentAlertForUITextField(field, title:title, message:message) { [weak field] text in
                         if var number = Int(text) {
                             if let minimum = minimum {
                                 number = max(minimum,number)

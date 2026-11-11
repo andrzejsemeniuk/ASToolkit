@@ -17,12 +17,16 @@ extension NSLayoutConstraint {
      - parameter multiplier: CGFloat
      - returns: NSLayoutConstraint
      */
-    open func set(multiplier:CGFloat) -> NSLayoutConstraint {
-        
-        NSLayoutConstraint.deactivate([self])
+    @discardableResult public func set(multiplier:CGFloat) -> NSLayoutConstraint {
+
+		let active = isActive
+
+		if active {
+        	NSLayoutConstraint.deactivate([self])
+		}
         
         let newConstraint = NSLayoutConstraint(
-            item: firstItem,
+			item: firstItem as Any,
             attribute: firstAttribute,
             relatedBy: relation,
             toItem: secondItem,
@@ -33,34 +37,78 @@ extension NSLayoutConstraint {
         newConstraint.priority = priority
         newConstraint.shouldBeArchived = self.shouldBeArchived
         newConstraint.identifier = self.identifier
-        
-        NSLayoutConstraint.activate([newConstraint])
+
+		if active {
+        	NSLayoutConstraint.activate([newConstraint])
+		}
+		
         return newConstraint
     }
     
-    open func activated         (_ value:Bool = true) -> NSLayoutConstraint {
+    @discardableResult public func activated         (_ value:Bool = true) -> NSLayoutConstraint {
         self.isActive=true
         return self
     }
     
-    open func deactivated       () -> NSLayoutConstraint {
+    @discardableResult public func deactivated       () -> NSLayoutConstraint {
         self.isActive=false
         return self
     }
     
-    open func prioritized       (_ value:UILayoutPriority) -> NSLayoutConstraint {
-        self.priority = value
+    @discardableResult public func prioritized       (priority:UILayoutPriority) -> NSLayoutConstraint {
+		if false {
+		if isActive {
+			isActive=false
+			self.priority = priority
+			isActive=true
+		}
+		else {
+        	self.priority = priority
+		}
+		}
         return self
     }
     
-    open func extended          (_ value:CGFloat) -> NSLayoutConstraint {
+	@discardableResult public func prioritized       (_ value:Double) -> NSLayoutConstraint {
+		if false {
+		if isActive {
+			isActive=false
+			self.priority = UILayoutPriority.init(Float(value))
+			isActive=true
+		}
+		else {
+			self.priority = UILayoutPriority.init(Float(value))
+		}
+		}
+		return self
+	}
+
+    @discardableResult public func extended          (_ value:CGFloat) -> NSLayoutConstraint {
         self.constant = value
         return self
     }
     
-    open func identified        (_ value:String?) -> NSLayoutConstraint {
+    @discardableResult public func identified        (_ value:String?) -> NSLayoutConstraint {
         self.identifier = value
         return self
     }
+
+	@discardableResult public func multiplied			(_ value:CGFloat) -> NSLayoutConstraint {
+		return self.set(multiplier: value)
+	}
     
 }
+
+
+extension Array where Element : NSLayoutConstraint {
+
+	public func get(_ identifier:String) -> NSLayoutConstraint? {
+		return self.first { constraint in
+			return constraint.identifier == identifier
+		}
+	}
+
+}
+
+
+
