@@ -141,7 +141,7 @@ public extension CaseIterable where Self : Equatable {
 
 
 
-public protocol StringNamed: Identifiable, Hashable, CaseIterable, Codable, RawRepresentable where RawValue == String {
+public protocol StringNamed: Identifiable, Sendable, Hashable, CaseIterable, Codable, RawRepresentable where RawValue == String {
     var id : String { get }
     var label: String { get }
     var Name: String { get }
